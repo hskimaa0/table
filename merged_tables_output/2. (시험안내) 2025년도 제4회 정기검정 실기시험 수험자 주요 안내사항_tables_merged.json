@@ -16,7 +16,7 @@
         "Table 4 -> 5: 텍스트 연결: '승강기설치 ※' -> '승강기설치 ※'"
       ],
       "disconnection_reasons": [
-        "Table 5 -X-> 6: 연결 조건 미충족"
+        "Table 5 -X-> 6: 타이틀이 다름 ('5.  작업형 시험장 위치 (2군)  [상세 시험장(건물) 위치는 수험표 참조]' vs '① 샤  프(SHARP)', 유사도: 0.08)"
       ],
       "merged_table": {
         "self_ref": "#/tables/4",
@@ -1387,24 +1387,21 @@
     {
       "group_id": 1,
       "table_indices": [
-        6,
         7,
         8
       ],
       "pages": [
-        6,
         7,
         8
       ],
       "connection_reasons": [
-        "Table 6 -> 7: 헤더가 동일함 (2개 일치)",
-        "Table 7 -> 8: 헤더 테이블 뒤 데이터 테이블 (열 2개 vs 2개, 유사 구조)"
+        "Table 7 -> 8: 타이틀이 있는 헤더 테이블 뒤 데이터 테이블 (연속 페이지)"
       ],
       "disconnection_reasons": [
-        "Table 8 -X-> 9: 테이블 구조가 다름"
+        "Table 8 -X-> 9: 두 번째 테이블에 새로운 타이틀 시작 ('③ 캐 논(CANON)')"
       ],
       "merged_table": {
-        "self_ref": "#/tables/6",
+        "self_ref": "#/tables/7",
         "parent": {
           "$ref": "#/body"
         },
@@ -1413,12 +1410,12 @@
         "label": "table",
         "prov": [
           {
-            "page_no": 6,
+            "page_no": 7,
             "bbox": {
-              "l": 57.22927474975586,
-              "t": 495.3436584472656,
-              "r": 553.935302734375,
-              "b": 73.59100341796875,
+              "l": 57.12135696411133,
+              "t": 744.0268096923828,
+              "r": 559.9486083984375,
+              "b": 72.58404541015625,
               "coord_origin": "BOTTOMLEFT"
             },
             "charspan": [
@@ -1432,366 +1429,6 @@
         "footnotes": [],
         "data": {
           "table_cells": [
-            {
-              "bbox": {
-                "l": 116.76,
-                "t": 350.772,
-                "r": 146.76,
-                "b": 362.76,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 0,
-              "end_row_offset_idx": 1,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "기 종",
-              "column_header": true,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 346.68,
-                "t": 350.772,
-                "r": 412.68,
-                "b": 362.76,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 0,
-              "end_row_offset_idx": 1,
-              "start_col_offset_idx": 2,
-              "end_col_offset_idx": 3,
-              "text": "초기화 방법",
-              "column_header": true,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 90.6,
-                "t": 371.579,
-                "r": 130.592,
-                "b": 453.048,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 1,
-              "end_row_offset_idx": 2,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "EL-9900 EL-9650 EL-9600 EL-9400 EL-9300",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 90.6,
-                "t": 459.539,
-                "r": 130.592,
-                "b": 523.3679999999999,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 2,
-              "end_row_offset_idx": 3,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "EL-9200 EL-5250 EL-5230 EL-5120",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 166.32,
-                "t": 407.772,
-                "r": 197.268,
-                "b": 419.76,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 1,
-              "end_row_offset_idx": 2,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "방법1",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 209.88,
-                "t": 371.772,
-                "r": 486.12,
-                "b": 455.76,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 1,
-              "end_row_offset_idx": 2,
-              "start_col_offset_idx": 2,
-              "end_col_offset_idx": 3,
-              "text": "① 계산기 뒷면 'Reset' 버튼을 누름 ② 'Wait'가 표시됨 ③ 'PRESS [CL] KEY TO CLEAR ALL DATE'가 표시됨 ④ [CL] 키를 누름 ⑤ 'ALL DATE CLEARED' 가 표시됨 ⇒ 저장된 메모리가 삭제된 것임",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 166.32,
-                "t": 490.812,
-                "r": 197.268,
-                "b": 502.8,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 2,
-              "end_row_offset_idx": 3,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "방법2",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 209.88,
-                "t": 469.212,
-                "r": 457.44,
-                "b": 524.4,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 2,
-              "end_row_offset_idx": 3,
-              "start_col_offset_idx": 2,
-              "end_col_offset_idx": 3,
-              "text": "① 계산기 뒷면 'Reset' 버튼을 누름 ② 'ALL DATE CL?' 가 표시되면, [CL] 키를 누름 ③ 'ALL DATE CLEARED' 문구가 표시됨 ⇒ 저장된 메모리가 삭제 된 것임",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 111.96,
-                "t": 547.692,
-                "r": 265.968,
-                "b": 559.6800000000001,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 2,
-              "start_row_offset_idx": 3,
-              "end_row_offset_idx": 4,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 2,
-              "text": "EL-9000 ② 'COMP",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 209.88,
-                "t": 533.2919999999999,
-                "r": 410.28,
-                "b": 574.0799999999999,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 3,
-              "end_row_offset_idx": 4,
-              "start_col_offset_idx": 2,
-              "end_col_offset_idx": 3,
-              "text": "① 계산기 뒷면 'Reset' 버튼을 누름 MODE' 가 표시됨 ⇒ 저장된 메모리가 삭제 된 것임",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 80.88,
-                "t": 585.659,
-                "r": 125.499,
-                "b": 639.648,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 4,
-              "end_row_offset_idx": 5,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "EL-520V EL-520W EL-506V EL-506W",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 80.88,
-                "t": 642.899,
-                "r": 125.499,
-                "b": 696.888,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 5,
-              "end_row_offset_idx": 6,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "EL-509V EL-509W EL-520R EL-512N",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 166.32,
-                "t": 595.572,
-                "r": 197.268,
-                "b": 607.56,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 4,
-              "end_row_offset_idx": 5,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "방법1",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 209.88,
-                "t": 580.8,
-                "r": 467.16,
-                "b": 621.96,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 4,
-              "end_row_offset_idx": 5,
-              "start_col_offset_idx": 2,
-              "end_col_offset_idx": 3,
-              "text": "❍ 계산기 뒷면 'Reset' 버튼만 누름 ⇒ 화면에 메모리 삭제표시는 없지만 저장된 메모리가 삭제된 것임",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 166.32,
-                "t": 660.012,
-                "r": 197.268,
-                "b": 672.0,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 5,
-              "end_row_offset_idx": 6,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "방법2",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 209.88,
-                "t": 631.212,
-                "r": 470.28,
-                "b": 700.8,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 5,
-              "end_row_offset_idx": 6,
-              "start_col_offset_idx": 2,
-              "end_col_offset_idx": 3,
-              "text": "① 계산기 뒷면 'Reset' 버튼만 누름 ② 'ALL CL?'가 표시됨 ③ ENT키를 누르면 숫자 '0'이 표시됨 ⇒ 화면에 메모리 삭제표시는 없지만 저장된 메모리가 삭제된 것임",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 111.0,
-                "t": 709.859,
-                "r": 163.409,
-                "b": 763.848,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 2,
-              "start_row_offset_idx": 6,
-              "end_row_offset_idx": 7,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 2,
-              "text": "EL-W531 EL-W531G EL-W531H EL-W535",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 209.88,
-                "t": 723.732,
-                "r": 484.56,
-                "b": 750.12,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 6,
-              "end_row_offset_idx": 7,
-              "start_col_offset_idx": 2,
-              "end_col_offset_idx": 3,
-              "text": "① '2ndF'와 'M-CLR'을 누름 ② 화면에 <M-CLR>메뉴 가 나오면  와  을 누름",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
             {
               "bbox": {
                 "l": 132.36,
@@ -2413,16 +2050,16 @@
               "fillable": false
             }
           ],
-          "num_rows": 7,
-          "num_cols": 3,
+          "num_rows": 13,
+          "num_cols": 2,
           "grid": [
             [
               {
                 "bbox": {
-                  "l": 116.76,
-                  "t": 350.772,
-                  "r": 146.76,
-                  "b": 362.76,
+                  "l": 132.36,
+                  "t": 102.61199999999997,
+                  "r": 162.36,
+                  "b": 114.60000000000002,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -2438,32 +2075,19 @@
                 "fillable": false
               },
               {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 1,
-                "end_col_offset_idx": 2,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
                 "bbox": {
-                  "l": 346.68,
-                  "t": 350.772,
-                  "r": 412.68,
-                  "b": 362.76,
+                  "l": 365.04,
+                  "t": 102.61199999999997,
+                  "r": 431.04,
+                  "b": 114.60000000000002,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
                 "col_span": 1,
                 "start_row_offset_idx": 0,
                 "end_row_offset_idx": 1,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
                 "text": "초기화 방법",
                 "column_header": true,
                 "row_header": false,
@@ -2474,10 +2098,10 @@
             [
               {
                 "bbox": {
-                  "l": 90.6,
-                  "t": 371.579,
-                  "r": 130.592,
-                  "b": 453.048,
+                  "l": 64.44,
+                  "t": 129.05899999999997,
+                  "r": 208.318,
+                  "b": 140.08799999999997,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -2486,47 +2110,20 @@
                 "end_row_offset_idx": 2,
                 "start_col_offset_idx": 0,
                 "end_col_offset_idx": 1,
-                "text": "EL-9900 EL-9650 EL-9600 EL-9400 EL-9300",
+                "text": "fx-82MS/85MS/300MS/350MS",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
                 "fillable": false
               },
               {
-                "bbox": {
-                  "l": 166.32,
-                  "t": 407.772,
-                  "r": 197.268,
-                  "b": 419.76,
-                  "coord_origin": "TOPLEFT"
-                },
                 "row_span": 1,
                 "col_span": 1,
                 "start_row_offset_idx": 1,
                 "end_row_offset_idx": 2,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "방법1",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 209.88,
-                  "t": 371.772,
-                  "r": 486.12,
-                  "b": 455.76,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "① 계산기 뒷면 'Reset' 버튼을 누름 ② 'Wait'가 표시됨 ③ 'PRESS [CL] KEY TO CLEAR ALL DATE'가 표시됨 ④ [CL] 키를 누름 ⑤ 'ALL DATE CLEARED' 가 표시됨 ⇒ 저장된 메모리가 삭제된 것임",
+                "text": "",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -2536,10 +2133,10 @@
             [
               {
                 "bbox": {
-                  "l": 90.6,
-                  "t": 459.539,
-                  "r": 130.592,
-                  "b": 523.3679999999999,
+                  "l": 64.44,
+                  "t": 163.25900000000001,
+                  "r": 175.437,
+                  "b": 174.288,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -2548,47 +2145,20 @@
                 "end_row_offset_idx": 3,
                 "start_col_offset_idx": 0,
                 "end_col_offset_idx": 1,
-                "text": "EL-9200 EL-5250 EL-5230 EL-5120",
+                "text": "fx-82SX PLUS/220PLUS",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
                 "fillable": false
               },
               {
-                "bbox": {
-                  "l": 166.32,
-                  "t": 490.812,
-                  "r": 197.268,
-                  "b": 502.8,
-                  "coord_origin": "TOPLEFT"
-                },
                 "row_span": 1,
                 "col_span": 1,
                 "start_row_offset_idx": 2,
                 "end_row_offset_idx": 3,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "방법2",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 209.88,
-                  "t": 469.212,
-                  "r": 457.44,
-                  "b": 524.4,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "① 계산기 뒷면 'Reset' 버튼을 누름 ② 'ALL DATE CL?' 가 표시되면, [CL] 키를 누름 ③ 'ALL DATE CLEARED' 문구가 표시됨 ⇒ 저장된 메모리가 삭제 된 것임",
+                "text": "",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -2598,59 +2168,32 @@
             [
               {
                 "bbox": {
-                  "l": 111.96,
-                  "t": 547.692,
-                  "r": 265.968,
-                  "b": 559.6800000000001,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 2,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 2,
-                "text": "EL-9000 ② 'COMP",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 111.96,
-                  "t": 547.692,
-                  "r": 265.968,
-                  "b": 559.6800000000001,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 2,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 2,
-                "text": "EL-9000 ② 'COMP",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 209.88,
-                  "t": 533.2919999999999,
-                  "r": 410.28,
-                  "b": 574.0799999999999,
+                  "l": 64.44,
+                  "t": 190.019,
+                  "r": 181.716,
+                  "b": 220.84799999999996,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
                 "col_span": 1,
                 "start_row_offset_idx": 3,
                 "end_row_offset_idx": 4,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "① 계산기 뒷면 'Reset' 버튼을 누름 MODE' 가 표시됨 ⇒ 저장된 메모리가 삭제 된 것임",
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "fx-95MS/100MS/115MS/ 570MS(912MS)/991MS",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -2660,10 +2203,10 @@
             [
               {
                 "bbox": {
-                  "l": 80.88,
-                  "t": 585.659,
-                  "r": 125.499,
-                  "b": 639.648,
+                  "l": 64.44,
+                  "t": 236.45899999999995,
+                  "r": 106.619,
+                  "b": 247.48800000000006,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -2672,47 +2215,20 @@
                 "end_row_offset_idx": 5,
                 "start_col_offset_idx": 0,
                 "end_col_offset_idx": 1,
-                "text": "EL-520V EL-520W EL-506V EL-506W",
+                "text": "fx-5800P",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
                 "fillable": false
               },
               {
-                "bbox": {
-                  "l": 166.32,
-                  "t": 595.572,
-                  "r": 197.268,
-                  "b": 607.56,
-                  "coord_origin": "TOPLEFT"
-                },
                 "row_span": 1,
                 "col_span": 1,
                 "start_row_offset_idx": 4,
                 "end_row_offset_idx": 5,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "방법1",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 209.88,
-                  "t": 580.8,
-                  "r": 467.16,
-                  "b": 621.96,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "❍ 계산기 뒷면 'Reset' 버튼만 누름 ⇒ 화면에 메모리 삭제표시는 없지만 저장된 메모리가 삭제된 것임",
+                "text": "",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -2722,10 +2238,10 @@
             [
               {
                 "bbox": {
-                  "l": 80.88,
-                  "t": 642.899,
-                  "r": 125.499,
-                  "b": 696.888,
+                  "l": 64.44,
+                  "t": 273.179,
+                  "r": 123.476,
+                  "b": 284.20799999999997,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -2734,47 +2250,20 @@
                 "end_row_offset_idx": 6,
                 "start_col_offset_idx": 0,
                 "end_col_offset_idx": 1,
-                "text": "EL-509V EL-509W EL-520R EL-512N",
+                "text": "fx-50F PLUS",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
                 "fillable": false
               },
               {
-                "bbox": {
-                  "l": 166.32,
-                  "t": 660.012,
-                  "r": 197.268,
-                  "b": 672.0,
-                  "coord_origin": "TOPLEFT"
-                },
                 "row_span": 1,
                 "col_span": 1,
                 "start_row_offset_idx": 5,
                 "end_row_offset_idx": 6,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "방법2",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 209.88,
-                  "t": 631.212,
-                  "r": 470.28,
-                  "b": 700.8,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "① 계산기 뒷면 'Reset' 버튼만 누름 ② 'ALL CL?'가 표시됨 ③ ENT키를 누르면 숫자 '0'이 표시됨 ⇒ 화면에 메모리 삭제표시는 없지만 저장된 메모리가 삭제된 것임",
+                "text": "",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -2784,59 +2273,277 @@
             [
               {
                 "bbox": {
-                  "l": 111.0,
-                  "t": 709.859,
-                  "r": 163.409,
-                  "b": 763.848,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 2,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 2,
-                "text": "EL-W531 EL-W531G EL-W531H EL-W535",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 111.0,
-                  "t": 709.859,
-                  "r": 163.409,
-                  "b": 763.848,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 2,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 2,
-                "text": "EL-W531 EL-W531G EL-W531H EL-W535",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 209.88,
-                  "t": 723.732,
-                  "r": 484.56,
-                  "b": 750.12,
+                  "l": 64.44,
+                  "t": 309.779,
+                  "r": 139.619,
+                  "b": 320.808,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
                 "col_span": 1,
                 "start_row_offset_idx": 6,
                 "end_row_offset_idx": 7,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "① '2ndF'와 'M-CLR'을 누름 ② 화면에 <M-CLR>메뉴 가 나오면  와  을 누름",
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "fx-3650P/3950P",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 64.44,
+                  "t": 333.659,
+                  "r": 191.434,
+                  "b": 415.128,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 7,
+                "end_row_offset_idx": 8,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "fx-82ES/82ES PLUS/ 83ES/85ES/85ES PLUS/ 95ES PLUS/115ES/ 300ES/350ES/350ES PLUS/ 500ES/570ES/570ES PLUS/",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 7,
+                "end_row_offset_idx": 8,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 64.44,
+                  "t": 435.539,
+                  "r": 206.759,
+                  "b": 518.088,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 8,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "FX-7400G / FX-7400G PLUS FX-9700GH / FX-9750G FX-9750G PLUS CFX-9850G/CFX-9850G PLUS CFX-9850GB/CFX-9850GB PLUS CFX-9850GC PLUS",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 240.96,
+                  "t": 439.692,
+                  "r": 486.36,
+                  "b": 514.0799999999999,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 8,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "① 계산기 뒷면 'Reset' 또는 'P' 버튼을 누름 ② 'Reset All Memory?'가 표시됨 ③ 'F1' 키를 누름 ④ 'Memory Cleared' 가 표시됨 ⇒ 저장된 메모리가 삭제 된 것임",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 64.44,
+                  "t": 523.8589999999999,
+                  "r": 230.04,
+                  "b": 561.192,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 9,
+                "end_row_offset_idx": 10,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "FX-9860GSD ※ SD Memory Card가있는경우제거후 초기화할것",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 240.96,
+                  "t": 521.052,
+                  "r": 478.8,
+                  "b": 564.24,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 9,
+                "end_row_offset_idx": 10,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "① AC/on키 → 메뉴모드에서 리플레이키로 화면이동하여 시스템을 선택 → ② EXE키 → F5 → F1 → F1 → EXIT",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 64.44,
+                  "t": 598.212,
+                  "r": 123.036,
+                  "b": 610.2,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 10,
+                "end_row_offset_idx": 11,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "FX-5500LA",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 240.96,
+                  "t": 567.012,
+                  "r": 444.96,
+                  "b": 641.4,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 10,
+                "end_row_offset_idx": 11,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "① 계산기 뒷면 'Reset' 버튼을 누름 ② 'ALL Reset?'가 표시됨 ③ 'F1' 키를 누름 ④ 화면이 초기화되어 백지상태로 됨 ⇒ 저장된 메모리가 삭제 된 것임",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 64.44,
+                  "t": 675.492,
+                  "r": 116.208,
+                  "b": 687.48,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 11,
+                "end_row_offset_idx": 12,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "FX-4800P",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 240.96,
+                  "t": 644.292,
+                  "r": 438.12,
+                  "b": 718.6800000000001,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 11,
+                "end_row_offset_idx": 12,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "① 계산기 뒷면 'Reset' 버튼을 누름 ② 'Reset all?' 이 표시됨 ③ 'EXE' 키를 누름 ④ 'RESET ALL MEMORIES' 가 표시됨 ⇒ 저장된 메모리가 삭제 된 것임",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 64.44,
+                  "t": 738.612,
+                  "r": 124.116,
+                  "b": 750.6,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 12,
+                "end_row_offset_idx": 13,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "FX-4500PA",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 240.96,
+                  "t": 723.012,
+                  "r": 444.96,
+                  "b": 766.2,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 12,
+                "end_row_offset_idx": 13,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "① 계산기 뒷면 'Reset' 버튼을 누름 ② 화면이 초기화되어 백지상태로 됨 ⇒ 저장된 메모리가 삭제 된 것",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -2847,7 +2554,6 @@
         },
         "annotations": [],
         "merged_from_pages": [
-          6,
           7,
           8
         ]
@@ -2859,7 +2565,7 @@
       "table_idx": 0,
       "page_no": 2,
       "title": "2.  시험일정 안내",
-      "disconnection_reason": "Table 0 -X-> 1: 연결 조건 미충족"
+      "disconnection_reason": "Table 0 -X-> 1: 같은 페이지의 다른 테이블 ('2.  시험일정 안내' vs '일정과 장소를 기관 측에 안내하였으니 참고하여 주시기 바랍니다.', 유사도: 0.24)"
     },
     {
       "table_idx": 1,
@@ -2871,7 +2577,7 @@
       "table_idx": 2,
       "page_no": 2,
       "title": "",
-      "disconnection_reason": "Table 2 -X-> 3: 연결 조건 미충족"
+      "disconnection_reason": "Table 2 -X-> 3: 두 번째 테이블에 새로운 타이틀 시작 ('2.  필답형 시험장 위치 [상세 시험장(건물) 위치는 수험표 참조]')"
     },
     {
       "table_idx": 3,
@@ -2880,10 +2586,16 @@
       "disconnection_reason": "Table 3 -X-> 4: 헤더는 동일하지만 키값이 겹침 (1개 중복)"
     },
     {
+      "table_idx": 6,
+      "page_no": 6,
+      "title": "① 샤  프(SHARP)",
+      "disconnection_reason": "Table 6 -X-> 7: 타이틀이 다름 ('① 샤  프(SHARP)' vs '② 카시오(CASIO)', 유사도: 0.36)"
+    },
+    {
       "table_idx": 9,
       "page_no": 8,
       "title": "③ 캐 논(CANON)",
-      "disconnection_reason": "Table 9 -X-> 10: 테이블 구조가 다름"
+      "disconnection_reason": "Table 9 -X-> 10: 같은 페이지의 다른 테이블 ('③ 캐 논(CANON)' vs '④ 유니원(UNIONE)', 유사도: 0.36)"
     },
     {
       "table_idx": 10,
@@ -2894,25 +2606,28 @@
   ],
   "all_disconnections": {
     "0": [
-      "Table 0 -X-> 1: 연결 조건 미충족"
+      "Table 0 -X-> 1: 같은 페이지의 다른 테이블 ('2.  시험일정 안내' vs '일정과 장소를 기관 측에 안내하였으니 참고하여 주시기 바랍니다.', 유사도: 0.24)"
     ],
     "1": [
       "Table 1 -X-> 2: 연결 조건 미충족"
     ],
     "2": [
-      "Table 2 -X-> 3: 연결 조건 미충족"
+      "Table 2 -X-> 3: 두 번째 테이블에 새로운 타이틀 시작 ('2.  필답형 시험장 위치 [상세 시험장(건물) 위치는 수험표 참조]')"
     ],
     "3": [
       "Table 3 -X-> 4: 헤더는 동일하지만 키값이 겹침 (1개 중복)"
     ],
     "5": [
-      "Table 5 -X-> 6: 연결 조건 미충족"
+      "Table 5 -X-> 6: 타이틀이 다름 ('5.  작업형 시험장 위치 (2군)  [상세 시험장(건물) 위치는 수험표 참조]' vs '① 샤  프(SHARP)', 유사도: 0.08)"
+    ],
+    "6": [
+      "Table 6 -X-> 7: 타이틀이 다름 ('① 샤  프(SHARP)' vs '② 카시오(CASIO)', 유사도: 0.36)"
     ],
     "8": [
-      "Table 8 -X-> 9: 테이블 구조가 다름"
+      "Table 8 -X-> 9: 두 번째 테이블에 새로운 타이틀 시작 ('③ 캐 논(CANON)')"
     ],
     "9": [
-      "Table 9 -X-> 10: 테이블 구조가 다름"
+      "Table 9 -X-> 10: 같은 페이지의 다른 테이블 ('③ 캐 논(CANON)' vs '④ 유니원(UNIONE)', 유사도: 0.36)"
     ]
   },
   "table_infos": [

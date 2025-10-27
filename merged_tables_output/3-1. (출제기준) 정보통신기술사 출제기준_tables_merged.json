@@ -10,7 +10,8 @@
         3,
         4,
         5,
-        6
+        6,
+        7
       ],
       "pages": [
         1,
@@ -18,18 +19,18 @@
         3,
         4,
         5,
-        6
+        6,
+        7
       ],
       "connection_reasons": [
         "Table 1 -> 2: 헤더가 동일함 (3개 일치)",
         "Table 2 -> 3: 헤더가 동일함 (3개 일치)",
         "Table 3 -> 4: 헤더가 동일함 (3개 일치)",
         "Table 4 -> 5: 텍스트 연결: 'o 위성통신망 시스템 구성 o 지구국, 위성중계국, 단말, 서비스 등' -> '주요항목'",
-        "Table 5 -> 6: 헤더가 동일함 (3개 일치)"
+        "Table 5 -> 6: 헤더가 동일함 (3개 일치)",
+        "Table 6 -> 7: 헤더가 동일함 (2개 일치)"
       ],
-      "disconnection_reasons": [
-        "Table 6 -X-> 7: 연결 조건 미충족"
-      ],
+      "disconnection_reasons": [],
       "merged_table": {
         "self_ref": "#/tables/1",
         "parent": {
@@ -1958,6 +1959,166 @@
               "row_header": false,
               "row_section": false,
               "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 161.4,
+                "t": 94.16200000000003,
+                "r": 198.828,
+                "b": 104.11199999999997,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "세부항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 362.4,
+                "t": 94.16200000000003,
+                "r": 399.828,
+                "b": 104.11199999999997,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "세세항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 137.4,
+                "t": 112.64200000000005,
+                "r": 215.04,
+                "b": 136.51199999999994,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "2. 정보통신공사 관련 기술기준",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 229.8,
+                "t": 112.64200000000005,
+                "r": 532.201,
+                "b": 154.51199999999994,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "o 방송통신설비의 기술기준에 관한 규정 o 접지설비·구내통신설비·선로설비 및 통신공동구 등에 관한 기술기준 o 방송공동수신설비의 설치기준에 관한 고시",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 137.4,
+                "t": 180.202,
+                "r": 225.12,
+                "b": 204.072,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "3. 건축물 정보통신 설비 관련 기준",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 229.8,
+                "t": 180.202,
+                "r": 499.227,
+                "b": 270.072,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "o 주택건설기준 등에 관한 규정 o 지능형 홈 네트워크 설비 설치 및 기술기준 o 비상방송설비의 화재안전기준(NFSC 102, 202, 204, 604) o 범죄예방 건축기준 고시 o 초고속 정보통신인증 o 홈네트워크 건물인증",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 137.4,
+                "t": 281.48199999999997,
+                "r": 226.92,
+                "b": 305.472,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "4. 정보통신실무 관련 각종 규정",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 229.8,
+                "t": 281.48199999999997,
+                "r": 532.811,
+                "b": 387.432,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "o 정보통신공사 감리 표준품셈 o 방송통신기자재 등의 적합성평가에 관한 고시 o 방송통신설비의 안전성·신뢰성 및 통신규약에 대한 기술기준 o TTA 표준(정보시스템 하드웨어 규모산정지침, 네트워크 구축을 위한 장비규모 산정지침, 디지털 방송 음량 레벨 운용 기준, LTE기반 철도통신시스템 요구사항 등) o ITU, IEEE, IETF 등의 표준 규격",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
             }
           ],
           "num_rows": 6,
@@ -2344,7 +2505,8 @@
           3,
           4,
           5,
-          6
+          6,
+          7
         ]
       }
     }
@@ -2354,21 +2516,12 @@
       "table_idx": 0,
       "page_no": 1,
       "title": "정보통신기술사 출제기준",
-      "disconnection_reason": "Table 0 -X-> 1: 테이블 구조가 다름"
-    },
-    {
-      "table_idx": 7,
-      "page_no": 7,
-      "title": "",
-      "disconnection_reason": ""
+      "disconnection_reason": "Table 0 -X-> 1: 연결 조건 미충족"
     }
   ],
   "all_disconnections": {
     "0": [
-      "Table 0 -X-> 1: 테이블 구조가 다름"
-    ],
-    "6": [
-      "Table 6 -X-> 7: 연결 조건 미충족"
+      "Table 0 -X-> 1: 연결 조건 미충족"
     ]
   },
   "table_infos": [

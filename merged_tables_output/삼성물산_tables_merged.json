@@ -5,6 +5,678 @@
     {
       "group_id": 0,
       "table_indices": [
+        1,
+        2
+      ],
+      "pages": [
+        2,
+        3
+      ],
+      "connection_reasons": [
+        "Table 1 -> 2: 타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
+      ],
+      "disconnection_reasons": [
+        "Table 2 -X-> 3: 두 번째 테이블에 새로운 타이틀 시작 ('③ 운영서버 1 번 정보 웹서버사용 65.130.11.147')"
+      ],
+      "merged_table": {
+        "self_ref": "#/tables/1",
+        "parent": {
+          "$ref": "#/body"
+        },
+        "children": [],
+        "content_layer": "body",
+        "label": "table",
+        "prov": [
+          {
+            "page_no": 2,
+            "bbox": {
+              "l": 155.83102416992188,
+              "t": 250.3251953125,
+              "r": 557.9420776367188,
+              "b": 164.62042236328125,
+              "coord_origin": "BOTTOMLEFT"
+            },
+            "charspan": [
+              0,
+              0
+            ]
+          }
+        ],
+        "captions": [],
+        "references": [],
+        "footnotes": [],
+        "data": {
+          "table_cells": [
+            {
+              "bbox": {
+                "l": 195.14,
+                "t": 353.038,
+                "r": 217.22,
+                "b": 363.494,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 317.09,
+                "t": 353.038,
+                "r": 339.17,
+                "b": 363.494,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "내용",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 467.95,
+                "t": 353.038,
+                "r": 490.03,
+                "b": 363.494,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "계정",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 179.06,
+                "t": 374.90200000000004,
+                "r": 232.94,
+                "b": 384.33500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "도메인 / 포트",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 258.17,
+                "t": 374.90200000000004,
+                "r": 389.174,
+                "b": 384.33500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "https://smobile.mkiis.co.kr:81",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 201.86,
+                "t": 395.54200000000003,
+                "r": 210.187,
+                "b": 404.975,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "IP",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 258.17,
+                "t": 395.54200000000003,
+                "r": 325.241,
+                "b": 404.975,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "210.118.117.77",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 403.85,
+                "t": 395.54200000000003,
+                "r": 507.158,
+                "b": 404.975,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "Woodwind / @ 건설 00",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 176.18,
+                "t": 416.09200000000004,
+                "r": 235.98,
+                "b": 425.5250000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Apache2.2.21",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 258.17,
+                "t": 416.09200000000004,
+                "r": 332.845,
+                "b": 425.5250000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "C:\\apache2.2.21",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 197.9,
+                "t": 88.98800000000006,
+                "r": 219.98,
+                "b": 99.44400000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 341.45,
+                "t": 88.98800000000006,
+                "r": 391.13,
+                "b": 99.44400000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "서버 사양",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 504.19,
+                "t": 88.98800000000006,
+                "r": 526.27,
+                "b": 99.44400000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "비고",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 198.38,
+                "t": 111.30800000000005,
+                "r": 219.444,
+                "b": 121.76400000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "CPU",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 262.85,
+                "t": 111.69200000000006,
+                "r": 464.371,
+                "b": 121.12500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Intel Xeon CPU E5645 @ 2.53GHz 2.53GHz",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 187.94,
+                "t": 133.62800000000004,
+                "r": 230.091,
+                "b": 144.08400000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Memory",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 262.85,
+                "t": 134.01200000000006,
+                "r": 286.634,
+                "b": 143.44500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "16GB",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 201.62,
+                "t": 155.94800000000004,
+                "r": 216.135,
+                "b": 166.40400000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "OS",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 262.85,
+                "t": 156.33200000000005,
+                "r": 425.199,
+                "b": 165.76500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Windows Server 2008 R2 Enterprise",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          "num_rows": 4,
+          "num_cols": 3,
+          "grid": [
+            [
+              {
+                "bbox": {
+                  "l": 195.14,
+                  "t": 353.038,
+                  "r": 217.22,
+                  "b": 363.494,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "항목",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 317.09,
+                  "t": 353.038,
+                  "r": 339.17,
+                  "b": 363.494,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "내용",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 467.95,
+                  "t": 353.038,
+                  "r": 490.03,
+                  "b": 363.494,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "계정",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 179.06,
+                  "t": 374.90200000000004,
+                  "r": 232.94,
+                  "b": 384.33500000000004,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "도메인 / 포트",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 258.17,
+                  "t": 374.90200000000004,
+                  "r": 389.174,
+                  "b": 384.33500000000004,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "https://smobile.mkiis.co.kr:81",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 201.86,
+                  "t": 395.54200000000003,
+                  "r": 210.187,
+                  "b": 404.975,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "IP",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 258.17,
+                  "t": 395.54200000000003,
+                  "r": 325.241,
+                  "b": 404.975,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "210.118.117.77",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 403.85,
+                  "t": 395.54200000000003,
+                  "r": 507.158,
+                  "b": 404.975,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "Woodwind / @ 건설 00",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 176.18,
+                  "t": 416.09200000000004,
+                  "r": 235.98,
+                  "b": 425.5250000000001,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "Apache2.2.21",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 258.17,
+                  "t": 416.09200000000004,
+                  "r": 332.845,
+                  "b": 425.5250000000001,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "C:\\apache2.2.21",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ]
+          ]
+        },
+        "annotations": [],
+        "merged_from_pages": [
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "group_id": 1,
+      "table_indices": [
         3,
         4,
         5
@@ -16,7 +688,7 @@
       ],
       "connection_reasons": [
         "Table 3 -> 4: 텍스트 연결: '웹경로는 가상 경로' -> '덤프파일 : //65.130.11.199/pmbfiles/SAT/OUT/DUMP/'",
-        "Table 4 -> 5: 헤더 테이블 뒤 데이터 테이블 (열 3개 vs 2개, 유사 구조)"
+        "Table 4 -> 5: 헤더 없는 데이터 테이블 연속 (열 3개 vs 2개, 연속 페이지)"
       ],
       "disconnection_reasons": [
         "Table 5 -X-> 6: 연결 조건 미충족"
@@ -1215,20 +1887,742 @@
       }
     },
     {
-      "group_id": 1,
+      "group_id": 2,
+      "table_indices": [
+        6,
+        7
+      ],
+      "pages": [
+        6,
+        6
+      ],
+      "connection_reasons": [
+        "Table 6 -> 7: 헤더가 동일함 (2개 일치)"
+      ],
+      "disconnection_reasons": [
+        "Table 7 -X-> 8: 두 번째 테이블에 새로운 타이틀 시작 ('③ 운영서버 1 번 정보 웹 서버 미사용 65.130.11.149')"
+      ],
+      "merged_table": {
+        "self_ref": "#/tables/6",
+        "parent": {
+          "$ref": "#/body"
+        },
+        "children": [],
+        "content_layer": "body",
+        "label": "table",
+        "prov": [
+          {
+            "page_no": 6,
+            "bbox": {
+              "l": 67.42329406738281,
+              "t": 515.8458938598633,
+              "r": 498.5915832519531,
+              "b": 428.2923126220703,
+              "coord_origin": "BOTTOMLEFT"
+            },
+            "charspan": [
+              0,
+              0
+            ]
+          }
+        ],
+        "captions": [],
+        "references": [],
+        "footnotes": [],
+        "data": {
+          "table_cells": [
+            {
+              "bbox": {
+                "l": 81.984,
+                "t": 87.42800000000005,
+                "r": 104.064,
+                "b": 97.88400000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 214.94,
+                "t": 87.42800000000005,
+                "r": 264.62,
+                "b": 97.88400000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "서버 사양",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 418.99,
+                "t": 87.42800000000005,
+                "r": 441.07,
+                "b": 97.88400000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "비고",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 82.464,
+                "t": 109.74800000000005,
+                "r": 103.528,
+                "b": 120.20400000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "CPU",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 119.78,
+                "t": 110.13200000000006,
+                "r": 272.118,
+                "b": 119.56500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Intel Xeon CPU E5-2630 v4 2.20G",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 365.45,
+                "t": 110.13200000000006,
+                "r": 401.744,
+                "b": 119.56500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "20CORE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 73.92,
+                "t": 131.49200000000008,
+                "r": 111.947,
+                "b": 140.92500000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Memory",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 119.78,
+                "t": 131.49200000000008,
+                "r": 143.587,
+                "b": 140.92500000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "48GB",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 86.424,
+                "t": 152.13200000000006,
+                "r": 99.512,
+                "b": 161.56500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "OS",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 119.78,
+                "t": 152.13200000000006,
+                "r": 347.054,
+                "b": 161.56500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Windows Server 2008 R2 Enterprise Server Pack 1",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 365.45,
+                "t": 152.13200000000006,
+                "r": 382.458,
+                "b": 161.56500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "X64",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 91.464,
+                "t": 197.85800000000006,
+                "r": 113.544,
+                "b": 208.31400000000008,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 221.54,
+                "t": 197.85800000000006,
+                "r": 262.7,
+                "b": 208.31400000000008,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "OA 정보",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 443.83,
+                "t": 197.85800000000006,
+                "r": 465.91,
+                "b": 208.31400000000008,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "비고",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 91.464,
+                "t": 220.17800000000005,
+                "r": 113.544,
+                "b": 230.63400000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "한글",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 138.62,
+                "t": 220.44200000000006,
+                "r": 185.508,
+                "b": 229.87500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "한글 2007",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 90.144,
+                "t": 241.92200000000003,
+                "r": 114.775,
+                "b": 251.35500000000008,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "office",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 138.62,
+                "t": 241.92200000000003,
+                "r": 190.621,
+                "b": 251.35500000000008,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Office 2010",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 82.464,
+                "t": 262.56200000000007,
+                "r": 122.304,
+                "b": 271.99500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "훈민정음",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 138.62,
+                "t": 262.56200000000007,
+                "r": 235.751,
+                "b": 271.99500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "정음 Global 9.1.3.727",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 351.29,
+                "t": 262.56200000000007,
+                "r": 517.308,
+                "b": 271.99500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "정음 글로벌은 항상 실행 ( 부하감소 )",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          "num_rows": 4,
+          "num_cols": 3,
+          "grid": [
+            [
+              {
+                "bbox": {
+                  "l": 81.984,
+                  "t": 87.42800000000005,
+                  "r": 104.064,
+                  "b": 97.88400000000007,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "항목",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 214.94,
+                  "t": 87.42800000000005,
+                  "r": 264.62,
+                  "b": 97.88400000000007,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "서버 사양",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 418.99,
+                  "t": 87.42800000000005,
+                  "r": 441.07,
+                  "b": 97.88400000000007,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "비고",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 82.464,
+                  "t": 109.74800000000005,
+                  "r": 103.528,
+                  "b": 120.20400000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "CPU",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 119.78,
+                  "t": 110.13200000000006,
+                  "r": 272.118,
+                  "b": 119.56500000000005,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "Intel Xeon CPU E5-2630 v4 2.20G",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 365.45,
+                  "t": 110.13200000000006,
+                  "r": 401.744,
+                  "b": 119.56500000000005,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "20CORE",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 73.92,
+                  "t": 131.49200000000008,
+                  "r": 111.947,
+                  "b": 140.92500000000007,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "Memory",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 119.78,
+                  "t": 131.49200000000008,
+                  "r": 143.587,
+                  "b": 140.92500000000007,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "48GB",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 86.424,
+                  "t": 152.13200000000006,
+                  "r": 99.512,
+                  "b": 161.56500000000005,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "OS",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 119.78,
+                  "t": 152.13200000000006,
+                  "r": 347.054,
+                  "b": 161.56500000000005,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "Windows Server 2008 R2 Enterprise Server Pack 1",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 365.45,
+                  "t": 152.13200000000006,
+                  "r": 382.458,
+                  "b": 161.56500000000005,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "X64",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ]
+          ]
+        },
+        "annotations": [],
+        "merged_from_pages": [
+          6,
+          6
+        ]
+      }
+    },
+    {
+      "group_id": 3,
       "table_indices": [
         8,
-        9
+        9,
+        10
       ],
       "pages": [
         7,
-        8
+        8,
+        9
       ],
       "connection_reasons": [
-        "Table 8 -> 9: 헤더 테이블 뒤 데이터 테이블 (열 3개 vs 2개, 유사 구조)"
+        "Table 8 -> 9: 타이틀이 있는 헤더 테이블 뒤 데이터 테이블 (연속 페이지)",
+        "Table 9 -> 10: 헤더 없는 데이터 테이블 연속 (열 2개 vs 2개, 연속 페이지)"
       ],
       "disconnection_reasons": [
-        "Table 9 -X-> 10: 연결 조건 미충족"
+        "Table 10 -X-> 11: 연결 조건 미충족"
       ],
       "merged_table": {
         "self_ref": "#/tables/8",
@@ -1834,6 +3228,46 @@
               "start_col_offset_idx": 1,
               "end_col_offset_idx": 2,
               "text": "[sMobileSE] #HTTP_URL=http://210.118.117.107:81/SimpleServer2/mobile_data/ HTTP_URL=https://smobile.mkiis.co.kr:81/SimpleServer2/mobile_data/ DBCONN=mbapp/!ahqkdlf00@65.253.2.160:1521:XEP1 Thumbnail_encryption=y SpoolCount=1( 동시변환 spool 개수 설정 ) CadSpoolCount=3 FailSpoolCount=3 SMSADDR=https://www.mkiis.co.kr/semp4/sendSMS.do",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 82.224,
+                "t": 134.61200000000002,
+                "r": 142.094,
+                "b": 144.04500000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "변환프로세스",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 100.05200000000008,
+                "r": 513.636,
+                "b": 178.63500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "1. U_CONVERTED =N : 변환대기중 2. U_CONVERTED =1 : 1 차 변환진행중 3. U_CONVERTED =2 : 1 차 변환실패 (1 번과 N 번 변환 완료시 N 으로 변경 ) 4. U_CONVERTED =3: 2 차 변환실패 (1 번과 2 번 변환 완료시 N 으로 변경 ) 5. U_CONVERTED =4,5,6 임시대기 사용문서",
               "column_header": false,
               "row_header": false,
               "row_section": false,
@@ -2495,12 +3929,732 @@
         "annotations": [],
         "merged_from_pages": [
           7,
-          8
+          8,
+          9
         ]
       }
     },
     {
-      "group_id": 2,
+      "group_id": 4,
+      "table_indices": [
+        11,
+        12
+      ],
+      "pages": [
+        9,
+        9
+      ],
+      "connection_reasons": [
+        "Table 11 -> 12: 헤더가 동일함 (2개 일치)"
+      ],
+      "disconnection_reasons": [
+        "Table 12 -X-> 13: 두 번째 테이블에 새로운 타이틀 시작 ('④ 개발서버 정보')"
+      ],
+      "merged_table": {
+        "self_ref": "#/tables/11",
+        "parent": {
+          "$ref": "#/body"
+        },
+        "children": [],
+        "content_layer": "body",
+        "label": "table",
+        "prov": [
+          {
+            "page_no": 9,
+            "bbox": {
+              "l": 67.50018310546875,
+              "t": 354.8288879394531,
+              "r": 498.1947937011719,
+              "b": 267.4593811035156,
+              "coord_origin": "BOTTOMLEFT"
+            },
+            "charspan": [
+              0,
+              0
+            ]
+          }
+        ],
+        "captions": [],
+        "references": [],
+        "footnotes": [],
+        "data": {
+          "table_cells": [
+            {
+              "bbox": {
+                "l": 81.984,
+                "t": 248.85800000000006,
+                "r": 104.064,
+                "b": 259.3140000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 214.94,
+                "t": 248.85800000000006,
+                "r": 264.62,
+                "b": 259.3140000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "서버 사양",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 418.99,
+                "t": 248.85800000000006,
+                "r": 441.07,
+                "b": 259.3140000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "비고",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 82.464,
+                "t": 271.17800000000005,
+                "r": 103.528,
+                "b": 281.63400000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "CPU",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 119.78,
+                "t": 271.44200000000006,
+                "r": 272.242,
+                "b": 280.87500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Intel Xeon CPU E5-2640 v4 2.40G",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 365.45,
+                "t": 271.44200000000006,
+                "r": 401.744,
+                "b": 280.87500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "10CORE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 73.92,
+                "t": 292.94200000000006,
+                "r": 111.947,
+                "b": 302.37500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Memory",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 119.78,
+                "t": 292.94200000000006,
+                "r": 143.587,
+                "b": 302.37500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "40GB",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 86.424,
+                "t": 313.58200000000005,
+                "r": 99.512,
+                "b": 323.01500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "OS",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 119.78,
+                "t": 313.58200000000005,
+                "r": 347.054,
+                "b": 323.01500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Windows Server 2012 R2 Enterprise Server Pack 1",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 365.45,
+                "t": 313.58200000000005,
+                "r": 382.458,
+                "b": 323.01500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "X64",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 91.464,
+                "t": 359.278,
+                "r": 113.544,
+                "b": 369.73400000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 221.54,
+                "t": 359.278,
+                "r": 262.7,
+                "b": 369.73400000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "OA 정보",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 443.83,
+                "t": 359.278,
+                "r": 465.91,
+                "b": 369.73400000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "비고",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 91.464,
+                "t": 381.59800000000007,
+                "r": 113.544,
+                "b": 392.0540000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "한글",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 138.62,
+                "t": 381.8620000000001,
+                "r": 185.508,
+                "b": 391.2950000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "한글 2007",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 90.144,
+                "t": 403.34200000000004,
+                "r": 114.775,
+                "b": 412.7750000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "office",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 138.62,
+                "t": 403.34200000000004,
+                "r": 190.621,
+                "b": 412.7750000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Office 2010",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 82.464,
+                "t": 424.01200000000006,
+                "r": 122.304,
+                "b": 433.44500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "훈민정음",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 138.62,
+                "t": 424.01200000000006,
+                "r": 235.751,
+                "b": 433.44500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "정음 Global 9.1.3.727",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 351.29,
+                "t": 424.01200000000006,
+                "r": 517.308,
+                "b": 433.44500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "정음 글로벌은 항상 실행 ( 부하감소 )",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          "num_rows": 4,
+          "num_cols": 3,
+          "grid": [
+            [
+              {
+                "bbox": {
+                  "l": 81.984,
+                  "t": 248.85800000000006,
+                  "r": 104.064,
+                  "b": 259.3140000000001,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "항목",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 214.94,
+                  "t": 248.85800000000006,
+                  "r": 264.62,
+                  "b": 259.3140000000001,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "서버 사양",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 418.99,
+                  "t": 248.85800000000006,
+                  "r": 441.07,
+                  "b": 259.3140000000001,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "비고",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 82.464,
+                  "t": 271.17800000000005,
+                  "r": 103.528,
+                  "b": 281.63400000000007,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "CPU",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 119.78,
+                  "t": 271.44200000000006,
+                  "r": 272.242,
+                  "b": 280.87500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "Intel Xeon CPU E5-2640 v4 2.40G",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 365.45,
+                  "t": 271.44200000000006,
+                  "r": 401.744,
+                  "b": 280.87500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "10CORE",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 73.92,
+                  "t": 292.94200000000006,
+                  "r": 111.947,
+                  "b": 302.37500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "Memory",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 119.78,
+                  "t": 292.94200000000006,
+                  "r": 143.587,
+                  "b": 302.37500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "40GB",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 86.424,
+                  "t": 313.58200000000005,
+                  "r": 99.512,
+                  "b": 323.01500000000004,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "OS",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 119.78,
+                  "t": 313.58200000000005,
+                  "r": 347.054,
+                  "b": 323.01500000000004,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "Windows Server 2012 R2 Enterprise Server Pack 1",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 365.45,
+                  "t": 313.58200000000005,
+                  "r": 382.458,
+                  "b": 323.01500000000004,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "X64",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ]
+          ]
+        },
+        "annotations": [],
+        "merged_from_pages": [
+          9,
+          9
+        ]
+      }
+    },
+    {
+      "group_id": 5,
       "table_indices": [
         13,
         14
@@ -2510,7 +4664,7 @@
         11
       ],
       "connection_reasons": [
-        "Table 13 -> 14: 헤더 테이블 뒤 데이터 테이블 (열 3개 vs 2개, 유사 구조)"
+        "Table 13 -> 14: 타이틀이 있는 헤더 테이블 뒤 데이터 테이블 (연속 페이지)"
       ],
       "disconnection_reasons": [
         "Table 14 -X-> 15: 연결 조건 미충족"
@@ -3820,21 +5974,23 @@
       }
     },
     {
-      "group_id": 3,
+      "group_id": 6,
       "table_indices": [
-        16,
-        17
+        15,
+        16
       ],
       "pages": [
         11,
-        12
+        11
       ],
       "connection_reasons": [
-        "Table 16 -> 17: 헤더 테이블 뒤 데이터 테이블 (열 3개 vs 2개, 유사 구조)"
+        "Table 15 -> 16: 헤더가 동일함 (2개 일치)"
       ],
-      "disconnection_reasons": [],
+      "disconnection_reasons": [
+        "Table 16 -X-> 17: 연결 조건 미충족"
+      ],
       "merged_table": {
-        "self_ref": "#/tables/16",
+        "self_ref": "#/tables/15",
         "parent": {
           "$ref": "#/body"
         },
@@ -3845,10 +6001,10 @@
           {
             "page_no": 11,
             "bbox": {
-              "l": 67.77172088623047,
-              "t": 222.41702270507812,
-              "r": 512.0531005859375,
-              "b": 134.75714111328125,
+              "l": 67.48741149902344,
+              "t": 330.96844482421875,
+              "r": 512.0689697265625,
+              "b": 243.4356689453125,
               "coord_origin": "BOTTOMLEFT"
             },
             "charspan": [
@@ -3862,6 +6018,226 @@
         "footnotes": [],
         "data": {
           "table_cells": [
+            {
+              "bbox": {
+                "l": 81.984,
+                "t": 272.85800000000006,
+                "r": 104.064,
+                "b": 283.3140000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 211.82,
+                "t": 272.85800000000006,
+                "r": 261.5,
+                "b": 283.3140000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "서버 사양",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 422.95,
+                "t": 272.85800000000006,
+                "r": 445.03,
+                "b": 283.3140000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "비고",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 82.464,
+                "t": 295.19800000000004,
+                "r": 103.528,
+                "b": 305.65400000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "CPU",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 119.78,
+                "t": 295.58200000000005,
+                "r": 329.401,
+                "b": 305.01500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Intel® Xeon® CPU E7 -4830 2.13GHz 2.13GHz",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 359.21,
+                "t": 295.58200000000005,
+                "r": 422.08,
+                "b": 305.01500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "4 개 프로세스",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 73.92,
+                "t": 317.06200000000007,
+                "r": 111.947,
+                "b": 326.49500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Memory",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 119.78,
+                "t": 317.06200000000007,
+                "r": 143.587,
+                "b": 326.49500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "16GB",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 86.424,
+                "t": 337.58200000000005,
+                "r": 99.512,
+                "b": 347.01500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "OS",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 119.78,
+                "t": 337.58200000000005,
+                "r": 336.925,
+                "b": 347.01500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Windows Server 2008 R2 Standard Service Pack",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 340.431,
+                "t": 337.58200000000005,
+                "r": 345.919,
+                "b": 347.01500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "1",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
             {
               "bbox": {
                 "l": 91.464,
@@ -4041,86 +6417,6 @@
               "row_header": false,
               "row_section": false,
               "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 87.264,
-                "t": 126.45200000000006,
-                "r": 137.174,
-                "b": 153.16500000000008,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 0,
-              "end_row_offset_idx": 1,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "아이피변경 수정파일",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 154.94,
-                "t": 109.17200000000003,
-                "r": 221.582,
-                "b": 170.44500000000005,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 0,
-              "end_row_offset_idx": 1,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "common.php httpd.conf httpdx64.conf option.ini",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 79.704,
-                "t": 243.24200000000008,
-                "r": 144.62,
-                "b": 269.95500000000004,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 1,
-              "end_row_offset_idx": 2,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "신규패치시 추 가사항",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 174.98,
-                "t": 217.32200000000006,
-                "r": 600.43,
-                "b": 278.595,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 1,
-              "end_row_offset_idx": 2,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "1. JAVA_HOME=C:\\Program Files\\Java\\jdk1.7.0_25 jce_policy-8.zip 해당폴더에 넣어야 복호화가능 2. 훈민정음 TLB 패치진행 3. APCHE 권한설정",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
             }
           ],
           "num_rows": 4,
@@ -4129,10 +6425,10 @@
             [
               {
                 "bbox": {
-                  "l": 91.464,
-                  "t": 381.59800000000007,
-                  "r": 113.544,
-                  "b": 392.0540000000001,
+                  "l": 81.984,
+                  "t": 272.85800000000006,
+                  "r": 104.064,
+                  "b": 283.3140000000001,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -4149,10 +6445,10 @@
               },
               {
                 "bbox": {
-                  "l": 225.02,
-                  "t": 381.59800000000007,
-                  "r": 266.21,
-                  "b": 392.0540000000001,
+                  "l": 211.82,
+                  "t": 272.85800000000006,
+                  "r": 261.5,
+                  "b": 283.3140000000001,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -4161,7 +6457,7 @@
                 "end_row_offset_idx": 1,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "OA 정보",
+                "text": "서버 사양",
                 "column_header": true,
                 "row_header": false,
                 "row_section": false,
@@ -4169,10 +6465,10 @@
               },
               {
                 "bbox": {
-                  "l": 422.47,
-                  "t": 381.59800000000007,
-                  "r": 444.55,
-                  "b": 392.0540000000001,
+                  "l": 422.95,
+                  "t": 272.85800000000006,
+                  "r": 445.03,
+                  "b": 283.3140000000001,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -4191,120 +6487,127 @@
             [
               {
                 "bbox": {
-                  "l": 91.464,
-                  "t": 403.91800000000006,
-                  "r": 113.544,
-                  "b": 414.374,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 1,
-                "text": "한글",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 138.62,
-                  "t": 404.302,
-                  "r": 185.508,
-                  "b": 413.735,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 1,
-                "end_col_offset_idx": 2,
-                "text": "한글 2010",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              }
-            ],
-            [
-              {
-                "bbox": {
-                  "l": 90.144,
-                  "t": 425.812,
-                  "r": 114.775,
-                  "b": 435.24500000000006,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 1,
-                "text": "office",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 138.62,
-                  "t": 425.812,
-                  "r": 190.621,
-                  "b": 435.24500000000006,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 1,
-                "end_col_offset_idx": 2,
-                "text": "Office 2010",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              }
-            ],
-            [
-              {
-                "bbox": {
                   "l": 82.464,
-                  "t": 446.33200000000005,
-                  "r": 122.304,
-                  "b": 455.76500000000004,
+                  "t": 295.19800000000004,
+                  "r": 103.528,
+                  "b": 305.65400000000005,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "CPU",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 119.78,
+                  "t": 295.58200000000005,
+                  "r": 329.401,
+                  "b": 305.01500000000004,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "Intel® Xeon® CPU E7 -4830 2.13GHz 2.13GHz",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 359.21,
+                  "t": 295.58200000000005,
+                  "r": 422.08,
+                  "b": 305.01500000000004,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "4 개 프로세스",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 73.92,
+                  "t": 317.06200000000007,
+                  "r": 111.947,
+                  "b": 326.49500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "Memory",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 119.78,
+                  "t": 317.06200000000007,
+                  "r": 143.587,
+                  "b": 326.49500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "16GB",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 86.424,
+                  "t": 337.58200000000005,
+                  "r": 99.512,
+                  "b": 347.01500000000004,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -4313,7 +6616,7 @@
                 "end_row_offset_idx": 4,
                 "start_col_offset_idx": 0,
                 "end_col_offset_idx": 1,
-                "text": "훈민정음",
+                "text": "OS",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -4321,10 +6624,10 @@
               },
               {
                 "bbox": {
-                  "l": 138.62,
-                  "t": 446.33200000000005,
-                  "r": 235.73,
-                  "b": 455.76500000000004,
+                  "l": 119.78,
+                  "t": 337.58200000000005,
+                  "r": 336.925,
+                  "b": 347.01500000000004,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -4333,20 +6636,27 @@
                 "end_row_offset_idx": 4,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "정음 Global 9.1.3.727",
+                "text": "Windows Server 2008 R2 Standard Service Pack",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
                 "fillable": false
               },
               {
+                "bbox": {
+                  "l": 340.431,
+                  "t": 337.58200000000005,
+                  "r": 345.919,
+                  "b": 347.01500000000004,
+                  "coord_origin": "TOPLEFT"
+                },
                 "row_span": 1,
                 "col_span": 1,
                 "start_row_offset_idx": 3,
                 "end_row_offset_idx": 4,
                 "start_col_offset_idx": 2,
                 "end_col_offset_idx": 3,
-                "text": "",
+                "text": "1",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -4358,7 +6668,7 @@
         "annotations": [],
         "merged_from_pages": [
           11,
-          12
+          11
         ]
       }
     }
@@ -4368,93 +6678,39 @@
       "table_idx": 0,
       "page_no": 2,
       "title": "① 삼성물산 CI 담당자 및 작업 PC 정보",
-      "disconnection_reason": "Table 0 -X-> 1: 연결 조건 미충족"
+      "disconnection_reason": "Table 0 -X-> 1: 같은 페이지의 다른 테이블 ('① 삼성물산 CI 담당자 및 작업 PC 정보' vs '② 중계서버 정보', 유사도: 0.12)"
     },
     {
-      "table_idx": 1,
-      "page_no": 2,
-      "title": "② 중계서버 정보",
-      "disconnection_reason": "Table 1 -X-> 2: 연결 조건 미충족"
-    },
-    {
-      "table_idx": 2,
-      "page_no": 3,
-      "title": "3",
-      "disconnection_reason": "Table 2 -X-> 3: 연결 조건 미충족"
-    },
-    {
-      "table_idx": 6,
-      "page_no": 6,
-      "title": "6",
-      "disconnection_reason": "Table 6 -X-> 7: 연결 조건 미충족"
-    },
-    {
-      "table_idx": 7,
-      "page_no": 6,
-      "title": "6",
-      "disconnection_reason": "Table 7 -X-> 8: 연결 조건 미충족"
-    },
-    {
-      "table_idx": 10,
-      "page_no": 9,
-      "title": "9",
-      "disconnection_reason": "Table 10 -X-> 11: 연결 조건 미충족"
-    },
-    {
-      "table_idx": 11,
-      "page_no": 9,
-      "title": "9",
-      "disconnection_reason": "Table 11 -X-> 12: 연결 조건 미충족"
-    },
-    {
-      "table_idx": 12,
-      "page_no": 9,
-      "title": "9",
-      "disconnection_reason": "Table 12 -X-> 13: 연결 조건 미충족"
-    },
-    {
-      "table_idx": 15,
-      "page_no": 11,
-      "title": "11",
-      "disconnection_reason": "Table 15 -X-> 16: 연결 조건 미충족"
+      "table_idx": 17,
+      "page_no": 12,
+      "title": "",
+      "disconnection_reason": ""
     }
   ],
   "all_disconnections": {
     "0": [
-      "Table 0 -X-> 1: 연결 조건 미충족"
-    ],
-    "1": [
-      "Table 1 -X-> 2: 연결 조건 미충족"
+      "Table 0 -X-> 1: 같은 페이지의 다른 테이블 ('① 삼성물산 CI 담당자 및 작업 PC 정보' vs '② 중계서버 정보', 유사도: 0.12)"
     ],
     "2": [
-      "Table 2 -X-> 3: 연결 조건 미충족"
+      "Table 2 -X-> 3: 두 번째 테이블에 새로운 타이틀 시작 ('③ 운영서버 1 번 정보 웹서버사용 65.130.11.147')"
     ],
     "5": [
       "Table 5 -X-> 6: 연결 조건 미충족"
     ],
-    "6": [
-      "Table 6 -X-> 7: 연결 조건 미충족"
-    ],
     "7": [
-      "Table 7 -X-> 8: 연결 조건 미충족"
-    ],
-    "9": [
-      "Table 9 -X-> 10: 연결 조건 미충족"
+      "Table 7 -X-> 8: 두 번째 테이블에 새로운 타이틀 시작 ('③ 운영서버 1 번 정보 웹 서버 미사용 65.130.11.149')"
     ],
     "10": [
       "Table 10 -X-> 11: 연결 조건 미충족"
     ],
-    "11": [
-      "Table 11 -X-> 12: 연결 조건 미충족"
-    ],
     "12": [
-      "Table 12 -X-> 13: 연결 조건 미충족"
+      "Table 12 -X-> 13: 두 번째 테이블에 새로운 타이틀 시작 ('④ 개발서버 정보')"
     ],
     "14": [
       "Table 14 -X-> 15: 연결 조건 미충족"
     ],
-    "15": [
-      "Table 15 -X-> 16: 연결 조건 미충족"
+    "16": [
+      "Table 16 -X-> 17: 연결 조건 미충족"
     ]
   },
   "table_infos": [
@@ -4471,7 +6727,7 @@
     {
       "table_idx": 2,
       "page_no": 3,
-      "title": "3"
+      "title": ""
     },
     {
       "table_idx": 3,
@@ -4481,22 +6737,22 @@
     {
       "table_idx": 4,
       "page_no": 4,
-      "title": "4"
+      "title": ""
     },
     {
       "table_idx": 5,
       "page_no": 5,
-      "title": "5"
+      "title": ""
     },
     {
       "table_idx": 6,
       "page_no": 6,
-      "title": "6"
+      "title": ""
     },
     {
       "table_idx": 7,
       "page_no": 6,
-      "title": "6"
+      "title": ""
     },
     {
       "table_idx": 8,
@@ -4506,22 +6762,22 @@
     {
       "table_idx": 9,
       "page_no": 8,
-      "title": "8"
+      "title": ""
     },
     {
       "table_idx": 10,
       "page_no": 9,
-      "title": "9"
+      "title": ""
     },
     {
       "table_idx": 11,
       "page_no": 9,
-      "title": "9"
+      "title": ""
     },
     {
       "table_idx": 12,
       "page_no": 9,
-      "title": "9"
+      "title": ""
     },
     {
       "table_idx": 13,
@@ -4531,12 +6787,12 @@
     {
       "table_idx": 14,
       "page_no": 11,
-      "title": "11"
+      "title": ""
     },
     {
       "table_idx": 15,
       "page_no": 11,
-      "title": "11"
+      "title": ""
     },
     {
       "table_idx": 16,
@@ -4546,7 +6802,7 @@
     {
       "table_idx": 17,
       "page_no": 12,
-      "title": "12"
+      "title": ""
     }
   ]
 }

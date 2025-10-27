@@ -7,25 +7,25 @@
       "table_idx": 0,
       "page_no": 1,
       "title": "정보통신기술사",
-      "disconnection_reason": "Table 0 -X-> 1: 연결 조건 미충족"
+      "disconnection_reason": "Table 0 -X-> 1: 같은 페이지의 다른 테이블 ('정보통신기술사' vs '기능장 기사 산업기사 기능사 · · ·', 유사도: 0.29)"
     },
     {
       "table_idx": 1,
       "page_no": 1,
       "title": "기능장 기사 산업기사 기능사 · · ·",
-      "disconnection_reason": "Table 1 -X-> 2: 연결 조건 미충족"
+      "disconnection_reason": "Table 1 -X-> 2: 타이틀이 다름 ('기능장 기사 산업기사 기능사 · · ·' vs '전파전자통신기능사', 유사도: 0.38)"
     },
     {
       "table_idx": 2,
       "page_no": 2,
       "title": "전파전자통신기능사",
-      "disconnection_reason": "Table 2 -X-> 3: 연결 조건 미충족"
+      "disconnection_reason": "Table 2 -X-> 3: 같은 페이지의 다른 테이블 ('전파전자통신기능사' vs '무선통신사 종목 아마추어무선기사 종목', 유사도: 0.33)"
     },
     {
       "table_idx": 3,
       "page_no": 2,
       "title": "무선통신사 종목 아마추어무선기사 종목",
-      "disconnection_reason": "Table 3 -X-> 4: 연결 조건 미충족"
+      "disconnection_reason": "Table 3 -X-> 4: 같은 페이지의 다른 테이블 ('무선통신사 종목 아마추어무선기사 종목' vs '종목항공제외 세부 시행일정', 유사도: 0.17)"
     },
     {
       "table_idx": 4,
@@ -37,43 +37,43 @@
       "table_idx": 5,
       "page_no": 3,
       "title": "항공무선통신사 세부 시행일정",
-      "disconnection_reason": "Table 5 -X-> 6: 연결 조건 미충족"
+      "disconnection_reason": "Table 5 -X-> 6: 같은 페이지의 다른 테이블 ('항공무선통신사 세부 시행일정' vs '정보통신기술사', 유사도: 0.31)"
     },
     {
       "table_idx": 6,
       "page_no": 3,
       "title": "정보통신기술사",
-      "disconnection_reason": "Table 6 -X-> 7: 연결 조건 미충족"
+      "disconnection_reason": "Table 6 -X-> 7: 타이틀이 다름 ('정보통신기술사' vs '기능장 기사 산업기사 기능사', 유사도: 0.29)"
     },
     {
       "table_idx": 7,
       "page_no": 4,
       "title": "기능장 기사 산업기사 기능사",
-      "disconnection_reason": "Table 7 -X-> 8: 연결 조건 미충족"
+      "disconnection_reason": "Table 7 -X-> 8: 같은 페이지의 다른 테이블 ('기능장 기사 산업기사 기능사' vs '무선통신사 종목 아마추어무선기사 종목', 유사도: 0.17)"
     },
     {
       "table_idx": 8,
       "page_no": 4,
       "title": "무선통신사 종목 아마추어무선기사 종목",
-      "disconnection_reason": "Table 8 -X-> 9: 테이블 구조가 다름"
+      "disconnection_reason": "Table 8 -X-> 9: 타이틀이 다름 ('무선통신사 종목 아마추어무선기사 종목' vs 'Ⅳ. 시행종목별 시험시간', 유사도: 0.17)"
     },
     {
       "table_idx": 9,
       "page_no": 5,
       "title": "Ⅳ. 시행종목별 시험시간",
-      "disconnection_reason": "Table 9 -X-> 10: 테이블 구조가 다름"
+      "disconnection_reason": "Table 9 -X-> 10: 타이틀이 다름 ('Ⅳ. 시행종목별 시험시간' vs '신규 민간자격 소개', 유사도: 0.11)"
     },
     {
       "table_idx": 10,
       "page_no": 6,
       "title": "신규 민간자격 소개",
-      "disconnection_reason": "Table 10 -X-> 11: 테이블 구조가 다름"
+      "disconnection_reason": "Table 10 -X-> 11: 같은 페이지의 다른 테이블 ('신규 민간자격 소개' vs '연간  회 정기검정 시행 단체 요청 시 특별검정 시행', 유사도: 0.07)"
     },
     {
       "table_idx": 11,
       "page_no": 6,
       "title": "연간  회 정기검정 시행 단체 요청 시 특별검정 시행",
-      "disconnection_reason": "Table 11 -X-> 12: 테이블 구조가 다름"
+      "disconnection_reason": "Table 11 -X-> 12: 같은 페이지의 다른 테이블 ('연간  회 정기검정 시행 단체 요청 시 특별검정 시행' vs '정기검정 및 특별검정', 유사도: 0.36)"
     },
     {
       "table_idx": 12,
@@ -84,40 +84,40 @@
   ],
   "all_disconnections": {
     "0": [
-      "Table 0 -X-> 1: 연결 조건 미충족"
+      "Table 0 -X-> 1: 같은 페이지의 다른 테이블 ('정보통신기술사' vs '기능장 기사 산업기사 기능사 · · ·', 유사도: 0.29)"
     ],
     "1": [
-      "Table 1 -X-> 2: 연결 조건 미충족"
+      "Table 1 -X-> 2: 타이틀이 다름 ('기능장 기사 산업기사 기능사 · · ·' vs '전파전자통신기능사', 유사도: 0.38)"
     ],
     "2": [
-      "Table 2 -X-> 3: 연결 조건 미충족"
+      "Table 2 -X-> 3: 같은 페이지의 다른 테이블 ('전파전자통신기능사' vs '무선통신사 종목 아마추어무선기사 종목', 유사도: 0.33)"
     ],
     "3": [
-      "Table 3 -X-> 4: 연결 조건 미충족"
+      "Table 3 -X-> 4: 같은 페이지의 다른 테이블 ('무선통신사 종목 아마추어무선기사 종목' vs '종목항공제외 세부 시행일정', 유사도: 0.17)"
     ],
     "4": [
       "Table 4 -X-> 5: 연결 조건 미충족"
     ],
     "5": [
-      "Table 5 -X-> 6: 연결 조건 미충족"
+      "Table 5 -X-> 6: 같은 페이지의 다른 테이블 ('항공무선통신사 세부 시행일정' vs '정보통신기술사', 유사도: 0.31)"
     ],
     "6": [
-      "Table 6 -X-> 7: 연결 조건 미충족"
+      "Table 6 -X-> 7: 타이틀이 다름 ('정보통신기술사' vs '기능장 기사 산업기사 기능사', 유사도: 0.29)"
     ],
     "7": [
-      "Table 7 -X-> 8: 연결 조건 미충족"
+      "Table 7 -X-> 8: 같은 페이지의 다른 테이블 ('기능장 기사 산업기사 기능사' vs '무선통신사 종목 아마추어무선기사 종목', 유사도: 0.17)"
     ],
     "8": [
-      "Table 8 -X-> 9: 테이블 구조가 다름"
+      "Table 8 -X-> 9: 타이틀이 다름 ('무선통신사 종목 아마추어무선기사 종목' vs 'Ⅳ. 시행종목별 시험시간', 유사도: 0.17)"
     ],
     "9": [
-      "Table 9 -X-> 10: 테이블 구조가 다름"
+      "Table 9 -X-> 10: 타이틀이 다름 ('Ⅳ. 시행종목별 시험시간' vs '신규 민간자격 소개', 유사도: 0.11)"
     ],
     "10": [
-      "Table 10 -X-> 11: 테이블 구조가 다름"
+      "Table 10 -X-> 11: 같은 페이지의 다른 테이블 ('신규 민간자격 소개' vs '연간  회 정기검정 시행 단체 요청 시 특별검정 시행', 유사도: 0.07)"
     ],
     "11": [
-      "Table 11 -X-> 12: 테이블 구조가 다름"
+      "Table 11 -X-> 12: 같은 페이지의 다른 테이블 ('연간  회 정기검정 시행 단체 요청 시 특별검정 시행' vs '정기검정 및 특별검정', 유사도: 0.36)"
     ]
   },
   "table_infos": [
