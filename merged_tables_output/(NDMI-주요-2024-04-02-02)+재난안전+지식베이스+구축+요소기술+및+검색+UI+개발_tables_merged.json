@@ -1,0 +1,2524 @@
+{
+  "source_file": "table_output\\(NDMI-주요-2024-04-02-02)+재난안전+지식베이스+구축+요소기술+및+검색+UI+개발_tables.json",
+  "original_table_count": 29,
+  "merged_groups": [
+    {
+      "group_id": 0,
+      "table_indices": [
+        7,
+        8
+      ],
+      "pages": [
+        40,
+        41
+      ],
+      "connection_reasons": [
+        "Table 7 -> 8: 텍스트 연결: 'SENT001' -> 'SENT001'"
+      ],
+      "merged_table": {
+        "self_ref": "#/tables/7",
+        "parent": {
+          "$ref": "#/body"
+        },
+        "children": [],
+        "content_layer": "body",
+        "label": "table",
+        "prov": [
+          {
+            "page_no": 40,
+            "bbox": {
+              "l": 270.7958068847656,
+              "t": 684.1697540283203,
+              "r": 494.7814025878906,
+              "b": 612.5979309082031,
+              "coord_origin": "BOTTOMLEFT"
+            },
+            "charspan": [
+              0,
+              0
+            ]
+          }
+        ],
+        "captions": [],
+        "references": [],
+        "footnotes": [],
+        "data": {
+          "table_cells": [
+            {
+              "bbox": {
+                "l": 384.0,
+                "t": 175.66666666666666,
+                "r": 417.6666666666667,
+                "b": 182.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "Predicate",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 319.0,
+                "t": 190.33333333333334,
+                "r": 335.33333333333337,
+                "b": 196.33333333333334,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "SENT001",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 398.6666666666667,
+                "t": 191.0,
+                "r": 403.3333333333333,
+                "b": 196.66666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "3",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 432.3333333333333,
+                "t": 190.33333333333334,
+                "r": 443.6666666666667,
+                "b": 196.66666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "(3,4)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 465.6666666666667,
+                "t": 190.0,
+                "r": 483.6666666666667,
+                "b": 196.66666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 5,
+              "end_col_offset_idx": 6,
+              "text": "品",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 281.33333333333337,
+                "t": 204.66666666666666,
+                "r": 299.33333333333337,
+                "b": 210.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "DOC12345",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 319.33333333333337,
+                "t": 204.66666666666666,
+                "r": 335.0,
+                "b": 210.33333333333334,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "SENT002",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 354.66666666666663,
+                "t": 204.33333333333334,
+                "r": 373.6666666666667,
+                "b": 210.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "2024-12-01",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 398.3333333333333,
+                "t": 204.0,
+                "r": 403.6666666666667,
+                "b": 211.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "5",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 432.3333333333333,
+                "t": 204.0,
+                "r": 443.6666666666667,
+                "b": 211.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "(5,6)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 465.3333333333333,
+                "t": 203.33333333333334,
+                "r": 484.0,
+                "b": 211.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 5,
+              "end_col_offset_idx": 6,
+              "text": "扫位",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 281.0,
+                "t": 218.33333333333331,
+                "r": 299.66666666666663,
+                "b": 225.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "DOC67890",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 319.0,
+                "t": 218.33333333333331,
+                "r": 335.33333333333337,
+                "b": 225.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "SENT001",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 354.66666666666663,
+                "t": 218.33333333333331,
+                "r": 374.3333333333333,
+                "b": 225.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "2024-11-30",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 472.6666666666667,
+                "t": 540.6666666666666,
+                "r": 497.0,
+                "b": 546.6666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 5,
+              "end_col_offset_idx": 6,
+              "text": "subject",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 329.33333333333337,
+                "t": 553.6666666666666,
+                "r": 345.33333333333337,
+                "b": 559.6666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "SENT001",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 364.66666666666663,
+                "t": 553.6666666666666,
+                "r": 383.3333333333333,
+                "b": 559.6666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "2024-12-01",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 408.6666666666667,
+                "t": 554.3333333333334,
+                "r": 413.3333333333333,
+                "b": 559.6666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "0",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 443.6666666666667,
+                "t": 553.6666666666666,
+                "r": 452.3333333333333,
+                "b": 560.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "0-2",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 479.6666666666667,
+                "t": 553.3333333333334,
+                "r": 490.6666666666667,
+                "b": 560.6666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 5,
+              "end_col_offset_idx": 6,
+              "text": "旱",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 293.0,
+                "t": 566.3333333333334,
+                "r": 307.66666666666663,
+                "b": 572.6666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "DOCO01",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 329.33333333333337,
+                "t": 566.3333333333334,
+                "r": 345.66666666666663,
+                "b": 572.6666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "SENT002",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 364.66666666666663,
+                "t": 566.6666666666666,
+                "r": 383.6666666666667,
+                "b": 572.6666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "2024-12-01",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 408.3333333333333,
+                "t": 566.6666666666666,
+                "r": 414.3333333333333,
+                "b": 574.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "15",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 442.3333333333333,
+                "t": 566.3333333333334,
+                "r": 454.0,
+                "b": 573.3333333333334,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "15-17",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 293.0,
+                "t": 579.3333333333334,
+                "r": 307.66666666666663,
+                "b": 585.3333333333334,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "DOCO02",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 329.66666666666663,
+                "t": 579.3333333333334,
+                "r": 345.0,
+                "b": 585.3333333333334,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "SENT001",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 364.66666666666663,
+                "t": 579.3333333333334,
+                "r": 383.6666666666667,
+                "b": 585.3333333333334,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "2024-12-02",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 408.6666666666667,
+                "t": 579.0,
+                "r": 413.6666666666667,
+                "b": 586.3333333333334,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "8",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 443.0,
+                "t": 579.0,
+                "r": 452.6666666666667,
+                "b": 585.6666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "8-10",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 330.0,
+                "t": 592.0,
+                "r": 345.0,
+                "b": 598.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "SENT003",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 364.66666666666663,
+                "t": 592.0,
+                "r": 383.6666666666667,
+                "b": 598.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "2024-12-03",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 408.3333333333333,
+                "t": 592.3333333333334,
+                "r": 414.0,
+                "b": 597.6666666666666,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "3",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 444.6666666666667,
+                "t": 592.0,
+                "r": 451.6666666666667,
+                "b": 598.3333333333334,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "3-5",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          "num_rows": 4,
+          "num_cols": 6,
+          "grid": [
+            [
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 384.0,
+                  "t": 175.66666666666666,
+                  "r": 417.6666666666667,
+                  "b": 182.0,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "Predicate",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 4,
+                "end_col_offset_idx": 5,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 5,
+                "end_col_offset_idx": 6,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 319.0,
+                  "t": 190.33333333333334,
+                  "r": 335.33333333333337,
+                  "b": 196.33333333333334,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "SENT001",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 398.6666666666667,
+                  "t": 191.0,
+                  "r": 403.3333333333333,
+                  "b": 196.66666666666666,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "3",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 432.3333333333333,
+                  "t": 190.33333333333334,
+                  "r": 443.6666666666667,
+                  "b": 196.66666666666666,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 4,
+                "end_col_offset_idx": 5,
+                "text": "(3,4)",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 465.6666666666667,
+                  "t": 190.0,
+                  "r": 483.6666666666667,
+                  "b": 196.66666666666666,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 5,
+                "end_col_offset_idx": 6,
+                "text": "品",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 281.33333333333337,
+                  "t": 204.66666666666666,
+                  "r": 299.33333333333337,
+                  "b": 210.0,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "DOC12345",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 319.33333333333337,
+                  "t": 204.66666666666666,
+                  "r": 335.0,
+                  "b": 210.33333333333334,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "SENT002",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 354.66666666666663,
+                  "t": 204.33333333333334,
+                  "r": 373.6666666666667,
+                  "b": 210.0,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "2024-12-01",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 398.3333333333333,
+                  "t": 204.0,
+                  "r": 403.6666666666667,
+                  "b": 211.0,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "5",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 432.3333333333333,
+                  "t": 204.0,
+                  "r": 443.6666666666667,
+                  "b": 211.0,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 4,
+                "end_col_offset_idx": 5,
+                "text": "(5,6)",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 465.3333333333333,
+                  "t": 203.33333333333334,
+                  "r": 484.0,
+                  "b": 211.0,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 5,
+                "end_col_offset_idx": 6,
+                "text": "扫位",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 281.0,
+                  "t": 218.33333333333331,
+                  "r": 299.66666666666663,
+                  "b": 225.0,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "DOC67890",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 319.0,
+                  "t": 218.33333333333331,
+                  "r": 335.33333333333337,
+                  "b": 225.0,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "SENT001",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 354.66666666666663,
+                  "t": 218.33333333333331,
+                  "r": 374.3333333333333,
+                  "b": 225.0,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "2024-11-30",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 4,
+                "end_col_offset_idx": 5,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 5,
+                "end_col_offset_idx": 6,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ]
+          ]
+        },
+        "annotations": [],
+        "merged_from_pages": [
+          40,
+          41
+        ]
+      }
+    },
+    {
+      "group_id": 1,
+      "table_indices": [
+        12,
+        13,
+        14
+      ],
+      "pages": [
+        66,
+        68,
+        70
+      ],
+      "connection_reasons": [
+        "Table 12 -> 13: 헤더가 동일함 (2개 일치)",
+        "Table 13 -> 14: 텍스트 연결: '쿼터 및 제한' -> 'APIKey (필수)'"
+      ],
+      "merged_table": {
+        "self_ref": "#/tables/12",
+        "parent": {
+          "$ref": "#/body"
+        },
+        "children": [
+          {
+            "$ref": "#/texts/1127"
+          }
+        ],
+        "content_layer": "body",
+        "label": "table",
+        "prov": [
+          {
+            "page_no": 66,
+            "bbox": {
+              "l": 110.47203063964844,
+              "t": 662.1945343017578,
+              "r": 495.0184326171875,
+              "b": 528.4177551269531,
+              "coord_origin": "BOTTOMLEFT"
+            },
+            "charspan": [
+              0,
+              0
+            ]
+          }
+        ],
+        "captions": [
+          {
+            "$ref": "#/texts/1127"
+          }
+        ],
+        "references": [],
+        "footnotes": [],
+        "data": {
+          "table_cells": [
+            {
+              "bbox": {
+                "l": 169.92,
+                "t": 183.72000000000003,
+                "r": 185.328,
+                "b": 192.72000000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 361.32,
+                "t": 183.72000000000003,
+                "r": 376.728,
+                "b": 192.72000000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "설명",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 160.08,
+                "t": 198.36,
+                "r": 195.289,
+                "b": 207.36,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "뉴스 검색",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 245.04,
+                "t": 197.83799999999997,
+                "r": 421.489,
+                "b": 207.36,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 특정 주제나 키워드를 기반으로 최신 뉴스 검색",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 148.56,
+                "t": 213.0,
+                "r": 206.81,
+                "b": 222.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "카테고리 필터링",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 245.04,
+                "t": 212.47799999999995,
+                "r": 446.57,
+                "b": 222.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 스포츠, 경제, 기술 등 다양한 카테고리별 뉴스 필터링",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 156.24,
+                "t": 227.64,
+                "r": 199.13,
+                "b": 236.64,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "출처 필터링",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 245.04,
+                "t": 227.11800000000005,
+                "r": 429.17,
+                "b": 236.64,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 특정 뉴스 출처나 출판사를 기반으로 뉴스 필터링",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 150.24,
+                "t": 242.39999999999998,
+                "r": 205.129,
+                "b": 251.39999999999998,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "날짜 범위 지정",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 245.04,
+                "t": 241.87800000000004,
+                "r": 383.089,
+                "b": 251.39999999999998,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 특정 날짜 범위 내의 뉴스 기사 검색",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 156.24,
+                "t": 257.03999999999996,
+                "r": 199.13,
+                "b": 266.03999999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "언어 필터링",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 245.04,
+                "t": 256.51800000000003,
+                "r": 394.009,
+                "b": 266.03999999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 원하는 언어로 작성된 뉴스 기사만 검색",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 160.08,
+                "t": 271.67999999999995,
+                "r": 195.289,
+                "b": 280.67999999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "정렬 옵션",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 245.04,
+                "t": 271.158,
+                "r": 405.529,
+                "b": 280.67999999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 최신 순, 관련성 순 등으로 검색 결과 정렬",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 152.4,
+                "t": 286.32000000000005,
+                "r": 202.97,
+                "b": 295.32000000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 7,
+              "end_row_offset_idx": 8,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "기사 미리보기",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 245.04,
+                "t": 285.798,
+                "r": 470.689,
+                "b": 295.32000000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 7,
+              "end_row_offset_idx": 8,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 뉴스 기사 제목, 요약, 출처 등을 포함한 기사 미리보기 제공",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 150.24,
+                "t": 300.96000000000004,
+                "r": 205.129,
+                "b": 309.96000000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 8,
+              "end_row_offset_idx": 9,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "지역 뉴스 검색",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 245.04,
+                "t": 300.438,
+                "r": 351.289,
+                "b": 309.96000000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 8,
+              "end_row_offset_idx": 9,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 특정 지역에 대한 뉴스 검색",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 169.92,
+                "t": 183.72000000000003,
+                "r": 185.328,
+                "b": 192.72000000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 361.32,
+                "t": 183.72000000000003,
+                "r": 376.728,
+                "b": 192.72000000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "설명",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 164.76,
+                "t": 198.36,
+                "r": 190.609,
+                "b": 207.36,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "API 키",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 249.48,
+                "t": 197.83799999999997,
+                "r": 350.689,
+                "b": 207.36,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• API 접근을 위한 인증 키",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 160.08,
+                "t": 213.0,
+                "r": 195.289,
+                "b": 222.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "검색 쿼리",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 249.48,
+                "t": 212.47799999999995,
+                "r": 422.569,
+                "b": 222.0,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 뉴스 기사를 검색하기 위한 키워드 또는 문구",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 160.08,
+                "t": 227.64,
+                "r": 195.289,
+                "b": 236.64,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "필터 옵션",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 249.48,
+                "t": 227.11800000000005,
+                "r": 462.409,
+                "b": 236.64,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 카테고리, 출처, 날짜 범위, 언어 등 다양한 필터링 옵션",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 160.08,
+                "t": 242.39999999999998,
+                "r": 195.289,
+                "b": 251.39999999999998,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "정렬 옵션",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 249.48,
+                "t": 241.87800000000004,
+                "r": 375.409,
+                "b": 251.39999999999998,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 검색 결과를 정렬하기 위한 옵션",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 160.08,
+                "t": 257.03999999999996,
+                "r": 195.289,
+                "b": 266.03999999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "응답 형식",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 249.48,
+                "t": 256.51800000000003,
+                "r": 390.409,
+                "b": 266.03999999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• JSON 형식으로 제공되는 검색 결과",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 148.56,
+                "t": 277.55999999999995,
+                "r": 206.81,
+                "b": 286.55999999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "기사 메타데이터",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 249.48,
+                "t": 271.158,
+                "r": 490.85,
+                "b": 292.44000000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 기사 제목, 요약, URL, 출처, 발행 날짜 등 뉴스 기사와 관련된 메타데이터",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.08,
+                "t": 298.08000000000004,
+                "r": 201.289,
+                "b": 307.08000000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 7,
+              "end_row_offset_idx": 8,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "쿼터 및 제한",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 249.48,
+                "t": 297.558,
+                "r": 423.769,
+                "b": 307.08000000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 7,
+              "end_row_offset_idx": 8,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 하루 또는 분당 호출 수에 대한 쿼터 및 제한",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 156.24,
+                "t": 312.72,
+                "r": 199.13,
+                "b": 321.72,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 8,
+              "end_row_offset_idx": 9,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "에러 핸들링",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 249.48,
+                "t": 312.198,
+                "r": 488.929,
+                "b": 321.72,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 8,
+              "end_row_offset_idx": 9,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• 잘못된 요청, 인증 실패 등 다양한 에러 상황에 대한 응답 처리",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 148.68,
+                "t": 183.72000000000003,
+                "r": 164.208,
+                "b": 192.72000000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 340.08,
+                "t": 183.72000000000003,
+                "r": 355.488,
+                "b": 192.72000000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "설명",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 129.6,
+                "t": 204.24,
+                "r": 183.228,
+                "b": 213.24,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "APIKey (필수)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 207.0,
+                "t": 197.83799999999997,
+                "r": 447.542,
+                "b": 219.12,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• Your API key. Alternatively you can provide this via the X-Api-KeyHTTP header.",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 138.72,
+                "t": 242.27999999999997,
+                "r": 174.147,
+                "b": 251.27999999999997,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Category",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 207.0,
+                "t": 224.23800000000006,
+                "r": 485.462,
+                "b": 268.91999999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• Find sources that display news of this category. • Possible options : business entertainment general health science sports technology. • Default: all categories",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 137.28,
+                "t": 286.32000000000005,
+                "r": 175.622,
+                "b": 295.32000000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Language",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 207.0,
+                "t": 274.038,
+                "r": 470.78,
+                "b": 306.96000000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• Find sources that display news in a specific language. • Possible options : ar de en es fr he it nl no pt ru sv ud zh. • Default : all languages.",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 141.0,
+                "t": 336.12,
+                "r": 171.987,
+                "b": 345.12,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Country",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 207.0,
+                "t": 312.198,
+                "r": 493.223,
+                "b": 368.52,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "• Find sources that display news in a specific country. • Possible options : ae ar at au be bg br ca ch cn co cu cz de eg fr gb gr hk hu id ie il in it jp kr lt lv ma mx my ng nl no nz ph pl pt ro rs ru sa se sg si sk th tr tw ua us ve za. • Default : all countries.",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          "num_rows": 9,
+          "num_cols": 2,
+          "grid": [
+            [
+              {
+                "bbox": {
+                  "l": 169.92,
+                  "t": 183.72000000000003,
+                  "r": 185.328,
+                  "b": 192.72000000000003,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "항목",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 361.32,
+                  "t": 183.72000000000003,
+                  "r": 376.728,
+                  "b": 192.72000000000003,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "설명",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 160.08,
+                  "t": 198.36,
+                  "r": 195.289,
+                  "b": 207.36,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "뉴스 검색",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 245.04,
+                  "t": 197.83799999999997,
+                  "r": 421.489,
+                  "b": 207.36,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "• 특정 주제나 키워드를 기반으로 최신 뉴스 검색",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 148.56,
+                  "t": 213.0,
+                  "r": 206.81,
+                  "b": 222.0,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "카테고리 필터링",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 245.04,
+                  "t": 212.47799999999995,
+                  "r": 446.57,
+                  "b": 222.0,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "• 스포츠, 경제, 기술 등 다양한 카테고리별 뉴스 필터링",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 156.24,
+                  "t": 227.64,
+                  "r": 199.13,
+                  "b": 236.64,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "출처 필터링",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 245.04,
+                  "t": 227.11800000000005,
+                  "r": 429.17,
+                  "b": 236.64,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "• 특정 뉴스 출처나 출판사를 기반으로 뉴스 필터링",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 150.24,
+                  "t": 242.39999999999998,
+                  "r": 205.129,
+                  "b": 251.39999999999998,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "날짜 범위 지정",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 245.04,
+                  "t": 241.87800000000004,
+                  "r": 383.089,
+                  "b": 251.39999999999998,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "• 특정 날짜 범위 내의 뉴스 기사 검색",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 156.24,
+                  "t": 257.03999999999996,
+                  "r": 199.13,
+                  "b": 266.03999999999996,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 6,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "언어 필터링",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 245.04,
+                  "t": 256.51800000000003,
+                  "r": 394.009,
+                  "b": 266.03999999999996,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 6,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "• 원하는 언어로 작성된 뉴스 기사만 검색",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 160.08,
+                  "t": 271.67999999999995,
+                  "r": 195.289,
+                  "b": 280.67999999999995,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "정렬 옵션",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 245.04,
+                  "t": 271.158,
+                  "r": 405.529,
+                  "b": 280.67999999999995,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "• 최신 순, 관련성 순 등으로 검색 결과 정렬",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 152.4,
+                  "t": 286.32000000000005,
+                  "r": 202.97,
+                  "b": 295.32000000000005,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 7,
+                "end_row_offset_idx": 8,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "기사 미리보기",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 245.04,
+                  "t": 285.798,
+                  "r": 470.689,
+                  "b": 295.32000000000005,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 7,
+                "end_row_offset_idx": 8,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "• 뉴스 기사 제목, 요약, 출처 등을 포함한 기사 미리보기 제공",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 150.24,
+                  "t": 300.96000000000004,
+                  "r": 205.129,
+                  "b": 309.96000000000004,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 8,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "지역 뉴스 검색",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 245.04,
+                  "t": 300.438,
+                  "r": 351.289,
+                  "b": 309.96000000000004,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 8,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "• 특정 지역에 대한 뉴스 검색",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ]
+          ]
+        },
+        "annotations": [],
+        "merged_from_pages": [
+          66,
+          68,
+          70
+        ]
+      }
+    }
+  ]
+}

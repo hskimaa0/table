@@ -1,0 +1,8 @@
+docling
+pandas
+numpy
+scikit-learn
+PyMuPDF
+Pillow
+transformers
+torch

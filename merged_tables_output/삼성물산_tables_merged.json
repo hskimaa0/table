@@ -1,0 +1,1151 @@
+{
+  "source_file": "table_output\\삼성물산_tables.json",
+  "original_table_count": 18,
+  "merged_groups": [
+    {
+      "group_id": 0,
+      "table_indices": [
+        3,
+        4
+      ],
+      "pages": [
+        3,
+        4
+      ],
+      "connection_reasons": [
+        "Table 3 -> 4: 텍스트 연결: '웹경로는 가상 경로' -> '덤프파일 : //65.130.11.199/pmbfiles/SAT/OUT/DUMP/'"
+      ],
+      "merged_table": {
+        "self_ref": "#/tables/3",
+        "parent": {
+          "$ref": "#/body"
+        },
+        "children": [],
+        "content_layer": "body",
+        "label": "table",
+        "prov": [
+          {
+            "page_no": 3,
+            "bbox": {
+              "l": 71.0179214477539,
+              "t": 362.77696228027344,
+              "r": 770.7244873046875,
+              "b": 93.68963623046875,
+              "coord_origin": "BOTTOMLEFT"
+            },
+            "charspan": [
+              0,
+              0
+            ]
+          }
+        ],
+        "captions": [],
+        "references": [],
+        "footnotes": [],
+        "data": {
+          "table_cells": [
+            {
+              "bbox": {
+                "l": 101.18,
+                "t": 240.93800000000005,
+                "r": 123.26,
+                "b": 251.39400000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "항목",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 382.61,
+                "t": 240.93800000000005,
+                "r": 404.69,
+                "b": 251.39400000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "내용",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 691.54,
+                "t": 240.93800000000005,
+                "r": 713.62,
+                "b": 251.39400000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "계정",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 91.944,
+                "t": 262.8020000000001,
+                "r": 132.26,
+                "b": 272.23500000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "URL 정보",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 262.8020000000001,
+                "r": 316.939,
+                "b": 272.23500000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "도메인 /SimpleServer, SimpleServer2",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 108.02,
+                "t": 283.32200000000006,
+                "r": 116.347,
+                "b": 292.75500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "IP",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 284.511,
+                "r": 229.267,
+                "b": 293.69900000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "65.130.11.147",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 638.02,
+                "t": 283.80800000000005,
+                "r": 731.002,
+                "b": 292.80800000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "sccadm / !manager12",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 92.184,
+                "t": 305.66200000000003,
+                "r": 132.024,
+                "b": 332.37500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "스토리지 연결정보",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 304.99000000000007,
+                "r": 351.076,
+                "b": 334.17500000000007,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "\\\\65.130.11.199/pmbfiles /SAT/IN, OUT H:\\ 드라이브로 설정 고정",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 638.02,
+                "t": 305.66200000000003,
+                "r": 746.86,
+                "b": 332.37500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "유닉스 / 윈도우계정 동일 vnxuser2 / !manager12",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 94.344,
+                "t": 346.94200000000006,
+                "r": 130.011,
+                "b": 356.37500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "sMobile",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 346.94200000000006,
+                "r": 356.139,
+                "b": 356.37500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "C:\\Program Files (x86)\\SAT Info\\Smobile\\",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 82.704,
+                "t": 419.57200000000006,
+                "r": 141.518,
+                "b": 446.2850000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 4,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 9,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "SimpleServer ( 웹 경로 )",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 371.302,
+                "r": 526.015,
+                "b": 380.735,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "C:\\Program Files (x86)\\SAT Info\\Smobile\\webapp\\www\\htdocs\\SimpleServer",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 638.02,
+                "t": 371.302,
+                "r": 721.126,
+                "b": 380.735,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "루트정보 /htdocs/",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 394.22200000000004,
+                "r": 477.062,
+                "b": 420.96500000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "첨부파일 웹경로 : /SimpleServer2/attachment/ 첨부파일 물리경로 : //65.130.11.199/pmbfiles/SAT/OUT/attachment/",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 432.052,
+                "r": 480.962,
+                "b": 458.76500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 7,
+              "end_row_offset_idx": 8,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "캐시파일 웹경로 : /SimpleServer2/mobile_data/ 캐시파일 물리경로 : //65.130.11.199/pmbfiles/SAT/OUT/mobile_data/",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 638.02,
+                "t": 440.69200000000006,
+                "r": 727.9,
+                "b": 450.12500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 7,
+              "end_row_offset_idx": 8,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "웹경로는 가상 경로",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 469.97200000000004,
+                "r": 398.229,
+                "b": 496.68500000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 8,
+              "end_row_offset_idx": 9,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "마크업 웹경로 : /SimpleServer/data/markup_data/ 마크업 물리경로 : /SimpleServer/data/markup_data/",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 79.41200000000003,
+                "r": 408.606,
+                "b": 88.84500000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "덤프파일 : //65.130.11.199/pmbfiles/SAT/OUT/DUMP/",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 78.144,
+                "t": 162.21200000000005,
+                "r": 146.06,
+                "b": 171.64500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "오라클 DB 정보",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 99.93200000000007,
+                "r": 471.612,
+                "b": 161.32500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "TNS 정보 - XEP1 https://smobile.mkiis.co.kr:81/SimpleServer/db1458/adminer.php? TSNB_D01 DBCONN=mbapp/!ahqkdlf00@65.130.11.21:1527:XEP1",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 638.02,
+                "t": 125.97200000000004,
+                "r": 733.659,
+                "b": 135.40500000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "mbapp / !ahqkdlf00",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 224.40200000000004,
+                "r": 608.1,
+                "b": 375.45500000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "첨부물테이블 : SE_ATTACHMENT_LIST JAVA_HOME =C:\\Program Files\\Java\\jdk1.7.0_25 jce_policy-8.zip 해당폴더에 넣어야 복호화가능 ORACLE_HOME = C:\\Program Files (x86)\\SAT Info\\Smobile\\webapp\\www\\htdocs\\SimpleServer\\Setting\\instantclient_11_2 TNS_ADMIN =C:\\Program Files (x86)\\SAT Info\\Smobile\\webapp\\www\\htdocs\\SimpleServer\\Setting\\instantclient_11_2\\network\\admin NLS_LANG = KOREAN_KOREA.AL32UTF8 PATH =C:\\Program Files\\Java\\jdk1.7.0_25\\bin;C:\\Program Files (x86)\\SAT Info\\Smobile\\webapp\\instantclient_11_2; C:\\Program Files\\Java\\jdk1.7.0_25;",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 84.744,
+                "t": 305.54200000000003,
+                "r": 139.58,
+                "b": 314.975,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "시스템 패스",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 90.024,
+                "t": 441.89200000000005,
+                "r": 134.197,
+                "b": 451.32500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Option.ini",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 154.94,
+                "t": 390.02200000000005,
+                "r": 490.184,
+                "b": 503.16100000000006,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "[sMobileSE] #HTTP_URL=http://210.118.117.107:81/SimpleServer2/mobile_data/ HTTP_URL=https://smobile.mkiis.co.kr:81/SimpleServer2/mobile_data/ DBCONN=mbapp/!ahqkdlf00@65.253.2.160:1521:XEP1 Thumbnail_encryption=y SpoolCount=1( 동시변환 spool 개수 설정 ) CadSpoolCount=3",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          "num_rows": 9,
+          "num_cols": 3,
+          "grid": [
+            [
+              {
+                "bbox": {
+                  "l": 101.18,
+                  "t": 240.93800000000005,
+                  "r": 123.26,
+                  "b": 251.39400000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "항목",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 382.61,
+                  "t": 240.93800000000005,
+                  "r": 404.69,
+                  "b": 251.39400000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "내용",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 691.54,
+                  "t": 240.93800000000005,
+                  "r": 713.62,
+                  "b": 251.39400000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "계정",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 91.944,
+                  "t": 262.8020000000001,
+                  "r": 132.26,
+                  "b": 272.23500000000007,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "URL 정보",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 154.94,
+                  "t": 262.8020000000001,
+                  "r": 316.939,
+                  "b": 272.23500000000007,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "도메인 /SimpleServer, SimpleServer2",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 108.02,
+                  "t": 283.32200000000006,
+                  "r": 116.347,
+                  "b": 292.75500000000005,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "IP",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 154.94,
+                  "t": 284.511,
+                  "r": 229.267,
+                  "b": 293.69900000000007,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "65.130.11.147",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 638.02,
+                  "t": 283.80800000000005,
+                  "r": 731.002,
+                  "b": 292.80800000000005,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "sccadm / !manager12",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 92.184,
+                  "t": 305.66200000000003,
+                  "r": 132.024,
+                  "b": 332.37500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "스토리지 연결정보",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 154.94,
+                  "t": 304.99000000000007,
+                  "r": 351.076,
+                  "b": 334.17500000000007,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "\\\\65.130.11.199/pmbfiles /SAT/IN, OUT H:\\ 드라이브로 설정 고정",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 638.02,
+                  "t": 305.66200000000003,
+                  "r": 746.86,
+                  "b": 332.37500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "유닉스 / 윈도우계정 동일 vnxuser2 / !manager12",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 94.344,
+                  "t": 346.94200000000006,
+                  "r": 130.011,
+                  "b": 356.37500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "sMobile",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 154.94,
+                  "t": 346.94200000000006,
+                  "r": 356.139,
+                  "b": 356.37500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "C:\\Program Files (x86)\\SAT Info\\Smobile\\",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 82.704,
+                  "t": 419.57200000000006,
+                  "r": 141.518,
+                  "b": 446.2850000000001,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 4,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "SimpleServer ( 웹 경로 )",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 154.94,
+                  "t": 371.302,
+                  "r": 526.015,
+                  "b": 380.735,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 6,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "C:\\Program Files (x86)\\SAT Info\\Smobile\\webapp\\www\\htdocs\\SimpleServer",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 638.02,
+                  "t": 371.302,
+                  "r": 721.126,
+                  "b": 380.735,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 6,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "루트정보 /htdocs/",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 82.704,
+                  "t": 419.57200000000006,
+                  "r": 141.518,
+                  "b": 446.2850000000001,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 4,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "SimpleServer ( 웹 경로 )",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 154.94,
+                  "t": 394.22200000000004,
+                  "r": 477.062,
+                  "b": 420.96500000000003,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "첨부파일 웹경로 : /SimpleServer2/attachment/ 첨부파일 물리경로 : //65.130.11.199/pmbfiles/SAT/OUT/attachment/",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 82.704,
+                  "t": 419.57200000000006,
+                  "r": 141.518,
+                  "b": 446.2850000000001,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 4,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "SimpleServer ( 웹 경로 )",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 154.94,
+                  "t": 432.052,
+                  "r": 480.962,
+                  "b": 458.76500000000004,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 7,
+                "end_row_offset_idx": 8,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "캐시파일 웹경로 : /SimpleServer2/mobile_data/ 캐시파일 물리경로 : //65.130.11.199/pmbfiles/SAT/OUT/mobile_data/",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 638.02,
+                  "t": 440.69200000000006,
+                  "r": 727.9,
+                  "b": 450.12500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 7,
+                "end_row_offset_idx": 8,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "웹경로는 가상 경로",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 82.704,
+                  "t": 419.57200000000006,
+                  "r": 141.518,
+                  "b": 446.2850000000001,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 4,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "SimpleServer ( 웹 경로 )",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 154.94,
+                  "t": 469.97200000000004,
+                  "r": 398.229,
+                  "b": 496.68500000000006,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 8,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "마크업 웹경로 : /SimpleServer/data/markup_data/ 마크업 물리경로 : /SimpleServer/data/markup_data/",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 8,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ]
+          ]
+        },
+        "annotations": [],
+        "merged_from_pages": [
+          3,
+          4
+        ]
+      }
+    }
+  ]
+}
