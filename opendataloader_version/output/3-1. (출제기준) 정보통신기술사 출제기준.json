@@ -1,0 +1,4231 @@
+{
+  "file name" : "3-1. (출제기준) 정보통신기술사 출제기준.pdf",
+  "number of pages" : 7,
+  "author" : "Owner",
+  "title" : null,
+  "creation date" : "D:20250718103310+09'00'",
+  "modification date" : "D:20250718103310+09'00'",
+  "kids" : [ {
+    "type" : "paragraph",
+    "id" : 147,
+    "level" : "1",
+    "page number" : 1,
+    "bounding box" : [ 284.966, 42.422, 309.873, 55.356 ],
+    "font" : "HCRDotum",
+    "font size" : 9.949,
+    "text color" : "[0.0]",
+    "content" : "- 1 -"
+  }, {
+    "type" : "heading",
+    "id" : 148,
+    "level" : "Doctitle",
+    "page number" : 1,
+    "bounding box" : [ 182.541, 736.157, 412.456, 756.175 ],
+    "heading level" : 1,
+    "font" : "Batang",
+    "font size" : 20.018,
+    "text color" : "[0.0]",
+    "content" : "정보통신기술사 출제기준"
+  }, {
+    "type" : "image",
+    "id" : 149,
+    "page number" : 1,
+    "bounding box" : [ 182.542, 733.777, 412.338, 736.175 ]
+  }, {
+    "type" : "table",
+    "id" : 150,
+    "level" : "2",
+    "page number" : 1,
+    "bounding box" : [ 58.949, 444.774, 534.912, 715.916 ],
+    "number of rows" : 6,
+    "number of columns" : 6,
+    "rows" : [ {
+      "type" : "table row",
+      "row number" : 1,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 59.518, 674.742, 110.221, 715.107 ],
+        "row number" : 1,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 1,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 74.839, 681.927, 94.749, 709.664 ],
+          "heading level" : 4,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "직무 분야"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 110.221, 674.742, 193.936, 715.107 ],
+        "row number" : 1,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 2,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 132.048, 689.119, 171.986, 702.352 ],
+          "heading level" : 5,
+          "font" : "MalgunGothic",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "정보통신"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 193.936, 674.742, 243.709, 715.107 ],
+        "row number" : 1,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 3,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 208.807, 681.927, 228.716, 709.664 ],
+          "heading level" : 4,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "자격 종목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 243.709, 674.742, 347.813, 715.107 ],
+        "row number" : 1,
+        "column number" : 4,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 4,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 260.739, 689.119, 330.66, 702.352 ],
+          "heading level" : 5,
+          "font" : "MalgunGothic",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "정보통신기술사"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 347.813, 674.742, 397.706, 715.107 ],
+        "row number" : 1,
+        "column number" : 5,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 5,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 362.803, 681.927, 382.713, 709.664 ],
+          "heading level" : 4,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "적용 기간"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 397.706, 674.742, 534.343, 715.107 ],
+        "row number" : 1,
+        "column number" : 6,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 6,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 404.781, 689.119, 527.125, 702.352 ],
+          "heading level" : 5,
+          "font" : "MalgunGothic",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "2026. 1. 1. ~ 2029. 12.31."
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 2,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 59.518, 628.832, 110.221, 674.742 ],
+        "row number" : 2,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 7,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 74.839, 638.654, 94.749, 666.391 ],
+          "heading level" : 4,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "직무 내용"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 110.221, 628.832, 534.343, 674.742 ],
+        "row number" : 2,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 5,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 8,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 116.217, 629.903, 528.104, 675.022 ],
+          "heading level" : 5,
+          "font" : "MalgunGothic",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "정보통신기술(ICT)에 관한 고도의 전문지식과 실무경험을 바탕으로 계획･연구･설계･분석･조사･ 시험･시공･감리･평가･진단･시험운전･사업관리･기술판단(기술감정을 포함)･기술중재 또는 이에 관한 기술자문과 기술지도 업무를 수행하는 직무"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 3,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 59.518, 582.922, 110.221, 628.832 ],
+        "row number" : 3,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 9,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 74.839, 592.744, 94.749, 620.481 ],
+          "heading level" : 4,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "시험 과목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 110.221, 582.922, 534.343, 628.832 ],
+        "row number" : 3,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 5,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 10,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 115.258, 599.936, 399.264, 613.169 ],
+          "heading level" : 5,
+          "font" : "MalgunGothic",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "유･무선 통신 시스템의 설계, 시공, 유지관리에 관계되는 사항"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 4,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 59.518, 537.132, 110.221, 582.922 ],
+        "row number" : 4,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 11,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 74.839, 546.834, 94.749, 574.571 ],
+          "heading level" : 4,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "필기 방법"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 110.221, 537.132, 193.936, 582.922 ],
+        "row number" : 4,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 12,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 119.575, 554.146, 183.5, 567.379 ],
+          "heading level" : 5,
+          "font" : "MalgunGothic",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "단답형/논문형"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 193.936, 537.132, 243.709, 582.922 ],
+        "row number" : 4,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 13,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 208.327, 546.834, 228.236, 574.571 ],
+          "heading level" : 4,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "시험 시간"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 243.709, 537.132, 534.343, 582.922 ],
+        "row number" : 4,
+        "column number" : 4,
+        "row span" : 1,
+        "column span" : 3,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 14,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 253.782, 554.146, 358.394, 567.379 ],
+          "heading level" : 5,
+          "font" : "MalgunGothic",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "400분(1교시 당 100분)"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 5,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 59.518, 491.223, 110.221, 537.132 ],
+        "row number" : 5,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 15,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 74.839, 501.044, 94.749, 528.781 ],
+          "heading level" : 4,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "면접 항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 110.221, 491.223, 534.343, 537.132 ],
+        "row number" : 5,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 5,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 16,
+          "level" : "1",
+          "page number" : 1,
+          "bounding box" : [ 115.258, 500.205, 414.374, 529.501 ],
+          "numbering style" : "arabic numbers",
+          "number of list items" : 2,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 115.258, 516.268, 414.374, 529.501 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.949,
+            "text color" : "[0.0]",
+            "content" : "1. 기술사로서의 직무능력, 사명감, 사회적책무수행, 윤리강령준수",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 115.258, 500.205, 369.999, 513.438 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.949,
+            "text color" : "[0.0]",
+            "content" : "2. 기술사로서의 전문지식, 실무경험에 입각한 응용능력",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 6,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 59.518, 445.583, 110.221, 491.223 ],
+        "row number" : 6,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 17,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 74.839, 455.134, 94.749, 482.872 ],
+          "heading level" : 4,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "면접 시간"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 110.221, 445.583, 534.343, 491.223 ],
+        "row number" : 6,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 5,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 18,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 115.258, 462.327, 219.721, 475.56 ],
+          "heading level" : 5,
+          "font" : "MalgunGothic",
+          "font size" : 9.949,
+          "text color" : "[0.0]",
+          "content" : "1명당 15 ~ 30분 내외"
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "table",
+    "id" : 151,
+    "level" : "3",
+    "page number" : 1,
+    "bounding box" : [ 57.51, 86.126, 538.271, 434.585 ],
+    "number of rows" : 6,
+    "number of columns" : 3,
+    "next table id" : 152,
+    "rows" : [ {
+      "type" : "table row",
+      "row number" : 1,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 58.259, 410.011, 135.917, 433.775 ],
+        "row number" : 1,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 19,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 76.2, 415.713, 113.628, 428.96 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "주요항목"
+        }, {
+          "type" : "image",
+          "id" : 20,
+          "page number" : 1,
+          "bounding box" : [ 58.648, 409.292, 135.887, 410.731 ]
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 135.917, 410.011, 228.357, 433.775 ],
+        "row number" : 1,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 21,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 161.4, 415.713, 198.828, 428.96 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세부항목"
+        }, {
+          "type" : "image",
+          "id" : 22,
+          "page number" : 1,
+          "bounding box" : [ 136.127, 409.292, 228.357, 410.731 ]
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 228.357, 410.011, 537.551, 433.775 ],
+        "row number" : 1,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 23,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 362.4, 415.713, 399.828, 428.96 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세세항목"
+        }, {
+          "type" : "image",
+          "id" : 24,
+          "page number" : 1,
+          "bounding box" : [ 228.357, 409.292, 537.191, 410.731 ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 2,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 58.259, 86.576, 135.917, 410.011 ],
+        "row number" : 2,
+        "column number" : 1,
+        "row span" : 5,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "paragraph",
+          "id" : 25,
+          "level" : "1",
+          "page number" : 1,
+          "bounding box" : [ 59.52, 383.193, 130.8, 410.48 ],
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "1. 정보통신 일반 및 심화"
+        }, {
+          "type" : "paragraph",
+          "id" : 26,
+          "page number" : 1,
+          "bounding box" : [ 69.96, 369.153, 120.388, 382.4 ],
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "(15% 내외)"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 135.917, 375.549, 228.357, 410.011 ],
+        "row number" : 2,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 27,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 137.4, 397.233, 220.44, 410.48 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "1. 통신시스템 구성"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 228.357, 375.549, 537.551, 410.011 ],
+        "row number" : 2,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 28,
+          "level" : "1",
+          "page number" : 1,
+          "bounding box" : [ 229.8, 381.153, 360.84, 410.48 ],
+          "numbering style" : "unordered",
+          "number of list items" : 2,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 397.233, 360.84, 410.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 아날로그 통신시스템 구성",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 381.153, 350.76, 394.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 디지털 통신시스템 구성",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 3,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 135.917, 309.142, 228.357, 375.549 ],
+        "row number" : 3,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 29,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 137.4, 362.673, 220.68, 375.92 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "2. 통신 품질 및 성능"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 228.357, 309.142, 537.551, 375.549 ],
+        "row number" : 3,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 30,
+          "level" : "1",
+          "page number" : 1,
+          "bounding box" : [ 229.8, 314.673, 368.4, 375.92 ],
+          "numbering style" : "unordered",
+          "number of list items" : 4,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 362.673, 327.96, 375.92 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 잡음, 간섭 및 왜곡",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 346.713, 340.8, 359.96 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 잡음지수 및 잡음인자",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 330.423, 368.4, 344.0 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 비트오류율 및 S/N(Eb/No)비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 314.673, 280.8, 327.92 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 채널용량",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 4,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 135.917, 226.792, 228.357, 309.142 ],
+        "row number" : 4,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 31,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 137.4, 296.193, 215.04, 309.44 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "3. 통신신호 해석"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 228.357, 226.792, 537.551, 309.142 ],
+        "row number" : 4,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 32,
+          "level" : "1",
+          "page number" : 1,
+          "bounding box" : [ 229.8, 232.233, 486.36, 309.44 ],
+          "numbering style" : "unordered",
+          "number of list items" : 5,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 296.193, 486.36, 309.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 신호의 RMS(Root Mean Square) 및 dB(decibel) 계산",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 280.233, 389.76, 293.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 필터(LPF, HPF, BPF, BSF)의 구분",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 264.273, 400.8, 277.52 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 시스템의 임펄스 응답 및 전달함수",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 248.193, 370.8, 261.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 푸리에 급수 및 푸리에 변환",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 232.233, 345.84, 245.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 신호의 전력 및 에너지",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 5,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 135.917, 160.385, 228.357, 226.792 ],
+        "row number" : 5,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 33,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 137.4, 199.713, 223.08, 227.0 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "4. 통신선로 및 무선 채널 특성, 안테나"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 228.357, 160.385, 537.551, 226.792 ],
+        "row number" : 5,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 34,
+          "level" : "1",
+          "page number" : 1,
+          "bounding box" : [ 229.8, 165.753, 519.84, 227.0 ],
+          "numbering style" : "unordered",
+          "number of list items" : 4,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 213.753, 519.84, 227.0 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 선로(동선케이블/동축케이블/광케이블 등) 특성 및 전송 이론",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 197.793, 471.24, 211.04 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 통신선로 열화 요인(간섭, 누화, 분산 등) 개선방법",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 181.713, 365.76, 194.96 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 전자기파 특성 및 전송이론",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 165.753, 481.32, 179.0 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 무선채널 열화 요인(잡음, 간섭, 페이딩 등) 개선방법",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 6,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 135.917, 86.576, 228.357, 160.385 ],
+        "row number" : 6,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 35,
+          "level" : "Subtitle",
+          "page number" : 1,
+          "bounding box" : [ 137.4, 147.273, 184.92, 160.52 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "5. 변･복조"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 1,
+        "bounding box" : [ 228.357, 86.576, 537.551, 160.385 ],
+        "row number" : 6,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 36,
+          "level" : "1",
+          "page number" : 1,
+          "bounding box" : [ 229.8, 99.273, 390.84, 160.52 ],
+          "numbering style" : "unordered",
+          "number of list items" : 4,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 147.273, 390.84, 160.52 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 변조방식별 기술적 특성 및 비교",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 131.313, 320.76, 144.56 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 변조지수 및 전력",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 115.233, 364.92, 128.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o M진신호 검파 및 정합필터",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 1,
+            "bounding box" : [ 229.8, 99.273, 365.76, 112.52 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 전력효율 및 스펙트럼 효율",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "table",
+    "id" : 152,
+    "level" : "3",
+    "page number" : 2,
+    "bounding box" : [ 57.51, 86.126, 538.271, 755.115 ],
+    "number of rows" : 8,
+    "number of columns" : 3,
+    "previous table id" : 151,
+    "next table id" : 154,
+    "rows" : [ {
+      "type" : "table row",
+      "row number" : 1,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 58.259, 730.541, 135.887, 754.305 ],
+        "row number" : 1,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 37,
+          "page number" : 2,
+          "bounding box" : [ 76.2, 736.473, 113.628, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "주요항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 135.887, 730.541, 228.357, 754.305 ],
+        "row number" : 1,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 38,
+          "page number" : 2,
+          "bounding box" : [ 161.4, 736.473, 198.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세부항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 228.357, 730.541, 537.671, 754.305 ],
+        "row number" : 1,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 39,
+          "page number" : 2,
+          "bounding box" : [ 362.4, 736.473, 399.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세세항목"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 2,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 58.259, 322.927, 135.887, 730.541 ],
+        "row number" : 2,
+        "column number" : 1,
+        "row span" : 4,
+        "column span" : 1,
+        "kids" : [ ]
+      }, {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 135.887, 607.615, 228.357, 730.541 ],
+        "row number" : 2,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 40,
+          "page number" : 2,
+          "bounding box" : [ 137.4, 717.993, 205.08, 731.24 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "6. 부호화 방식"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 228.357, 607.615, 537.671, 730.541 ],
+        "row number" : 2,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 41,
+          "page number" : 2,
+          "bounding box" : [ 229.8, 621.993, 395.76, 731.24 ],
+          "numbering style" : "unordered",
+          "number of list items" : 7,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 717.993, 365.76, 731.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 펄스성형기술 및 펄스 변조",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 702.033, 355.8, 715.28 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 라인코드 형식 및 장단점",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 686.073, 357.96, 699.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 표본화, 양자화 및 부호화",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 669.993, 395.76, 683.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 소스 부호화 방식의 종류 및 특징",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 654.033, 340.8, 667.28 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 엔트로피 등 정보이론",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 638.073, 380.76, 651.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 오류검출방식 및 오류제어방식",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 621.993, 395.76, 635.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 채널 부호화 방식의 종류 및 특징",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 3,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 135.887, 500.812, 228.357, 607.615 ],
+        "row number" : 3,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 42,
+          "page number" : 2,
+          "bounding box" : [ 137.4, 581.073, 220.08, 608.36 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "7. 다중화 및 다중 접속방식"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 228.357, 500.812, 537.671, 607.615 ],
+        "row number" : 3,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 43,
+          "page number" : 2,
+          "bounding box" : [ 229.8, 515.073, 520.588, 608.36 ],
+          "numbering style" : "unordered",
+          "number of list items" : 6,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 595.113, 300.839, 608.36 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 통신자원할당",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 579.033, 405.268, 592.28 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 다중화 방식 (PDH, SDH, OFDM 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 563.073, 520.588, 576.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 다중접속 방식 (FDMA, TDMA, CDMA, WCDMA, OFDMA 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 547.113, 405.748, 560.36 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 대역확산통신 방식 (FHSS, DSSS 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 531.033, 496.348, 544.28 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 공간 다중화 및 공간 다중접속 방식 (MIMO, 빔포밍 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 515.073, 434.188, 528.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 전송 프레임 구조와 처리용량 (4G, 5G 등)",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 4,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 135.887, 427.333, 228.357, 500.812 ],
+        "row number" : 4,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 44,
+          "page number" : 2,
+          "bounding box" : [ 137.4, 488.073, 200.04, 501.32 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "8. 인터넷통신"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 228.357, 427.333, 537.671, 500.812 ],
+        "row number" : 4,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 45,
+          "page number" : 2,
+          "bounding box" : [ 229.8, 441.513, 471.868, 501.32 ],
+          "numbering style" : "unordered",
+          "number of list items" : 4,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 488.073, 471.868, 501.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 통신 계층 구조와 기능(OSI 7 Layer 및 TCP/IP 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 472.593, 360.84, 485.84 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 인터넷 구조 및 동작 원리",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 457.113, 340.8, 470.36 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 인터넷 정보보안 이론",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 441.513, 446.308, 454.76 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 암호화 기술 (공개키, 비밀키, 양자암호화 등)",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 5,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 135.887, 322.927, 228.357, 427.333 ],
+        "row number" : 5,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 46,
+          "page number" : 2,
+          "bounding box" : [ 137.4, 400.593, 222.96, 427.88 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "9. 차세대 정보통신 기술"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 228.357, 322.927, 537.671, 427.333 ],
+        "row number" : 5,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 47,
+          "page number" : 2,
+          "bounding box" : [ 229.8, 336.993, 394.92, 427.88 ],
+          "numbering style" : "unordered",
+          "number of list items" : 6,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 414.633, 394.92, 427.88 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 인공지능(AI), 생성형 AI, 머신러닝",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 399.033, 369.24, 412.28 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 실감콘텐츠(AR, VR 등) 기술",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 383.553, 350.76, 396.8 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 초고화질 스트리밍 기술",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 368.073, 295.8, 381.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 양자 컴퓨팅",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 352.473, 280.8, 365.72 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 블록체인",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 336.993, 325.8, 350.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 그 외 신기술 동향",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 6,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 58.259, 86.755, 135.887, 322.927 ],
+        "row number" : 6,
+        "column number" : 1,
+        "row span" : 3,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "paragraph",
+          "id" : 48,
+          "page number" : 2,
+          "bounding box" : [ 59.52, 309.993, 127.2, 323.24 ],
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "2. 시스템 요소"
+        }, {
+          "type" : "paragraph",
+          "id" : 49,
+          "page number" : 2,
+          "bounding box" : [ 71.76, 277.953, 134.16, 307.28 ],
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "(장비/장치) 기술 (20% 내외)"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 135.887, 249.507, 228.357, 322.927 ],
+        "row number" : 6,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "image",
+          "id" : 50,
+          "page number" : 2,
+          "bounding box" : [ 136.127, 249.267, 228.357, 249.747 ]
+        }, {
+          "type" : "heading",
+          "id" : 51,
+          "page number" : 2,
+          "bounding box" : [ 137.4, 295.953, 207.96, 323.24 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "1. 유․무선 통신 시스템"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 228.357, 249.507, 537.671, 322.927 ],
+        "row number" : 6,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "image",
+          "id" : 52,
+          "page number" : 2,
+          "bounding box" : [ 228.357, 249.267, 537.191, 249.747 ]
+        }, {
+          "type" : "list",
+          "id" : 53,
+          "page number" : 2,
+          "bounding box" : [ 229.8, 263.433, 414.148, 323.24 ],
+          "numbering style" : "unordered",
+          "number of list items" : 4,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 309.993, 392.52, 323.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 무선통신 M/W 및 무선LAN 장비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 294.513, 324.84, 307.76 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 무선LAN 표준규격",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 278.913, 295.8, 292.16 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 광 전송장비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 263.433, 414.148, 276.68 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 기타 유, 무선 시스템 구성요소 (장비)",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 7,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 135.887, 160.565, 228.357, 249.507 ],
+        "row number" : 7,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 54,
+          "page number" : 2,
+          "bounding box" : [ 137.4, 222.513, 213.12, 249.68 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "2. 이동통신･위성 통신 시스템"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 228.357, 160.565, 537.671, 249.507 ],
+        "row number" : 7,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 55,
+          "page number" : 2,
+          "bounding box" : [ 229.8, 174.393, 522.971, 249.68 ],
+          "numbering style" : "unordered",
+          "number of list items" : 4,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 236.433, 445.708, 249.68 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 이동통신(4G, 5G, 접속망, 코어망, 교환망 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 220.953, 362.428, 234.2 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 국가재난안전망(PS-LTE 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 189.873, 522.971, 218.72 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 위성통신(변조, 주파수 변환, 증폭, 안테나, 위성중계기, 수신 장치, 지상국 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 174.393, 435.6, 187.64 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 기타 이동통신･위성통신 시스템 요소 기술",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 8,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 135.887, 86.755, 228.357, 160.565 ],
+        "row number" : 8,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 56,
+          "page number" : 2,
+          "bounding box" : [ 137.4, 133.473, 213.24, 160.64 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "3. 도로･교통 통신 시스템"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 2,
+        "bounding box" : [ 228.357, 86.755, 537.671, 160.565 ],
+        "row number" : 8,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 57,
+          "page number" : 2,
+          "bounding box" : [ 229.8, 100.833, 521.548, 160.64 ],
+          "numbering style" : "unordered",
+          "number of list items" : 4,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 147.393, 486.388, 160.64 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 도로·교통정보 수집 및 제어(CCTV, VDS, AVI, RSE 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 131.913, 521.548, 145.16 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 교통정보센터 시스템(서버, 네트워크, 감시, 제어, 응용 장비 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 116.433, 405.028, 129.68 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 교통정보제공 시스템(VMS, 단말 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 2,
+            "bounding box" : [ 229.8, 100.833, 416.548, 114.08 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 기타 시스템 요소 기술 (ITS, C-ITS 등)",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "footer",
+    "id" : 153,
+    "page number" : 2,
+    "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+    "kids" : [ {
+      "type" : "heading",
+      "id" : 141,
+      "page number" : 2,
+      "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+      "heading level" : 3,
+      "font" : "HCRDotum",
+      "font size" : 9.96,
+      "text color" : "[0.0]",
+      "content" : "- 2 -"
+    } ]
+  }, {
+    "type" : "table",
+    "id" : 154,
+    "level" : "3",
+    "page number" : 3,
+    "bounding box" : [ 57.51, 86.126, 538.271, 755.115 ],
+    "number of rows" : 5,
+    "number of columns" : 3,
+    "previous table id" : 152,
+    "next table id" : 156,
+    "rows" : [ {
+      "type" : "table row",
+      "row number" : 1,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 58.079, 730.541, 135.887, 754.305 ],
+        "row number" : 1,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 58,
+          "page number" : 3,
+          "bounding box" : [ 76.2, 736.473, 113.628, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "주요항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 135.887, 730.541, 228.357, 754.305 ],
+        "row number" : 1,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 59,
+          "page number" : 3,
+          "bounding box" : [ 161.4, 736.473, 198.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세부항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 228.357, 730.541, 537.671, 754.305 ],
+        "row number" : 1,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 60,
+          "page number" : 3,
+          "bounding box" : [ 362.4, 736.473, 399.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세세항목"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 2,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 58.079, 86.755, 135.887, 730.541 ],
+        "row number" : 2,
+        "column number" : 1,
+        "row span" : 4,
+        "column span" : 1,
+        "kids" : [ ]
+      }, {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 135.887, 631.769, 228.357, 730.541 ],
+        "row number" : 2,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 61,
+          "page number" : 3,
+          "bounding box" : [ 137.4, 704.073, 215.191, 731.24 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "4. 철도･항공･항행･ 항만 시스템"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 228.357, 631.769, 537.671, 730.541 ],
+        "row number" : 2,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "image",
+          "id" : 62,
+          "page number" : 3,
+          "bounding box" : [ 228.357, 631.529, 537.191, 632.009 ]
+        }, {
+          "type" : "list",
+          "id" : 63,
+          "page number" : 3,
+          "bounding box" : [ 229.8, 640.473, 522.96, 731.24 ],
+          "numbering style" : "unordered",
+          "number of list items" : 4,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 702.513, 522.96, 731.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 철도 정보통신 구성 장비 (운영관리, 운전관리, 여객서비스, 역무 자동화설비 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 671.433, 522.84, 700.28 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 항공 항행 구성 장비(정보통신기기, 운항통신, 항행안전, 항공 이동통신 시스템 등 )",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 655.953, 522.748, 669.2 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 항해·항만 구성 장비(GMDSS, 항로표지, 선박교통관제센터 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 640.473, 345.84, 653.72 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 기타 시스템 요소 기술",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 3,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 135.887, 532.997, 228.357, 631.769 ],
+        "row number" : 3,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 64,
+          "page number" : 3,
+          "bounding box" : [ 137.4, 605.193, 216.48, 632.36 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "5. 건축물 통신설비 시스템"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 228.357, 532.997, 537.671, 631.769 ],
+        "row number" : 3,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 65,
+          "page number" : 3,
+          "bounding box" : [ 229.8, 541.593, 522.96, 632.36 ],
+          "numbering style" : "unordered",
+          "number of list items" : 5,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 619.113, 519.748, 632.36 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o IoT 통신 시스템 및 장비(센싱, 네트워크, 인터페이스, 통신장치 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 588.153, 522.96, 616.88 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 건축물 공동수신설비(이동통신, DTV, UHDTV, DMB, FM, 위성수신 장치 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 572.553, 520.708, 585.8 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 구내방송, 비상방송, 재난방송 수신 설비(건물, 철도 및 도로 터널 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 557.073, 513.96, 570.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 홈 네트워크, 스마트 홈, CCTV, 주차, 빌딩정보 구성장비 등",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 541.593, 345.84, 554.84 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 기타 시스템 요소 기술",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 4,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 135.887, 239.918, 228.357, 532.997 ],
+        "row number" : 4,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 66,
+          "page number" : 3,
+          "bounding box" : [ 137.4, 520.233, 200.04, 533.48 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "6. 방송시스템"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 228.357, 239.918, 537.671, 532.997 ],
+        "row number" : 4,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 67,
+          "page number" : 3,
+          "bounding box" : [ 229.8, 248.193, 522.972, 533.48 ],
+          "numbering style" : "unordered",
+          "number of list items" : 11,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 504.273, 522.972, 533.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 방송 제작 및 송출 장비(카메라, CG, VMU, AMU, FS, Router, NLE, 송출 Switcher, APC 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 488.193, 461.308, 501.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 프로그램 저장장치(서버, 스토리지, 아카이브 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 456.273, 522.84, 485.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 전송 장비(Encoder, Decoder, MUX, 마이크로웨이브, 광 전송 장비, 비 압축, SNG 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 440.193, 471.748, 453.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 지상파방송 송신 장비(FM, DMB, DTV, UHDTV 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 408.273, 522.971, 437.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 케이블(CABLE) 방송(Headend, HFC 네트워크, 가입자 관리, 단말 장비 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 376.233, 522.971, 405.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 인터넷멀티미디어방송(IPTV)(DMC, Multicast/CDN 등 네트워크, 가입자 관리, 보안, 단말장비 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 344.193, 522.971, 373.52 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 위성방송(송출센터, 지구국, 위성중계기, 수신기, 가입자관리, 보안, 단말 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 312.273, 522.84, 341.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 방송정보 및 자동화(인제스트, 서버, 스토리지, NAS, SAN, 아 카이브, APM, CMS, 소프트웨어 관련 장치 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 280.233, 522.961, 309.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 소셜 및 실감 미디어(제작, 업로드, 서비스장비, MR, XR, 디지털 트윈, 메타버스 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 264.273, 419.068, 277.52 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 전원장비(발전기, UPS, ATS, 정류기 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 248.193, 345.84, 261.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 기타 시스템 요소 기술",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 5,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 135.887, 86.755, 228.357, 239.918 ],
+        "row number" : 5,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 68,
+          "page number" : 3,
+          "bounding box" : [ 137.4, 226.953, 210.72, 240.2 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "7. 정보시스템구성"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 3,
+        "bounding box" : [ 228.357, 86.755, 537.671, 239.918 ],
+        "row number" : 5,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 69,
+          "page number" : 3,
+          "bounding box" : [ 229.8, 98.913, 469.468, 240.2 ],
+          "numbering style" : "unordered",
+          "number of list items" : 9,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 226.953, 382.948, 240.2 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 서버(응용, DB, WEB Server 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 210.873, 469.468, 224.12 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 네트워크 장비(백본, L2, L3, L4, L5, L7 스위치 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 194.913, 408.148, 208.16 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 무선네트워크 장비(와이파이, IoT 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 178.953, 426.748, 192.2 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 네트워크 보안장비(UTM, 방화벽, IPS 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 162.873, 435.748, 176.12 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 물리적 보안장비(CCTV, 출입, 주차관제 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 146.913, 462.24, 160.16 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 운영체계, 미들웨어, DBMS, 가상화, 클라우드 등",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 130.953, 445.8, 144.2 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 소프트웨어 관련 이해 및 연계 구성 장치 등",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 114.873, 351.268, 128.12 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 관제장비(NMS, TMS 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 3,
+            "bounding box" : [ 229.8, 98.913, 345.84, 112.16 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 기타 시스템 요소 기술",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "footer",
+    "id" : 155,
+    "page number" : 3,
+    "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+    "kids" : [ {
+      "type" : "heading",
+      "id" : 142,
+      "page number" : 3,
+      "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+      "heading level" : 3,
+      "font" : "HCRDotum",
+      "font size" : 9.96,
+      "text color" : "[0.0]",
+      "content" : "- 3 -"
+    } ]
+  }, {
+    "type" : "table",
+    "id" : 156,
+    "level" : "3",
+    "page number" : 4,
+    "bounding box" : [ 57.51, 86.126, 538.271, 755.115 ],
+    "number of rows" : 9,
+    "number of columns" : 3,
+    "previous table id" : 154,
+    "next table id" : 158,
+    "rows" : [ {
+      "type" : "table row",
+      "row number" : 1,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 58.139, 730.541, 135.887, 754.305 ],
+        "row number" : 1,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 70,
+          "page number" : 4,
+          "bounding box" : [ 76.2, 736.473, 113.628, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "주요항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 135.887, 730.541, 228.357, 754.305 ],
+        "row number" : 1,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 71,
+          "page number" : 4,
+          "bounding box" : [ 161.4, 736.473, 198.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세부항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 228.357, 730.541, 537.671, 754.305 ],
+        "row number" : 1,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 72,
+          "page number" : 4,
+          "bounding box" : [ 362.4, 736.473, 399.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세세항목"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 2,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 58.139, 612.71, 135.887, 730.541 ],
+        "row number" : 2,
+        "column number" : 1,
+        "row span" : 2,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "image",
+          "id" : 73,
+          "page number" : 4,
+          "bounding box" : [ 58.648, 612.47, 228.357, 655.863 ]
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 135.887, 655.623, 228.357, 730.541 ],
+        "row number" : 2,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 74,
+          "page number" : 4,
+          "bounding box" : [ 137.4, 704.073, 210.72, 731.24 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "8. 정보통신 융합 시스템"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 228.357, 655.623, 537.671, 730.541 ],
+        "row number" : 2,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "image",
+          "id" : 75,
+          "page number" : 4,
+          "bounding box" : [ 228.357, 655.383, 537.191, 655.863 ]
+        }, {
+          "type" : "list",
+          "id" : 76,
+          "page number" : 4,
+          "bounding box" : [ 229.8, 669.993, 340.8, 731.24 ],
+          "numbering style" : "unordered",
+          "number of list items" : 4,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 717.993, 290.76, 731.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 스마트시티",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 702.033, 285.84, 715.28 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 스마트 팜",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 686.073, 340.8, 699.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 스마트 그리드 서비스",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 669.993, 315.839, 683.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 기타 융합서비스",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 3,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 135.887, 612.71, 228.357, 655.623 ],
+        "row number" : 3,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 77,
+          "page number" : 4,
+          "bounding box" : [ 137.4, 643.113, 207.0, 656.36 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "9. 전자기 적합성"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 228.357, 612.71, 537.671, 655.623 ],
+        "row number" : 3,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 78,
+          "page number" : 4,
+          "bounding box" : [ 229.8, 627.033, 493.08, 656.36 ],
+          "numbering style" : "unordered",
+          "number of list items" : 2,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 643.113, 462.24, 656.36 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 전자기 적합성(EMI/EMS/EMC) 대책 및 검증기술",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 627.033, 493.08, 640.28 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 전자기 펄스(Electromagnetic Pulse) 발생 및 방호 기술",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 4,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 58.139, 86.576, 135.887, 612.71 ],
+        "row number" : 4,
+        "column number" : 1,
+        "row span" : 6,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 79,
+          "page number" : 4,
+          "bounding box" : [ 59.52, 584.073, 127.2, 613.4 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "3. 통신망 기술 (15% 내외)"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 135.887, 473.842, 228.357, 612.71 ],
+        "row number" : 4,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 80,
+          "page number" : 4,
+          "bounding box" : [ 137.4, 600.153, 225.12, 613.4 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "1. 유선통신망 기술"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 228.357, 473.842, 537.671, 612.71 ],
+        "row number" : 4,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 81,
+          "page number" : 4,
+          "bounding box" : [ 229.8, 488.073, 511.708, 613.4 ],
+          "numbering style" : "unordered",
+          "number of list items" : 8,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 600.153, 290.76, 613.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 교환스위칭",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 584.073, 511.708, 597.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 프로토콜(OSI 7 Layer, TCP/IP, DNS, LAN, VLAN, QoS 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 568.113, 421.348, 581.36 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 네트워크 장비(허브, 스위치, 라우터 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 552.153, 487.588, 565.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 다중화 전송기술(MPLS, MSPP, MPLS-TP, IP-MPLS 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 536.073, 474.868, 549.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 광전송기술(WDM, ONT, OLT, ONU, AOL, PON 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 520.113, 360.84, 533.36 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 네트워크가상화(NFV) 기술",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 504.153, 327.48, 517.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o Cloud 컴퓨팅 기술",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 488.073, 325.8, 501.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 네트워크 보안기술",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 5,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 135.887, 382.981, 228.357, 473.842 ],
+        "row number" : 5,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 82,
+          "page number" : 4,
+          "bounding box" : [ 137.4, 461.193, 225.12, 474.44 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "2. 무선통신망 기술"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 228.357, 382.981, 537.671, 473.842 ],
+        "row number" : 5,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 83,
+          "page number" : 4,
+          "bounding box" : [ 229.8, 397.113, 532.932, 474.44 ],
+          "numbering style" : "unordered",
+          "number of list items" : 3,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 461.193, 390.84, 474.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 무선통신망 시스템 구성 및 장비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 429.153, 532.841, 458.36 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o M/W 시스템(신호처리, 변·복조, 중간주파수, 주파수변환부, RF Amp, Antenna 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 397.113, 532.932, 426.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o Wireless LAN(AP, Switch, PoE, 인증서버, WIPS, 표준 무선LAN, 차세대 무선LAN 등)",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 6,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 135.887, 292.12, 228.357, 382.981 ],
+        "row number" : 6,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 84,
+          "page number" : 4,
+          "bounding box" : [ 137.4, 370.113, 225.12, 383.36 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "3. 이동통신망 기술"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 228.357, 292.12, 537.671, 382.981 ],
+        "row number" : 6,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 85,
+          "page number" : 4,
+          "bounding box" : [ 229.8, 306.153, 530.76, 383.36 ],
+          "numbering style" : "unordered",
+          "number of list items" : 5,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 370.113, 530.64, 383.36 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 이동통신 시스템, 다원접속, 듀플렉스, 환경분석, 코딩방식, RF 부품 구성",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 354.153, 331.822, 367.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 4G LTE, 5G NR, 6G",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 338.193, 437.4, 351.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 무선접속기술, 무선 접속망, 교환망, 코어망",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 322.113, 530.76, 335.36 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 5G 공동망, Private/Local 5G시스템 최적화 등 주요 규격 기술사항",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 306.153, 530.04, 319.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o MIMO, Beamforming, 네트워크 슬라이스, Edge computing 5G 클라우드 등",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 7,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 135.887, 249.207, 228.357, 292.12 ],
+        "row number" : 7,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 86,
+          "page number" : 4,
+          "bounding box" : [ 137.4, 279.153, 225.12, 292.4 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "4. 위성통신망 기술"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 228.357, 249.207, 537.671, 292.12 ],
+        "row number" : 7,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 87,
+          "page number" : 4,
+          "bounding box" : [ 229.8, 263.193, 407.4, 292.4 ],
+          "numbering style" : "unordered",
+          "number of list items" : 2,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 279.153, 350.76, 292.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 위성통신망 시스템 구성",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 263.193, 407.4, 276.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 지구국, 위성중계국, 단말, 서비스 등",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 8,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 135.887, 174.289, 228.357, 249.207 ],
+        "row number" : 8,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 88,
+          "page number" : 4,
+          "bounding box" : [ 137.4, 222.273, 220.079, 249.44 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "5. 재난안전통신망 기술"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 228.357, 174.289, 537.671, 249.207 ],
+        "row number" : 8,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 89,
+          "page number" : 4,
+          "bounding box" : [ 229.8, 188.193, 532.828, 249.44 ],
+          "numbering style" : "unordered",
+          "number of list items" : 3,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 236.193, 345.84, 249.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 공공안전통신망 시스템",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 204.273, 532.828, 233.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 재난안전통신망(PS-LTE), 철도통합무선망(LTE-R), 해상무선통신망(LTE-M) 및 재난망 상호연동(RAN-Sharing)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 188.193, 375.84, 201.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 기존 방식과 상호연동기술 등",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 9,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 135.887, 86.576, 228.357, 174.289 ],
+        "row number" : 9,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 90,
+          "page number" : 4,
+          "bounding box" : [ 137.4, 161.313, 224.16, 174.56 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "6. IoT 통신망 기술"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 4,
+        "bounding box" : [ 228.357, 86.576, 537.671, 174.289 ],
+        "row number" : 9,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 91,
+          "page number" : 4,
+          "bounding box" : [ 229.8, 97.233, 531.6, 174.56 ],
+          "numbering style" : "unordered",
+          "number of list items" : 5,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 161.313, 354.84, 174.56 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o IoT 통신망 구성 및 장비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 145.233, 365.16, 158.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 센싱, 네트워킹, 인터페이스",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 129.273, 326.04, 142.52 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o IoT보안, IoT서비스",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 113.313, 450.6, 126.56 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 저전력 통신(RFID, ZigBee, LTE-M, NB-IoT) 등",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 4,
+            "bounding box" : [ 229.8, 97.233, 531.6, 110.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 스마트 그리드, 스마트 팩토리, 자율주행, 위치정보, e-Navigation 등",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "footer",
+    "id" : 157,
+    "page number" : 4,
+    "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+    "kids" : [ {
+      "type" : "heading",
+      "id" : 143,
+      "page number" : 4,
+      "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+      "heading level" : 3,
+      "font" : "HCRDotum",
+      "font size" : 9.96,
+      "text color" : "[0.0]",
+      "content" : "- 4 -"
+    } ]
+  }, {
+    "type" : "table",
+    "id" : 158,
+    "level" : "3",
+    "page number" : 5,
+    "bounding box" : [ 57.51, 86.126, 538.271, 755.115 ],
+    "number of rows" : 6,
+    "number of columns" : 3,
+    "previous table id" : 156,
+    "next table id" : 160,
+    "rows" : [ {
+      "type" : "table row",
+      "row number" : 1,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 58.079, 730.541, 135.887, 754.305 ],
+        "row number" : 1,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 92,
+          "page number" : 5,
+          "bounding box" : [ 76.2, 736.473, 113.628, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "주요항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 135.887, 730.541, 228.357, 754.305 ],
+        "row number" : 1,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 93,
+          "page number" : 5,
+          "bounding box" : [ 161.4, 736.473, 198.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세부항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 228.357, 730.541, 537.701, 754.305 ],
+        "row number" : 1,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 94,
+          "page number" : 5,
+          "bounding box" : [ 362.4, 736.473, 399.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세세항목"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 2,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 58.079, 86.576, 135.887, 730.541 ],
+        "row number" : 2,
+        "column number" : 1,
+        "row span" : 5,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "paragraph",
+          "id" : 95,
+          "page number" : 5,
+          "bounding box" : [ 59.52, 702.033, 122.16, 731.24 ],
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "4. 엔지니어링 설비 실무"
+        }, {
+          "type" : "paragraph",
+          "id" : 96,
+          "page number" : 5,
+          "bounding box" : [ 69.96, 686.073, 120.388, 699.32 ],
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "(30% 내외)"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 135.887, 540.848, 228.357, 730.541 ],
+        "row number" : 2,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 97,
+          "page number" : 5,
+          "bounding box" : [ 137.4, 703.473, 226.931, 731.24 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "1. 유선공중망/자가망, 인터넷 구축 실무"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 228.357, 540.848, 537.701, 730.541 ],
+        "row number" : 2,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 98,
+          "page number" : 5,
+          "bounding box" : [ 229.8, 558.033, 532.812, 731.24 ],
+          "numbering style" : "unordered",
+          "number of list items" : 4,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 702.033, 532.811, 731.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 통신구, 통신관로, 통신케이블(광섬유 및 동축케이블·전주·지지철물· 케이블방재·철탑·배관·단자함 등) 등의 설비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 686.073, 364.8, 699.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 사설교환(PBX·CBX) 설비 등",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 654.033, 532.811, 683.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 전송 단국(FLC·PCM·PDH·SDH·DACS·SONET·WDM), 송·수신, 중계, 다중화, 분배, 전력선반송, 종합유선방송(CATV)전송 등의 설비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 558.033, 532.812, 651.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 근거리통신망(이더넷 LAN·ATM-LAN·기가비트LAN등을 포함), 부가 가치통신망(VAN), 광역통신망(WAN), 정보시스템망관리(TMN), 무선통신망, 전산시스템(CPU·C/S·제어장치 등), 인터넷(인트라넷· 엑스트라넷·방화벽 등을 포함), 멀티미디어, 컴퓨터·통신통합(CTI), 종합정보통신망(ISDN), 초고속정보망(xDSL·케이블모뎀 등), 판매시점 관리시스템(POS), 유비쿼터스, 인터넷데이터센터(IDC) 등의 설비",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 3,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 135.887, 431.168, 228.357, 540.848 ],
+        "row number" : 3,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 99,
+          "page number" : 5,
+          "bounding box" : [ 137.4, 499.233, 226.921, 541.52 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "2. 이동·위성통신 공 중 망 / 자 가 망 구축 실무"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 228.357, 431.168, 537.701, 540.848 ],
+        "row number" : 3,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 100,
+          "page number" : 5,
+          "bounding box" : [ 229.8, 448.233, 532.813, 541.52 ],
+          "numbering style" : "unordered",
+          "number of list items" : 3,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 496.233, 532.813, 541.52 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 주파수공용통신(TRS), 위성이동휴대전화(GMPCS), 2세대(CDMA), 3세대(WCDMA), 4세대(LTE), 5세대(5G) 및 재난안전통신망 (PS-LTE/LTE-R/LTE-M) 등의 설비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 464.193, 532.8, 493.52 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 위성송·수신국, 위성체, 지상관제소, 위성측위시스템(GPS), 소형 위성지구국(VSAT), 등의 설비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 448.233, 466.348, 461.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 저궤도 위성통신시스템(우주부, 지상부, 사용자부)",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 4,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 135.887, 337.551, 228.357, 431.168 ],
+        "row number" : 4,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 101,
+          "page number" : 5,
+          "bounding box" : [ 137.4, 403.953, 217.32, 431.72 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "3. 전파·방송 설비 구축 실무"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 228.357, 337.551, 537.701, 431.168 ],
+        "row number" : 4,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 102,
+          "page number" : 5,
+          "bounding box" : [ 229.8, 354.393, 532.811, 431.72 ],
+          "numbering style" : "unordered",
+          "number of list items" : 3,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 402.393, 532.8, 431.72 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 라디오, 지상파TV, 지상파DMB, 케이블, 인터넷멀티미디어 방송 등 관련 기술",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 370.473, 532.811, 399.68 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 방송관로, 방송케이블(전주·철탑·배관·단자함 등을 포함), 전송단국, 송·수신, 중계, 다중화, 분배, 구내전송선로, 위성방송수신 등의 설비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 354.393, 437.4, 367.64 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 영상·음향, 송출, 방송관리시스템 등의 설비",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 5,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 135.887, 195.866, 228.357, 337.551 ],
+        "row number" : 5,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 103,
+          "page number" : 5,
+          "bounding box" : [ 137.4, 310.113, 225.12, 337.88 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "4. 건축물 정보통신 설비 구축 실무"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 228.357, 195.866, 537.701, 337.551 ],
+        "row number" : 5,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 104,
+          "page number" : 5,
+          "bounding box" : [ 229.8, 212.673, 532.828, 337.88 ],
+          "numbering style" : "unordered",
+          "number of list items" : 2,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 292.593, 532.811, 337.88 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 구내통신선로, 이동통신구내선로, 방송공동수신, 전화, 방범, 방송, 방재관련 정보통신, 수직·수평배관 및 배선, 주장비실, 장비실, 장애자용 음향통신, 키폰전화 등의 설비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 212.673, 532.828, 289.88 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 화상(영상)회의시스템, 홈뱅킹시스템, 원격의료시스템, 원격교육 시스템, 주문대응형비디오시스템(VOD), 홈오토메이션시스템, 전자식 전광판, 지리정보시스템(GIS), 원격자동검침(AMR), 홈네트워크(디지털홈) 시스템, 동시통역시스템, 도시정보체계(UIS), 공간영상정보시스템(SIIS), 객실관리시스템 등의 설비",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 6,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 135.887, 86.576, 228.357, 195.866 ],
+        "row number" : 6,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 105,
+          "page number" : 5,
+          "bounding box" : [ 137.4, 168.273, 226.92, 196.04 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "5. 철도 정보통신 및 신호설비 구축 실무"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 5,
+        "bounding box" : [ 228.357, 86.576, 537.701, 195.866 ],
+        "row number" : 6,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 106,
+          "page number" : 5,
+          "bounding box" : [ 229.8, 102.873, 532.8, 196.04 ],
+          "numbering style" : "unordered",
+          "number of list items" : 2,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 118.833, 532.8, 196.04 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 역무자동화(AFC), 토크백, 연선전화, 열차무선, 사령전화, 자동안내 방송, 전자시계, 복합통신, 행선안내게시기, 도관전선관(HP), 통신 및 신호용 트로프, 자동열차정지장치, 열차집중제어장치, 전자식 신호제어, 열차내이동무선 공중전화, 여객자동안내장치, 통신기반 열차제어(CBTC), 종합관제센터(OCC) 등의 설비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 5,
+            "bounding box" : [ 229.8, 102.873, 424.468, 116.12 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 한국형 열차제어시스템(KTCS-2, KTCS-3)",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "footer",
+    "id" : 159,
+    "page number" : 5,
+    "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+    "kids" : [ {
+      "type" : "heading",
+      "id" : 144,
+      "page number" : 5,
+      "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+      "heading level" : 3,
+      "font" : "HCRDotum",
+      "font size" : 9.96,
+      "text color" : "[0.0]",
+      "content" : "- 5 -"
+    } ]
+  }, {
+    "type" : "table",
+    "id" : 160,
+    "level" : "3",
+    "page number" : 6,
+    "bounding box" : [ 57.51, 85.767, 538.271, 755.115 ],
+    "number of rows" : 8,
+    "number of columns" : 3,
+    "previous table id" : 158,
+    "next table id" : 162,
+    "rows" : [ {
+      "type" : "table row",
+      "row number" : 1,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 58.079, 730.541, 135.737, 754.305 ],
+        "row number" : 1,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 107,
+          "page number" : 6,
+          "bounding box" : [ 76.2, 736.473, 113.628, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "주요항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 135.737, 730.541, 228.357, 754.305 ],
+        "row number" : 1,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 108,
+          "page number" : 6,
+          "bounding box" : [ 161.4, 736.473, 198.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세부항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 228.357, 730.541, 537.701, 754.305 ],
+        "row number" : 1,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 109,
+          "page number" : 6,
+          "bounding box" : [ 362.4, 736.473, 399.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세세항목"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 2,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 58.079, 251.125, 135.737, 730.541 ],
+        "row number" : 2,
+        "column number" : 1,
+        "row span" : 6,
+        "column span" : 1,
+        "kids" : [ ]
+      }, {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 135.737, 533.417, 228.357, 730.541 ],
+        "row number" : 2,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 110,
+          "page number" : 6,
+          "bounding box" : [ 137.4, 688.953, 226.92, 731.24 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "6. 항공·항만·선박용 정보 통신설비 구축 실무"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 228.357, 533.417, 537.701, 730.541 ],
+        "row number" : 2,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 111,
+          "page number" : 6,
+          "bounding box" : [ 229.8, 542.073, 532.812, 731.24 ],
+          "numbering style" : "unordered",
+          "number of list items" : 2,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 654.033, 532.811, 731.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 선박통신설비(GMDSS, 조난구조장치, MF·HF·VHF·SSB의 송수신기, 전파수신기, 위성통신기, SSAS, 선내지령장치 등), 선박항해 (RADAR, 기상수신기, GPS, 전자해도장치, RDF, 측심기, NAVTEX, AIS, VDR, 풍속계, 선속계, 콤파스, 자동조타장치 등), 선박어로(어군 탐지장치, 어망감시장치, 수온측정장치, 조류계 등) 등의 설비",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 542.073, 532.812, 651.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 무지향표식(NDB), 전방향표식(VOR), 거리측정(DME), 계기착륙(ILS), 로란 및 레이다(ASDE·ASR·MSR), 전술항행(TACAN), 위성항행(CNS/ATM), 위성항법시스템(GNSS), 위성항법보정시스템(DGPS), 항공운항정보(FIS), 저고도돌풍경보장치(LLWAS), 소음측정시스템, 셀프이용안내(KIOSK), 이동지역관리시스템(MAMS), 종합정보통신시스템, 일반공중통신시스템, 통신자동화시스템, 통합경비보안시스템, 해안무선(VTS 및 해안지역 각종 통신시설) 등의 설비",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 3,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 135.737, 448.19, 228.357, 533.417 ],
+        "row number" : 3,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 112,
+          "page number" : 6,
+          "bounding box" : [ 137.4, 506.193, 226.92, 533.96 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "7. 교통/ITS 정보통신 설비 구축 실무"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 228.357, 448.19, 537.701, 533.417 ],
+        "row number" : 3,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "paragraph",
+          "id" : 113,
+          "page number" : 6,
+          "bounding box" : [ 229.8, 456.753, 532.932, 533.96 ],
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "o 도로교통 통신시스템(ITS, C-ITS, VDS, RWIS, DSRC, AVC, AVI, WAVE 등), 도로교통 관리시스템(ATMS), 버스정보시스템(BIS), 자율주행시스템, 요금징수(TCS, ETCS), 과적단속(측중기), 운행관제 및 정보수집시스템, 무인계수설비시스템, 기상측정, 스마트파킹 시스템 등의 설비"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 4,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 135.737, 394.968, 228.357, 448.19 ],
+        "row number" : 4,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 114,
+          "page number" : 6,
+          "bounding box" : [ 137.4, 420.873, 226.32, 448.64 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "8. 스마트시티 정보 통신설비 구축 실무"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 228.357, 394.968, 537.701, 448.19 ],
+        "row number" : 4,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "paragraph",
+          "id" : 115,
+          "page number" : 6,
+          "bounding box" : [ 229.8, 435.393, 532.8, 448.64 ],
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "o 주차정보안내, 위치정보시스템, 다목적가로등, 교통안전유도, 재난"
+        }, {
+          "type" : "paragraph",
+          "id" : 116,
+          "page number" : 6,
+          "bounding box" : [ 241.32, 403.473, 532.8, 432.68 ],
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "감지경보, 안전관리, 환경측정, 수질계측, 에너지관리, 에너지생산 제어, 수질원격관리시스템, 지진감지시스템 등의 설비"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 5,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 135.737, 325.684, 228.357, 394.968 ],
+        "row number" : 5,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 117,
+          "page number" : 6,
+          "bounding box" : [ 137.4, 367.593, 221.64, 395.36 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "9. ICT 융·복합설비 구축 실무"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 228.357, 325.684, 537.701, 394.968 ],
+        "row number" : 5,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "paragraph",
+          "id" : 118,
+          "page number" : 6,
+          "bounding box" : [ 229.8, 334.113, 532.8, 395.36 ],
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "o IoT, 클라우드 컴퓨팅, 빅데이터, 모바일 통신, 인공지능(AI) 등의 정보통신기술(ICT)을 근간으로 하는 시설자동화 시스템, 유통관리 시스템, 지하공간 안전관리시스템, 무인비행･항행시스템, 가상화 시스템, 지능형 로봇 시스템 등의 설비"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 6,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 135.737, 288.405, 228.357, 325.684 ],
+        "row number" : 6,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 119,
+          "page number" : 6,
+          "bounding box" : [ 137.4, 298.233, 226.588, 326.0 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "10. 데이터센터(IDC) 설비 구축 실무"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 228.357, 288.405, 537.701, 325.684 ],
+        "row number" : 6,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 120,
+          "page number" : 6,
+          "bounding box" : [ 229.8, 296.793, 532.801, 326.0 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "o 서버, 스토리지, 각종 네트워크 장비, 빅데이터 시스템, 전력감시 시스템, 중앙집중제어관리시스템, 출입통제시스템 등의 설비"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 7,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 135.737, 251.125, 228.357, 288.405 ],
+        "row number" : 7,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 121,
+          "page number" : 6,
+          "bounding box" : [ 137.4, 275.553, 226.2, 288.8 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "11. 정보통신 전원설비"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 228.357, 251.125, 537.701, 288.405 ],
+        "row number" : 7,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 122,
+          "page number" : 6,
+          "bounding box" : [ 229.8, 259.473, 532.8, 288.8 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "o 정류기, 무정전전원장치(UPS), 축전지, 비상발전기, 에너지저장 장치(ESS), 접지, 서지보호장치(SPD) 등의 설비"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 8,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 58.079, 86.576, 135.737, 251.125 ],
+        "row number" : 8,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 123,
+          "page number" : 6,
+          "bounding box" : [ 59.52, 212.193, 130.8, 251.48 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "5. 법규 및 기술 기준 (20% 내외)"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 135.737, 86.576, 228.357, 251.125 ],
+        "row number" : 8,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 124,
+          "page number" : 6,
+          "bounding box" : [ 137.4, 238.233, 226.32, 251.48 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "1. 정보통신 관련 법령"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 6,
+        "bounding box" : [ 228.357, 86.576, 537.701, 251.125 ],
+        "row number" : 8,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 125,
+          "page number" : 6,
+          "bounding box" : [ 229.8, 94.233, 500.76, 251.48 ],
+          "numbering style" : "unordered",
+          "number of list items" : 10,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 238.233, 340.799, 251.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 방송통신발전기본법령",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 222.153, 330.839, 235.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 정보통신공사업법령",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 206.193, 280.8, 219.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 전파법령",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 190.233, 350.759, 203.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 엔지니어링산업진흥법령",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 174.153, 280.8, 187.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 건축법령",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 158.193, 280.8, 171.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 주택법령",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 142.233, 320.759, 155.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 개인정보보호법령",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 126.153, 300.839, 139.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 전자정부법령",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 110.193, 500.76, 123.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 초고층 및 지하연계 복합건축물 재난관리에 관한 특별법",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 6,
+            "bounding box" : [ 229.8, 94.233, 290.76, 107.48 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 기술사법령",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "footer",
+    "id" : 161,
+    "page number" : 6,
+    "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+    "kids" : [ {
+      "type" : "heading",
+      "id" : 145,
+      "page number" : 6,
+      "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+      "heading level" : 3,
+      "font" : "HCRDotum",
+      "font size" : 9.96,
+      "text color" : "[0.0]",
+      "content" : "- 6 -"
+    } ]
+  }, {
+    "type" : "table",
+    "id" : 162,
+    "level" : "3",
+    "page number" : 7,
+    "bounding box" : [ 57.51, 443.335, 538.271, 755.115 ],
+    "number of rows" : 4,
+    "number of columns" : 3,
+    "previous table id" : 160,
+    "rows" : [ {
+      "type" : "table row",
+      "row number" : 1,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 7,
+        "bounding box" : [ 58.079, 730.541, 135.887, 754.305 ],
+        "row number" : 1,
+        "column number" : 1,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 126,
+          "page number" : 7,
+          "bounding box" : [ 76.2, 736.473, 113.628, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "주요항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 7,
+        "bounding box" : [ 135.887, 730.541, 228.357, 754.305 ],
+        "row number" : 1,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 127,
+          "page number" : 7,
+          "bounding box" : [ 161.4, 736.473, 198.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세부항목"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 7,
+        "bounding box" : [ 228.357, 730.541, 537.701, 754.305 ],
+        "row number" : 1,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 128,
+          "page number" : 7,
+          "bounding box" : [ 362.4, 736.473, 399.828, 749.72 ],
+          "heading level" : 2,
+          "font" : "MalgunGothicBold",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "세세항목"
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 2,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 7,
+        "bounding box" : [ 58.079, 444.144, 135.887, 730.541 ],
+        "row number" : 2,
+        "column number" : 1,
+        "row span" : 3,
+        "column span" : 1,
+        "kids" : [ ]
+      }, {
+        "type" : "table cell",
+        "page number" : 7,
+        "bounding box" : [ 135.887, 662.995, 228.357, 730.541 ],
+        "row number" : 2,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 129,
+          "page number" : 7,
+          "bounding box" : [ 137.4, 704.073, 215.04, 731.24 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "2. 정보통신공사 관련 기술기준"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 7,
+        "bounding box" : [ 228.357, 662.995, 537.701, 730.541 ],
+        "row number" : 2,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 130,
+          "page number" : 7,
+          "bounding box" : [ 229.8, 686.073, 532.201, 731.24 ],
+          "numbering style" : "unordered",
+          "number of list items" : 3,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 717.993, 415.8, 731.24 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 방송통신설비의 기술기준에 관한 규정",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 702.033, 532.201, 715.28 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 접지설비·구내통신설비·선로설비 및 통신공동구 등에 관한 기술기준",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 686.073, 435.84, 699.32 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 방송공동수신설비의 설치기준에 관한 고시",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 3,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 7,
+        "bounding box" : [ 135.887, 561.825, 228.357, 662.995 ],
+        "row number" : 3,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 131,
+          "page number" : 7,
+          "bounding box" : [ 137.4, 636.513, 225.12, 663.68 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "3. 건축물 정보통신 설비 관련 기준"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 7,
+        "bounding box" : [ 228.357, 561.825, 537.701, 662.995 ],
+        "row number" : 3,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 132,
+          "page number" : 7,
+          "bounding box" : [ 229.8, 570.513, 499.227, 663.68 ],
+          "numbering style" : "unordered",
+          "number of list items" : 6,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 650.433, 375.84, 663.68 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 주택건설기준 등에 관한 규정",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 634.473, 440.76, 647.72 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 지능형 홈 네트워크 설비 설치 및 기술기준",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 618.513, 499.227, 631.76 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 비상방송설비의 화재안전기준(NFSC 102, 202, 204, 604)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 602.433, 350.76, 615.68 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 범죄예방 건축기준 고시",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 586.473, 335.76, 599.72 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 초고속 정보통신인증",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 570.513, 335.76, 583.76 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 홈네트워크 건물인증",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "table row",
+      "row number" : 4,
+      "cells" : [ {
+        "type" : "table cell",
+        "page number" : 7,
+        "bounding box" : [ 135.887, 444.144, 228.357, 561.825 ],
+        "row number" : 4,
+        "column number" : 2,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "heading",
+          "id" : 133,
+          "page number" : 7,
+          "bounding box" : [ 137.4, 535.113, 226.92, 562.4 ],
+          "heading level" : 3,
+          "font" : "MalgunGothic",
+          "font size" : 9.96,
+          "text color" : "[0.0]",
+          "content" : "4. 정보통신실무 관련 각종 규정"
+        } ]
+      }, {
+        "type" : "table cell",
+        "page number" : 7,
+        "bounding box" : [ 228.357, 444.144, 537.701, 561.825 ],
+        "row number" : 4,
+        "column number" : 3,
+        "row span" : 1,
+        "column span" : 1,
+        "kids" : [ {
+          "type" : "list",
+          "id" : 134,
+          "page number" : 7,
+          "bounding box" : [ 229.8, 453.153, 532.811, 562.4 ],
+          "numbering style" : "unordered",
+          "number of list items" : 5,
+          "list items" : [ {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 549.153, 370.8, 562.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 정보통신공사 감리 표준품셈",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 533.193, 450.84, 546.44 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 방송통신기자재 등의 적합성평가에 관한 고시",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 517.113, 518.04, 530.36 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o 방송통신설비의 안전성·신뢰성 및 통신규약에 대한 기술기준",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 469.113, 532.811, 514.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o TTA 표준(정보시스템 하드웨어 규모산정지침, 네트워크 구축을 위한 장비규모 산정지침, 디지털 방송 음량 레벨 운용 기준, LTE기반 철도통신시스템 요구사항 등)",
+            "kids" : [ ]
+          }, {
+            "type" : "list item",
+            "page number" : 7,
+            "bounding box" : [ 229.8, 453.153, 381.72, 466.4 ],
+            "font" : "MalgunGothic",
+            "font size" : 9.96,
+            "text color" : "[0.0]",
+            "content" : "o ITU, IEEE, IETF 등의 표준 규격",
+            "kids" : [ ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "footer",
+    "id" : 163,
+    "page number" : 7,
+    "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+    "kids" : [ {
+      "type" : "heading",
+      "id" : 146,
+      "page number" : 7,
+      "bounding box" : [ 285.12, 41.549, 310.041, 54.497 ],
+      "heading level" : 3,
+      "font" : "HCRDotum",
+      "font size" : 9.96,
+      "text color" : "[0.0]",
+      "content" : "- 7 -"
+    } ]
+  } ]
+}

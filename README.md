@@ -2,6 +2,17 @@
 
 PDF 문서에서 여러 페이지에 걸쳐 이어지는 테이블들을 자동으로 찾아서 병합하고 시각화하는 도구입니다.
 
+## 프로젝트 구조
+
+이 프로젝트는 두 가지 버전으로 구성되어 있습니다:
+
+- **[docling_version/](docling_version/)**: GPU 가속을 지원하는 docling 기반 (빠른 처리 속도)
+- **[opendataloader_version/](opendataloader_version/)**: Java 기반 opendataloader-pdf (설치 간편)
+
+각 버전은 독립적으로 실행 가능하며, 동일한 병합 로직과 규칙을 사용합니다.
+
+자세한 내용은 [README_프로젝트구조.md](README_프로젝트구조.md) 참조
+
 ## 주요 기능
 
 - ✅ **텍스트 연결성 분석**: 테이블 간 텍스트가 자연스럽게 이어지는지 감지
@@ -11,33 +22,62 @@ PDF 문서에서 여러 페이지에 걸쳐 이어지는 테이블들을 자동�
 - ✅ **원본 PDF 시각화**: 연결된 테이블을 색깔별로 표시
 - ✅ **상세 보고서**: 각 연결의 근거가 되는 텍스트 비교 정보 제공
 
+## 빠른 시작
+
+### Docling 버전 (GPU 가속)
+
+```bash
+cd docling_version
+python check_gpu.py  # GPU 상태 확인
+python extract_tables_from_json.py  # 테이블 추출
+python merge_connected_tables.py  # 테이블 병합
+python visualize_connected_tables.py  # 시각화
+```
+
+### Opendataloader 버전 (간편 설치)
+
+```bash
+cd opendataloader_version
+python run_all_v2.py  # 전체 파이프라인 실행 (추출+병합+시각화+오버레이)
+```
+
+## 상세 사용 방법
+
+각 버전의 상세한 사용 방법은 해당 폴더의 README.md를 참조하세요:
+
+- [docling_version/README.md](docling_version/README.md)
+- [opendataloader_version/README.md](opendataloader_version/README.md)
+
 ## 설치
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## 사용 방법
+## 이전 버전 사용 방법 (참고용)
 
 ### 0. GPU 가속 상태 확인 (선택)
 
 ```bash
+cd docling_version
 python check_gpu.py
 ```
 
 ### 1. 테이블 데이터 준비
 
 **옵션 A: 직접 준비**
-`table_output/` 디렉토리에 분석할 JSON 파일들을 위치시킵니다.
+`docling_version/table_output/` 디렉토리에 분석할 JSON 파일들을 위치시킵니다.
 
 **옵션 B: output 폴더에서 추출**
 ```bash
+cd docling_version
 python extract_tables_from_json.py
 ```
 
 ### 2. 테이블 병합 실행
 
 ```bash
+cd docling_version
 python merge_connected_tables.py
 ```
 
