@@ -5,6 +5,714 @@
     {
       "group_id": 0,
       "table_indices": [
+        0,
+        1
+      ],
+      "pages": [
+        3,
+        4
+      ],
+      "connection_reasons": [
+        "Table 0 -> 1: 헤더 테이블 뒤 데이터 테이블 (열 4개 vs 2개, 유사 구조)"
+      ],
+      "disconnection_reasons": [
+        "Table 1 -X-> 2: 테이블 구조가 다름"
+      ],
+      "merged_table": {
+        "self_ref": "#/tables/0",
+        "parent": {
+          "$ref": "#/body"
+        },
+        "children": [],
+        "content_layer": "body",
+        "label": "table",
+        "prov": [
+          {
+            "page_no": 3,
+            "bbox": {
+              "l": 49.956268310546875,
+              "t": 695.2422943115234,
+              "r": 543.1259155273438,
+              "b": 159.6243896484375,
+              "coord_origin": "BOTTOMLEFT"
+            },
+            "charspan": [
+              0,
+              0
+            ]
+          }
+        ],
+        "captions": [],
+        "references": [],
+        "footnotes": [],
+        "data": {
+          "table_cells": [
+            {
+              "bbox": {
+                "l": 69.024,
+                "t": 152.73199999999997,
+                "r": 108.864,
+                "b": 162.16499999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "개정번호",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 236.93,
+                "t": 152.73199999999997,
+                "r": 306.77,
+                "b": 162.16499999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "개정 내용 요약",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 439.18,
+                "t": 152.73199999999997,
+                "r": 469.06,
+                "b": 162.16499999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "작성자",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 507.34,
+                "t": 152.73199999999997,
+                "r": 527.26,
+                "b": 162.16499999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "비고",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 82.464,
+                "t": 170.49199999999996,
+                "r": 95.641,
+                "b": 179.92499999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "1.0",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 251.93,
+                "t": 170.49199999999996,
+                "r": 291.77,
+                "b": 179.92499999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "최초작성",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 56.664,
+                "t": 141.812,
+                "r": 65.034,
+                "b": 151.245,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "1.",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 74.664,
+                "t": 141.812,
+                "r": 538.197,
+                "b": 151.245,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "계정관리 .............................................................................................................................................................5",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 76.704,
+                "t": 193.65199999999993,
+                "r": 538.148,
+                "b": 203.08499999999992,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "1.3. 관리자 패스워드 관리 ........................................................................................................................................................8",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 56.664,
+                "t": 228.332,
+                "r": 65.034,
+                "b": 237.765,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "2.",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 74.664,
+                "t": 228.332,
+                "r": 114.504,
+                "b": 237.765,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "보안관리",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 116.18,
+                "t": 228.332,
+                "r": 538.077,
+                "b": 237.765,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "...........................................................................................................................................................10",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 76.704,
+                "t": 245.64199999999994,
+                "r": 146.54,
+                "b": 255.07499999999993,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "2.1. 데몬 관리",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 146.9,
+                "t": 245.64199999999994,
+                "r": 538.148,
+                "b": 255.07499999999993,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "................................................................................................................................................................................10",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 76.704,
+                "t": 262.9219999999999,
+                "r": 538.148,
+                "b": 272.3549999999999,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "2.2. 디렉토리 쓰기 권한 관리 ...............................................................................................................................................11",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 76.704,
+                "t": 280.202,
+                "r": 538.148,
+                "b": 289.635,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 7,
+              "end_row_offset_idx": 8,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "2.3. 소스 / 설정파일 권한 관리 ................................................................................................................................................12",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 76.704,
+                "t": 297.48199999999997,
+                "r": 538.148,
+                "b": 306.91499999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 8,
+              "end_row_offset_idx": 9,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "2.4. 디렉토리 검색 기능 제거 ...............................................................................................................................................13",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 76.704,
+                "t": 314.76199999999994,
+                "r": 538.148,
+                "b": 324.19499999999994,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 9,
+              "end_row_offset_idx": 10,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "2.5. 에러 메시지 관리 ...............................................................................................................................................................14",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 76.704,
+                "t": 332.042,
+                "r": 538.148,
+                "b": 341.47499999999997,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 10,
+              "end_row_offset_idx": 11,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "2.6. Examples 디렉토리 삭제 .................................................................................................................................................16",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 76.704,
+                "t": 349.44199999999995,
+                "r": 538.148,
+                "b": 358.87499999999994,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 11,
+              "end_row_offset_idx": 12,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "2.7. 프로세스 관리기능 삭제 ..................................................................................................................................................17",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 56.664,
+                "t": 366.722,
+                "r": 65.034,
+                "b": 376.155,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 12,
+              "end_row_offset_idx": 13,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "3.",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 74.664,
+                "t": 366.722,
+                "r": 538.077,
+                "b": 376.155,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 12,
+              "end_row_offset_idx": 13,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "로그 및 패치 관리 ..........................................................................................................................................18",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 76.704,
+                "t": 384.00199999999995,
+                "r": 240.53,
+                "b": 393.43499999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 13,
+              "end_row_offset_idx": 14,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "3.1. 로깅 디렉토리 / 파일 권한 관리",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 241.97,
+                "t": 384.00199999999995,
+                "r": 538.148,
+                "b": 393.43499999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 14,
+              "end_row_offset_idx": 15,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "....................................................................................................................................18",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 76.704,
+                "t": 401.30199999999996,
+                "r": 538.148,
+                "b": 410.73499999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 15,
+              "end_row_offset_idx": 16,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "3.2. 최신 패치 적용 ....................................................................................................................................................................20",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          "num_rows": 2,
+          "num_cols": 4,
+          "grid": [
+            [
+              {
+                "bbox": {
+                  "l": 69.024,
+                  "t": 152.73199999999997,
+                  "r": 108.864,
+                  "b": 162.16499999999996,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "개정번호",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 236.93,
+                  "t": 152.73199999999997,
+                  "r": 306.77,
+                  "b": 162.16499999999996,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "개정 내용 요약",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 439.18,
+                  "t": 152.73199999999997,
+                  "r": 469.06,
+                  "b": 162.16499999999996,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "작성자",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 507.34,
+                  "t": 152.73199999999997,
+                  "r": 527.26,
+                  "b": 162.16499999999996,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "비고",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 82.464,
+                  "t": 170.49199999999996,
+                  "r": 95.641,
+                  "b": 179.92499999999995,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "1.0",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 251.93,
+                  "t": 170.49199999999996,
+                  "r": 291.77,
+                  "b": 179.92499999999995,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "최초작성",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ]
+          ]
+        },
+        "annotations": [],
+        "merged_from_pages": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "group_id": 1,
+      "table_indices": [
         2,
         3,
         4
@@ -17,6 +725,9 @@
       "connection_reasons": [
         "Table 2 -> 3: 텍스트 연결: '관리자 페이지에' -> 'Tomcat 상'",
         "Table 3 -> 4: 텍스트 연결: 'User name 확인 및 변경 Definition]-[Users]-[Role Name] 에서' -> 'Tomcat code'"
+      ],
+      "disconnection_reasons": [
+        "Table 4 -X-> 5: 연결 조건 미충족"
       ],
       "merged_table": {
         "self_ref": "#/tables/2",
@@ -1898,7 +2609,7 @@
       }
     },
     {
-      "group_id": 1,
+      "group_id": 2,
       "table_indices": [
         5,
         6
@@ -1909,6 +2620,9 @@
       ],
       "connection_reasons": [
         "Table 5 -> 6: 텍스트 연결: '조치방안대로 권한을' -> 'Tomcat, OS(Windows, Unix)'"
+      ],
+      "disconnection_reasons": [
+        "Table 6 -X-> 7: 연결 조건 미충족"
       ],
       "merged_table": {
         "self_ref": "#/tables/5",
@@ -3497,7 +4211,7 @@
       }
     },
     {
-      "group_id": 2,
+      "group_id": 3,
       "table_indices": [
         10,
         11
@@ -3508,6 +4222,9 @@
       ],
       "connection_reasons": [
         "Table 10 -> 11: 텍스트 연결: '사용자 브라우저로 에러 설정파일에서 에러 메시지 설정 파일 : /[Tomcat' -> 'Tomcat 하'"
+      ],
+      "disconnection_reasons": [
+        "Table 11 -X-> 12: 연결 조건 미충족"
       ],
       "merged_table": {
         "self_ref": "#/tables/10",
@@ -4875,7 +5592,7 @@
       }
     },
     {
-      "group_id": 3,
+      "group_id": 4,
       "table_indices": [
         12,
         13,
@@ -4890,6 +5607,7 @@
         "Table 12 -> 13: 텍스트 연결: '다음 경로가 프로세스 관리기능이' -> 'Tomcat'",
         "Table 13 -> 14: 텍스트 연결: '접근관리를' -> 'Tomcat'"
       ],
+      "disconnection_reasons": [],
       "merged_table": {
         "self_ref": "#/tables/12",
         "parent": {
@@ -6784,6 +7502,126 @@
           20
         ]
       }
+    }
+  ],
+  "single_tables": [
+    {
+      "table_idx": 7,
+      "page_no": 11,
+      "title": "2.2. 디렉토리 쓰기 권한 관리",
+      "disconnection_reason": "Table 7 -X-> 8: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 8,
+      "page_no": 12,
+      "title": "2.3. 소스 / 설정파일 권한 관리",
+      "disconnection_reason": "Table 8 -X-> 9: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 9,
+      "page_no": 13,
+      "title": "2.4. 디렉토리 검색 기능 제거",
+      "disconnection_reason": "Table 9 -X-> 10: 연결 조건 미충족"
+    }
+  ],
+  "all_disconnections": {
+    "1": [
+      "Table 1 -X-> 2: 테이블 구조가 다름"
+    ],
+    "4": [
+      "Table 4 -X-> 5: 연결 조건 미충족"
+    ],
+    "6": [
+      "Table 6 -X-> 7: 연결 조건 미충족"
+    ],
+    "7": [
+      "Table 7 -X-> 8: 연결 조건 미충족"
+    ],
+    "8": [
+      "Table 8 -X-> 9: 연결 조건 미충족"
+    ],
+    "9": [
+      "Table 9 -X-> 10: 연결 조건 미충족"
+    ],
+    "11": [
+      "Table 11 -X-> 12: 연결 조건 미충족"
+    ]
+  },
+  "table_infos": [
+    {
+      "table_idx": 0,
+      "page_no": 3,
+      "title": "개 정 이 력"
+    },
+    {
+      "table_idx": 1,
+      "page_no": 4,
+      "title": "목 차"
+    },
+    {
+      "table_idx": 2,
+      "page_no": 5,
+      "title": "1.1. 관리자 페이지 관리"
+    },
+    {
+      "table_idx": 3,
+      "page_no": 7,
+      "title": "1.2. 관리자 계정명 변경"
+    },
+    {
+      "table_idx": 4,
+      "page_no": 8,
+      "title": "1.3. 관리자 패스워드 관리"
+    },
+    {
+      "table_idx": 5,
+      "page_no": 9,
+      "title": "1.4. 패스워드 파일 관리"
+    },
+    {
+      "table_idx": 6,
+      "page_no": 10,
+      "title": "2.1. 데몬 관리"
+    },
+    {
+      "table_idx": 7,
+      "page_no": 11,
+      "title": "2.2. 디렉토리 쓰기 권한 관리"
+    },
+    {
+      "table_idx": 8,
+      "page_no": 12,
+      "title": "2.3. 소스 / 설정파일 권한 관리"
+    },
+    {
+      "table_idx": 9,
+      "page_no": 13,
+      "title": "2.4. 디렉토리 검색 기능 제거"
+    },
+    {
+      "table_idx": 10,
+      "page_no": 14,
+      "title": "2.5. 에러 메시지 관리"
+    },
+    {
+      "table_idx": 11,
+      "page_no": 16,
+      "title": "2.6. Examples 디렉토리 삭제"
+    },
+    {
+      "table_idx": 12,
+      "page_no": 17,
+      "title": "2.7. 프로세스 관리기능 삭제"
+    },
+    {
+      "table_idx": 13,
+      "page_no": 18,
+      "title": "3.1. 로깅 디렉토리 / 파일 권한 관리"
+    },
+    {
+      "table_idx": 14,
+      "page_no": 20,
+      "title": "3.2. 최신 패치 적용"
     }
   ]
 }

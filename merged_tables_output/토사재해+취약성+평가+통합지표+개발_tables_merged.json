@@ -15,6 +15,9 @@
       "connection_reasons": [
         "Table 3 -> 4: 텍스트 연결: '5.4 보강조적조 붙임공에 적용한' -> '붙임공과 기초에 적용한 철근 설계 모식도···· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·93'"
       ],
+      "disconnection_reasons": [
+        "Table 4 -X-> 5: 연결 조건 미충족"
+      ],
       "merged_table": {
         "self_ref": "#/tables/3",
         "parent": {
@@ -3528,6 +3531,1042 @@
     {
       "group_id": 1,
       "table_indices": [
+        21,
+        22
+      ],
+      "pages": [
+        78,
+        78
+      ],
+      "connection_reasons": [
+        "Table 21 -> 22: 텍스트 연결: '결정트리에 활용할 변수의' -> '하이퍼파라미터'"
+      ],
+      "disconnection_reasons": [
+        "Table 22 -X-> 23: 테이블 구조가 다름"
+      ],
+      "merged_table": {
+        "self_ref": "#/tables/21",
+        "parent": {
+          "$ref": "#/body"
+        },
+        "children": [
+          {
+            "$ref": "#/texts/817"
+          }
+        ],
+        "content_layer": "body",
+        "label": "table",
+        "prov": [
+          {
+            "page_no": 78,
+            "bbox": {
+              "l": 78.67901611328125,
+              "t": 524.3904571533203,
+              "r": 469.96417236328125,
+              "b": 392.8283386230469,
+              "coord_origin": "BOTTOMLEFT"
+            },
+            "charspan": [
+              0,
+              0
+            ]
+          }
+        ],
+        "captions": [
+          {
+            "$ref": "#/texts/817"
+          }
+        ],
+        "references": [],
+        "footnotes": [],
+        "data": {
+          "table_cells": [
+            {
+              "bbox": {
+                "l": 94.458,
+                "t": 239.413,
+                "r": 147.907,
+                "b": 249.313,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "하이퍼파라미터",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 232.398,
+                "t": 239.413,
+                "r": 247.806,
+                "b": 249.313,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "정의",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 379.278,
+                "t": 239.413,
+                "r": 406.686,
+                "b": 249.313,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "설정 값",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 95.538,
+                "t": 265.393,
+                "r": 146.813,
+                "b": 275.29299999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "n_estimators",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 214.878,
+                "t": 265.393,
+                "r": 265.361,
+                "b": 275.29299999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "결정트리 개수",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 348.078,
+                "t": 265.393,
+                "r": 437.881,
+                "b": 275.29299999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "4, 8, 16, 32, 64, 128",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 99.317,
+                "t": 291.373,
+                "r": 143.158,
+                "b": 301.27299999999997,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "max_depth",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 214.993,
+                "t": 291.373,
+                "r": 265.489,
+                "b": 301.27299999999997,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "결정트리 깊이",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 367.645,
+                "t": 291.373,
+                "r": 418.461,
+                "b": 301.27299999999997,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "4, 8, 16, 32",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 84.676,
+                "t": 317.35299999999995,
+                "r": 157.57,
+                "b": 327.253,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "min_samples_split",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 194.997,
+                "t": 317.35299999999995,
+                "r": 285.059,
+                "b": 327.253,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "결정트리 분활 최소 개수",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 375.995,
+                "t": 317.35299999999995,
+                "r": 409.937,
+                "b": 327.253,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "2, 5, 10",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 85.696,
+                "t": 343.334,
+                "r": 156.602,
+                "b": 353.234,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "min_samples_leaf",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 187.369,
+                "t": 343.334,
+                "r": 280.762,
+                "b": 353.234,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "결정트리에 활용할 변수의",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 378.545,
+                "t": 343.334,
+                "r": 407.481,
+                "b": 353.234,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "1, 2, 4",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 94.458,
+                "t": 494.29299999999995,
+                "r": 147.907,
+                "b": 504.193,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "하이퍼파라미터",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 232.398,
+                "t": 494.29299999999995,
+                "r": 247.806,
+                "b": 504.193,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "정의",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 379.278,
+                "t": 494.29299999999995,
+                "r": 406.686,
+                "b": 504.193,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "설정 값",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 95.538,
+                "t": 517.453,
+                "r": 146.813,
+                "b": 527.353,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "n_estimators",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 214.878,
+                "t": 517.453,
+                "r": 265.361,
+                "b": 527.353,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "결정트리 개수",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 348.078,
+                "t": 517.453,
+                "r": 437.881,
+                "b": 527.353,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "4, 8, 16, 32, 64, 128",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 99.317,
+                "t": 540.612,
+                "r": 143.158,
+                "b": 550.512,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "max_depth",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 214.993,
+                "t": 540.612,
+                "r": 265.489,
+                "b": 550.512,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "결정트리 깊이",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 367.645,
+                "t": 540.612,
+                "r": 418.461,
+                "b": 550.512,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "4, 8, 16, 32",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 95.717,
+                "t": 563.7719999999999,
+                "r": 146.556,
+                "b": 573.672,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "learning_rate",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 211.011,
+                "t": 563.7719999999999,
+                "r": 269.243,
+                "b": 573.672,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "학습률 보정계수",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 354.838,
+                "t": 563.7719999999999,
+                "r": 431.182,
+                "b": 573.672,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "0.01, 0.1, 0.2, 0.3",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 86.417,
+                "t": 586.872,
+                "r": 155.991,
+                "b": 596.7719999999999,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "colsample_bytree",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 183.606,
+                "t": 586.872,
+                "r": 296.71,
+                "b": 596.7719999999999,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "결정트리에 활용할 변수의 비율",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 367.185,
+                "t": 586.872,
+                "r": 418.859,
+                "b": 596.7719999999999,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "0.6, 0.8, 1.0",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 99.737,
+                "t": 610.0319999999999,
+                "r": 142.67,
+                "b": 619.932,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "subsample",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 183.605,
+                "t": 610.0319999999999,
+                "r": 296.719,
+                "b": 619.932,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "훈련데이터 무작위 샘플링 비율",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 367.195,
+                "t": 610.0319999999999,
+                "r": 418.876,
+                "b": 619.932,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "0.6, 0.8, 1.0",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          "num_rows": 5,
+          "num_cols": 3,
+          "grid": [
+            [
+              {
+                "bbox": {
+                  "l": 94.458,
+                  "t": 239.413,
+                  "r": 147.907,
+                  "b": 249.313,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "하이퍼파라미터",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 232.398,
+                  "t": 239.413,
+                  "r": 247.806,
+                  "b": 249.313,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "정의",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 379.278,
+                  "t": 239.413,
+                  "r": 406.686,
+                  "b": 249.313,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "설정 값",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 95.538,
+                  "t": 265.393,
+                  "r": 146.813,
+                  "b": 275.29299999999995,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "n_estimators",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 214.878,
+                  "t": 265.393,
+                  "r": 265.361,
+                  "b": 275.29299999999995,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "결정트리 개수",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 348.078,
+                  "t": 265.393,
+                  "r": 437.881,
+                  "b": 275.29299999999995,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "4, 8, 16, 32, 64, 128",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 99.317,
+                  "t": 291.373,
+                  "r": 143.158,
+                  "b": 301.27299999999997,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "max_depth",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 214.993,
+                  "t": 291.373,
+                  "r": 265.489,
+                  "b": 301.27299999999997,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "결정트리 깊이",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 367.645,
+                  "t": 291.373,
+                  "r": 418.461,
+                  "b": 301.27299999999997,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "4, 8, 16, 32",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 84.676,
+                  "t": 317.35299999999995,
+                  "r": 157.57,
+                  "b": 327.253,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "min_samples_split",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 194.997,
+                  "t": 317.35299999999995,
+                  "r": 285.059,
+                  "b": 327.253,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "결정트리 분활 최소 개수",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 375.995,
+                  "t": 317.35299999999995,
+                  "r": 409.937,
+                  "b": 327.253,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "2, 5, 10",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 85.696,
+                  "t": 343.334,
+                  "r": 156.602,
+                  "b": 353.234,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "min_samples_leaf",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 187.369,
+                  "t": 343.334,
+                  "r": 280.762,
+                  "b": 353.234,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "결정트리에 활용할 변수의",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 378.545,
+                  "t": 343.334,
+                  "r": 407.481,
+                  "b": 353.234,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "1, 2, 4",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ]
+          ]
+        },
+        "annotations": [],
+        "merged_from_pages": [
+          78,
+          78
+        ]
+      }
+    },
+    {
+      "group_id": 2,
+      "table_indices": [
         28,
         29,
         30
@@ -3540,6 +4579,9 @@
       "connection_reasons": [
         "Table 28 -> 29: 텍스트 연결: '3m 초과 5m 이하' -> '주요지표'",
         "Table 29 -> 30: 텍스트 연결: '4.5 초과' -> '주요지표'"
+      ],
+      "disconnection_reasons": [
+        "Table 30 -X-> 31: 연결 조건 미충족"
       ],
       "merged_table": {
         "self_ref": "#/tables/28",
@@ -5858,6 +6900,543 @@
           87
         ]
       }
+    }
+  ],
+  "single_tables": [
+    {
+      "table_idx": 0,
+      "page_no": 9,
+      "title": "차  례",
+      "disconnection_reason": "Table 0 -X-> 1: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 1,
+      "page_no": 10,
+      "title": "",
+      "disconnection_reason": "Table 1 -X-> 2: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 2,
+      "page_no": 11,
+      "title": "그림 차례",
+      "disconnection_reason": "Table 2 -X-> 3: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 5,
+      "page_no": 14,
+      "title": "표  차례",
+      "disconnection_reason": "Table 5 -X-> 6: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 6,
+      "page_no": 15,
+      "title": "",
+      "disconnection_reason": "Table 6 -X-> 7: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 7,
+      "page_no": 25,
+      "title": "표 2.1 토사재해 취약성 평가표(안)",
+      "disconnection_reason": "Table 7 -X-> 8: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 8,
+      "page_no": 26,
+      "title": "표 2.2 '23, '24년 토사재해로 인한 인명피해 및 피해 건축물 현황",
+      "disconnection_reason": "Table 8 -X-> 9: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 9,
+      "page_no": 27,
+      "title": "표 2.3 건축허가·착공·준공 통계(동수별 건축 착공현황(2005.01.~2022.06.))",
+      "disconnection_reason": "Table 9 -X-> 10: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 10,
+      "page_no": 27,
+      "title": "표 2.4 건축허가·착공·준공 통계(동수별 건축 착공현황(2022.07.~2024.09.))",
+      "disconnection_reason": "Table 10 -X-> 11: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 11,
+      "page_no": 41,
+      "title": "표 3.1 실험 재료의 물리적·공학적 특성",
+      "disconnection_reason": "Table 11 -X-> 12: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 12,
+      "page_no": 48,
+      "title": "표 3.2 고정인자 및 조정인자",
+      "disconnection_reason": "Table 12 -X-> 13: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 13,
+      "page_no": 55,
+      "title": "그림 3.9 토사 충격력 계측을 위한 로드셀 설치 위치 표 3.3 토사재해에 의한 조적조 건축물의 충격력 결과",
+      "disconnection_reason": "Table 13 -X-> 14: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 14,
+      "page_no": 62,
+      "title": "표 4.1 토사재해 관련 부처별 평가인자",
+      "disconnection_reason": "Table 14 -X-> 15: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 15,
+      "page_no": 63,
+      "title": "표 4.2 '22년 토사재해 취약성 평가표(안)",
+      "disconnection_reason": "Table 15 -X-> 16: 테이블 구조가 다름"
+    },
+    {
+      "table_idx": 16,
+      "page_no": 64,
+      "title": "표 4.3 건축물의 파손도 등급",
+      "disconnection_reason": "Table 16 -X-> 17: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 17,
+      "page_no": 67,
+      "title": "표 4.4 취약성 분류에 따른 토석류에 의한 건축물 취약성 평가 인자 구분",
+      "disconnection_reason": "Table 17 -X-> 18: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 18,
+      "page_no": 71,
+      "title": "표 4.5 '재해위험도 평가표' 내 이격거리에 따른 점수 기준",
+      "disconnection_reason": "Table 18 -X-> 19: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 19,
+      "page_no": 75,
+      "title": "표 4.6 지표별 수치화",
+      "disconnection_reason": "Table 19 -X-> 20: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 20,
+      "page_no": 76,
+      "title": "표 4.7 Case별 데이터 셋",
+      "disconnection_reason": "Table 20 -X-> 21: 테이블 구조가 다름"
+    },
+    {
+      "table_idx": 23,
+      "page_no": 79,
+      "title": "표 4.10 RF모델 하이퍼파라미터 및 정확도",
+      "disconnection_reason": "Table 23 -X-> 24: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 24,
+      "page_no": 80,
+      "title": "표 4.11 XGBoost모델 하이퍼파라미터 및 정확도",
+      "disconnection_reason": "Table 24 -X-> 25: 테이블 구조가 다름"
+    },
+    {
+      "table_idx": 25,
+      "page_no": 81,
+      "title": "표 4.12 토석류에 의한 조적조 및 비조적조 건축물의 취약성 주요지표",
+      "disconnection_reason": "Table 25 -X-> 26: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 26,
+      "page_no": 82,
+      "title": "표 4.13 주요지표 배점",
+      "disconnection_reason": "Table 26 -X-> 27: 테이블 구조가 다름"
+    },
+    {
+      "table_idx": 27,
+      "page_no": 84,
+      "title": "표 4.14 저지대 거리 취약성 평가표(안)",
+      "disconnection_reason": "Table 27 -X-> 28: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 31,
+      "page_no": 87,
+      "title": "표 4.18 지붕형식 취약성 평가표(안)",
+      "disconnection_reason": "Table 31 -X-> 32: 테이블 구조가 다름"
+    },
+    {
+      "table_idx": 32,
+      "page_no": 89,
+      "title": "표 4.19 건축물 취약성 등급",
+      "disconnection_reason": "Table 32 -X-> 33: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 33,
+      "page_no": 96,
+      "title": "표 4.20 토석류에 의한 건축물 취약성 평가표(안)",
+      "disconnection_reason": "Table 33 -X-> 34: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 34,
+      "page_no": 100,
+      "title": "표 4.21 등고선 및 등고선 간격을 활용한 사면경사 유추 방법",
+      "disconnection_reason": "Table 34 -X-> 35: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 35,
+      "page_no": 116,
+      "title": "표 5.1 보강 조적조 붙임공의 충격력 결과",
+      "disconnection_reason": "Table 35 -X-> 36: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 36,
+      "page_no": 119,
+      "title": "변형률",
+      "disconnection_reason": "Table 36 -X-> 37: 테이블 구조가 다름"
+    },
+    {
+      "table_idx": 37,
+      "page_no": 120,
+      "title": "표 5.3 보강 조적조 붙임공의 시공 매뉴얼(안)(그림 5.4 ~ 그림 5.6 참고)",
+      "disconnection_reason": "Table 37 -X-> 38: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 38,
+      "page_no": 131,
+      "title": "서 지 자 료",
+      "disconnection_reason": "Table 38 -X-> 39: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 39,
+      "page_no": 131,
+      "title": "토사재해, 토석류, 건축물 취약성 평가표, 실증실험, 보강 조적조 붙임공",
+      "disconnection_reason": "Table 39 -X-> 40: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 40,
+      "page_no": 132,
+      "title": "REPORT DOCUMENTATION PAGE",
+      "disconnection_reason": "Table 40 -X-> 41: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 41,
+      "page_no": 132,
+      "title": "Mass  movement,  Debris  flow,  Vulnerability  assessment  table  for  buildings,  Empirical experiments,  Reinforced  masonry  cladding  method",
+      "disconnection_reason": ""
+    }
+  ],
+  "all_disconnections": {
+    "0": [
+      "Table 0 -X-> 1: 연결 조건 미충족"
+    ],
+    "1": [
+      "Table 1 -X-> 2: 연결 조건 미충족"
+    ],
+    "2": [
+      "Table 2 -X-> 3: 연결 조건 미충족"
+    ],
+    "4": [
+      "Table 4 -X-> 5: 연결 조건 미충족"
+    ],
+    "5": [
+      "Table 5 -X-> 6: 연결 조건 미충족"
+    ],
+    "6": [
+      "Table 6 -X-> 7: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "7": [
+      "Table 7 -X-> 8: 연결 조건 미충족"
+    ],
+    "8": [
+      "Table 8 -X-> 9: 연결 조건 미충족"
+    ],
+    "9": [
+      "Table 9 -X-> 10: 연결 조건 미충족"
+    ],
+    "10": [
+      "Table 10 -X-> 11: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "11": [
+      "Table 11 -X-> 12: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "12": [
+      "Table 12 -X-> 13: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "13": [
+      "Table 13 -X-> 14: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "14": [
+      "Table 14 -X-> 15: 연결 조건 미충족"
+    ],
+    "15": [
+      "Table 15 -X-> 16: 테이블 구조가 다름"
+    ],
+    "16": [
+      "Table 16 -X-> 17: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "17": [
+      "Table 17 -X-> 18: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "18": [
+      "Table 18 -X-> 19: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "19": [
+      "Table 19 -X-> 20: 연결 조건 미충족"
+    ],
+    "20": [
+      "Table 20 -X-> 21: 테이블 구조가 다름"
+    ],
+    "22": [
+      "Table 22 -X-> 23: 테이블 구조가 다름"
+    ],
+    "23": [
+      "Table 23 -X-> 24: 연결 조건 미충족"
+    ],
+    "24": [
+      "Table 24 -X-> 25: 테이블 구조가 다름"
+    ],
+    "25": [
+      "Table 25 -X-> 26: 연결 조건 미충족"
+    ],
+    "26": [
+      "Table 26 -X-> 27: 테이블 구조가 다름"
+    ],
+    "27": [
+      "Table 27 -X-> 28: 연결 조건 미충족"
+    ],
+    "30": [
+      "Table 30 -X-> 31: 연결 조건 미충족"
+    ],
+    "31": [
+      "Table 31 -X-> 32: 테이블 구조가 다름"
+    ],
+    "32": [
+      "Table 32 -X-> 33: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "33": [
+      "Table 33 -X-> 34: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "34": [
+      "Table 34 -X-> 35: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "35": [
+      "Table 35 -X-> 36: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "36": [
+      "Table 36 -X-> 37: 테이블 구조가 다름"
+    ],
+    "37": [
+      "Table 37 -X-> 38: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "38": [
+      "Table 38 -X-> 39: 연결 조건 미충족"
+    ],
+    "39": [
+      "Table 39 -X-> 40: 연결 조건 미충족"
+    ],
+    "40": [
+      "Table 40 -X-> 41: 연결 조건 미충족"
+    ]
+  },
+  "table_infos": [
+    {
+      "table_idx": 0,
+      "page_no": 9,
+      "title": "차  례"
+    },
+    {
+      "table_idx": 1,
+      "page_no": 10,
+      "title": ""
+    },
+    {
+      "table_idx": 2,
+      "page_no": 11,
+      "title": "그림 차례"
+    },
+    {
+      "table_idx": 3,
+      "page_no": 12,
+      "title": ""
+    },
+    {
+      "table_idx": 4,
+      "page_no": 13,
+      "title": ""
+    },
+    {
+      "table_idx": 5,
+      "page_no": 14,
+      "title": "표  차례"
+    },
+    {
+      "table_idx": 6,
+      "page_no": 15,
+      "title": ""
+    },
+    {
+      "table_idx": 7,
+      "page_no": 25,
+      "title": "표 2.1 토사재해 취약성 평가표(안)"
+    },
+    {
+      "table_idx": 8,
+      "page_no": 26,
+      "title": "표 2.2 '23, '24년 토사재해로 인한 인명피해 및 피해 건축물 현황"
+    },
+    {
+      "table_idx": 9,
+      "page_no": 27,
+      "title": "표 2.3 건축허가·착공·준공 통계(동수별 건축 착공현황(2005.01.~2022.06.))"
+    },
+    {
+      "table_idx": 10,
+      "page_no": 27,
+      "title": "표 2.4 건축허가·착공·준공 통계(동수별 건축 착공현황(2022.07.~2024.09.))"
+    },
+    {
+      "table_idx": 11,
+      "page_no": 41,
+      "title": "표 3.1 실험 재료의 물리적·공학적 특성"
+    },
+    {
+      "table_idx": 12,
+      "page_no": 48,
+      "title": "표 3.2 고정인자 및 조정인자"
+    },
+    {
+      "table_idx": 13,
+      "page_no": 55,
+      "title": "그림 3.9 토사 충격력 계측을 위한 로드셀 설치 위치 표 3.3 토사재해에 의한 조적조 건축물의 충격력 결과"
+    },
+    {
+      "table_idx": 14,
+      "page_no": 62,
+      "title": "표 4.1 토사재해 관련 부처별 평가인자"
+    },
+    {
+      "table_idx": 15,
+      "page_no": 63,
+      "title": "표 4.2 '22년 토사재해 취약성 평가표(안)"
+    },
+    {
+      "table_idx": 16,
+      "page_no": 64,
+      "title": "표 4.3 건축물의 파손도 등급"
+    },
+    {
+      "table_idx": 17,
+      "page_no": 67,
+      "title": "표 4.4 취약성 분류에 따른 토석류에 의한 건축물 취약성 평가 인자 구분"
+    },
+    {
+      "table_idx": 18,
+      "page_no": 71,
+      "title": "표 4.5 '재해위험도 평가표' 내 이격거리에 따른 점수 기준"
+    },
+    {
+      "table_idx": 19,
+      "page_no": 75,
+      "title": "표 4.6 지표별 수치화"
+    },
+    {
+      "table_idx": 20,
+      "page_no": 76,
+      "title": "표 4.7 Case별 데이터 셋"
+    },
+    {
+      "table_idx": 21,
+      "page_no": 78,
+      "title": "표 4.8 RF모델 설계"
+    },
+    {
+      "table_idx": 22,
+      "page_no": 78,
+      "title": "표 4.9 XGBoost모델 설계"
+    },
+    {
+      "table_idx": 23,
+      "page_no": 79,
+      "title": "표 4.10 RF모델 하이퍼파라미터 및 정확도"
+    },
+    {
+      "table_idx": 24,
+      "page_no": 80,
+      "title": "표 4.11 XGBoost모델 하이퍼파라미터 및 정확도"
+    },
+    {
+      "table_idx": 25,
+      "page_no": 81,
+      "title": "표 4.12 토석류에 의한 조적조 및 비조적조 건축물의 취약성 주요지표"
+    },
+    {
+      "table_idx": 26,
+      "page_no": 82,
+      "title": "표 4.13 주요지표 배점"
+    },
+    {
+      "table_idx": 27,
+      "page_no": 84,
+      "title": "표 4.14 저지대 거리 취약성 평가표(안)"
+    },
+    {
+      "table_idx": 28,
+      "page_no": 85,
+      "title": "표 4.15 기초부 높이 취약성 평가표(안)"
+    },
+    {
+      "table_idx": 29,
+      "page_no": 86,
+      "title": "표 4.16 이격거리비 취약성 평가표(안)"
+    },
+    {
+      "table_idx": 30,
+      "page_no": 87,
+      "title": "표 4.17 유지관리 상태 취약성 평가표(안)"
+    },
+    {
+      "table_idx": 31,
+      "page_no": 87,
+      "title": "표 4.18 지붕형식 취약성 평가표(안)"
+    },
+    {
+      "table_idx": 32,
+      "page_no": 89,
+      "title": "표 4.19 건축물 취약성 등급"
+    },
+    {
+      "table_idx": 33,
+      "page_no": 96,
+      "title": "표 4.20 토석류에 의한 건축물 취약성 평가표(안)"
+    },
+    {
+      "table_idx": 34,
+      "page_no": 100,
+      "title": "표 4.21 등고선 및 등고선 간격을 활용한 사면경사 유추 방법"
+    },
+    {
+      "table_idx": 35,
+      "page_no": 116,
+      "title": "표 5.1 보강 조적조 붙임공의 충격력 결과"
+    },
+    {
+      "table_idx": 36,
+      "page_no": 119,
+      "title": "변형률"
+    },
+    {
+      "table_idx": 37,
+      "page_no": 120,
+      "title": "표 5.3 보강 조적조 붙임공의 시공 매뉴얼(안)(그림 5.4 ~ 그림 5.6 참고)"
+    },
+    {
+      "table_idx": 38,
+      "page_no": 131,
+      "title": "서 지 자 료"
+    },
+    {
+      "table_idx": 39,
+      "page_no": 131,
+      "title": "토사재해, 토석류, 건축물 취약성 평가표, 실증실험, 보강 조적조 붙임공"
+    },
+    {
+      "table_idx": 40,
+      "page_no": 132,
+      "title": "REPORT DOCUMENTATION PAGE"
+    },
+    {
+      "table_idx": 41,
+      "page_no": 132,
+      "title": "Mass  movement,  Debris  flow,  Vulnerability  assessment  table  for  buildings,  Empirical experiments,  Reinforced  masonry  cladding  method"
     }
   ]
 }

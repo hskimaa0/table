@@ -32,7 +32,85 @@ def register_korean_font():
             return 'Helvetica'
 
 
-def extract_table_info(table: Dict) -> Dict:
+def find_table_title(table: Dict, all_texts: List[Dict], page_height: float = 792.0) -> str:
+    """테이블 위 300px 내의 텍스트를 타이틀로 추출"""
+    table_bbox = table.get('prov', [{}])[0].get('bbox', {})
+    table_page = table.get('prov', [{}])[0].get('page_no', -1)
+
+    if not table_bbox or table_page == -1:
+        return ""
+
+    # 좌표계 확인
+    coord_origin = table_bbox.get('coord_origin', 'BOTTOMLEFT')
+
+    if coord_origin == 'BOTTOMLEFT':
+        # BOTTOMLEFT: y가 위로 갈수록 증가
+        # 테이블의 상단 y 좌표
+        table_top_y = table_bbox.get('t', 0)
+    else:  # TOPLEFT
+        # TOPLEFT: y가 아래로 갈수록 증가
+        # 테이블의 상단 y 좌표 (작은 값)
+        table_top_y = table_bbox.get('t', 0)
+
+    # 테이블 위 300px 영역의 텍스트 찾기
+    title_candidates = []
+
+    for text_obj in all_texts:
+        text_page = text_obj.get('prov', [{}])[0].get('page_no', -1)
+
+        # 같은 페이지의 텍스트만 확인
+        if text_page != table_page:
+            continue
+
+        text_bbox = text_obj.get('prov', [{}])[0].get('bbox', {})
+        if not text_bbox:
+            continue
+
+        text_coord_origin = text_bbox.get('coord_origin', 'BOTTOMLEFT')
+
+        if coord_origin == 'BOTTOMLEFT' and text_coord_origin == 'BOTTOMLEFT':
+            # BOTTOMLEFT: 테이블 위에 있는 텍스트는 y값이 더 큼
+            text_bottom_y = text_bbox.get('b', 0)
+            text_top_y = text_bbox.get('t', 0)
+
+            # 텍스트의 하단이 테이블 상단보다 위에 있는지 확인
+            if text_bottom_y > table_top_y:
+                distance = text_bottom_y - table_top_y
+                if distance <= 300:
+                    text_content = text_obj.get('text', '').strip()
+                    if text_content and len(text_content) > 0:
+                        title_candidates.append({
+                            'text': text_content,
+                            'distance': distance,
+                            'y_position': text_bottom_y
+                        })
+
+        elif coord_origin == 'TOPLEFT' and text_coord_origin == 'TOPLEFT':
+            # TOPLEFT: 테이블 위에 있는 텍스트는 y값이 더 작음
+            text_bottom_y = text_bbox.get('b', 0)
+
+            # 텍스트의 하단이 테이블 상단보다 위에 있는지 확인
+            if text_bottom_y < table_top_y:
+                distance = table_top_y - text_bottom_y
+                if distance <= 300:
+                    text_content = text_obj.get('text', '').strip()
+                    if text_content and len(text_content) > 0:
+                        title_candidates.append({
+                            'text': text_content,
+                            'distance': distance,
+                            'y_position': text_bottom_y
+                        })
+
+    # 거리가 가장 가까운 텍스트를 타이틀로 선택
+    if title_candidates:
+        title_candidates.sort(key=lambda x: x['distance'])
+        return title_candidates[0]['text']
+
+    # 타이틀이 없을 수도 있음
+    return ""
+
+
+def extract_table_info(table: Dict, all_texts: List[Dict] = None) -> Dict:
     """테이블에서 필요한 정보 추출"""
     cells = table.get('data', {}).get('table_cells', [])
     page_no = table.get('prov', [{}])[0].get('page_no', -1)
@@ -44,18 +122,34 @@ def extract_table_info(table: Dict) -> Dict:
     headers = [cell.get('text', '').strip() for cell in cells
                if cell.get('column_header', False) and cell.get('text', '').strip()]
 
+    # 키값 추출 (첫 번째 열의 데이터, 헤더 제외)
+    key_values = []
+    for cell in cells:
+        if (not cell.get('column_header', False) and
+            not cell.get('row_header', False) and
+            cell.get('start_col_offset_idx', -1) == 0 and
+            cell.get('text', '').strip()):
+            key_values.append(cell.get('text', '').strip())
+
     # 테이블 구조 정보
     rows = max([cell.get('end_row_offset_idx', 0) for cell in cells]) if cells else 0
     cols = max([cell.get('end_col_offset_idx', 0) for cell in cells]) if cells else 0
+
+    # 타이틀 추출
+    title = ""
+    if all_texts:
+        title = find_table_title(table, all_texts)
 
     return {
         'page_no': page_no,
         'cells': cells,
         'texts': texts,
         'headers': headers,
+        'key_values': key_values,
         'rows': rows,
         'cols': cols,
         'bbox': table.get('prov', [{}])[0].get('bbox', {}),
+        'title': title,
         'original_table': table
     }
 
@@ -160,10 +254,6 @@ def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, 
     # 페이지 차이 확인
     page_diff = table2_info['page_no'] - table1_info['page_no']
 
-    # IMPORTANT: 같은 페이지에 있는 테이블은 연속될 수 없음
-    if page_diff == 0:
-        return False, "같은 페이지에 있는 테이블은 연속될 수 없음"
-
     # 페이지가 너무 멀리 떨어져 있으면 연결 안됨
     if page_diff < 0 or page_diff > 2:
         return False, "페이지가 너무 멀리 떨어져 있음"
@@ -202,16 +292,39 @@ def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, 
 
             # 헤더가 80% 이상 일치하고, 공통 헤더가 최소 2개 이상
             if similarity >= 0.8 and len(common) >= 2:
+                # 헤더가 동일한 경우, 키값도 체크
+                keys1 = set([normalize_text(k) for k in table1_info['key_values'][:10]])  # 최대 10개만 비교
+                keys2 = set([normalize_text(k) for k in table2_info['key_values'][:10]])
+
+                # 키값이 겹치면 다른 테이블로 판단
+                if keys1 and keys2:
+                    common_keys = keys1 & keys2
+                    key_overlap_ratio = len(common_keys) / min(len(keys1), len(keys2)) if min(len(keys1), len(keys2)) > 0 else 0
+
+                    if key_overlap_ratio > 0.3:  # 30% 이상 겹치면 다른 테이블
+                        return False, f"헤더는 동일하지만 키값이 겹침 ({len(common_keys)}개 중복)"
+
                 return True, f"헤더가 동일함 ({len(common)}개 일치)"
 
     # 첫 번째 테이블에만 헤더가 있는 경우
-    # 구조가 같고 (같은 열 개수), 연속 페이지이면 데이터 테이블로 간주하여 연결
+    # 텍스트 연결성이 있으면 연결 (열 개수가 달라도 가능)
     elif table1_info['headers'] and not table2_info['headers']:
-        # 열 개수가 정확히 같아야 함
-        if table1_info['cols'] == table2_info['cols'] and table1_info['cols'] >= 2:
-            # 페이지가 바로 이어지는 경우 (1페이지 차이)
-            if page_diff == 1:
-                return True, f"헤더 테이블 뒤 데이터 테이블 (열 {table1_info['cols']}개 동일)"
+        # 페이지가 바로 이어지는 경우 (1-2페이지 차이)
+        if page_diff >= 1 and page_diff <= 2:
+            # 텍스트 연결성 체크 (이미 위에서 체크했지만 여기서도 확인)
+            if table1_info['texts'] and table2_info['texts']:
+                last_texts = table1_info['texts'][-5:]
+                first_texts = table2_info['texts'][:5]
+
+                for prev_text in last_texts:
+                    for curr_text in first_texts:
+                        if is_continuation_text(prev_text, curr_text):
+                            return True, f"헤더 테이블 뒤 데이터 테이블 - 텍스트 연결: '{prev_text}' -> '{curr_text}'"
+
+            # 텍스트 연결성이 명확하지 않아도, 열 개수가 비슷하고 연속 페이지면 연결
+            col_diff = abs(table1_info['cols'] - table2_info['cols'])
+            if col_diff <= 2 and page_diff == 1 and table1_info['cols'] >= 2:
+                return True, f"헤더 테이블 뒤 데이터 테이블 (열 {table1_info['cols']}개 vs {table2_info['cols']}개, 유사 구조)"
 
     # 두 번째 테이블에만 헤더가 있는 경우는 일반적으로 새로운 테이블
     # (연결되지 않음)
@@ -244,9 +357,9 @@ def merge_tables(table_group: List[Dict]) -> Dict:
     return merged
 
 
-def find_connected_table_groups(tables: List[Dict]) -> List[List[int]]:
+def find_connected_table_groups(tables: List[Dict], all_texts: List[Dict] = None) -> List[List[int]]:
     """연결된 테이블 그룹 찾기"""
-    table_infos = [extract_table_info(table) for table in tables]
+    table_infos = [extract_table_info(table, all_texts) for table in tables]
 
     # 페이지 번호순으로 정렬
     sorted_indices = sorted(range(len(table_infos)),
@@ -255,7 +368,25 @@ def find_connected_table_groups(tables: List[Dict]) -> List[List[int]]:
     visited = set()
     groups = []
     connection_reasons = []
+    all_disconnection_reasons = {}  # 모든 비연속 이유 저장 (테이블 인덱스별)
 
+    # 먼저 모든 인접 테이블 쌍에 대해 연속성 체크
+    for idx in range(len(sorted_indices) - 1):
+        i = sorted_indices[idx]
+        j = sorted_indices[idx + 1]
+
+        is_connected, reason = check_table_connection(
+            table_infos[i],
+            table_infos[j]
+        )
+
+        if not is_connected:
+            # 비연속인 경우 저장
+            if i not in all_disconnection_reasons:
+                all_disconnection_reasons[i] = []
+            all_disconnection_reasons[i].append(f"Table {i} -X-> {j}: {reason}")
+
+    # 연결된 그룹 찾기
     for i in sorted_indices:
         if i in visited:
             continue
@@ -295,7 +426,7 @@ def find_connected_table_groups(tables: List[Dict]) -> List[List[int]]:
         groups.append(current_group)
         connection_reasons.append(current_reasons)
 
-    return groups, connection_reasons, table_infos
+    return groups, connection_reasons, all_disconnection_reasons, table_infos
 
 
 def create_visualization_pdf(json_files: List[str], output_dir: str, font_name: str):
@@ -347,10 +478,11 @@ def create_visualization_pdf(json_files: List[str], output_dir: str, font_name: 
         story.append(Paragraph(f"파일: {filename}", heading_style))
 
         tables = data.get('tables', [])
-        groups, reasons, table_infos = find_connected_table_groups(tables)
+        groups, reasons, all_disconnections, table_infos = find_connected_table_groups(tables)
 
         # 병합된 그룹만 필터링
-        merged_groups = [(g, r) for g, r in zip(groups, reasons) if len(g) > 1]
+        merged_groups = [g for g in groups if len(g) > 1]
+        merged_reasons = [r for g, r in zip(groups, reasons) if len(g) > 1]
 
         if not merged_groups:
             story.append(Paragraph("병합된 테이블 없음", normal_style))
@@ -359,7 +491,7 @@ def create_visualization_pdf(json_files: List[str], output_dir: str, font_name: 
 
         total_merged += len(merged_groups)
 
-        for group_idx, (group, group_reasons) in enumerate(merged_groups, 1):
+        for group_idx, (group, group_reasons) in enumerate(zip(merged_groups, merged_reasons), 1):
             # 그룹 정보
             pages = [table_infos[i]['page_no'] for i in group]
             story.append(Paragraph(
@@ -370,6 +502,12 @@ def create_visualization_pdf(json_files: List[str], output_dir: str, font_name: 
             # 연결 이유
             for reason in group_reasons:
                 story.append(Paragraph(f"  • {reason}", normal_style))
+
+            # 비연속 이유 (이 그룹의 테이블들과 관련된 것)
+            for table_idx in group:
+                if table_idx in all_disconnections:
+                    for reason in all_disconnections[table_idx]:
+                        story.append(Paragraph(f"  • (비연속) {reason}", normal_style))
 
             # 테이블 미리보기 데이터 준비
             preview_data = [["테이블", "페이지", "행수", "열수", "샘플 텍스트"]]
@@ -414,7 +552,7 @@ def create_visualization_pdf(json_files: List[str], output_dir: str, font_name: 
     return pdf_path
 
 
-def process_json_files(input_dir: str, output_dir: str):
+def process_json_files(input_dir: str, output_dir: str, original_json_dir: str = "output"):
     """JSON 파일들을 처리하여 병합된 테이블 생성"""
     os.makedirs(output_dir, exist_ok=True)
 
@@ -434,27 +572,77 @@ def process_json_files(input_dir: str, output_dir: str):
         tables = data.get('tables', [])
         print(f"  총 테이블 수: {len(tables)}")
 
+        # 원본 JSON에서 텍스트 정보 로드
+        all_texts = []
+        source_file = data.get('source_file', '')
+        if source_file:
+            original_json_path = os.path.join(original_json_dir, os.path.basename(source_file))
+            if os.path.exists(original_json_path):
+                try:
+                    with open(original_json_path, 'r', encoding='utf-8') as f:
+                        original_data = json.load(f)
+                        all_texts = original_data.get('texts', [])
+                        print(f"  원본 JSON에서 {len(all_texts)}개 텍스트 로드")
+                except Exception as e:
+                    print(f"  경고: 원본 JSON 로드 실패: {e}")
+
         # 연결된 테이블 그룹 찾기
-        groups, reasons, table_infos = find_connected_table_groups(tables)
+        groups, reasons, all_disconnections, table_infos = find_connected_table_groups(tables, all_texts)
 
         # 병합된 그룹만 필터링
-        merged_groups = [(g, r) for g, r in zip(groups, reasons) if len(g) > 1]
+        merged_groups = [g for g in groups if len(g) > 1]
+        merged_reasons = [r for g, r in zip(groups, reasons) if len(g) > 1]
 
         print(f"  병합된 그룹 수: {len(merged_groups)}")
+        print(f"  단일 테이블 수: {len(tables) - sum(len(g) for g in merged_groups)}")
+
+        # 단일 테이블 그룹 (연결되지 않은 테이블들)
+        single_table_groups = []
+        for g_idx, (group, group_reasons) in enumerate(zip(groups, reasons)):
+            if len(group) == 1:
+                table_idx = group[0]
+                disconnection_reason = ""
+                # 이 테이블의 비연속 이유 찾기
+                if table_idx in all_disconnections:
+                    disconnection_reason = all_disconnections[table_idx][0] if all_disconnections[table_idx] else ""
+
+                single_table_groups.append({
+                    'table_idx': table_idx,
+                    'page_no': table_infos[table_idx]['page_no'],
+                    'title': table_infos[table_idx]['title'],
+                    'disconnection_reason': disconnection_reason
+                })
 
         # 결과 저장
         result = {
             'source_file': str(json_file),
             'original_table_count': len(tables),
-            'merged_groups': []
+            'merged_groups': [],
+            'single_tables': single_table_groups,  # 단일 테이블 정보
+            'all_disconnections': all_disconnections,  # 모든 비연속 정보 저장
+            'table_infos': [  # 모든 테이블 정보 저장 (타이틀 포함)
+                {
+                    'table_idx': idx,
+                    'page_no': info['page_no'],
+                    'title': info['title']
+                }
+                for idx, info in enumerate(table_infos)
+            ]
         }
 
-        for group_idx, (group, group_reasons) in enumerate(merged_groups):
+        for group_idx, (group, group_reasons) in enumerate(zip(merged_groups, merged_reasons)):
+            # 이 그룹에 속한 테이블들의 비연속 이유 수집
+            group_disconnections = []
+            for table_idx in group:
+                if table_idx in all_disconnections:
+                    group_disconnections.extend(all_disconnections[table_idx])
+
             group_info = {
                 'group_id': group_idx,
                 'table_indices': group,
                 'pages': [table_infos[i]['page_no'] for i in group],
                 'connection_reasons': group_reasons,
+                'disconnection_reasons': group_disconnections,
                 'merged_table': merge_tables([table_infos[i] for i in group])
             }
             result['merged_groups'].append(group_info)
@@ -462,8 +650,15 @@ def process_json_files(input_dir: str, output_dir: str):
             print(f"\n  그룹 {group_idx + 1}:")
             print(f"    테이블 인덱스: {group}")
             print(f"    페이지: {group_info['pages']}")
+            # 타이틀 출력
+            for idx in group:
+                if table_infos[idx]['title']:
+                    print(f"    테이블 {idx} 타이틀: {table_infos[idx]['title']}")
             for reason in group_reasons:
                 print(f"    - {reason}")
+            if group_disconnections:
+                for reason in group_disconnections:
+                    print(f"    - (비연속) {reason}")
 
         all_results.append(result)
 

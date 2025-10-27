@@ -27,6 +27,9 @@
         "Table 4 -> 5: 텍스트 연결: 'o 위성통신망 시스템 구성 o 지구국, 위성중계국, 단말, 서비스 등' -> '주요항목'",
         "Table 5 -> 6: 헤더가 동일함 (3개 일치)"
       ],
+      "disconnection_reasons": [
+        "Table 6 -X-> 7: 연결 조건 미충족"
+      ],
       "merged_table": {
         "self_ref": "#/tables/1",
         "parent": {
@@ -2344,6 +2347,70 @@
           6
         ]
       }
+    }
+  ],
+  "single_tables": [
+    {
+      "table_idx": 0,
+      "page_no": 1,
+      "title": "정보통신기술사 출제기준",
+      "disconnection_reason": "Table 0 -X-> 1: 테이블 구조가 다름"
+    },
+    {
+      "table_idx": 7,
+      "page_no": 7,
+      "title": "",
+      "disconnection_reason": ""
+    }
+  ],
+  "all_disconnections": {
+    "0": [
+      "Table 0 -X-> 1: 테이블 구조가 다름"
+    ],
+    "6": [
+      "Table 6 -X-> 7: 연결 조건 미충족"
+    ]
+  },
+  "table_infos": [
+    {
+      "table_idx": 0,
+      "page_no": 1,
+      "title": "정보통신기술사 출제기준"
+    },
+    {
+      "table_idx": 1,
+      "page_no": 1,
+      "title": ""
+    },
+    {
+      "table_idx": 2,
+      "page_no": 2,
+      "title": ""
+    },
+    {
+      "table_idx": 3,
+      "page_no": 3,
+      "title": ""
+    },
+    {
+      "table_idx": 4,
+      "page_no": 4,
+      "title": ""
+    },
+    {
+      "table_idx": 5,
+      "page_no": 5,
+      "title": ""
+    },
+    {
+      "table_idx": 6,
+      "page_no": 6,
+      "title": ""
+    },
+    {
+      "table_idx": 7,
+      "page_no": 7,
+      "title": ""
     }
   ]
 }

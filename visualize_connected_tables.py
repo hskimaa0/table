@@ -8,6 +8,7 @@ from typing import List, Dict
 import PyPDF2
 from reportlab.pdfgen import canvas
 from reportlab.lib.colors import Color, HexColor
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -93,19 +94,23 @@ def create_overlay_pdf(pdf_path: str, merged_data: Dict, original_tables: List[D
 
     # 병합된 그룹 정보 가져오기
     merged_groups = merged_data.get('merged_groups', [])
+    single_tables = merged_data.get('single_tables', [])
 
-    if not merged_groups:
-        print("  병합된 테이블 그룹이 없습니다.")
+    if not merged_groups and not single_tables:
+        print("  표시할 테이블이 없습니다.")
         return
 
     # 페이지별로 그려야 할 박스들 정리
     page_annotations = {}
 
+    # 1. 병합된 그룹 처리 (색칠 있음)
     for group in merged_groups:
         group_id = group['group_id']
         color = get_color_for_group(group_id)
         table_indices = group.get('table_indices', [])
         pages = group.get('pages', [])
+        connection_reasons = group.get('connection_reasons', [])
+        disconnection_reasons = group.get('disconnection_reasons', [])
 
         print(f"    그룹 {group_id + 1}: 테이블 인덱스 {table_indices}, 페이지 {pages}")
 
@@ -116,6 +121,22 @@ def create_overlay_pdf(pdf_path: str, merged_data: Dict, original_tables: List[D
 
             original_table = original_tables[table_idx]
             prov_list = original_table.get('prov', [])
+
+            # 테이블 타이틀 가져오기 (merged_data에서)
+            table_title = ""
+            for tbl_info in merged_data.get('table_infos', []):
+                if tbl_info.get('table_idx') == table_idx:
+                    table_title = tbl_info.get('title', '')
+                    break
+
+            # 이 테이블과 관련된 연결/비연속 이유 찾기
+            related_reasons = []
+            for reason in connection_reasons:
+                if f"Table {table_idx}" in reason:
+                    related_reasons.append(("연속", reason))
+            for reason in disconnection_reasons:
+                if f"Table {table_idx}" in reason:
+                    related_reasons.append(("비연속", reason))
 
             for prov in prov_list:
                 page_no = prov.get('page_no', -1)
@@ -130,8 +151,46 @@ def create_overlay_pdf(pdf_path: str, merged_data: Dict, original_tables: List[D
                         'color': color,
                         'group_id': group_id,
                         'table_idx': table_idx,
-                        'group_info': f"Group {group_id + 1} ({len(table_indices)} tables, {len(pages)} pages)"
+                        'title': table_title,
+                        'is_merged': True,  # 병합된 테이블
+                        'group_info': f"Group {group_id + 1} ({len(table_indices)} tables, {len(pages)} pages)",
+                        'reasons': related_reasons
                     })
+
+    # 2. 단일 테이블 처리 (테두리만)
+    for single_table in single_tables:
+        table_idx = single_table['table_idx']
+
+        if table_idx >= len(original_tables):
+            continue
+
+        original_table = original_tables[table_idx]
+        prov_list = original_table.get('prov', [])
+        table_title = single_table.get('title', '')
+        disconnection_reason = single_table.get('disconnection_reason', '')
+
+        for prov in prov_list:
+            page_no = prov.get('page_no', -1)
+            bbox = prov.get('bbox', {})
+
+            if page_no > 0 and bbox:
+                if page_no not in page_annotations:
+                    page_annotations[page_no] = []
+
+                reasons = []
+                if disconnection_reason:
+                    reasons.append(("비연속", disconnection_reason))
+
+                page_annotations[page_no].append({
+                    'bbox': bbox,
+                    'color': None,  # 단일 테이블은 색 없음
+                    'group_id': -1,
+                    'table_idx': table_idx,
+                    'title': table_title,
+                    'is_merged': False,  # 단일 테이블
+                    'group_info': f"단일 테이블",
+                    'reasons': reasons
+                })
 
     # 각 페이지에 대한 오버레이 생성
     overlay_pages = {}
@@ -145,33 +204,105 @@ def create_overlay_pdf(pdf_path: str, merged_data: Dict, original_tables: List[D
         for ann in annotations:
             bbox = ann['bbox']
             color = ann['color']
+            is_merged = ann.get('is_merged', True)
 
             # 좌표 변환
             coords = convert_bbox_coordinates(bbox, page_height)
 
-            # 반투명 박스 그리기
-            can.setFillColor(color, alpha=0.15)
-            can.setStrokeColor(color, alpha=0.8)
-            can.setLineWidth(3)
+            if is_merged:
+                # 병합된 테이블: 반투명 박스 + 색칠된 테두리
+                can.setFillColor(color, alpha=0.15)
+                can.setStrokeColor(color, alpha=0.8)
+                can.setLineWidth(3)
 
-            # 사각형 그리기
-            can.rect(
-                coords['x1'],
-                coords['y1'],
-                coords['x2'] - coords['x1'],
-                coords['y2'] - coords['y1'],
-                fill=1,
-                stroke=1
-            )
+                # 사각형 그리기 (색칠 포함)
+                can.rect(
+                    coords['x1'],
+                    coords['y1'],
+                    coords['x2'] - coords['x1'],
+                    coords['y2'] - coords['y1'],
+                    fill=1,
+                    stroke=1
+                )
+            else:
+                # 단일 테이블: 회색 테두리만
+                can.setStrokeColor(colors.HexColor('#888888'), alpha=0.8)
+                can.setLineWidth(2)
 
-            # 그룹 번호 표시
+                # 사각형 그리기 (테두리만)
+                can.rect(
+                    coords['x1'],
+                    coords['y1'],
+                    coords['x2'] - coords['x1'],
+                    coords['y2'] - coords['y1'],
+                    fill=0,
+                    stroke=1
+                )
+
+            # 그룹 번호와 타이틀 표시
             can.setFont(font_name, 10)
-            can.setFillColor(color, alpha=1.0)
-            can.drawString(
-                coords['x1'] + 5,
-                coords['y2'] - 15,
-                f"그룹 {ann['group_id'] + 1}"
-            )
+            if is_merged:
+                can.setFillColor(color, alpha=1.0)
+            else:
+                can.setFillColor(colors.HexColor('#444444'), alpha=1.0)
+
+            y_offset = 15
+
+            # 타이틀이 있으면 표시
+            title = ann.get('title', '')
+            if title:
+                # 타이틀이 너무 길면 자르기
+                if len(title) > 40:
+                    title = title[:37] + "..."
+                can.drawString(
+                    coords['x1'] + 5,
+                    coords['y2'] - y_offset,
+                    f"[{title}]"
+                )
+                y_offset += 12
+
+            # 그룹 정보 표시
+            if is_merged:
+                can.drawString(
+                    coords['x1'] + 5,
+                    coords['y2'] - y_offset,
+                    f"그룹 {ann['group_id'] + 1} (Table {ann['table_idx']})"
+                )
+            else:
+                can.drawString(
+                    coords['x1'] + 5,
+                    coords['y2'] - y_offset,
+                    f"단일 테이블 (Table {ann['table_idx']})"
+                )
+            y_offset += 12
+
+            # 연결/비연속 이유 표시
+            reasons = ann.get('reasons', [])
+            if reasons:
+                can.setFont(font_name, 7)
+                for reason_type, reason_text in reasons[:3]:  # 최대 3개까지만 표시
+                    # 이유 텍스트 간소화
+                    if ': ' in reason_text:
+                        reason_text = reason_text.split(': ', 1)[-1]
+
+                    # 연속/비연속 표시 추가
+                    if reason_type == "연속":
+                        prefix = "✓ "
+                    else:  # 비연속
+                        prefix = "✗ "
+
+                    # 너무 길면 자르기
+                    if len(reason_text) > 50:
+                        reason_text = reason_text[:47] + "..."
+
+                    display_text = f"{prefix}{reason_text}"
+
+                    can.drawString(
+                        coords['x1'] + 5,
+                        coords['y2'] - y_offset,
+                        display_text
+                    )
+                    y_offset += 9
 
         can.save()
         packet.seek(0)
@@ -198,7 +329,7 @@ def create_overlay_pdf(pdf_path: str, merged_data: Dict, original_tables: List[D
         pdf_writer.write(f)
 
     print(f"  오버레이 PDF 생성 완료: {output_path}")
-    print(f"  총 {len(merged_groups)}개 그룹을 {len(page_annotations)}개 페이지에 표시")
+    print(f"  총 {len(merged_groups)}개 병합 그룹, {len(single_tables)}개 단일 테이블을 {len(page_annotations)}개 페이지에 표시")
 
 
 def process_all_pdfs(input_pdf_dir: str, merged_json_dir: str, table_json_dir: str, output_dir: str):
@@ -342,6 +473,7 @@ def create_legend_pdf(output_dir: str, summary_data: Dict, table_json_dir: str, 
             pages = group['pages']
             table_indices = group['table_indices']
             reasons = group['connection_reasons']
+            disconnections = group.get('disconnection_reasons', [])
 
             # 그룹 헤더
             story.append(Spacer(1, 0.3*cm))
@@ -349,11 +481,20 @@ def create_legend_pdf(output_dir: str, summary_data: Dict, table_json_dir: str, 
             story.append(Paragraph(color_box, normal_style))
             story.append(Paragraph(f"테이블 인덱스: {table_indices}", detail_style))
             story.append(Paragraph(f"페이지: {pages}", detail_style))
+
+            # 타이틀 표시
+            table_infos_list = summary_data.get('files', [])[0].get('table_infos', []) if summary_data.get('files') else []
+            for idx in table_indices:
+                for tbl_info in table_infos_list:
+                    if tbl_info.get('table_idx') == idx and tbl_info.get('title'):
+                        story.append(Paragraph(f"테이블 {idx} 타이틀: <i>{tbl_info['title']}</i>", detail_style))
+                        break
+
             story.append(Spacer(1, 0.2*cm))
 
             # 연결 상세 정보
             if reasons:
-                story.append(Paragraph("<b>연결 상세:</b>", detail_style))
+                story.append(Paragraph("<b>✓ 연결 상세:</b>", detail_style))
                 for reason in reasons:
                     # 테이블 인덱스 추출
                     parts = reason.split(': ')
@@ -392,6 +533,31 @@ def create_legend_pdf(output_dir: str, summary_data: Dict, table_json_dir: str, 
                                 story.append(Paragraph(f"  └ Table {idx1} 끝: {table1_sample}...", detail_style))
                             if table2_sample:
                                 story.append(Paragraph(f"  └ Table {idx2} 시작: {table2_sample}...", detail_style))
+                        else:
+                            story.append(Paragraph(f"• {reason}", detail_style))
+                    else:
+                        story.append(Paragraph(f"• {reason}", detail_style))
+
+            # 비연속 상세 정보
+            if disconnections:
+                story.append(Spacer(1, 0.2*cm))
+                story.append(Paragraph("<b>✗ 비연속 상세:</b>", detail_style))
+                for reason in disconnections:
+                    # 테이블 인덱스 추출
+                    parts = reason.split(': ')
+                    if len(parts) >= 2:
+                        connection_part = parts[0]  # "Table X -X-> Y"
+                        reason_part = ': '.join(parts[1:])  # 나머지 이유
+
+                        # 테이블 인덱스 추출
+                        import re
+                        match = re.search(r'Table (\d+) -X-> (\d+)', connection_part)
+                        if match and original_tables:
+                            idx1 = int(match.group(1))
+                            idx2 = int(match.group(2))
+
+                            # 상세 정보 출력
+                            story.append(Paragraph(f"• {connection_part}: {reason_part}", detail_style))
                         else:
                             story.append(Paragraph(f"• {reason}", detail_style))
                     else:

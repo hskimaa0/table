@@ -15,6 +15,9 @@
       "connection_reasons": [
         "Table 7 -> 8: 텍스트 연결: 'SENT001' -> 'SENT001'"
       ],
+      "disconnection_reasons": [
+        "Table 8 -X-> 9: 페이지가 너무 멀리 떨어져 있음"
+      ],
       "merged_table": {
         "self_ref": "#/tables/7",
         "parent": {
@@ -1170,6 +1173,9 @@
       "connection_reasons": [
         "Table 12 -> 13: 헤더가 동일함 (2개 일치)",
         "Table 13 -> 14: 텍스트 연결: '쿼터 및 제한' -> 'APIKey (필수)'"
+      ],
+      "disconnection_reasons": [
+        "Table 14 -X-> 15: 페이지가 너무 멀리 떨어져 있음"
       ],
       "merged_table": {
         "self_ref": "#/tables/12",
@@ -2519,6 +2525,376 @@
           70
         ]
       }
+    }
+  ],
+  "single_tables": [
+    {
+      "table_idx": 0,
+      "page_no": 11,
+      "title": "차  례",
+      "disconnection_reason": "Table 0 -X-> 1: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 1,
+      "page_no": 12,
+      "title": "",
+      "disconnection_reason": "Table 1 -X-> 2: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 2,
+      "page_no": 13,
+      "title": "그림 차례",
+      "disconnection_reason": "Table 2 -X-> 3: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 3,
+      "page_no": 14,
+      "title": "",
+      "disconnection_reason": "Table 3 -X-> 4: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 4,
+      "page_no": 15,
+      "title": "표  차례",
+      "disconnection_reason": "Table 4 -X-> 5: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 5,
+      "page_no": 36,
+      "title": "결과적으로, 재난안전 사건정보 데이터베이스에서 수식 표현은 사건의 맥락과 의미를 강화하고, 사건의 본질적 속성을 보다 명확히 파악하는 데 중요한 도구로 기능한다. NLP 기반의 분석 시스템에서는 이러한 수식 표현을 활용해 사건의 스케일, 강도, 시간적 및 공간적  특성을  정량화하거나  분류할  수  있으며,  이는  데이터  기반  의사결정의  핵심 자료로 활용될 수 있다.",
+      "disconnection_reason": "Table 5 -X-> 6: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 6,
+      "page_no": 40,
+      "title": "24",
+      "disconnection_reason": "Table 6 -X-> 7: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 9,
+      "page_no": 45,
+      "title": "이처럼 timex 정보는 NLP 기술을 활용하여 텍스트 데이터에 숨겨진 시간적 맥락을 분석하는  핵심적인  데이터  요소로  작용하며,  이를  통해  재난안전  사건의  이해와 대응력을 향상시킬 수 있다.",
+      "disconnection_reason": "Table 9 -X-> 10: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 10,
+      "page_no": 45,
+      "title": "이처럼 timex 정보는 NLP 기술을 활용하여 텍스트 데이터에 숨겨진 시간적 맥락을 분석하는  핵심적인  데이터  요소로  작용하며,  이를  통해  재난안전  사건의  이해와 대응력을 향상시킬 수 있다.",
+      "disconnection_reason": "Table 10 -X-> 11: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 11,
+      "page_no": 64,
+      "title": "표  3.1  해외뉴스  수집을  위한  뉴스제공  API  조사  항목",
+      "disconnection_reason": "Table 11 -X-> 12: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 15,
+      "page_no": 76,
+      "title": "표  3.5  샘플  API  요청  결과  파싱(parsing)  예시",
+      "disconnection_reason": "Table 15 -X-> 16: 테이블 구조가 다름"
+    },
+    {
+      "table_idx": 16,
+      "page_no": 78,
+      "title": "데이터  접근을  필요로  하는  대기업이나  기관에  고급  기능과  솔루션을  제공한다.  각 플랜은 지원 범위, 요청 한도, 가동 시간 보장, 고객 지원의 수준이 다르며, 사용자들의 다양한 요구를 충족시킬 수 있도록 구성되어 있다.",
+      "disconnection_reason": "Table 16 -X-> 17: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 17,
+      "page_no": 83,
+      "title": "표  3.6  해외  뉴스  데이터  수집  및  번역  시스템  운영  예산안(1안)",
+      "disconnection_reason": "Table 17 -X-> 18: 헤더는 동일하지만 키값이 겹침 (7개 중복)"
+    },
+    {
+      "table_idx": 18,
+      "page_no": 83,
+      "title": "표  3.7  해외  뉴스  데이터  수집  및  번역  시스템  운영  예산안(2안)",
+      "disconnection_reason": "Table 18 -X-> 19: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 19,
+      "page_no": 91,
+      "title": "이와  같이  감사연보와  국정감사결과보고서를 텍스트와 이미지로 변환하여 저장하는 과정은 원본 문서의 정보 활용도를 극대화하고, 필요한 데이터를 효과적으로 추출 및 가공할 수 있게 한다. 이러한 데이터 변환 작업은 향후 데이터베이스 구축이나 문서 분석 작업에서 중요한 기초 자료로 사용될 수 있다.",
+      "disconnection_reason": "Table 19 -X-> 20: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 20,
+      "page_no": 93,
+      "title": "표  4.1  PDF  형태의  자료  내  재난안전정보  추출  분석",
+      "disconnection_reason": "Table 20 -X-> 21: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 21,
+      "page_no": 99,
+      "title": "표  4.2  형식  교정  예시",
+      "disconnection_reason": "Table 21 -X-> 22: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 22,
+      "page_no": 102,
+      "title": "표  4.3  PDF  자료  변환  대상  목록",
+      "disconnection_reason": "Table 22 -X-> 23: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 23,
+      "page_no": 104,
+      "title": "88 │ 재난안전 지식베이스 구축 요소기술 및 검색 UI 개발",
+      "disconnection_reason": "Table 23 -X-> 24: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 24,
+      "page_no": 125,
+      "title": "표  5.1  재난안전  지식베이스  데이터베이스  설계(안)",
+      "disconnection_reason": "Table 24 -X-> 25: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 25,
+      "page_no": 169,
+      "title": "서 지 자 료",
+      "disconnection_reason": "Table 25 -X-> 26: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 26,
+      "page_no": 169,
+      "title": "재난안전 지식베이스, 데이터베이스 구축, 해외 뉴스 수집, PDF 정보 추출, 검색 UI 개발, 자연어 처리 (NLP),  대규모  언어  모델(LLM),  약신호(Weak  Signal)  탐지",
+      "disconnection_reason": "Table 26 -X-> 27: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 27,
+      "page_no": 170,
+      "title": "REPORT DOCUMENTATION PAGE",
+      "disconnection_reason": "Table 27 -X-> 28: 연결 조건 미충족"
+    },
+    {
+      "table_idx": 28,
+      "page_no": 170,
+      "title": "Disaster  Safety  Knowledge  Base,  Database  Construction,  International  News  Collection, PDF  Information  Extraction,  Search  UI  Development,  Natural  Language  Processing  (NLP), Large  Language  Models  (LLM),  Weak  Signal  Detection",
+      "disconnection_reason": ""
+    }
+  ],
+  "all_disconnections": {
+    "0": [
+      "Table 0 -X-> 1: 연결 조건 미충족"
+    ],
+    "1": [
+      "Table 1 -X-> 2: 연결 조건 미충족"
+    ],
+    "2": [
+      "Table 2 -X-> 3: 연결 조건 미충족"
+    ],
+    "3": [
+      "Table 3 -X-> 4: 연결 조건 미충족"
+    ],
+    "4": [
+      "Table 4 -X-> 5: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "5": [
+      "Table 5 -X-> 6: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "6": [
+      "Table 6 -X-> 7: 연결 조건 미충족"
+    ],
+    "8": [
+      "Table 8 -X-> 9: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "9": [
+      "Table 9 -X-> 10: 연결 조건 미충족"
+    ],
+    "10": [
+      "Table 10 -X-> 11: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "11": [
+      "Table 11 -X-> 12: 연결 조건 미충족"
+    ],
+    "14": [
+      "Table 14 -X-> 15: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "15": [
+      "Table 15 -X-> 16: 테이블 구조가 다름"
+    ],
+    "16": [
+      "Table 16 -X-> 17: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "17": [
+      "Table 17 -X-> 18: 헤더는 동일하지만 키값이 겹침 (7개 중복)"
+    ],
+    "18": [
+      "Table 18 -X-> 19: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "19": [
+      "Table 19 -X-> 20: 연결 조건 미충족"
+    ],
+    "20": [
+      "Table 20 -X-> 21: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "21": [
+      "Table 21 -X-> 22: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "22": [
+      "Table 22 -X-> 23: 연결 조건 미충족"
+    ],
+    "23": [
+      "Table 23 -X-> 24: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "24": [
+      "Table 24 -X-> 25: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "25": [
+      "Table 25 -X-> 26: 연결 조건 미충족"
+    ],
+    "26": [
+      "Table 26 -X-> 27: 연결 조건 미충족"
+    ],
+    "27": [
+      "Table 27 -X-> 28: 연결 조건 미충족"
+    ]
+  },
+  "table_infos": [
+    {
+      "table_idx": 0,
+      "page_no": 11,
+      "title": "차  례"
+    },
+    {
+      "table_idx": 1,
+      "page_no": 12,
+      "title": ""
+    },
+    {
+      "table_idx": 2,
+      "page_no": 13,
+      "title": "그림 차례"
+    },
+    {
+      "table_idx": 3,
+      "page_no": 14,
+      "title": ""
+    },
+    {
+      "table_idx": 4,
+      "page_no": 15,
+      "title": "표  차례"
+    },
+    {
+      "table_idx": 5,
+      "page_no": 36,
+      "title": "결과적으로, 재난안전 사건정보 데이터베이스에서 수식 표현은 사건의 맥락과 의미를 강화하고, 사건의 본질적 속성을 보다 명확히 파악하는 데 중요한 도구로 기능한다. NLP 기반의 분석 시스템에서는 이러한 수식 표현을 활용해 사건의 스케일, 강도, 시간적 및 공간적  특성을  정량화하거나  분류할  수  있으며,  이는  데이터  기반  의사결정의  핵심 자료로 활용될 수 있다."
+    },
+    {
+      "table_idx": 6,
+      "page_no": 40,
+      "title": "24"
+    },
+    {
+      "table_idx": 7,
+      "page_no": 40,
+      "title": "24"
+    },
+    {
+      "table_idx": 8,
+      "page_no": 41,
+      "title": "doc_detail_event_subject_info"
+    },
+    {
+      "table_idx": 9,
+      "page_no": 45,
+      "title": "이처럼 timex 정보는 NLP 기술을 활용하여 텍스트 데이터에 숨겨진 시간적 맥락을 분석하는  핵심적인  데이터  요소로  작용하며,  이를  통해  재난안전  사건의  이해와 대응력을 향상시킬 수 있다."
+    },
+    {
+      "table_idx": 10,
+      "page_no": 45,
+      "title": "이처럼 timex 정보는 NLP 기술을 활용하여 텍스트 데이터에 숨겨진 시간적 맥락을 분석하는  핵심적인  데이터  요소로  작용하며,  이를  통해  재난안전  사건의  이해와 대응력을 향상시킬 수 있다."
+    },
+    {
+      "table_idx": 11,
+      "page_no": 64,
+      "title": "표  3.1  해외뉴스  수집을  위한  뉴스제공  API  조사  항목"
+    },
+    {
+      "table_idx": 12,
+      "page_no": 66,
+      "title": "표  3.2  News  API  주요  기능"
+    },
+    {
+      "table_idx": 13,
+      "page_no": 68,
+      "title": "표  3.3  News  API  구성요소"
+    },
+    {
+      "table_idx": 14,
+      "page_no": 70,
+      "title": "표  3.4  News  API 요청 Parameter"
+    },
+    {
+      "table_idx": 15,
+      "page_no": 76,
+      "title": "표  3.5  샘플  API  요청  결과  파싱(parsing)  예시"
+    },
+    {
+      "table_idx": 16,
+      "page_no": 78,
+      "title": "데이터  접근을  필요로  하는  대기업이나  기관에  고급  기능과  솔루션을  제공한다.  각 플랜은 지원 범위, 요청 한도, 가동 시간 보장, 고객 지원의 수준이 다르며, 사용자들의 다양한 요구를 충족시킬 수 있도록 구성되어 있다."
+    },
+    {
+      "table_idx": 17,
+      "page_no": 83,
+      "title": "표  3.6  해외  뉴스  데이터  수집  및  번역  시스템  운영  예산안(1안)"
+    },
+    {
+      "table_idx": 18,
+      "page_no": 83,
+      "title": "표  3.7  해외  뉴스  데이터  수집  및  번역  시스템  운영  예산안(2안)"
+    },
+    {
+      "table_idx": 19,
+      "page_no": 91,
+      "title": "이와  같이  감사연보와  국정감사결과보고서를 텍스트와 이미지로 변환하여 저장하는 과정은 원본 문서의 정보 활용도를 극대화하고, 필요한 데이터를 효과적으로 추출 및 가공할 수 있게 한다. 이러한 데이터 변환 작업은 향후 데이터베이스 구축이나 문서 분석 작업에서 중요한 기초 자료로 사용될 수 있다."
+    },
+    {
+      "table_idx": 20,
+      "page_no": 93,
+      "title": "표  4.1  PDF  형태의  자료  내  재난안전정보  추출  분석"
+    },
+    {
+      "table_idx": 21,
+      "page_no": 99,
+      "title": "표  4.2  형식  교정  예시"
+    },
+    {
+      "table_idx": 22,
+      "page_no": 102,
+      "title": "표  4.3  PDF  자료  변환  대상  목록"
+    },
+    {
+      "table_idx": 23,
+      "page_no": 104,
+      "title": "88 │ 재난안전 지식베이스 구축 요소기술 및 검색 UI 개발"
+    },
+    {
+      "table_idx": 24,
+      "page_no": 125,
+      "title": "표  5.1  재난안전  지식베이스  데이터베이스  설계(안)"
+    },
+    {
+      "table_idx": 25,
+      "page_no": 169,
+      "title": "서 지 자 료"
+    },
+    {
+      "table_idx": 26,
+      "page_no": 169,
+      "title": "재난안전 지식베이스, 데이터베이스 구축, 해외 뉴스 수집, PDF 정보 추출, 검색 UI 개발, 자연어 처리 (NLP),  대규모  언어  모델(LLM),  약신호(Weak  Signal)  탐지"
+    },
+    {
+      "table_idx": 27,
+      "page_no": 170,
+      "title": "REPORT DOCUMENTATION PAGE"
+    },
+    {
+      "table_idx": 28,
+      "page_no": 170,
+      "title": "Disaster  Safety  Knowledge  Base,  Database  Construction,  International  News  Collection, PDF  Information  Extraction,  Search  UI  Development,  Natural  Language  Processing  (NLP), Large  Language  Models  (LLM),  Weak  Signal  Detection"
     }
   ]
 }
