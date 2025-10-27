@@ -386,21 +386,13 @@ def calculate_title_similarity(title1: str, title2: str) -> float:
     if t1 == t2:
         return 1.0
 
-    # 한 쪽이 다른 쪽을 포함하는 경우
+    # 한 쪽이 다른 쪽을 포함하는 경우만 유사한 것으로 처리
+    # (예: "표 3.1 제목" 과 "표 3.1 제목 (계속)")
     if t1 in t2 or t2 in t1:
         return 0.8
 
-    # 공통 단어 비율 계산
-    words1 = set(t1)
-    words2 = set(t2)
-
-    if not words1 or not words2:
-        return 0.0
-
-    common = words1 & words2
-    similarity = len(common) / max(len(words1), len(words2))
-
-    return similarity
+    # 타이틀이 다르면 유사도 0 (엄격하게 처리)
+    return 0.0
 
 
 def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, str]:

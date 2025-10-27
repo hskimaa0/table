@@ -50506,438 +50506,6 @@
     {
       "group_id": 9,
       "table_indices": [
-        76,
-        77
-      ],
-      "pages": [
-        116,
-        117
-      ],
-      "connection_reasons": [
-        "Table 76 -> 77: 텍스트 연결: '재난 및 안전관리 기본법 시행령(재난안전법 시행령) 제75조의3(재난원인조사 등)' -> '재난 및 안전관리 기본법 시행령(재난안전법 시행령) 제75조의3(재난원인조사 등)'"
-      ],
-      "disconnection_reasons": [
-        "Table 77 -X-> 78: 페이지가 너무 멀리 떨어져 있음"
-      ],
-      "merged_table": {
-        "self_ref": "#/tables/76",
-        "parent": {
-          "$ref": "#/body"
-        },
-        "children": [
-          {
-            "$ref": "#/texts/769"
-          }
-        ],
-        "content_layer": "body",
-        "label": "table",
-        "prov": [
-          {
-            "page_no": 116,
-            "bbox": {
-              "l": 99.59156036376953,
-              "t": 496.07769775390625,
-              "r": 495.4361572265625,
-              "b": 265.14166259765625,
-              "coord_origin": "BOTTOMLEFT"
-            },
-            "charspan": [
-              0,
-              0
-            ]
-          }
-        ],
-        "captions": [
-          {
-            "$ref": "#/texts/769"
-          }
-        ],
-        "references": [],
-        "footnotes": [],
-        "data": {
-          "table_cells": [
-            {
-              "bbox": {
-                "l": 143.76,
-                "t": 352.68,
-                "r": 190.728,
-                "b": 361.68,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 0,
-              "end_row_offset_idx": 1,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "관련 법 조항",
-              "column_header": true,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 333.24,
-                "t": 352.68,
-                "r": 395.328,
-                "b": 361.68,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 0,
-              "end_row_offset_idx": 1,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "현행 법조문 내용",
-              "column_header": true,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 116.4,
-                "t": 391.92,
-                "r": 217.985,
-                "b": 424.44,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 1,
-              "end_row_offset_idx": 2,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "재난 및 안전관리 기본법 시행령(재난안전법 시행령) 제75조의3(재난원인조사 등)",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 241.08,
-                "t": 374.4,
-                "r": 489.771,
-                "b": 441.96,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 1,
-              "end_row_offset_idx": 2,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "⑪ 행정안전부장관은 법 제69조제5항에 따라 관계 기관의 장에게 개선 권고한 사항에 관하여 매년 그 조치결과를 점검ㆍ확인하고, 다음 각 호의 조치를 할 수 있다. 1. 점검ㆍ확인 결과 미흡한 사항의 관계 기관의 장에 대한 시정 또는 보완 등의 요구 2. 점검ㆍ확인 결과의 행정안전부 인터넷 홈페이지 등을 통한 공개",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 104.64,
-                "t": 497.16,
-                "r": 229.73,
-                "b": 529.56,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 2,
-              "end_row_offset_idx": 3,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "재난원인조사 실시 및 운영에 관한 규정(행안부훈령 제294호) 제11조(이행점검 등)",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 241.08,
-                "t": 456.12,
-                "r": 490.011,
-                "b": 570.6,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 2,
-              "end_row_offset_idx": 3,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "① 행정안전부장관은 영 제75조의3제11항에 따라 재난원인조사 결과 관계 기관의 장에게 요청한 개선권고 등의 필요한 조치사항의 이행 여부를 점검ㆍ확인하고, 미흡한 사항에 대하여 시정 또는 보완 등을 요구할 수 있다. ② 행정안전부장관은 제1항의 이행점검을 위하여 협의회 및 외부 전문 가를 활용할 수 있으며, 필요시 안전감찰담당관에게 지시하여 점검 ㆍ확인할 수 있다. ③ 제1항에 따라 행정안전부장관이 관계 기관의 장에게 시정 또는 보완 등을 요구하는 경우, 관계 기관의 장은 1개월 이내에 시정 또는 보완 계획을 행정안전부장관에게 서면으로 제출하여야 한다.",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 144.24,
-                "t": 310.67999999999995,
-                "r": 191.208,
-                "b": 319.67999999999995,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 0,
-              "end_row_offset_idx": 1,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "관련 법 조항",
-              "column_header": true,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 349.44,
-                "t": 310.67999999999995,
-                "r": 380.088,
-                "b": 319.67999999999995,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 0,
-              "end_row_offset_idx": 1,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "개정방안",
-              "column_header": true,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 117.0,
-                "t": 348.6,
-                "r": 218.465,
-                "b": 381.12,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 1,
-              "end_row_offset_idx": 2,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "재난 및 안전관리 기본법 시행령(재난안전법 시행령) 제75조의3(재난원인조사 등)",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 242.04,
-                "t": 331.08,
-                "r": 487.85,
-                "b": 398.64,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 1,
-              "end_row_offset_idx": 2,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "⑪ 행정안전부장관은 법 제69조제5항에 따라 관계 기관의 장에게 개 선권고한 사항에 관하여 매년 그 조치결과를 점검ㆍ평가하고, 다음 각 호의 조치를 할 수 있다. 1. 점검ㆍ평가 결과 미흡한 사항의 관계 기관의 장에 대한 시정 또는 보완 등의 요구와 현장점검 실시 2. 점검ㆍ확인 결과의 행정안전부 인터넷 홈페이지 등을 통한 공개",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 105.12,
-                "t": 447.96,
-                "r": 230.21,
-                "b": 480.36,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 2,
-              "end_row_offset_idx": 3,
-              "start_col_offset_idx": 0,
-              "end_col_offset_idx": 1,
-              "text": "재난원인조사 실시 및 운영에 관한 규정(행안부훈령 제294호) 제11조(이행점검 등)",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            },
-            {
-              "bbox": {
-                "l": 242.04,
-                "t": 412.8,
-                "r": 487.85,
-                "b": 515.52,
-                "coord_origin": "TOPLEFT"
-              },
-              "row_span": 1,
-              "col_span": 1,
-              "start_row_offset_idx": 2,
-              "end_row_offset_idx": 3,
-              "start_col_offset_idx": 1,
-              "end_col_offset_idx": 2,
-              "text": "① 행정안전부장관은 영 제75조의3제11항에 따라 재난원인조사 결과 관계 기관의 장에게 요청한 개선권고 등의 필요한 조치사항의 이행 여부를 점검ㆍ평가하고, 미흡한 사항에 대하여 시정 또는 보완 등 을 요구와 현장점검을 실시 할 수 있다. ③ 제1항에 따라 행정안전부장관이 관계 기관의 장에게 시정 또는 보 완 등을 요구하고 현장점검을 실시하는 경우, 관계 기관의 장은 1 개월 이내에 시정 또는 보완 계획을 행정안전부장관에게 서면으로 제출하여야 하며, 행정안전부장관은 관계 기관의 장에게 현장점검 결과를 통보한다.",
-              "column_header": false,
-              "row_header": false,
-              "row_section": false,
-              "fillable": false
-            }
-          ],
-          "num_rows": 3,
-          "num_cols": 2,
-          "grid": [
-            [
-              {
-                "bbox": {
-                  "l": 143.76,
-                  "t": 352.68,
-                  "r": 190.728,
-                  "b": 361.68,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 1,
-                "text": "관련 법 조항",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 333.24,
-                  "t": 352.68,
-                  "r": 395.328,
-                  "b": 361.68,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 1,
-                "end_col_offset_idx": 2,
-                "text": "현행 법조문 내용",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              }
-            ],
-            [
-              {
-                "bbox": {
-                  "l": 116.4,
-                  "t": 391.92,
-                  "r": 217.985,
-                  "b": 424.44,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 1,
-                "text": "재난 및 안전관리 기본법 시행령(재난안전법 시행령) 제75조의3(재난원인조사 등)",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 241.08,
-                  "t": 374.4,
-                  "r": 489.771,
-                  "b": 441.96,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 1,
-                "end_col_offset_idx": 2,
-                "text": "⑪ 행정안전부장관은 법 제69조제5항에 따라 관계 기관의 장에게 개선 권고한 사항에 관하여 매년 그 조치결과를 점검ㆍ확인하고, 다음 각 호의 조치를 할 수 있다. 1. 점검ㆍ확인 결과 미흡한 사항의 관계 기관의 장에 대한 시정 또는 보완 등의 요구 2. 점검ㆍ확인 결과의 행정안전부 인터넷 홈페이지 등을 통한 공개",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              }
-            ],
-            [
-              {
-                "bbox": {
-                  "l": 104.64,
-                  "t": 497.16,
-                  "r": 229.73,
-                  "b": 529.56,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 1,
-                "text": "재난원인조사 실시 및 운영에 관한 규정(행안부훈령 제294호) 제11조(이행점검 등)",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 241.08,
-                  "t": 456.12,
-                  "r": 490.011,
-                  "b": 570.6,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 1,
-                "end_col_offset_idx": 2,
-                "text": "① 행정안전부장관은 영 제75조의3제11항에 따라 재난원인조사 결과 관계 기관의 장에게 요청한 개선권고 등의 필요한 조치사항의 이행 여부를 점검ㆍ확인하고, 미흡한 사항에 대하여 시정 또는 보완 등을 요구할 수 있다. ② 행정안전부장관은 제1항의 이행점검을 위하여 협의회 및 외부 전문 가를 활용할 수 있으며, 필요시 안전감찰담당관에게 지시하여 점검 ㆍ확인할 수 있다. ③ 제1항에 따라 행정안전부장관이 관계 기관의 장에게 시정 또는 보완 등을 요구하는 경우, 관계 기관의 장은 1개월 이내에 시정 또는 보완 계획을 행정안전부장관에게 서면으로 제출하여야 한다.",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              }
-            ]
-          ]
-        },
-        "annotations": [],
-        "merged_from_pages": [
-          116,
-          117
-        ]
-      }
-    },
-    {
-      "group_id": 10,
-      "table_indices": [
         85,
         86
       ],
@@ -54986,7 +54554,7 @@
       }
     },
     {
-      "group_id": 11,
+      "group_id": 10,
       "table_indices": [
         89,
         90
@@ -55807,55 +55375,55 @@
       "table_idx": 11,
       "page_no": 34,
       "title": "표 2.3 항공·철도사고조사위원회",
-      "disconnection_reason": "Table 11 -X-> 12: 연결 조건 미충족"
+      "disconnection_reason": "Table 11 -X-> 12: 타이틀이 다름 ('표 2.3 항공·철도사고조사위원회' vs '표 2.4 항공사고 조사 진행 단계', 유사도: 0.00)"
     },
     {
       "table_idx": 12,
       "page_no": 35,
       "title": "표 2.4 항공사고 조사 진행 단계",
-      "disconnection_reason": "Table 12 -X-> 13: 타이틀이 다름 ('표 2.4 항공사고 조사 진행 단계' vs '표 2.5 항공·철도사고조사위원회 개선과제 이행관리 현황', 유사도: 0.36)"
+      "disconnection_reason": "Table 12 -X-> 13: 타이틀이 다름 ('표 2.4 항공사고 조사 진행 단계' vs '표 2.5 항공·철도사고조사위원회 개선과제 이행관리 현황', 유사도: 0.00)"
     },
     {
       "table_idx": 13,
       "page_no": 36,
       "title": "표 2.5 항공·철도사고조사위원회 개선과제 이행관리 현황",
-      "disconnection_reason": "Table 13 -X-> 14: 타이틀이 다름 ('표 2.5 항공·철도사고조사위원회 개선과제 이행관리 현황' vs '표 2.6 해양안전심판원', 유사도: 0.16)"
+      "disconnection_reason": "Table 13 -X-> 14: 타이틀이 다름 ('표 2.5 항공·철도사고조사위원회 개선과제 이행관리 현황' vs '표 2.6 해양안전심판원', 유사도: 0.00)"
     },
     {
       "table_idx": 14,
       "page_no": 37,
       "title": "표 2.6 해양안전심판원",
-      "disconnection_reason": "Table 14 -X-> 15: 타이틀이 다름 ('표 2.6 해양안전심판원' vs '표 2.7 해양안전심판원 개선과제 이행관리 현황', 유사도: 0.48)"
+      "disconnection_reason": "Table 14 -X-> 15: 타이틀이 다름 ('표 2.6 해양안전심판원' vs '표 2.7 해양안전심판원 개선과제 이행관리 현황', 유사도: 0.00)"
     },
     {
       "table_idx": 15,
       "page_no": 38,
       "title": "표 2.7 해양안전심판원 개선과제 이행관리 현황",
-      "disconnection_reason": "Table 15 -X-> 16: 연결 조건 미충족"
+      "disconnection_reason": "Table 15 -X-> 16: 타이틀이 다름 ('표 2.7 해양안전심판원 개선과제 이행관리 현황' vs '표 2.8 개선과제 분야 및 이행점검 관리체계', 유사도: 0.00)"
     },
     {
       "table_idx": 16,
       "page_no": 39,
       "title": "표 2.8 개선과제 분야 및 이행점검 관리체계",
-      "disconnection_reason": "Table 16 -X-> 17: 타이틀이 다름 ('표 2.8 개선과제 분야 및 이행점검 관리체계' vs '표 2.9 행정안전부 주관 재난원인조사 개선권고 현황', 유사도: 0.30)"
+      "disconnection_reason": "Table 16 -X-> 17: 타이틀이 다름 ('표 2.8 개선과제 분야 및 이행점검 관리체계' vs '표 2.9 행정안전부 주관 재난원인조사 개선권고 현황', 유사도: 0.00)"
     },
     {
       "table_idx": 19,
       "page_no": 44,
       "title": "표 2.10 물류창고화재 개선권고 조치내용 점검 미비 내역",
-      "disconnection_reason": "Table 19 -X-> 20: 타이틀이 다름 ('표 2.10 물류창고화재 개선권고 조치내용 점검 미비 내역' vs '출처:  행정안전부 국가재난조사 정보관리시스템', 유사도: 0.09)"
+      "disconnection_reason": "Table 19 -X-> 20: 타이틀이 다름 ('표 2.10 물류창고화재 개선권고 조치내용 점검 미비 내역' vs '출처:  행정안전부 국가재난조사 정보관리시스템', 유사도: 0.00)"
     },
     {
       "table_idx": 20,
       "page_no": 45,
       "title": "출처:  행정안전부 국가재난조사 정보관리시스템",
-      "disconnection_reason": "Table 20 -X-> 21: 타이틀이 다름 ('출처:  행정안전부 국가재난조사 정보관리시스템' vs '표 2.11 상설 개별 재난(사고)조사기구 이행점검 근거', 유사도: 0.22)"
+      "disconnection_reason": "Table 20 -X-> 21: 타이틀이 다름 ('출처:  행정안전부 국가재난조사 정보관리시스템' vs '표 2.11 상설 개별 재난(사고)조사기구 이행점검 근거', 유사도: 0.00)"
     },
     {
       "table_idx": 21,
       "page_no": 46,
       "title": "표 2.11 상설 개별 재난(사고)조사기구 이행점검 근거",
-      "disconnection_reason": "Table 21 -X-> 22: 연결 조건 미충족"
+      "disconnection_reason": "Table 21 -X-> 22: 타이틀이 다름 ('표 2.11 상설 개별 재난(사고)조사기구 이행점검 근거' vs '표 2.12 개별 재난조사기구의 이행점검 근거 규정', 유사도: 0.00)"
     },
     {
       "table_idx": 22,
@@ -55873,19 +55441,19 @@
       "table_idx": 24,
       "page_no": 49,
       "title": "표 2.13 최근 10년(2010~2019년)간 운영기관별 안전권고 이행현황",
-      "disconnection_reason": "Table 24 -X-> 25: 타이틀이 다름 ('표 2.13 최근 10년(2010~2019년)간 운영기관별 안전권고 이행현황' vs '표 2.14 국내 재난(사고)원인조사 개선과제 이행관리 현황', 유사도: 0.44)"
+      "disconnection_reason": "Table 24 -X-> 25: 타이틀이 다름 ('표 2.13 최근 10년(2010~2019년)간 운영기관별 안전권고 이행현황' vs '표 2.14 국내 재난(사고)원인조사 개선과제 이행관리 현황', 유사도: 0.00)"
     },
     {
       "table_idx": 25,
       "page_no": 50,
       "title": "표 2.14 국내 재난(사고)원인조사 개선과제 이행관리 현황",
-      "disconnection_reason": "Table 25 -X-> 26: 같은 페이지의 다른 테이블 ('표 2.14 국내 재난(사고)원인조사 개선과제 이행관리 현황' vs '표 2.15 안전권고 이행 상태 관리 현황(2017.1.1 ~ 2021.9.6.)', 유사도: 0.50)"
+      "disconnection_reason": "Table 25 -X-> 26: 같은 페이지의 다른 테이블 ('표 2.14 국내 재난(사고)원인조사 개선과제 이행관리 현황' vs '표 2.15 안전권고 이행 상태 관리 현황(2017.1.1 ~ 2021.9.6.)', 유사도: 0.00)"
     },
     {
       "table_idx": 28,
       "page_no": 52,
       "title": "872（1492）",
-      "disconnection_reason": "Table 28 -X-> 29: 타이틀이 다름 ('872（1492）' vs '표 2.16 미국 연방교통안전위원회 조사절차', 유사도: 0.10)"
+      "disconnection_reason": "Table 28 -X-> 29: 타이틀이 다름 ('872（1492）' vs '표 2.16 미국 연방교통안전위원회 조사절차', 유사도: 0.00)"
     },
     {
       "table_idx": 29,
@@ -55897,13 +55465,13 @@
       "table_idx": 30,
       "page_no": 57,
       "title": "표 2.17 국외 재난원인조사 체계",
-      "disconnection_reason": "Table 30 -X-> 31: 타이틀이 다름 ('표 2.17 국외 재난원인조사 체계' vs '표 2.18 국외 주요 조사기구 이행관리 과정', 유사도: 0.42)"
+      "disconnection_reason": "Table 30 -X-> 31: 타이틀이 다름 ('표 2.17 국외 재난원인조사 체계' vs '표 2.18 국외 주요 조사기구 이행관리 과정', 유사도: 0.00)"
     },
     {
       "table_idx": 31,
       "page_no": 59,
       "title": "표 2.18 국외 주요 조사기구 이행관리 과정",
-      "disconnection_reason": "Table 31 -X-> 32: 타이틀이 다름 ('표 2.18 국외 주요 조사기구 이행관리 과정' vs '표 2.19 국내·외 재난(사고)조사기구 이행평가 분류 비교', 유사도: 0.46)"
+      "disconnection_reason": "Table 31 -X-> 32: 타이틀이 다름 ('표 2.18 국외 주요 조사기구 이행관리 과정' vs '표 2.19 국내·외 재난(사고)조사기구 이행평가 분류 비교', 유사도: 0.00)"
     },
     {
       "table_idx": 32,
@@ -55915,55 +55483,55 @@
       "table_idx": 33,
       "page_no": 66,
       "title": "표 3.1 정량적 측정 여부에 따른 분류",
-      "disconnection_reason": "Table 33 -X-> 34: 같은 페이지의 다른 테이블 ('표 3.1 정량적 측정 여부에 따른 분류' vs '표 3.2 성과정보의 성격에 따른 지표유형 분류', 유사도: 0.50)"
+      "disconnection_reason": "Table 33 -X-> 34: 같은 페이지의 다른 테이블 ('표 3.1 정량적 측정 여부에 따른 분류' vs '표 3.2 성과정보의 성격에 따른 지표유형 분류', 유사도: 0.00)"
     },
     {
       "table_idx": 34,
       "page_no": 66,
       "title": "표 3.2 성과정보의 성격에 따른 지표유형 분류",
-      "disconnection_reason": "Table 34 -X-> 35: 타이틀이 다름 ('표 3.2 성과정보의 성격에 따른 지표유형 분류' vs '표 3.3 성과관련 지표의 기준', 유사도: 0.39)"
+      "disconnection_reason": "Table 34 -X-> 35: 타이틀이 다름 ('표 3.2 성과정보의 성격에 따른 지표유형 분류' vs '표 3.3 성과관련 지표의 기준', 유사도: 0.00)"
     },
     {
       "table_idx": 35,
       "page_no": 67,
       "title": "표 3.3 성과관련 지표의 기준",
-      "disconnection_reason": "Table 35 -X-> 36: 타이틀이 다름 ('표 3.3 성과관련 지표의 기준' vs '표 3.4 재난경감 프레임워크 지표', 유사도: 0.29)"
+      "disconnection_reason": "Table 35 -X-> 36: 타이틀이 다름 ('표 3.3 성과관련 지표의 기준' vs '표 3.4 재난경감 프레임워크 지표', 유사도: 0.00)"
     },
     {
       "table_idx": 36,
       "page_no": 69,
       "title": "표 3.4 재난경감 프레임워크 지표",
-      "disconnection_reason": "Table 36 -X-> 37: 타이틀이 다름 ('표 3.4 재난경감 프레임워크 지표' vs '표 3.5 2024년 중앙행정기관 특정평가 평가지표', 유사도: 0.28)"
+      "disconnection_reason": "Table 36 -X-> 37: 타이틀이 다름 ('표 3.4 재난경감 프레임워크 지표' vs '표 3.5 2024년 중앙행정기관 특정평가 평가지표', 유사도: 0.00)"
     },
     {
       "table_idx": 37,
       "page_no": 71,
       "title": "표 3.5 2024년 중앙행정기관 특정평가 평가지표",
-      "disconnection_reason": "Table 37 -X-> 38: 타이틀이 다름 ('표 3.5 2024년 중앙행정기관 특정평가 평가지표' vs '표 3.6 공공기관 유형별 사업 및 연구성과에 관한 평가지표', 유사도: 0.36)"
+      "disconnection_reason": "Table 37 -X-> 38: 타이틀이 다름 ('표 3.5 2024년 중앙행정기관 특정평가 평가지표' vs '표 3.6 공공기관 유형별 사업 및 연구성과에 관한 평가지표', 유사도: 0.00)"
     },
     {
       "table_idx": 38,
       "page_no": 72,
       "title": "표 3.6 공공기관 유형별 사업 및 연구성과에 관한 평가지표",
-      "disconnection_reason": "Table 38 -X-> 39: 타이틀이 다름 ('표 3.6 공공기관 유형별 사업 및 연구성과에 관한 평가지표' vs '표 3.7 지자체 기후변화 적응대책 이행평가 지표', 유사도: 0.32)"
+      "disconnection_reason": "Table 38 -X-> 39: 타이틀이 다름 ('표 3.6 공공기관 유형별 사업 및 연구성과에 관한 평가지표' vs '표 3.7 지자체 기후변화 적응대책 이행평가 지표', 유사도: 0.00)"
     },
     {
       "table_idx": 39,
       "page_no": 73,
       "title": "표 3.7 지자체 기후변화 적응대책 이행평가 지표",
-      "disconnection_reason": "Table 39 -X-> 40: 타이틀이 다름 ('표 3.7 지자체 기후변화 적응대책 이행평가 지표' vs '재난관리평가는 재난관리행정에 대한 평가 과정을 통해 평가받는 재난관리책임기관(중앙행정 기관, 공공기관, 지방자치단체)의 재난관리역량 제고로 자율과 책임행정을 강화하기 위하여 「재 난 및 안전관리 기본법」 제33조의2에 근거하여 시행되고 있다. 재난관리평가는 재난관리는 단계 별 6개 분야에 대한 관리실태를 평가하고 있으며 평가분야는 기관의 재난관리 역량 진단을 위해 구성된 정량‧정성지표를 활용하여 공통(조직‧인력 운영, 예산 확대, 인터뷰 등), 예방(교육‧홍 보, 재해 저감활동, 방재시설 관리 등), 대비(매뉴얼 관리‧개선, 훈련 등), 대응(초동조치 역량, 실제 대응사례 등), 복구(복구사업 관리 등), 가감점 부문에 대해서 총 44개 지표를 바탕으로 평 가하고 있다. 평가는 계획 수립 → 평가 실시 → 결과 확정‧통보 → 결과 환류의 과정으로 이루어진다.', 유사도: 0.12)"
+      "disconnection_reason": "Table 39 -X-> 40: 타이틀이 다름 ('표 3.7 지자체 기후변화 적응대책 이행평가 지표' vs '재난관리평가는 재난관리행정에 대한 평가 과정을 통해 평가받는 재난관리책임기관(중앙행정 기관, 공공기관, 지방자치단체)의 재난관리역량 제고로 자율과 책임행정을 강화하기 위하여 「재 난 및 안전관리 기본법」 제33조의2에 근거하여 시행되고 있다. 재난관리평가는 재난관리는 단계 별 6개 분야에 대한 관리실태를 평가하고 있으며 평가분야는 기관의 재난관리 역량 진단을 위해 구성된 정량‧정성지표를 활용하여 공통(조직‧인력 운영, 예산 확대, 인터뷰 등), 예방(교육‧홍 보, 재해 저감활동, 방재시설 관리 등), 대비(매뉴얼 관리‧개선, 훈련 등), 대응(초동조치 역량, 실제 대응사례 등), 복구(복구사업 관리 등), 가감점 부문에 대해서 총 44개 지표를 바탕으로 평 가하고 있다. 평가는 계획 수립 → 평가 실시 → 결과 확정‧통보 → 결과 환류의 과정으로 이루어진다.', 유사도: 0.00)"
     },
     {
       "table_idx": 40,
       "page_no": 74,
       "title": "재난관리평가는 재난관리행정에 대한 평가 과정을 통해 평가받는 재난관리책임기관(중앙행정 기관, 공공기관, 지방자치단체)의 재난관리역량 제고로 자율과 책임행정을 강화하기 위하여 「재 난 및 안전관리 기본법」 제33조의2에 근거하여 시행되고 있다. 재난관리평가는 재난관리는 단계 별 6개 분야에 대한 관리실태를 평가하고 있으며 평가분야는 기관의 재난관리 역량 진단을 위해 구성된 정량‧정성지표를 활용하여 공통(조직‧인력 운영, 예산 확대, 인터뷰 등), 예방(교육‧홍 보, 재해 저감활동, 방재시설 관리 등), 대비(매뉴얼 관리‧개선, 훈련 등), 대응(초동조치 역량, 실제 대응사례 등), 복구(복구사업 관리 등), 가감점 부문에 대해서 총 44개 지표를 바탕으로 평 가하고 있다. 평가는 계획 수립 → 평가 실시 → 결과 확정‧통보 → 결과 환류의 과정으로 이루어진다.",
-      "disconnection_reason": "Table 40 -X-> 41: 타이틀이 다름 ('재난관리평가는 재난관리행정에 대한 평가 과정을 통해 평가받는 재난관리책임기관(중앙행정 기관, 공공기관, 지방자치단체)의 재난관리역량 제고로 자율과 책임행정을 강화하기 위하여 「재 난 및 안전관리 기본법」 제33조의2에 근거하여 시행되고 있다. 재난관리평가는 재난관리는 단계 별 6개 분야에 대한 관리실태를 평가하고 있으며 평가분야는 기관의 재난관리 역량 진단을 위해 구성된 정량‧정성지표를 활용하여 공통(조직‧인력 운영, 예산 확대, 인터뷰 등), 예방(교육‧홍 보, 재해 저감활동, 방재시설 관리 등), 대비(매뉴얼 관리‧개선, 훈련 등), 대응(초동조치 역량, 실제 대응사례 등), 복구(복구사업 관리 등), 가감점 부문에 대해서 총 44개 지표를 바탕으로 평 가하고 있다. 평가는 계획 수립 → 평가 실시 → 결과 확정‧통보 → 결과 환류의 과정으로 이루어진다.' vs '표 3.8 재난관리평가 평가체계', 유사도: 0.08)"
+      "disconnection_reason": "Table 40 -X-> 41: 타이틀이 다름 ('재난관리평가는 재난관리행정에 대한 평가 과정을 통해 평가받는 재난관리책임기관(중앙행정 기관, 공공기관, 지방자치단체)의 재난관리역량 제고로 자율과 책임행정을 강화하기 위하여 「재 난 및 안전관리 기본법」 제33조의2에 근거하여 시행되고 있다. 재난관리평가는 재난관리는 단계 별 6개 분야에 대한 관리실태를 평가하고 있으며 평가분야는 기관의 재난관리 역량 진단을 위해 구성된 정량‧정성지표를 활용하여 공통(조직‧인력 운영, 예산 확대, 인터뷰 등), 예방(교육‧홍 보, 재해 저감활동, 방재시설 관리 등), 대비(매뉴얼 관리‧개선, 훈련 등), 대응(초동조치 역량, 실제 대응사례 등), 복구(복구사업 관리 등), 가감점 부문에 대해서 총 44개 지표를 바탕으로 평 가하고 있다. 평가는 계획 수립 → 평가 실시 → 결과 확정‧통보 → 결과 환류의 과정으로 이루어진다.' vs '표 3.8 재난관리평가 평가체계', 유사도: 0.00)"
     },
     {
       "table_idx": 41,
       "page_no": 75,
       "title": "표 3.8 재난관리평가 평가체계",
-      "disconnection_reason": "Table 41 -X-> 42: 타이틀이 다름 ('표 3.8 재난관리평가 평가체계' vs '(계속)', 유사도: 0.08)"
+      "disconnection_reason": "Table 41 -X-> 42: 타이틀이 다름 ('표 3.8 재난관리평가 평가체계' vs '(계속)', 유사도: 0.00)"
     },
     {
       "table_idx": 42,
@@ -55981,37 +55549,37 @@
       "table_idx": 47,
       "page_no": 84,
       "title": "표 3.11 이행점검을 위한 평가 이행지표",
-      "disconnection_reason": "Table 47 -X-> 48: 타이틀이 다름 ('표 3.11 이행점검을 위한 평가 이행지표' vs '개선권고일  이후  기한  내(1개월  이내)  이행계획서를  제출하였나?', 유사도: 0.16)"
+      "disconnection_reason": "Table 47 -X-> 48: 타이틀이 다름 ('표 3.11 이행점검을 위한 평가 이행지표' vs '개선권고일  이후  기한  내(1개월  이내)  이행계획서를  제출하였나?', 유사도: 0.00)"
     },
     {
       "table_idx": 48,
       "page_no": 85,
       "title": "개선권고일  이후  기한  내(1개월  이내)  이행계획서를  제출하였나?",
-      "disconnection_reason": "Table 48 -X-> 49: 같은 페이지의 다른 테이블 ('개선권고일  이후  기한  내(1개월  이내)  이행계획서를  제출하였나?' vs '-  개선과제  도출  목적  맞게  계획서  내용에  충실히  반영하였나?', 유사도: 0.46)"
+      "disconnection_reason": "Table 48 -X-> 49: 같은 페이지의 다른 테이블 ('개선권고일  이후  기한  내(1개월  이내)  이행계획서를  제출하였나?' vs '-  개선과제  도출  목적  맞게  계획서  내용에  충실히  반영하였나?', 유사도: 0.00)"
     },
     {
       "table_idx": 49,
       "page_no": 85,
       "title": "-  개선과제  도출  목적  맞게  계획서  내용에  충실히  반영하였나?",
-      "disconnection_reason": "Table 49 -X-> 50: 같은 페이지의 다른 테이블 ('-  개선과제  도출  목적  맞게  계획서  내용에  충실히  반영하였나?' vs '-  이행시  예상되는  위험요인  및  극복방안을  제시하였나?', 유사도: 0.23)"
+      "disconnection_reason": "Table 49 -X-> 50: 같은 페이지의 다른 테이블 ('-  개선과제  도출  목적  맞게  계획서  내용에  충실히  반영하였나?' vs '-  이행시  예상되는  위험요인  및  극복방안을  제시하였나?', 유사도: 0.00)"
     },
     {
       "table_idx": 50,
       "page_no": 85,
       "title": "-  이행시  예상되는  위험요인  및  극복방안을  제시하였나?",
-      "disconnection_reason": "Table 50 -X-> 51: 같은 페이지의 다른 테이블 ('-  이행시  예상되는  위험요인  및  극복방안을  제시하였나?' vs '-  추진단계별  추진내용을  구분하여  제시하였나?', 유사도: 0.35)"
+      "disconnection_reason": "Table 50 -X-> 51: 같은 페이지의 다른 테이블 ('-  이행시  예상되는  위험요인  및  극복방안을  제시하였나?' vs '-  추진단계별  추진내용을  구분하여  제시하였나?', 유사도: 0.00)"
     },
     {
       "table_idx": 51,
       "page_no": 85,
       "title": "-  추진단계별  추진내용을  구분하여  제시하였나?",
-      "disconnection_reason": "Table 51 -X-> 52: 같은 페이지의 다른 테이블 ('-  추진단계별  추진내용을  구분하여  제시하였나?' vs '-  이행  기간 ․ 단계 고려한 기간설정이 적정하게 제시하였나?', 유사도: 0.43)"
+      "disconnection_reason": "Table 51 -X-> 52: 같은 페이지의 다른 테이블 ('-  추진단계별  추진내용을  구분하여  제시하였나?' vs '-  이행  기간 ․ 단계 고려한 기간설정이 적정하게 제시하였나?', 유사도: 0.00)"
     },
     {
       "table_idx": 52,
       "page_no": 85,
       "title": "-  이행  기간 ․ 단계 고려한 기간설정이 적정하게 제시하였나?",
-      "disconnection_reason": "Table 52 -X-> 53: 타이틀이 다름 ('-  이행  기간 ․ 단계 고려한 기간설정이 적정하게 제시하였나?' vs '채점기준', 유사도: 0.05)"
+      "disconnection_reason": "Table 52 -X-> 53: 타이틀이 다름 ('-  이행  기간 ․ 단계 고려한 기간설정이 적정하게 제시하였나?' vs '채점기준', 유사도: 0.00)"
     },
     {
       "table_idx": 53,
@@ -56023,43 +55591,43 @@
       "table_idx": 54,
       "page_no": 86,
       "title": "최종  산출물의  효과를  제시하였나?",
-      "disconnection_reason": "Table 54 -X-> 55: 타이틀이 다름 ('최종  산출물의  효과를  제시하였나?' vs '표 3.13 이행결과 평가 부문별  평가기준 및 가중치', 유사도: 0.06)"
+      "disconnection_reason": "Table 54 -X-> 55: 타이틀이 다름 ('최종  산출물의  효과를  제시하였나?' vs '표 3.13 이행결과 평가 부문별  평가기준 및 가중치', 유사도: 0.00)"
     },
     {
       "table_idx": 55,
       "page_no": 88,
       "title": "표 3.13 이행결과 평가 부문별  평가기준 및 가중치",
-      "disconnection_reason": "Table 55 -X-> 56: 같은 페이지의 다른 테이블 ('표 3.13 이행결과 평가 부문별  평가기준 및 가중치' vs '채점기준  :  각  평가지표별로', 유사도: 0.33)"
+      "disconnection_reason": "Table 55 -X-> 56: 같은 페이지의 다른 테이블 ('표 3.13 이행결과 평가 부문별  평가기준 및 가중치' vs '채점기준  :  각  평가지표별로', 유사도: 0.00)"
     },
     {
       "table_idx": 56,
       "page_no": 88,
       "title": "채점기준  :  각  평가지표별로",
-      "disconnection_reason": "Table 56 -X-> 57: 같은 페이지의 다른 테이블 ('채점기준  :  각  평가지표별로' vs '표 3.14 이행점검 평가 평가등급', 유사도: 0.31)"
+      "disconnection_reason": "Table 56 -X-> 57: 같은 페이지의 다른 테이블 ('채점기준  :  각  평가지표별로' vs '표 3.14 이행점검 평가 평가등급', 유사도: 0.00)"
     },
     {
       "table_idx": 57,
       "page_no": 88,
       "title": "표 3.14 이행점검 평가 평가등급",
-      "disconnection_reason": "Table 57 -X-> 58: 타이틀이 다름 ('표 3.14 이행점검 평가 평가등급' vs '표 3.15 장기적인 측면에서 평가부문 및 평가지표', 유사도: 0.32)"
+      "disconnection_reason": "Table 57 -X-> 58: 타이틀이 다름 ('표 3.14 이행점검 평가 평가등급' vs '표 3.15 장기적인 측면에서 평가부문 및 평가지표', 유사도: 0.00)"
     },
     {
       "table_idx": 58,
       "page_no": 90,
       "title": "표 3.15 장기적인 측면에서 평가부문 및 평가지표",
-      "disconnection_reason": "Table 58 -X-> 59: 타이틀이 다름 ('표 3.15 장기적인 측면에서 평가부문 및 평가지표' vs '표 3.16 투입단계 평가지표 별 평가기준', 유사도: 0.42)"
+      "disconnection_reason": "Table 58 -X-> 59: 타이틀이 다름 ('표 3.15 장기적인 측면에서 평가부문 및 평가지표' vs '표 3.16 투입단계 평가지표 별 평가기준', 유사도: 0.00)"
     },
     {
       "table_idx": 59,
       "page_no": 92,
       "title": "표 3.16 투입단계 평가지표 별 평가기준",
-      "disconnection_reason": "Table 59 -X-> 60: 연결 조건 미충족"
+      "disconnection_reason": "Table 59 -X-> 60: 같은 페이지의 다른 테이블 ('표 3.16 투입단계 평가지표 별 평가기준' vs '표 3.17 과정단계 평가지표별 평가기준', 유사도: 0.00)"
     },
     {
       "table_idx": 62,
       "page_no": 94,
       "title": "표 3.18 산출 및 결과단계 평가지표별 평가기준",
-      "disconnection_reason": "Table 62 -X-> 63: 타이틀이 다름 ('표 3.18 산출 및 결과단계 평가지표별 평가기준' vs '표 3.19 이행평가 종합 등급의 구분', 유사도: 0.33)"
+      "disconnection_reason": "Table 62 -X-> 63: 타이틀이 다름 ('표 3.18 산출 및 결과단계 평가지표별 평가기준' vs '표 3.19 이행평가 종합 등급의 구분', 유사도: 0.00)"
     },
     {
       "table_idx": 63,
@@ -56071,37 +55639,49 @@
       "table_idx": 64,
       "page_no": 99,
       "title": "표 3.20 재난관리평가 내 이행점검 평가지표 반영",
-      "disconnection_reason": "Table 64 -X-> 65: 연결 조건 미충족"
+      "disconnection_reason": "Table 64 -X-> 65: 타이틀이 다름 ('표 3.20 재난관리평가 내 이행점검 평가지표 반영' vs '표 3.21 재난관리평가 평가지표별 평균 배점', 유사도: 0.00)"
     },
     {
       "table_idx": 65,
       "page_no": 100,
       "title": "표 3.21 재난관리평가 평가지표별 평균 배점",
-      "disconnection_reason": "Table 65 -X-> 66: 같은 페이지의 다른 테이블 ('표 3.21 재난관리평가 평가지표별 평균 배점' vs '표 3.22 이행평가 종합점수 재난관리평가 내 적용', 유사도: 0.58)"
+      "disconnection_reason": "Table 65 -X-> 66: 같은 페이지의 다른 테이블 ('표 3.21 재난관리평가 평가지표별 평균 배점' vs '표 3.22 이행평가 종합점수 재난관리평가 내 적용', 유사도: 0.00)"
     },
     {
       "table_idx": 66,
       "page_no": 100,
       "title": "표 3.22 이행평가 종합점수 재난관리평가 내 적용",
-      "disconnection_reason": "Table 66 -X-> 67: 타이틀이 다름 ('표 3.22 이행평가 종합점수 재난관리평가 내 적용' vs '표 3.23 물류창고 화재 재발 방지대책 개선권고 추진기관', 유사도: 0.27)"
+      "disconnection_reason": "Table 66 -X-> 67: 타이틀이 다름 ('표 3.22 이행평가 종합점수 재난관리평가 내 적용' vs '표 3.23 물류창고 화재 재발 방지대책 개선권고 추진기관', 유사도: 0.00)"
     },
     {
       "table_idx": 67,
       "page_no": 101,
       "title": "표 3.23 물류창고 화재 재발 방지대책 개선권고 추진기관",
-      "disconnection_reason": "Table 67 -X-> 68: 연결 조건 미충족"
+      "disconnection_reason": "Table 67 -X-> 68: 타이틀이 다름 ('표 3.23 물류창고 화재 재발 방지대책 개선권고 추진기관' vs '표 3.24 물류창고 화재 재발 방지대책 추진 세부과제 35건', 유사도: 0.00)"
     },
     {
       "table_idx": 74,
       "page_no": 109,
       "title": "표 3.27 이행점검 평가 적용 결과",
-      "disconnection_reason": "Table 74 -X-> 75: 연결 조건 미충족"
+      "disconnection_reason": "Table 74 -X-> 75: 타이틀이 다름 ('표 3.27 이행점검 평가 적용 결과' vs '표 3.28 이행점검 평가 적용 시 개선이 필요한 사항', 유사도: 0.00)"
     },
     {
       "table_idx": 75,
       "page_no": 111,
       "title": "표 3.28 이행점검 평가 적용 시 개선이 필요한 사항",
       "disconnection_reason": "Table 75 -X-> 76: 페이지가 너무 멀리 떨어져 있음"
+    },
+    {
+      "table_idx": 76,
+      "page_no": 116,
+      "title": "표 4.1 이행 점검 및 확인과 관련한 법령과 규정",
+      "disconnection_reason": "Table 76 -X-> 77: 타이틀이 다름 ('표 4.1 이행 점검 및 확인과 관련한 법령과 규정' vs '표 4.2 이행 점검 및 평가 관련한 법안 개정(안)', 유사도: 0.00)"
+    },
+    {
+      "table_idx": 77,
+      "page_no": 117,
+      "title": "표 4.2 이행 점검 및 평가 관련한 법안 개정(안)",
+      "disconnection_reason": "Table 77 -X-> 78: 페이지가 너무 멀리 떨어져 있음"
     },
     {
       "table_idx": 78,
@@ -56113,37 +55693,37 @@
       "table_idx": 79,
       "page_no": 130,
       "title": "출처:  미국  연방교통안전위원회 홈페이지(https://www.ntsb.gov/)",
-      "disconnection_reason": "Table 79 -X-> 80: 타이틀이 다름 ('출처:  미국  연방교통안전위원회 홈페이지(https://www.ntsb.gov/)' vs '조치상태에 대해서는 이행(closed)과 미이행(open)으로 크게 구분하고 세부적으로 이행 (closed)은 11등급, 즉 CEX(초과 달성), CAA(조치 완료), CAAA(대체방식으로 완료), CUA (거부),  CUAN(응답없음),  CR(재고),  CNLA(만료),  CS(대체처리),  CAAS·CAAAS·  CUAS(대 체)으로 분류하여 공개하고 있다. 미이행(open)은 OAA(적절한 계획 제출), OAAR(적절한 대 체 계획 제출), OUA(부적절한 계획 제출), ORR(응답 검토중), OAR(응답 대기 중)로 5개 등 급으로 분류하고 있다. 이에 대해서 상세히 정리하여 설명하면 다음 표 5.1과 같다.', 유사도: 0.13)"
+      "disconnection_reason": "Table 79 -X-> 80: 타이틀이 다름 ('출처:  미국  연방교통안전위원회 홈페이지(https://www.ntsb.gov/)' vs '조치상태에 대해서는 이행(closed)과 미이행(open)으로 크게 구분하고 세부적으로 이행 (closed)은 11등급, 즉 CEX(초과 달성), CAA(조치 완료), CAAA(대체방식으로 완료), CUA (거부),  CUAN(응답없음),  CR(재고),  CNLA(만료),  CS(대체처리),  CAAS·CAAAS·  CUAS(대 체)으로 분류하여 공개하고 있다. 미이행(open)은 OAA(적절한 계획 제출), OAAR(적절한 대 체 계획 제출), OUA(부적절한 계획 제출), ORR(응답 검토중), OAR(응답 대기 중)로 5개 등 급으로 분류하고 있다. 이에 대해서 상세히 정리하여 설명하면 다음 표 5.1과 같다.', 유사도: 0.00)"
     },
     {
       "table_idx": 80,
       "page_no": 131,
       "title": "조치상태에 대해서는 이행(closed)과 미이행(open)으로 크게 구분하고 세부적으로 이행 (closed)은 11등급, 즉 CEX(초과 달성), CAA(조치 완료), CAAA(대체방식으로 완료), CUA (거부),  CUAN(응답없음),  CR(재고),  CNLA(만료),  CS(대체처리),  CAAS·CAAAS·  CUAS(대 체)으로 분류하여 공개하고 있다. 미이행(open)은 OAA(적절한 계획 제출), OAAR(적절한 대 체 계획 제출), OUA(부적절한 계획 제출), ORR(응답 검토중), OAR(응답 대기 중)로 5개 등 급으로 분류하고 있다. 이에 대해서 상세히 정리하여 설명하면 다음 표 5.1과 같다.",
-      "disconnection_reason": "Table 80 -X-> 81: 타이틀이 다름 ('조치상태에 대해서는 이행(closed)과 미이행(open)으로 크게 구분하고 세부적으로 이행 (closed)은 11등급, 즉 CEX(초과 달성), CAA(조치 완료), CAAA(대체방식으로 완료), CUA (거부),  CUAN(응답없음),  CR(재고),  CNLA(만료),  CS(대체처리),  CAAS·CAAAS·  CUAS(대 체)으로 분류하여 공개하고 있다. 미이행(open)은 OAA(적절한 계획 제출), OAAR(적절한 대 체 계획 제출), OUA(부적절한 계획 제출), ORR(응답 검토중), OAR(응답 대기 중)로 5개 등 급으로 분류하고 있다. 이에 대해서 상세히 정리하여 설명하면 다음 표 5.1과 같다.' vs '표 5.1 미국의 NTSB 이행결과 공개', 유사도: 0.13)"
+      "disconnection_reason": "Table 80 -X-> 81: 타이틀이 다름 ('조치상태에 대해서는 이행(closed)과 미이행(open)으로 크게 구분하고 세부적으로 이행 (closed)은 11등급, 즉 CEX(초과 달성), CAA(조치 완료), CAAA(대체방식으로 완료), CUA (거부),  CUAN(응답없음),  CR(재고),  CNLA(만료),  CS(대체처리),  CAAS·CAAAS·  CUAS(대 체)으로 분류하여 공개하고 있다. 미이행(open)은 OAA(적절한 계획 제출), OAAR(적절한 대 체 계획 제출), OUA(부적절한 계획 제출), ORR(응답 검토중), OAR(응답 대기 중)로 5개 등 급으로 분류하고 있다. 이에 대해서 상세히 정리하여 설명하면 다음 표 5.1과 같다.' vs '표 5.1 미국의 NTSB 이행결과 공개', 유사도: 0.00)"
     },
     {
       "table_idx": 81,
       "page_no": 132,
       "title": "표 5.1 미국의 NTSB 이행결과 공개",
-      "disconnection_reason": "Table 81 -X-> 82: 연결 조건 미충족"
+      "disconnection_reason": "Table 81 -X-> 82: 타이틀이 다름 ('표 5.1 미국의 NTSB 이행결과 공개' vs '표 5.2 미국의 CSB 이행결과 공개', 유사도: 0.00)"
     },
     {
       "table_idx": 82,
       "page_no": 134,
       "title": "표 5.2 미국의 CSB 이행결과 공개",
-      "disconnection_reason": "Table 82 -X-> 83: 헤더는 동일하지만 키값이 겹침 (6개 중복)"
+      "disconnection_reason": "Table 82 -X-> 83: 타이틀이 다름 ('표 5.2 미국의 CSB 이행결과 공개' vs '표 5.3 스웨덴의 SHK 이행결과 공개', 유사도: 0.00)"
     },
     {
       "table_idx": 83,
       "page_no": 136,
       "title": "표 5.3 스웨덴의 SHK 이행결과 공개",
-      "disconnection_reason": "Table 83 -X-> 84: 타이틀이 다름 ('표 5.3 스웨덴의 SHK 이행결과 공개' vs '표 5.4 중앙행정기관 정부업무평가 결과 공개 여부 및 방식 현황', 유사도: 0.32)"
+      "disconnection_reason": "Table 83 -X-> 84: 타이틀이 다름 ('표 5.3 스웨덴의 SHK 이행결과 공개' vs '표 5.4 중앙행정기관 정부업무평가 결과 공개 여부 및 방식 현황', 유사도: 0.00)"
     },
     {
       "table_idx": 84,
       "page_no": 137,
       "title": "표 5.4 중앙행정기관 정부업무평가 결과 공개 여부 및 방식 현황",
-      "disconnection_reason": "Table 84 -X-> 85: 같은 페이지의 다른 테이블 ('표 5.4 중앙행정기관 정부업무평가 결과 공개 여부 및 방식 현황' vs '표 5.5 주관부처별 정부업무평가(개별평가) 공개 방식 및 현황', 유사도: 0.68)"
+      "disconnection_reason": "Table 84 -X-> 85: 같은 페이지의 다른 테이블 ('표 5.4 중앙행정기관 정부업무평가 결과 공개 여부 및 방식 현황' vs '표 5.5 주관부처별 정부업무평가(개별평가) 공개 방식 및 현황', 유사도: 0.00)"
     },
     {
       "table_idx": 87,
@@ -56155,19 +55735,19 @@
       "table_idx": 88,
       "page_no": 142,
       "title": "표 5.8 이행결과 조치 상태 및 평가등급",
-      "disconnection_reason": "Table 88 -X-> 89: 타이틀이 다름 ('표 5.8 이행결과 조치 상태 및 평가등급' vs '표 5.9 이행점검 평가 결과 대국민 공개 방안', 유사도: 0.47)"
+      "disconnection_reason": "Table 88 -X-> 89: 타이틀이 다름 ('표 5.8 이행결과 조치 상태 및 평가등급' vs '표 5.9 이행점검 평가 결과 대국민 공개 방안', 유사도: 0.00)"
     },
     {
       "table_idx": 91,
       "page_no": 146,
       "title": "표 5.10  재난안전관리 인력의 전문성의 구성요소",
-      "disconnection_reason": "Table 91 -X-> 92: 타이틀이 다름 ('표 5.10  재난안전관리 인력의 전문성의 구성요소' vs '표 5.11 전문가 및 평가자의 역량을 나타내는 중요 요소', 유사도: 0.43)"
+      "disconnection_reason": "Table 91 -X-> 92: 타이틀이 다름 ('표 5.10  재난안전관리 인력의 전문성의 구성요소' vs '표 5.11 전문가 및 평가자의 역량을 나타내는 중요 요소', 유사도: 0.00)"
     },
     {
       "table_idx": 92,
       "page_no": 147,
       "title": "표 5.11 전문가 및 평가자의 역량을 나타내는 중요 요소",
-      "disconnection_reason": "Table 92 -X-> 93: 타이틀이 다름 ('표 5.11 전문가 및 평가자의 역량을 나타내는 중요 요소' vs '표 5.12 우수전문가 평가 요소', 유사도: 0.48)"
+      "disconnection_reason": "Table 92 -X-> 93: 타이틀이 다름 ('표 5.11 전문가 및 평가자의 역량을 나타내는 중요 요소' vs '표 5.12 우수전문가 평가 요소', 유사도: 0.00)"
     },
     {
       "table_idx": 93,
@@ -56179,7 +55759,7 @@
       "table_idx": 94,
       "page_no": 152,
       "title": "표 5.13 전문가 참여 활동 사후 평가항목",
-      "disconnection_reason": "Table 94 -X-> 95: 타이틀이 다름 ('표 5.13 전문가 참여 활동 사후 평가항목' vs '표 5.14 우수 전문가 활성화 방안', 유사도: 0.47)"
+      "disconnection_reason": "Table 94 -X-> 95: 타이틀이 다름 ('표 5.13 전문가 참여 활동 사후 평가항목' vs '표 5.14 우수 전문가 활성화 방안', 유사도: 0.00)"
     },
     {
       "table_idx": 95,
@@ -56191,7 +55771,7 @@
       "table_idx": 96,
       "page_no": 165,
       "title": "서 지 자 료",
-      "disconnection_reason": "Table 96 -X-> 97: 같은 페이지의 다른 테이블 ('서 지 자 료' vs '본  연구는  재난원인조사를  토대로  도출된  개선과제의  이행력을  높이는  방안  마련을  위해,  국내‧외 개선과제의 이행점검‧평가 관련 동향 조사와 문헌 연구를 살펴보고, 개선과제 이행지표 개발과 적용, 현장점검 ･ 평가체계를 구축하고 이행결과 활용을 위한 방안을 마련한다.', 유사도: 0.01)"
+      "disconnection_reason": "Table 96 -X-> 97: 같은 페이지의 다른 테이블 ('서 지 자 료' vs '본  연구는  재난원인조사를  토대로  도출된  개선과제의  이행력을  높이는  방안  마련을  위해,  국내‧외 개선과제의 이행점검‧평가 관련 동향 조사와 문헌 연구를 살펴보고, 개선과제 이행지표 개발과 적용, 현장점검 ･ 평가체계를 구축하고 이행결과 활용을 위한 방안을 마련한다.', 유사도: 0.00)"
     },
     {
       "table_idx": 97,
@@ -56235,34 +55815,34 @@
       "Table 10 -X-> 11: 두 번째 테이블에 새로운 타이틀 시작 ('표 2.3 항공·철도사고조사위원회')"
     ],
     "11": [
-      "Table 11 -X-> 12: 연결 조건 미충족"
+      "Table 11 -X-> 12: 타이틀이 다름 ('표 2.3 항공·철도사고조사위원회' vs '표 2.4 항공사고 조사 진행 단계', 유사도: 0.00)"
     ],
     "12": [
-      "Table 12 -X-> 13: 타이틀이 다름 ('표 2.4 항공사고 조사 진행 단계' vs '표 2.5 항공·철도사고조사위원회 개선과제 이행관리 현황', 유사도: 0.36)"
+      "Table 12 -X-> 13: 타이틀이 다름 ('표 2.4 항공사고 조사 진행 단계' vs '표 2.5 항공·철도사고조사위원회 개선과제 이행관리 현황', 유사도: 0.00)"
     ],
     "13": [
-      "Table 13 -X-> 14: 타이틀이 다름 ('표 2.5 항공·철도사고조사위원회 개선과제 이행관리 현황' vs '표 2.6 해양안전심판원', 유사도: 0.16)"
+      "Table 13 -X-> 14: 타이틀이 다름 ('표 2.5 항공·철도사고조사위원회 개선과제 이행관리 현황' vs '표 2.6 해양안전심판원', 유사도: 0.00)"
     ],
     "14": [
-      "Table 14 -X-> 15: 타이틀이 다름 ('표 2.6 해양안전심판원' vs '표 2.7 해양안전심판원 개선과제 이행관리 현황', 유사도: 0.48)"
+      "Table 14 -X-> 15: 타이틀이 다름 ('표 2.6 해양안전심판원' vs '표 2.7 해양안전심판원 개선과제 이행관리 현황', 유사도: 0.00)"
     ],
     "15": [
-      "Table 15 -X-> 16: 연결 조건 미충족"
+      "Table 15 -X-> 16: 타이틀이 다름 ('표 2.7 해양안전심판원 개선과제 이행관리 현황' vs '표 2.8 개선과제 분야 및 이행점검 관리체계', 유사도: 0.00)"
     ],
     "16": [
-      "Table 16 -X-> 17: 타이틀이 다름 ('표 2.8 개선과제 분야 및 이행점검 관리체계' vs '표 2.9 행정안전부 주관 재난원인조사 개선권고 현황', 유사도: 0.30)"
+      "Table 16 -X-> 17: 타이틀이 다름 ('표 2.8 개선과제 분야 및 이행점검 관리체계' vs '표 2.9 행정안전부 주관 재난원인조사 개선권고 현황', 유사도: 0.00)"
     ],
     "18": [
       "Table 18 -X-> 19: 두 번째 테이블에 새로운 타이틀 시작 ('표 2.10 물류창고화재 개선권고 조치내용 점검 미비 내역')"
     ],
     "19": [
-      "Table 19 -X-> 20: 타이틀이 다름 ('표 2.10 물류창고화재 개선권고 조치내용 점검 미비 내역' vs '출처:  행정안전부 국가재난조사 정보관리시스템', 유사도: 0.09)"
+      "Table 19 -X-> 20: 타이틀이 다름 ('표 2.10 물류창고화재 개선권고 조치내용 점검 미비 내역' vs '출처:  행정안전부 국가재난조사 정보관리시스템', 유사도: 0.00)"
     ],
     "20": [
-      "Table 20 -X-> 21: 타이틀이 다름 ('출처:  행정안전부 국가재난조사 정보관리시스템' vs '표 2.11 상설 개별 재난(사고)조사기구 이행점검 근거', 유사도: 0.22)"
+      "Table 20 -X-> 21: 타이틀이 다름 ('출처:  행정안전부 국가재난조사 정보관리시스템' vs '표 2.11 상설 개별 재난(사고)조사기구 이행점검 근거', 유사도: 0.00)"
     ],
     "21": [
-      "Table 21 -X-> 22: 연결 조건 미충족"
+      "Table 21 -X-> 22: 타이틀이 다름 ('표 2.11 상설 개별 재난(사고)조사기구 이행점검 근거' vs '표 2.12 개별 재난조사기구의 이행점검 근거 규정', 유사도: 0.00)"
     ],
     "22": [
       "Table 22 -X-> 23: 타이틀이 다름 ('표 2.12 개별 재난조사기구의 이행점검 근거 규정' vs '民正民', 유사도: 0.00)"
@@ -56271,55 +55851,55 @@
       "Table 23 -X-> 24: 타이틀이 다름 ('民正民' vs '표 2.13 최근 10년(2010~2019년)간 운영기관별 안전권고 이행현황', 유사도: 0.00)"
     ],
     "24": [
-      "Table 24 -X-> 25: 타이틀이 다름 ('표 2.13 최근 10년(2010~2019년)간 운영기관별 안전권고 이행현황' vs '표 2.14 국내 재난(사고)원인조사 개선과제 이행관리 현황', 유사도: 0.44)"
+      "Table 24 -X-> 25: 타이틀이 다름 ('표 2.13 최근 10년(2010~2019년)간 운영기관별 안전권고 이행현황' vs '표 2.14 국내 재난(사고)원인조사 개선과제 이행관리 현황', 유사도: 0.00)"
     ],
     "25": [
-      "Table 25 -X-> 26: 같은 페이지의 다른 테이블 ('표 2.14 국내 재난(사고)원인조사 개선과제 이행관리 현황' vs '표 2.15 안전권고 이행 상태 관리 현황(2017.1.1 ~ 2021.9.6.)', 유사도: 0.50)"
+      "Table 25 -X-> 26: 같은 페이지의 다른 테이블 ('표 2.14 국내 재난(사고)원인조사 개선과제 이행관리 현황' vs '표 2.15 안전권고 이행 상태 관리 현황(2017.1.1 ~ 2021.9.6.)', 유사도: 0.00)"
     ],
     "27": [
       "Table 27 -X-> 28: 두 번째 테이블에 새로운 타이틀 시작 ('872（1492）')"
     ],
     "28": [
-      "Table 28 -X-> 29: 타이틀이 다름 ('872（1492）' vs '표 2.16 미국 연방교통안전위원회 조사절차', 유사도: 0.10)"
+      "Table 28 -X-> 29: 타이틀이 다름 ('872（1492）' vs '표 2.16 미국 연방교통안전위원회 조사절차', 유사도: 0.00)"
     ],
     "29": [
       "Table 29 -X-> 30: 페이지가 너무 멀리 떨어져 있음"
     ],
     "30": [
-      "Table 30 -X-> 31: 타이틀이 다름 ('표 2.17 국외 재난원인조사 체계' vs '표 2.18 국외 주요 조사기구 이행관리 과정', 유사도: 0.42)"
+      "Table 30 -X-> 31: 타이틀이 다름 ('표 2.17 국외 재난원인조사 체계' vs '표 2.18 국외 주요 조사기구 이행관리 과정', 유사도: 0.00)"
     ],
     "31": [
-      "Table 31 -X-> 32: 타이틀이 다름 ('표 2.18 국외 주요 조사기구 이행관리 과정' vs '표 2.19 국내·외 재난(사고)조사기구 이행평가 분류 비교', 유사도: 0.46)"
+      "Table 31 -X-> 32: 타이틀이 다름 ('표 2.18 국외 주요 조사기구 이행관리 과정' vs '표 2.19 국내·외 재난(사고)조사기구 이행평가 분류 비교', 유사도: 0.00)"
     ],
     "32": [
       "Table 32 -X-> 33: 페이지가 너무 멀리 떨어져 있음"
     ],
     "33": [
-      "Table 33 -X-> 34: 같은 페이지의 다른 테이블 ('표 3.1 정량적 측정 여부에 따른 분류' vs '표 3.2 성과정보의 성격에 따른 지표유형 분류', 유사도: 0.50)"
+      "Table 33 -X-> 34: 같은 페이지의 다른 테이블 ('표 3.1 정량적 측정 여부에 따른 분류' vs '표 3.2 성과정보의 성격에 따른 지표유형 분류', 유사도: 0.00)"
     ],
     "34": [
-      "Table 34 -X-> 35: 타이틀이 다름 ('표 3.2 성과정보의 성격에 따른 지표유형 분류' vs '표 3.3 성과관련 지표의 기준', 유사도: 0.39)"
+      "Table 34 -X-> 35: 타이틀이 다름 ('표 3.2 성과정보의 성격에 따른 지표유형 분류' vs '표 3.3 성과관련 지표의 기준', 유사도: 0.00)"
     ],
     "35": [
-      "Table 35 -X-> 36: 타이틀이 다름 ('표 3.3 성과관련 지표의 기준' vs '표 3.4 재난경감 프레임워크 지표', 유사도: 0.29)"
+      "Table 35 -X-> 36: 타이틀이 다름 ('표 3.3 성과관련 지표의 기준' vs '표 3.4 재난경감 프레임워크 지표', 유사도: 0.00)"
     ],
     "36": [
-      "Table 36 -X-> 37: 타이틀이 다름 ('표 3.4 재난경감 프레임워크 지표' vs '표 3.5 2024년 중앙행정기관 특정평가 평가지표', 유사도: 0.28)"
+      "Table 36 -X-> 37: 타이틀이 다름 ('표 3.4 재난경감 프레임워크 지표' vs '표 3.5 2024년 중앙행정기관 특정평가 평가지표', 유사도: 0.00)"
     ],
     "37": [
-      "Table 37 -X-> 38: 타이틀이 다름 ('표 3.5 2024년 중앙행정기관 특정평가 평가지표' vs '표 3.6 공공기관 유형별 사업 및 연구성과에 관한 평가지표', 유사도: 0.36)"
+      "Table 37 -X-> 38: 타이틀이 다름 ('표 3.5 2024년 중앙행정기관 특정평가 평가지표' vs '표 3.6 공공기관 유형별 사업 및 연구성과에 관한 평가지표', 유사도: 0.00)"
     ],
     "38": [
-      "Table 38 -X-> 39: 타이틀이 다름 ('표 3.6 공공기관 유형별 사업 및 연구성과에 관한 평가지표' vs '표 3.7 지자체 기후변화 적응대책 이행평가 지표', 유사도: 0.32)"
+      "Table 38 -X-> 39: 타이틀이 다름 ('표 3.6 공공기관 유형별 사업 및 연구성과에 관한 평가지표' vs '표 3.7 지자체 기후변화 적응대책 이행평가 지표', 유사도: 0.00)"
     ],
     "39": [
-      "Table 39 -X-> 40: 타이틀이 다름 ('표 3.7 지자체 기후변화 적응대책 이행평가 지표' vs '재난관리평가는 재난관리행정에 대한 평가 과정을 통해 평가받는 재난관리책임기관(중앙행정 기관, 공공기관, 지방자치단체)의 재난관리역량 제고로 자율과 책임행정을 강화하기 위하여 「재 난 및 안전관리 기본법」 제33조의2에 근거하여 시행되고 있다. 재난관리평가는 재난관리는 단계 별 6개 분야에 대한 관리실태를 평가하고 있으며 평가분야는 기관의 재난관리 역량 진단을 위해 구성된 정량‧정성지표를 활용하여 공통(조직‧인력 운영, 예산 확대, 인터뷰 등), 예방(교육‧홍 보, 재해 저감활동, 방재시설 관리 등), 대비(매뉴얼 관리‧개선, 훈련 등), 대응(초동조치 역량, 실제 대응사례 등), 복구(복구사업 관리 등), 가감점 부문에 대해서 총 44개 지표를 바탕으로 평 가하고 있다. 평가는 계획 수립 → 평가 실시 → 결과 확정‧통보 → 결과 환류의 과정으로 이루어진다.', 유사도: 0.12)"
+      "Table 39 -X-> 40: 타이틀이 다름 ('표 3.7 지자체 기후변화 적응대책 이행평가 지표' vs '재난관리평가는 재난관리행정에 대한 평가 과정을 통해 평가받는 재난관리책임기관(중앙행정 기관, 공공기관, 지방자치단체)의 재난관리역량 제고로 자율과 책임행정을 강화하기 위하여 「재 난 및 안전관리 기본법」 제33조의2에 근거하여 시행되고 있다. 재난관리평가는 재난관리는 단계 별 6개 분야에 대한 관리실태를 평가하고 있으며 평가분야는 기관의 재난관리 역량 진단을 위해 구성된 정량‧정성지표를 활용하여 공통(조직‧인력 운영, 예산 확대, 인터뷰 등), 예방(교육‧홍 보, 재해 저감활동, 방재시설 관리 등), 대비(매뉴얼 관리‧개선, 훈련 등), 대응(초동조치 역량, 실제 대응사례 등), 복구(복구사업 관리 등), 가감점 부문에 대해서 총 44개 지표를 바탕으로 평 가하고 있다. 평가는 계획 수립 → 평가 실시 → 결과 확정‧통보 → 결과 환류의 과정으로 이루어진다.', 유사도: 0.00)"
     ],
     "40": [
-      "Table 40 -X-> 41: 타이틀이 다름 ('재난관리평가는 재난관리행정에 대한 평가 과정을 통해 평가받는 재난관리책임기관(중앙행정 기관, 공공기관, 지방자치단체)의 재난관리역량 제고로 자율과 책임행정을 강화하기 위하여 「재 난 및 안전관리 기본법」 제33조의2에 근거하여 시행되고 있다. 재난관리평가는 재난관리는 단계 별 6개 분야에 대한 관리실태를 평가하고 있으며 평가분야는 기관의 재난관리 역량 진단을 위해 구성된 정량‧정성지표를 활용하여 공통(조직‧인력 운영, 예산 확대, 인터뷰 등), 예방(교육‧홍 보, 재해 저감활동, 방재시설 관리 등), 대비(매뉴얼 관리‧개선, 훈련 등), 대응(초동조치 역량, 실제 대응사례 등), 복구(복구사업 관리 등), 가감점 부문에 대해서 총 44개 지표를 바탕으로 평 가하고 있다. 평가는 계획 수립 → 평가 실시 → 결과 확정‧통보 → 결과 환류의 과정으로 이루어진다.' vs '표 3.8 재난관리평가 평가체계', 유사도: 0.08)"
+      "Table 40 -X-> 41: 타이틀이 다름 ('재난관리평가는 재난관리행정에 대한 평가 과정을 통해 평가받는 재난관리책임기관(중앙행정 기관, 공공기관, 지방자치단체)의 재난관리역량 제고로 자율과 책임행정을 강화하기 위하여 「재 난 및 안전관리 기본법」 제33조의2에 근거하여 시행되고 있다. 재난관리평가는 재난관리는 단계 별 6개 분야에 대한 관리실태를 평가하고 있으며 평가분야는 기관의 재난관리 역량 진단을 위해 구성된 정량‧정성지표를 활용하여 공통(조직‧인력 운영, 예산 확대, 인터뷰 등), 예방(교육‧홍 보, 재해 저감활동, 방재시설 관리 등), 대비(매뉴얼 관리‧개선, 훈련 등), 대응(초동조치 역량, 실제 대응사례 등), 복구(복구사업 관리 등), 가감점 부문에 대해서 총 44개 지표를 바탕으로 평 가하고 있다. 평가는 계획 수립 → 평가 실시 → 결과 확정‧통보 → 결과 환류의 과정으로 이루어진다.' vs '표 3.8 재난관리평가 평가체계', 유사도: 0.00)"
     ],
     "41": [
-      "Table 41 -X-> 42: 타이틀이 다름 ('표 3.8 재난관리평가 평가체계' vs '(계속)', 유사도: 0.08)"
+      "Table 41 -X-> 42: 타이틀이 다름 ('표 3.8 재난관리평가 평가체계' vs '(계속)', 유사도: 0.00)"
     ],
     "42": [
       "Table 42 -X-> 43: 같은 페이지의 다른 테이블 ('(계속)' vs '표 3.9 재난관리평가 지표 구성', 유사도: 0.00)"
@@ -56331,64 +55911,64 @@
       "Table 46 -X-> 47: 페이지가 너무 멀리 떨어져 있음"
     ],
     "47": [
-      "Table 47 -X-> 48: 타이틀이 다름 ('표 3.11 이행점검을 위한 평가 이행지표' vs '개선권고일  이후  기한  내(1개월  이내)  이행계획서를  제출하였나?', 유사도: 0.16)"
+      "Table 47 -X-> 48: 타이틀이 다름 ('표 3.11 이행점검을 위한 평가 이행지표' vs '개선권고일  이후  기한  내(1개월  이내)  이행계획서를  제출하였나?', 유사도: 0.00)"
     ],
     "48": [
-      "Table 48 -X-> 49: 같은 페이지의 다른 테이블 ('개선권고일  이후  기한  내(1개월  이내)  이행계획서를  제출하였나?' vs '-  개선과제  도출  목적  맞게  계획서  내용에  충실히  반영하였나?', 유사도: 0.46)"
+      "Table 48 -X-> 49: 같은 페이지의 다른 테이블 ('개선권고일  이후  기한  내(1개월  이내)  이행계획서를  제출하였나?' vs '-  개선과제  도출  목적  맞게  계획서  내용에  충실히  반영하였나?', 유사도: 0.00)"
     ],
     "49": [
-      "Table 49 -X-> 50: 같은 페이지의 다른 테이블 ('-  개선과제  도출  목적  맞게  계획서  내용에  충실히  반영하였나?' vs '-  이행시  예상되는  위험요인  및  극복방안을  제시하였나?', 유사도: 0.23)"
+      "Table 49 -X-> 50: 같은 페이지의 다른 테이블 ('-  개선과제  도출  목적  맞게  계획서  내용에  충실히  반영하였나?' vs '-  이행시  예상되는  위험요인  및  극복방안을  제시하였나?', 유사도: 0.00)"
     ],
     "50": [
-      "Table 50 -X-> 51: 같은 페이지의 다른 테이블 ('-  이행시  예상되는  위험요인  및  극복방안을  제시하였나?' vs '-  추진단계별  추진내용을  구분하여  제시하였나?', 유사도: 0.35)"
+      "Table 50 -X-> 51: 같은 페이지의 다른 테이블 ('-  이행시  예상되는  위험요인  및  극복방안을  제시하였나?' vs '-  추진단계별  추진내용을  구분하여  제시하였나?', 유사도: 0.00)"
     ],
     "51": [
-      "Table 51 -X-> 52: 같은 페이지의 다른 테이블 ('-  추진단계별  추진내용을  구분하여  제시하였나?' vs '-  이행  기간 ․ 단계 고려한 기간설정이 적정하게 제시하였나?', 유사도: 0.43)"
+      "Table 51 -X-> 52: 같은 페이지의 다른 테이블 ('-  추진단계별  추진내용을  구분하여  제시하였나?' vs '-  이행  기간 ․ 단계 고려한 기간설정이 적정하게 제시하였나?', 유사도: 0.00)"
     ],
     "52": [
-      "Table 52 -X-> 53: 타이틀이 다름 ('-  이행  기간 ․ 단계 고려한 기간설정이 적정하게 제시하였나?' vs '채점기준', 유사도: 0.05)"
+      "Table 52 -X-> 53: 타이틀이 다름 ('-  이행  기간 ․ 단계 고려한 기간설정이 적정하게 제시하였나?' vs '채점기준', 유사도: 0.00)"
     ],
     "53": [
       "Table 53 -X-> 54: 같은 페이지의 다른 테이블 ('채점기준' vs '최종  산출물의  효과를  제시하였나?', 유사도: 0.00)"
     ],
     "54": [
-      "Table 54 -X-> 55: 타이틀이 다름 ('최종  산출물의  효과를  제시하였나?' vs '표 3.13 이행결과 평가 부문별  평가기준 및 가중치', 유사도: 0.06)"
+      "Table 54 -X-> 55: 타이틀이 다름 ('최종  산출물의  효과를  제시하였나?' vs '표 3.13 이행결과 평가 부문별  평가기준 및 가중치', 유사도: 0.00)"
     ],
     "55": [
-      "Table 55 -X-> 56: 같은 페이지의 다른 테이블 ('표 3.13 이행결과 평가 부문별  평가기준 및 가중치' vs '채점기준  :  각  평가지표별로', 유사도: 0.33)"
+      "Table 55 -X-> 56: 같은 페이지의 다른 테이블 ('표 3.13 이행결과 평가 부문별  평가기준 및 가중치' vs '채점기준  :  각  평가지표별로', 유사도: 0.00)"
     ],
     "56": [
-      "Table 56 -X-> 57: 같은 페이지의 다른 테이블 ('채점기준  :  각  평가지표별로' vs '표 3.14 이행점검 평가 평가등급', 유사도: 0.31)"
+      "Table 56 -X-> 57: 같은 페이지의 다른 테이블 ('채점기준  :  각  평가지표별로' vs '표 3.14 이행점검 평가 평가등급', 유사도: 0.00)"
     ],
     "57": [
-      "Table 57 -X-> 58: 타이틀이 다름 ('표 3.14 이행점검 평가 평가등급' vs '표 3.15 장기적인 측면에서 평가부문 및 평가지표', 유사도: 0.32)"
+      "Table 57 -X-> 58: 타이틀이 다름 ('표 3.14 이행점검 평가 평가등급' vs '표 3.15 장기적인 측면에서 평가부문 및 평가지표', 유사도: 0.00)"
     ],
     "58": [
-      "Table 58 -X-> 59: 타이틀이 다름 ('표 3.15 장기적인 측면에서 평가부문 및 평가지표' vs '표 3.16 투입단계 평가지표 별 평가기준', 유사도: 0.42)"
+      "Table 58 -X-> 59: 타이틀이 다름 ('표 3.15 장기적인 측면에서 평가부문 및 평가지표' vs '표 3.16 투입단계 평가지표 별 평가기준', 유사도: 0.00)"
     ],
     "59": [
-      "Table 59 -X-> 60: 연결 조건 미충족"
+      "Table 59 -X-> 60: 같은 페이지의 다른 테이블 ('표 3.16 투입단계 평가지표 별 평가기준' vs '표 3.17 과정단계 평가지표별 평가기준', 유사도: 0.00)"
     ],
     "61": [
       "Table 61 -X-> 62: 두 번째 테이블에 새로운 타이틀 시작 ('표 3.18 산출 및 결과단계 평가지표별 평가기준')"
     ],
     "62": [
-      "Table 62 -X-> 63: 타이틀이 다름 ('표 3.18 산출 및 결과단계 평가지표별 평가기준' vs '표 3.19 이행평가 종합 등급의 구분', 유사도: 0.33)"
+      "Table 62 -X-> 63: 타이틀이 다름 ('표 3.18 산출 및 결과단계 평가지표별 평가기준' vs '표 3.19 이행평가 종합 등급의 구분', 유사도: 0.00)"
     ],
     "63": [
       "Table 63 -X-> 64: 페이지가 너무 멀리 떨어져 있음"
     ],
     "64": [
-      "Table 64 -X-> 65: 연결 조건 미충족"
+      "Table 64 -X-> 65: 타이틀이 다름 ('표 3.20 재난관리평가 내 이행점검 평가지표 반영' vs '표 3.21 재난관리평가 평가지표별 평균 배점', 유사도: 0.00)"
     ],
     "65": [
-      "Table 65 -X-> 66: 같은 페이지의 다른 테이블 ('표 3.21 재난관리평가 평가지표별 평균 배점' vs '표 3.22 이행평가 종합점수 재난관리평가 내 적용', 유사도: 0.58)"
+      "Table 65 -X-> 66: 같은 페이지의 다른 테이블 ('표 3.21 재난관리평가 평가지표별 평균 배점' vs '표 3.22 이행평가 종합점수 재난관리평가 내 적용', 유사도: 0.00)"
     ],
     "66": [
-      "Table 66 -X-> 67: 타이틀이 다름 ('표 3.22 이행평가 종합점수 재난관리평가 내 적용' vs '표 3.23 물류창고 화재 재발 방지대책 개선권고 추진기관', 유사도: 0.27)"
+      "Table 66 -X-> 67: 타이틀이 다름 ('표 3.22 이행평가 종합점수 재난관리평가 내 적용' vs '표 3.23 물류창고 화재 재발 방지대책 개선권고 추진기관', 유사도: 0.00)"
     ],
     "67": [
-      "Table 67 -X-> 68: 연결 조건 미충족"
+      "Table 67 -X-> 68: 타이틀이 다름 ('표 3.23 물류창고 화재 재발 방지대책 개선권고 추진기관' vs '표 3.24 물류창고 화재 재발 방지대책 추진 세부과제 35건', 유사도: 0.00)"
     ],
     "69": [
       "Table 69 -X-> 70: 두 번째 테이블에 새로운 타이틀 시작 ('표 3.25 이행계획 수립 평가부문의 이행점검 평가 결과')"
@@ -56400,10 +55980,13 @@
       "Table 73 -X-> 74: 두 번째 테이블에 새로운 타이틀 시작 ('표 3.27 이행점검 평가 적용 결과')"
     ],
     "74": [
-      "Table 74 -X-> 75: 연결 조건 미충족"
+      "Table 74 -X-> 75: 타이틀이 다름 ('표 3.27 이행점검 평가 적용 결과' vs '표 3.28 이행점검 평가 적용 시 개선이 필요한 사항', 유사도: 0.00)"
     ],
     "75": [
       "Table 75 -X-> 76: 페이지가 너무 멀리 떨어져 있음"
+    ],
+    "76": [
+      "Table 76 -X-> 77: 타이틀이 다름 ('표 4.1 이행 점검 및 확인과 관련한 법령과 규정' vs '표 4.2 이행 점검 및 평가 관련한 법안 개정(안)', 유사도: 0.00)"
     ],
     "77": [
       "Table 77 -X-> 78: 페이지가 너무 멀리 떨어져 있음"
@@ -56412,22 +55995,22 @@
       "Table 78 -X-> 79: 페이지가 너무 멀리 떨어져 있음"
     ],
     "79": [
-      "Table 79 -X-> 80: 타이틀이 다름 ('출처:  미국  연방교통안전위원회 홈페이지(https://www.ntsb.gov/)' vs '조치상태에 대해서는 이행(closed)과 미이행(open)으로 크게 구분하고 세부적으로 이행 (closed)은 11등급, 즉 CEX(초과 달성), CAA(조치 완료), CAAA(대체방식으로 완료), CUA (거부),  CUAN(응답없음),  CR(재고),  CNLA(만료),  CS(대체처리),  CAAS·CAAAS·  CUAS(대 체)으로 분류하여 공개하고 있다. 미이행(open)은 OAA(적절한 계획 제출), OAAR(적절한 대 체 계획 제출), OUA(부적절한 계획 제출), ORR(응답 검토중), OAR(응답 대기 중)로 5개 등 급으로 분류하고 있다. 이에 대해서 상세히 정리하여 설명하면 다음 표 5.1과 같다.', 유사도: 0.13)"
+      "Table 79 -X-> 80: 타이틀이 다름 ('출처:  미국  연방교통안전위원회 홈페이지(https://www.ntsb.gov/)' vs '조치상태에 대해서는 이행(closed)과 미이행(open)으로 크게 구분하고 세부적으로 이행 (closed)은 11등급, 즉 CEX(초과 달성), CAA(조치 완료), CAAA(대체방식으로 완료), CUA (거부),  CUAN(응답없음),  CR(재고),  CNLA(만료),  CS(대체처리),  CAAS·CAAAS·  CUAS(대 체)으로 분류하여 공개하고 있다. 미이행(open)은 OAA(적절한 계획 제출), OAAR(적절한 대 체 계획 제출), OUA(부적절한 계획 제출), ORR(응답 검토중), OAR(응답 대기 중)로 5개 등 급으로 분류하고 있다. 이에 대해서 상세히 정리하여 설명하면 다음 표 5.1과 같다.', 유사도: 0.00)"
     ],
     "80": [
-      "Table 80 -X-> 81: 타이틀이 다름 ('조치상태에 대해서는 이행(closed)과 미이행(open)으로 크게 구분하고 세부적으로 이행 (closed)은 11등급, 즉 CEX(초과 달성), CAA(조치 완료), CAAA(대체방식으로 완료), CUA (거부),  CUAN(응답없음),  CR(재고),  CNLA(만료),  CS(대체처리),  CAAS·CAAAS·  CUAS(대 체)으로 분류하여 공개하고 있다. 미이행(open)은 OAA(적절한 계획 제출), OAAR(적절한 대 체 계획 제출), OUA(부적절한 계획 제출), ORR(응답 검토중), OAR(응답 대기 중)로 5개 등 급으로 분류하고 있다. 이에 대해서 상세히 정리하여 설명하면 다음 표 5.1과 같다.' vs '표 5.1 미국의 NTSB 이행결과 공개', 유사도: 0.13)"
+      "Table 80 -X-> 81: 타이틀이 다름 ('조치상태에 대해서는 이행(closed)과 미이행(open)으로 크게 구분하고 세부적으로 이행 (closed)은 11등급, 즉 CEX(초과 달성), CAA(조치 완료), CAAA(대체방식으로 완료), CUA (거부),  CUAN(응답없음),  CR(재고),  CNLA(만료),  CS(대체처리),  CAAS·CAAAS·  CUAS(대 체)으로 분류하여 공개하고 있다. 미이행(open)은 OAA(적절한 계획 제출), OAAR(적절한 대 체 계획 제출), OUA(부적절한 계획 제출), ORR(응답 검토중), OAR(응답 대기 중)로 5개 등 급으로 분류하고 있다. 이에 대해서 상세히 정리하여 설명하면 다음 표 5.1과 같다.' vs '표 5.1 미국의 NTSB 이행결과 공개', 유사도: 0.00)"
     ],
     "81": [
-      "Table 81 -X-> 82: 연결 조건 미충족"
+      "Table 81 -X-> 82: 타이틀이 다름 ('표 5.1 미국의 NTSB 이행결과 공개' vs '표 5.2 미국의 CSB 이행결과 공개', 유사도: 0.00)"
     ],
     "82": [
-      "Table 82 -X-> 83: 헤더는 동일하지만 키값이 겹침 (6개 중복)"
+      "Table 82 -X-> 83: 타이틀이 다름 ('표 5.2 미국의 CSB 이행결과 공개' vs '표 5.3 스웨덴의 SHK 이행결과 공개', 유사도: 0.00)"
     ],
     "83": [
-      "Table 83 -X-> 84: 타이틀이 다름 ('표 5.3 스웨덴의 SHK 이행결과 공개' vs '표 5.4 중앙행정기관 정부업무평가 결과 공개 여부 및 방식 현황', 유사도: 0.32)"
+      "Table 83 -X-> 84: 타이틀이 다름 ('표 5.3 스웨덴의 SHK 이행결과 공개' vs '표 5.4 중앙행정기관 정부업무평가 결과 공개 여부 및 방식 현황', 유사도: 0.00)"
     ],
     "84": [
-      "Table 84 -X-> 85: 같은 페이지의 다른 테이블 ('표 5.4 중앙행정기관 정부업무평가 결과 공개 여부 및 방식 현황' vs '표 5.5 주관부처별 정부업무평가(개별평가) 공개 방식 및 현황', 유사도: 0.68)"
+      "Table 84 -X-> 85: 같은 페이지의 다른 테이블 ('표 5.4 중앙행정기관 정부업무평가 결과 공개 여부 및 방식 현황' vs '표 5.5 주관부처별 정부업무평가(개별평가) 공개 방식 및 현황', 유사도: 0.00)"
     ],
     "86": [
       "Table 86 -X-> 87: 두 번째 테이블에 새로운 타이틀 시작 ('표 5.6 행정안전부 개별 평가 공개 현황')"
@@ -56436,28 +56019,28 @@
       "Table 87 -X-> 88: 페이지가 너무 멀리 떨어져 있음"
     ],
     "88": [
-      "Table 88 -X-> 89: 타이틀이 다름 ('표 5.8 이행결과 조치 상태 및 평가등급' vs '표 5.9 이행점검 평가 결과 대국민 공개 방안', 유사도: 0.47)"
+      "Table 88 -X-> 89: 타이틀이 다름 ('표 5.8 이행결과 조치 상태 및 평가등급' vs '표 5.9 이행점검 평가 결과 대국민 공개 방안', 유사도: 0.00)"
     ],
     "90": [
       "Table 90 -X-> 91: 두 번째 테이블에 새로운 타이틀 시작 ('표 5.10  재난안전관리 인력의 전문성의 구성요소')"
     ],
     "91": [
-      "Table 91 -X-> 92: 타이틀이 다름 ('표 5.10  재난안전관리 인력의 전문성의 구성요소' vs '표 5.11 전문가 및 평가자의 역량을 나타내는 중요 요소', 유사도: 0.43)"
+      "Table 91 -X-> 92: 타이틀이 다름 ('표 5.10  재난안전관리 인력의 전문성의 구성요소' vs '표 5.11 전문가 및 평가자의 역량을 나타내는 중요 요소', 유사도: 0.00)"
     ],
     "92": [
-      "Table 92 -X-> 93: 타이틀이 다름 ('표 5.11 전문가 및 평가자의 역량을 나타내는 중요 요소' vs '표 5.12 우수전문가 평가 요소', 유사도: 0.48)"
+      "Table 92 -X-> 93: 타이틀이 다름 ('표 5.11 전문가 및 평가자의 역량을 나타내는 중요 요소' vs '표 5.12 우수전문가 평가 요소', 유사도: 0.00)"
     ],
     "93": [
       "Table 93 -X-> 94: 페이지가 너무 멀리 떨어져 있음"
     ],
     "94": [
-      "Table 94 -X-> 95: 타이틀이 다름 ('표 5.13 전문가 참여 활동 사후 평가항목' vs '표 5.14 우수 전문가 활성화 방안', 유사도: 0.47)"
+      "Table 94 -X-> 95: 타이틀이 다름 ('표 5.13 전문가 참여 활동 사후 평가항목' vs '표 5.14 우수 전문가 활성화 방안', 유사도: 0.00)"
     ],
     "95": [
       "Table 95 -X-> 96: 페이지가 너무 멀리 떨어져 있음"
     ],
     "96": [
-      "Table 96 -X-> 97: 같은 페이지의 다른 테이블 ('서 지 자 료' vs '본  연구는  재난원인조사를  토대로  도출된  개선과제의  이행력을  높이는  방안  마련을  위해,  국내‧외 개선과제의 이행점검‧평가 관련 동향 조사와 문헌 연구를 살펴보고, 개선과제 이행지표 개발과 적용, 현장점검 ･ 평가체계를 구축하고 이행결과 활용을 위한 방안을 마련한다.', 유사도: 0.01)"
+      "Table 96 -X-> 97: 같은 페이지의 다른 테이블 ('서 지 자 료' vs '본  연구는  재난원인조사를  토대로  도출된  개선과제의  이행력을  높이는  방안  마련을  위해,  국내‧외 개선과제의 이행점검‧평가 관련 동향 조사와 문헌 연구를 살펴보고, 개선과제 이행지표 개발과 적용, 현장점검 ･ 평가체계를 구축하고 이행결과 활용을 위한 방안을 마련한다.', 유사도: 0.00)"
     ],
     "97": [
       "Table 97 -X-> 98: 타이틀이 다름 ('본  연구는  재난원인조사를  토대로  도출된  개선과제의  이행력을  높이는  방안  마련을  위해,  국내‧외 개선과제의 이행점검‧평가 관련 동향 조사와 문헌 연구를 살펴보고, 개선과제 이행지표 개발과 적용, 현장점검 ･ 평가체계를 구축하고 이행결과 활용을 위한 방안을 마련한다.' vs 'REPORT DOCUMENTATION PAGE', 유사도: 0.00)"
