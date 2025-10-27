@@ -580,7 +580,7 @@ if __name__ == "__main__":
         sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
         sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
-    input_pdf_dir = "input"
+    input_pdf_dir = "../input"
     merged_json_dir = "merged_tables_output"
     table_json_dir = "table_output"
     output_dir = "visualized_pdfs"

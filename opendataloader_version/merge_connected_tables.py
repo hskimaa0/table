@@ -9,6 +9,7 @@ import re
 import sys
 from pathlib import Path
 from typing import List, Dict, Tuple
+from difflib import SequenceMatcher
 
 # UTF-8 출력 설정
 if sys.stdout.encoding != 'utf-8':
@@ -328,21 +329,38 @@ def calculate_title_similarity(title1: str, title2: str) -> float:
     if t1 == t2:
         return 1.0
 
-    if t1 in t2 or t2 in t1:
-        return 0.8
+    # 차이 부분(diff) 추출
+    matcher = SequenceMatcher(None, t1, t2)
+    diff1_parts = []
+    diff2_parts = []
 
-    # 공통 단어 기반 유사도 (2글자 이상 단어만)
-    words1 = set([w for w in t1.split() if len(w) >= 2])
-    words2 = set([w for w in t2.split() if len(w) >= 2])
+    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+        if tag == 'replace':
+            diff1_parts.append(t1[i1:i2])
+            diff2_parts.append(t2[j1:j2])
+        elif tag == 'delete':
+            diff1_parts.append(t1[i1:i2])
+        elif tag == 'insert':
+            diff2_parts.append(t2[j1:j2])
 
-    if words1 and words2:
-        common = words1 & words2
-        all_words = words1 | words2
-        if common:
-            similarity = len(common) / len(all_words)
-            return similarity
+    diff1 = ''.join(diff1_parts)
+    diff2 = ''.join(diff2_parts)
 
-    return 0.0
+    # 차이가 숫자(와 점)로만 이루어져 있고 다르면 -> 다른 표 번호
+    if diff1 and diff2:
+        if re.match(r'^[\d.]+$', diff1) and re.match(r'^[\d.]+$', diff2):
+            if diff1 != diff2:
+                return 0.0  # 표 번호가 다름 (예: 표 3.3 vs 표 3.4)
+
+    # 전체 유사도 계산
+    ratio = matcher.ratio()
+
+    if ratio >= 0.85:
+        return 1.0
+    elif ratio >= 0.7:
+        return 0.7
+    else:
+        return 0.0
 
 
 def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, str]:
