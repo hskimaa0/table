@@ -19,9 +19,17 @@ def extract_tables_from_json(input_dir: str, output_dir: str):
     for json_file in json_files:
         print(f"처리 중: {json_file.name}")
 
-        # JSON 파일 읽기
-        with open(json_file, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+        try:
+            # JSON 파일 읽기
+            with open(json_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except json.JSONDecodeError as e:
+            print(f"  ✗ JSON 파싱 오류: {e}")
+            print(f"  → 파일이 비어있거나 손상됨\n")
+            continue
+        except Exception as e:
+            print(f"  ✗ 파일 읽기 오류: {e}\n")
+            continue
 
         # tables 데이터만 추출
         if 'tables' in data:

@@ -76,7 +76,76 @@ def is_text_in_any_table(text_bbox: Dict, all_tables: List[Dict], exclude_table:
     return False
 
 
-def find_table_title(table: Dict, all_texts: List[Dict], all_tables: List[Dict] = None, page_height: float = 792.0) -> str:
+def detect_repeated_headers_footers(all_texts: List[Dict], min_pages: int = 3) -> set:
+    """문서 내에서 반복되는 header/footer 텍스트 패턴 감지"""
+    # 페이지별 텍스트 위치 수집 (상단 100px, 하단 100px)
+    page_top_texts = {}  # {page_no: [(text, y_position)]}
+    page_bottom_texts = {}
+
+    for text_obj in all_texts:
+        text_content = text_obj.get('text', '').strip()
+        if not text_content or len(text_content) < 2:
+            continue
+
+        page_no = text_obj.get('prov', [{}])[0].get('page_no', -1)
+        if page_no == -1:
+            continue
+
+        text_bbox = text_obj.get('prov', [{}])[0].get('bbox', {})
+        if not text_bbox:
+            continue
+
+        coord_origin = text_bbox.get('coord_origin', 'BOTTOMLEFT')
+
+        if coord_origin == 'BOTTOMLEFT':
+            y_pos = text_bbox.get('t', 0)  # 상단 y 좌표
+            # 상단 100px 내의 텍스트 (y > 692 for 792 height)
+            if y_pos > 692:
+                if page_no not in page_top_texts:
+                    page_top_texts[page_no] = []
+                page_top_texts[page_no].append(text_content)
+            # 하단 100px 내의 텍스트 (y < 100)
+            elif y_pos < 100:
+                if page_no not in page_bottom_texts:
+                    page_bottom_texts[page_no] = []
+                page_bottom_texts[page_no].append(text_content)
+        else:  # TOPLEFT
+            y_pos = text_bbox.get('t', 0)
+            # 상단 100px 내의 텍스트 (y < 100)
+            if y_pos < 100:
+                if page_no not in page_top_texts:
+                    page_top_texts[page_no] = []
+                page_top_texts[page_no].append(text_content)
+            # 하단 100px 내의 텍스트 (y > 692 for 792 height)
+            elif y_pos > 692:
+                if page_no not in page_bottom_texts:
+                    page_bottom_texts[page_no] = []
+                page_bottom_texts[page_no].append(text_content)
+
+    # 반복되는 텍스트 찾기
+    repeated_texts = set()
+
+    # 텍스트 빈도 계산
+    from collections import Counter
+
+    # 상단 텍스트 중 여러 페이지에서 반복되는 것
+    all_top_texts = [text for texts in page_top_texts.values() for text in texts]
+    top_counter = Counter(all_top_texts)
+    for text, count in top_counter.items():
+        if count >= min_pages:  # 최소 N개 페이지에서 반복
+            repeated_texts.add(text)
+
+    # 하단 텍스트 중 여러 페이지에서 반복되는 것
+    all_bottom_texts = [text for texts in page_bottom_texts.values() for text in texts]
+    bottom_counter = Counter(all_bottom_texts)
+    for text, count in bottom_counter.items():
+        if count >= min_pages:
+            repeated_texts.add(text)
+
+    return repeated_texts
+
+
+def find_table_title(table: Dict, all_texts: List[Dict], all_tables: List[Dict] = None, page_height: float = 792.0, repeated_patterns: set = None) -> str:
     """테이블 위 300px 내의 텍스트를 타이틀로 추출 (다른 테이블 안의 텍스트 제외)"""
     table_bbox = table.get('prov', [{}])[0].get('bbox', {})
     table_page = table.get('prov', [{}])[0].get('page_no', -1)
@@ -162,6 +231,10 @@ def find_table_title(table: Dict, all_texts: List[Dict], all_tables: List[Dict] 
             if len(title_text.strip()) < 3:
                 continue
 
+            # 반복되는 header/footer 패턴 제외
+            if repeated_patterns and title_text in repeated_patterns:
+                continue
+
             # 페이지 헤더/장 제목 패턴 제외
             # "제X장", "│ 숫자" 패턴이 포함된 경우
             import re
@@ -192,7 +265,7 @@ def find_table_title(table: Dict, all_texts: List[Dict], all_tables: List[Dict] 
     return ""
 
 
-def extract_table_info(table: Dict, all_texts: List[Dict] = None, all_tables: List[Dict] = None) -> Dict:
+def extract_table_info(table: Dict, all_texts: List[Dict] = None, all_tables: List[Dict] = None, repeated_patterns: set = None) -> Dict:
     """테이블에서 필요한 정보 추출"""
     cells = table.get('data', {}).get('table_cells', [])
     page_no = table.get('prov', [{}])[0].get('page_no', -1)
@@ -205,20 +278,48 @@ def extract_table_info(table: Dict, all_texts: List[Dict] = None, all_tables: Li
     header_cells = [cell for cell in cells if cell.get('column_header', False)]
 
     if header_cells:
+        # 헤더는 보통 상단 몇 개 행에만 있으므로, 최대 행 번호 확인
+        max_header_row = max([cell.get('end_row_offset_idx', 0) for cell in header_cells]) if header_cells else 0
+
+        # 상단 5개 행 이내의 헤더만 사용 (중간 소계 행 등 제외)
+        # 단, 전체 헤더 행이 5개 이하면 그대로 사용
+        header_row_threshold = min(5, max_header_row) if max_header_row > 0 else 5
+
         # 열별로 헤더 셀 그룹화
         headers_by_col = {}
+        merged_headers = []  # 병합된 헤더 셀 (여러 열에 걸친 것)
+
         for cell in header_cells:
             start_col = cell.get('start_col_offset_idx', -1)
             end_col = cell.get('end_col_offset_idx', -1)
+            start_row = cell.get('start_row_offset_idx', -1)
             text = cell.get('text', '').strip()
 
+            # 상단 헤더 영역의 셀만 사용
+            if start_row > header_row_threshold:
+                continue
+
             if text and start_col >= 0:
-                # 셀이 단일 열에만 해당하는 경우만 사용
-                # (여러 열에 걸친 병합 셀은 제외)
-                if end_col - start_col == 1:
+                span = end_col - start_col
+
+                # 단일 열 헤더
+                if span == 1:
                     if start_col not in headers_by_col:
                         headers_by_col[start_col] = []
                     headers_by_col[start_col].append(text)
+                # 병합된 헤더 (여러 열에 걸친 것)
+                elif span > 1:
+                    merged_headers.append({
+                        'text': text,
+                        'start_col': start_col,
+                        'end_col': end_col,
+                        'span': span
+                    })
+                    # 병합된 헤더가 포함하는 각 열에 추가
+                    for col in range(start_col, end_col):
+                        if col not in headers_by_col:
+                            headers_by_col[col] = []
+                        headers_by_col[col].append(text)
 
         # 각 열마다 가장 긴 텍스트를 헤더로 선택
         headers = []
@@ -250,7 +351,7 @@ def extract_table_info(table: Dict, all_texts: List[Dict] = None, all_tables: Li
     # 타이틀 추출
     title = ""
     if all_texts:
-        title = find_table_title(table, all_texts, all_tables)
+        title = find_table_title(table, all_texts, all_tables, repeated_patterns=repeated_patterns)
 
     return {
         'page_no': page_no,
@@ -628,9 +729,9 @@ def merge_tables(table_group: List[Dict]) -> Dict:
     return merged
 
 
-def find_connected_table_groups(tables: List[Dict], all_texts: List[Dict] = None) -> List[List[int]]:
+def find_connected_table_groups(tables: List[Dict], all_texts: List[Dict] = None, repeated_patterns: set = None) -> List[List[int]]:
     """연결된 테이블 그룹 찾기"""
-    table_infos = [extract_table_info(table, all_texts, tables) for table in tables]
+    table_infos = [extract_table_info(table, all_texts, tables, repeated_patterns) for table in tables]
 
     # 페이지 번호순으로 정렬
     sorted_indices = sorted(range(len(table_infos)),
@@ -855,8 +956,15 @@ def process_json_files(input_dir: str, output_dir: str, original_json_dir: str =
                 except Exception as e:
                     print(f"  경고: 원본 JSON 로드 실패: {e}")
 
+        # 반복되는 header/footer 패턴 감지
+        repeated_patterns = set()
+        if all_texts:
+            repeated_patterns = detect_repeated_headers_footers(all_texts, min_pages=3)
+            if repeated_patterns:
+                print(f"  감지된 반복 패턴 {len(repeated_patterns)}개: {list(repeated_patterns)[:5]}")
+
         # 연결된 테이블 그룹 찾기
-        groups, reasons, all_disconnections, table_infos = find_connected_table_groups(tables, all_texts)
+        groups, reasons, all_disconnections, table_infos = find_connected_table_groups(tables, all_texts, repeated_patterns)
 
         # 병합된 그룹만 필터링
         merged_groups = [g for g in groups if len(g) > 1]
