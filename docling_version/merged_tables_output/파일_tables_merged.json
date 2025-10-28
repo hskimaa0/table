@@ -13,7 +13,7 @@
         11
       ],
       "connection_reasons": [
-        "Table 4 -> 5: 헤더가 동일함 (4개 일치)"
+        "Table 4 -> 5: 타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
       ],
       "disconnection_reasons": [
         "Table 5 -X-> 6: 두 번째 테이블에 새로운 타이틀 시작 ('ㅇ 컨설팅 요구사항')"
@@ -2103,6 +2103,858 @@
     {
       "group_id": 1,
       "table_indices": [
+        6,
+        7
+      ],
+      "pages": [
+        11,
+        12
+      ],
+      "connection_reasons": [
+        "Table 6 -> 7: 타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
+      ],
+      "disconnection_reasons": [
+        "Table 7 -X-> 8: 연결 조건 미충족"
+      ],
+      "merged_table": {
+        "self_ref": "#/tables/6",
+        "parent": {
+          "$ref": "#/body"
+        },
+        "children": [],
+        "content_layer": "body",
+        "label": "table",
+        "prov": [
+          {
+            "page_no": 11,
+            "bbox": {
+              "l": 56.771976470947266,
+              "t": 497.7033386230469,
+              "r": 527.22314453125,
+              "b": 95.9232177734375,
+              "coord_origin": "BOTTOMLEFT"
+            },
+            "charspan": [
+              0,
+              0
+            ]
+          }
+        ],
+        "captions": [],
+        "references": [],
+        "footnotes": [],
+        "data": {
+          "table_cells": [
+            {
+              "bbox": {
+                "l": 83.235,
+                "t": 350.459,
+                "r": 148.12,
+                "b": 360.398,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 2,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 2,
+              "text": "요구사항 분류",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 179.183,
+                "t": 350.459,
+                "r": 254.142,
+                "b": 360.398,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "컨설팅 요구사항",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 100.386,
+                "t": 371.796,
+                "r": 140.323,
+                "b": 381.735,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 2,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 2,
+              "text": "고유번호",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 181.222,
+                "t": 371.796,
+                "r": 219.968,
+                "b": 381.735,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "CSR-001",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 83.235,
+                "t": 393.012,
+                "r": 148.12,
+                "b": 402.952,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 2,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 2,
+              "text": "요구사항 명칭",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 181.222,
+                "t": 393.012,
+                "r": 356.087,
+                "b": 402.952,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "경영환경 분석 및 정보기술 환경 분석",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 66.924,
+                "t": 532.9,
+                "r": 106.862,
+                "b": 542.8389999999999,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "요구사항",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 66.924,
+                "t": 548.842,
+                "r": 106.862,
+                "b": 558.781,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "상세설명",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 134.567,
+                "t": 414.349,
+                "r": 154.596,
+                "b": 424.288,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "정의",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 181.222,
+                "t": 414.349,
+                "r": 301.156,
+                "b": 424.288,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "외부환경 및 내부환경분석",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 124.612,
+                "t": 551.5989999999999,
+                "r": 164.55,
+                "b": 561.538,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "세부내용",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 176.304,
+                "t": 436.936,
+                "r": 523.516,
+                "b": 677.332,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "○ 내 ・ 외부 업무 환경분석을 통한 정보화전략계획 수립 - 배출권거래제 적합성 평가 및 인증 관련 , 제도, 업무절차 분석 - 공단 내부 전략, 업무, 조직, 정보화 경영 환경 변화 분석 - 조직 내부활동 및 현행 비즈니스 프로세스 분석 - 조직 프로세스 이슈 및 요구사항 분석 - 현행절차 분석, 문제점 파악을 통해 개선이 필요한 시사점 도출 ○ 경영 환경 분석 - 조직, 유관기관 및 고객의 특성 분석, 핵심성공요소 파악, 제도적 타당성 분석 및 외부환경(시장, 고객, 산업) 분석 ○ 정보기술 환경 분석 - 최근 정보기술동향(빅데이터, 클라우드, AI, RPA 등) 및 기술적 변화 요인과 적용 타당성 분석 - 정보화(IT) 및 비즈니스 동향 분석 ○ 인프라(HW/SW/네트웍/기존 정보자원) 환경 분석 - 온실가스종합관리시스템(NGMS) 인프라를활용",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 93.189,
+                "t": 698.079,
+                "r": 138.165,
+                "b": 708.018,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 2,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 2,
+              "text": "산출 정보",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 178.583,
+                "t": 690.048,
+                "r": 523.528,
+                "b": 715.9300000000001,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "환경분석서, 핵심성공요소(CSF), 주요정보화 요구사항(CIR), CSF/CIR 연관도, 주요정보기술 동향, 정보기술 적용성",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 83.235,
+                "t": 729.125,
+                "r": 148.119,
+                "b": 739.064,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 2,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 2,
+              "text": "관련 요구사항",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 178.583,
+                "t": 729.125,
+                "r": 436.804,
+                "b": 739.064,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "정보화 목적 및 범위는 구축부터 운영까지 모든 단계를 고려",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 83.235,
+                "t": 94.53899999999999,
+                "r": 148.12,
+                "b": 104.47799999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "요구사항 출처",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 178.583,
+                "t": 94.53899999999999,
+                "r": 389.429,
+                "b": 104.47799999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "SW 사업 대가산정 가이드 > ISP/BPR 업무활동",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          "num_rows": 7,
+          "num_cols": 3,
+          "grid": [
+            [
+              {
+                "bbox": {
+                  "l": 83.235,
+                  "t": 350.459,
+                  "r": 148.12,
+                  "b": 360.398,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 2,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 2,
+                "text": "요구사항 분류",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 83.235,
+                  "t": 350.459,
+                  "r": 148.12,
+                  "b": 360.398,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 2,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 2,
+                "text": "요구사항 분류",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 179.183,
+                  "t": 350.459,
+                  "r": 254.142,
+                  "b": 360.398,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "컨설팅 요구사항",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 100.386,
+                  "t": 371.796,
+                  "r": 140.323,
+                  "b": 381.735,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 2,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 2,
+                "text": "고유번호",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 100.386,
+                  "t": 371.796,
+                  "r": 140.323,
+                  "b": 381.735,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 2,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 2,
+                "text": "고유번호",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 181.222,
+                  "t": 371.796,
+                  "r": 219.968,
+                  "b": 381.735,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "CSR-001",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 83.235,
+                  "t": 393.012,
+                  "r": 148.12,
+                  "b": 402.952,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 2,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 2,
+                "text": "요구사항 명칭",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 83.235,
+                  "t": 393.012,
+                  "r": 148.12,
+                  "b": 402.952,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 2,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 2,
+                "text": "요구사항 명칭",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 181.222,
+                  "t": 393.012,
+                  "r": 356.087,
+                  "b": 402.952,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "경영환경 분석 및 정보기술 환경 분석",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 66.924,
+                  "t": 548.842,
+                  "r": 106.862,
+                  "b": 558.781,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "상세설명",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 134.567,
+                  "t": 414.349,
+                  "r": 154.596,
+                  "b": 424.288,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "정의",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 181.222,
+                  "t": 414.349,
+                  "r": 301.156,
+                  "b": 424.288,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "외부환경 및 내부환경분석",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 66.924,
+                  "t": 532.9,
+                  "r": 106.862,
+                  "b": 542.8389999999999,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "요구사항",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 124.612,
+                  "t": 551.5989999999999,
+                  "r": 164.55,
+                  "b": 561.538,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "세부내용",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 176.304,
+                  "t": 436.936,
+                  "r": 523.516,
+                  "b": 677.332,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "○ 내 ・ 외부 업무 환경분석을 통한 정보화전략계획 수립 - 배출권거래제 적합성 평가 및 인증 관련 , 제도, 업무절차 분석 - 공단 내부 전략, 업무, 조직, 정보화 경영 환경 변화 분석 - 조직 내부활동 및 현행 비즈니스 프로세스 분석 - 조직 프로세스 이슈 및 요구사항 분석 - 현행절차 분석, 문제점 파악을 통해 개선이 필요한 시사점 도출 ○ 경영 환경 분석 - 조직, 유관기관 및 고객의 특성 분석, 핵심성공요소 파악, 제도적 타당성 분석 및 외부환경(시장, 고객, 산업) 분석 ○ 정보기술 환경 분석 - 최근 정보기술동향(빅데이터, 클라우드, AI, RPA 등) 및 기술적 변화 요인과 적용 타당성 분석 - 정보화(IT) 및 비즈니스 동향 분석 ○ 인프라(HW/SW/네트웍/기존 정보자원) 환경 분석 - 온실가스종합관리시스템(NGMS) 인프라를활용",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 93.189,
+                  "t": 698.079,
+                  "r": 138.165,
+                  "b": 708.018,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 2,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 6,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 2,
+                "text": "산출 정보",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 93.189,
+                  "t": 698.079,
+                  "r": 138.165,
+                  "b": 708.018,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 2,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 6,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 2,
+                "text": "산출 정보",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 178.583,
+                  "t": 690.048,
+                  "r": 523.528,
+                  "b": 715.9300000000001,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 6,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "환경분석서, 핵심성공요소(CSF), 주요정보화 요구사항(CIR), CSF/CIR 연관도, 주요정보기술 동향, 정보기술 적용성",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 83.235,
+                  "t": 729.125,
+                  "r": 148.119,
+                  "b": 739.064,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 2,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 2,
+                "text": "관련 요구사항",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 83.235,
+                  "t": 729.125,
+                  "r": 148.119,
+                  "b": 739.064,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 2,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 2,
+                "text": "관련 요구사항",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 178.583,
+                  "t": 729.125,
+                  "r": 436.804,
+                  "b": 739.064,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "정보화 목적 및 범위는 구축부터 운영까지 모든 단계를 고려",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ]
+          ]
+        },
+        "annotations": [],
+        "merged_from_pages": [
+          11,
+          12
+        ]
+      }
+    },
+    {
+      "group_id": 2,
+      "table_indices": [
         11,
         12
       ],
@@ -2111,7 +2963,7 @@
         15
       ],
       "connection_reasons": [
-        "Table 11 -> 12: 타이틀이 있는 헤더 테이블 뒤 데이터 테이블 (연속 페이지)"
+        "Table 11 -> 12: 타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
       ],
       "disconnection_reasons": [
         "Table 12 -X-> 13: 두 번째 테이블에 새로운 타이틀 시작 ('ㅇ 제약 요구사항')"
@@ -2782,7 +3634,7 @@
       }
     },
     {
-      "group_id": 2,
+      "group_id": 3,
       "table_indices": [
         20,
         21
@@ -3388,7 +4240,7 @@
       }
     },
     {
-      "group_id": 3,
+      "group_id": 4,
       "table_indices": [
         26,
         27
@@ -3752,7 +4604,7 @@
       }
     },
     {
-      "group_id": 4,
+      "group_id": 5,
       "table_indices": [
         29,
         30
@@ -4881,7 +5733,7 @@
       }
     },
     {
-      "group_id": 5,
+      "group_id": 6,
       "table_indices": [
         31,
         32
@@ -4891,7 +5743,7 @@
         27
       ],
       "connection_reasons": [
-        "Table 31 -> 32: 헤더가 동일함 (6개 일치)"
+        "Table 31 -> 32: 타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
       ],
       "disconnection_reasons": [
         "Table 32 -X-> 33: 두 번째 테이블에 새로운 타이틀 시작 ('□ 요소기술 분야')"
@@ -7307,7 +8159,7 @@
       }
     },
     {
-      "group_id": 6,
+      "group_id": 7,
       "table_indices": [
         33,
         34
@@ -7317,7 +8169,7 @@
         28
       ],
       "connection_reasons": [
-        "Table 33 -> 34: 헤더가 동일함 (5개 일치)"
+        "Table 33 -> 34: 타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
       ],
       "disconnection_reasons": [
         "Table 34 -X-> 35: 연결 조건 미충족"
@@ -8950,7 +9802,7 @@
       }
     },
     {
-      "group_id": 7,
+      "group_id": 8,
       "table_indices": [
         36,
         37,
@@ -8962,7 +9814,7 @@
         31
       ],
       "connection_reasons": [
-        "Table 36 -> 37: 헤더가 동일함 (4개 일치)",
+        "Table 36 -> 37: 타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)",
         "Table 37 -> 38: 텍스트 연결: 'ｏ 모바일 서비스(앱·웹) 등' -> '구 분'"
       ],
       "disconnection_reasons": [
@@ -13999,7 +14851,7 @@
       }
     },
     {
-      "group_id": 8,
+      "group_id": 9,
       "table_indices": [
         41,
         42
@@ -15829,7 +16681,7 @@
       }
     },
     {
-      "group_id": 9,
+      "group_id": 10,
       "table_indices": [
         44,
         45
@@ -15839,7 +16691,7 @@
         47
       ],
       "connection_reasons": [
-        "Table 44 -> 45: 헤더가 동일함 (3개 일치)"
+        "Table 44 -> 45: 타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
       ],
       "disconnection_reasons": [
         "Table 45 -X-> 46: 두 번째 테이블에 새로운 타이틀 시작 ('위규 수준별로 A~D 등급으로 차등 부과')"
@@ -16459,18 +17311,6 @@
       "disconnection_reason": "Table 3 -X-> 4: 같은 페이지의 다른 테이블 ('□ 요구사항 분류기준' vs '□ 요구사항 목록', 유사도: 0.00)"
     },
     {
-      "table_idx": 6,
-      "page_no": 11,
-      "title": "ㅇ 컨설팅 요구사항",
-      "disconnection_reason": "Table 6 -X-> 7: 연결 조건 미충족"
-    },
-    {
-      "table_idx": 7,
-      "page_no": 12,
-      "title": "",
-      "disconnection_reason": "Table 7 -X-> 8: 연결 조건 미충족"
-    },
-    {
       "table_idx": 8,
       "page_no": 12,
       "title": "",
@@ -16636,9 +17476,6 @@
     ],
     "5": [
       "Table 5 -X-> 6: 두 번째 테이블에 새로운 타이틀 시작 ('ㅇ 컨설팅 요구사항')"
-    ],
-    "6": [
-      "Table 6 -X-> 7: 연결 조건 미충족"
     ],
     "7": [
       "Table 7 -X-> 8: 연결 조건 미충족"

@@ -5,21 +5,24 @@
     {
       "group_id": 0,
       "table_indices": [
+        3,
         4,
         5
       ],
       "pages": [
         7,
+        7,
         8
       ],
       "connection_reasons": [
-        "Table 4 -> 5: 타이틀이 있는 헤더 테이블 뒤 데이터 테이블 (연속 페이지)"
+        "Table 3 -> 4: 타이틀이 같음 ('※ 뒤쪽의 경력증명서 작성방법을 읽고 작성해 주시기 바랍니다.')",
+        "Table 4 -> 5: 타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
       ],
       "disconnection_reasons": [
         "Table 5 -X-> 6: 두 번째 테이블에 새로운 타이틀 시작 ('입증인 인적사항')"
       ],
       "merged_table": {
-        "self_ref": "#/tables/4",
+        "self_ref": "#/tables/3",
         "parent": {
           "$ref": "#/body"
         },
@@ -30,10 +33,10 @@
           {
             "page_no": 7,
             "bbox": {
-              "l": 47.841346740722656,
-              "t": 661.9198913574219,
-              "r": 548.3113403320312,
-              "b": 464.63189697265625,
+              "l": 48.73223876953125,
+              "t": 730.002067565918,
+              "r": 548.29833984375,
+              "b": 672.5596618652344,
               "coord_origin": "BOTTOMLEFT"
             },
             "charspan": [
@@ -47,6 +50,86 @@
         "footnotes": [],
         "data": {
           "table_cells": [
+            {
+              "bbox": {
+                "l": 59.76,
+                "t": 130.519,
+                "r": 91.2,
+                "b": 141.97900000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 3,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "제출인",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 105.48,
+                "t": 116.83399999999995,
+                "r": 124.56,
+                "b": 127.17200000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "성명",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 105.48,
+                "t": 136.63400000000001,
+                "r": 143.52,
+                "b": 146.97199999999998,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "전화번호",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 105.48,
+                "t": 156.55399999999997,
+                "r": 124.56,
+                "b": 166.89200000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "주소",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
             {
               "bbox": {
                 "l": 191.761,
@@ -1328,227 +1411,25 @@
               "fillable": false
             }
           ],
-          "num_rows": 8,
-          "num_cols": 10,
+          "num_rows": 3,
+          "num_cols": 2,
           "grid": [
             [
               {
                 "bbox": {
-                  "l": 191.761,
-                  "t": 195.07899999999995,
-                  "r": 231.961,
-                  "b": 206.539,
+                  "l": 59.76,
+                  "t": 130.519,
+                  "r": 91.2,
+                  "b": 141.97900000000004,
                   "coord_origin": "TOPLEFT"
                 },
-                "row_span": 1,
-                "col_span": 8,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 8,
-                "text": "재직기간",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 191.761,
-                  "t": 195.07899999999995,
-                  "r": 231.961,
-                  "b": 206.539,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 8,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 8,
-                "text": "재직기간",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 191.761,
-                  "t": 195.07899999999995,
-                  "r": 231.961,
-                  "b": 206.539,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 8,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 8,
-                "text": "재직기간",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 191.761,
-                  "t": 195.07899999999995,
-                  "r": 231.961,
-                  "b": 206.539,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 8,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 8,
-                "text": "재직기간",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 191.761,
-                  "t": 195.07899999999995,
-                  "r": 231.961,
-                  "b": 206.539,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 8,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 8,
-                "text": "재직기간",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 191.761,
-                  "t": 195.07899999999995,
-                  "r": 231.961,
-                  "b": 206.539,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 8,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 8,
-                "text": "재직기간",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 191.761,
-                  "t": 195.07899999999995,
-                  "r": 231.961,
-                  "b": 206.539,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 8,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 8,
-                "text": "재직기간",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 191.761,
-                  "t": 195.07899999999995,
-                  "r": 231.961,
-                  "b": 206.539,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 8,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 8,
-                "text": "재직기간",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 327.001,
-                  "t": 186.31899999999996,
-                  "r": 362.281,
-                  "b": 215.29899999999998,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
+                "row_span": 3,
                 "col_span": 1,
                 "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 8,
-                "end_col_offset_idx": 9,
-                "text": "소속 및 직위",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 404.281,
-                  "t": 186.31899999999996,
-                  "r": 510.398,
-                  "b": 215.88400000000001,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 9,
-                "end_col_offset_idx": 10,
-                "text": "담당 업무 내용 구체적으로 작성할 것 ( )",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              }
-            ],
-            [
-              {
-                "bbox": {
-                  "l": 128.16,
-                  "t": 224.60299999999995,
-                  "r": 136.8,
-                  "b": 233.94500000000005,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
                 "start_col_offset_idx": 0,
                 "end_col_offset_idx": 1,
-                "text": "년",
+                "text": "제출인",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -1556,165 +1437,19 @@
               },
               {
                 "bbox": {
-                  "l": 148.32,
-                  "t": 224.60299999999995,
-                  "r": 177.24,
-                  "b": 233.94500000000005,
+                  "l": 105.48,
+                  "t": 116.83399999999995,
+                  "r": 124.56,
+                  "b": 127.17200000000003,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
                 "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "월 일",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 180.72,
-                  "t": 226.09699999999998,
-                  "r": 185.766,
-                  "b": 234.42200000000003,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "~",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 211.44,
-                  "t": 224.60299999999995,
-                  "r": 220.08,
-                  "b": 233.94500000000005,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 231.6,
-                  "t": 224.60299999999995,
-                  "r": 240.24,
-                  "b": 233.94500000000005,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 4,
-                "end_col_offset_idx": 5,
-                "text": "월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 255.961,
-                  "t": 224.60299999999995,
-                  "r": 264.601,
-                  "b": 233.94500000000005,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 5,
-                "end_col_offset_idx": 6,
-                "text": "일",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 281.281,
-                  "t": 224.60299999999995,
-                  "r": 289.921,
-                  "b": 233.94500000000005,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 6,
-                "end_col_offset_idx": 7,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 301.561,
-                  "t": 224.60299999999995,
-                  "r": 318.361,
-                  "b": 233.94500000000005,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 7,
-                "end_col_offset_idx": 8,
-                "text": "개월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 8,
-                "end_col_offset_idx": 9,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 9,
-                "end_col_offset_idx": 10,
-                "text": "",
+                "text": "성명",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -1724,19 +1459,19 @@
             [
               {
                 "bbox": {
-                  "l": 128.16,
-                  "t": 247.40300000000002,
-                  "r": 136.8,
-                  "b": 256.745,
+                  "l": 59.76,
+                  "t": 130.519,
+                  "r": 91.2,
+                  "b": 141.97900000000004,
                   "coord_origin": "TOPLEFT"
                 },
-                "row_span": 1,
+                "row_span": 3,
                 "col_span": 1,
-                "start_row_offset_idx": 2,
+                "start_row_offset_idx": 0,
                 "end_row_offset_idx": 3,
                 "start_col_offset_idx": 0,
                 "end_col_offset_idx": 1,
-                "text": "년",
+                "text": "제출인",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -1744,165 +1479,19 @@
               },
               {
                 "bbox": {
-                  "l": 148.32,
-                  "t": 247.40300000000002,
-                  "r": 177.24,
-                  "b": 256.745,
+                  "l": 105.48,
+                  "t": 136.63400000000001,
+                  "r": 143.52,
+                  "b": 146.97199999999998,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
                 "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "월 일",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 180.72,
-                  "t": 248.89700000000005,
-                  "r": 185.766,
-                  "b": 257.222,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "~",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 211.44,
-                  "t": 247.40300000000002,
-                  "r": 220.08,
-                  "b": 256.745,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 231.6,
-                  "t": 247.40300000000002,
-                  "r": 240.24,
-                  "b": 256.745,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 4,
-                "end_col_offset_idx": 5,
-                "text": "월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 255.961,
-                  "t": 247.40300000000002,
-                  "r": 264.601,
-                  "b": 256.745,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 5,
-                "end_col_offset_idx": 6,
-                "text": "일",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 281.281,
-                  "t": 247.40300000000002,
-                  "r": 289.921,
-                  "b": 256.745,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 6,
-                "end_col_offset_idx": 7,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 301.561,
-                  "t": 247.40300000000002,
-                  "r": 318.361,
-                  "b": 256.745,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 7,
-                "end_col_offset_idx": 8,
-                "text": "개월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 8,
-                "end_col_offset_idx": 9,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 9,
-                "end_col_offset_idx": 10,
-                "text": "",
+                "text": "전화번호",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -1912,19 +1501,19 @@
             [
               {
                 "bbox": {
-                  "l": 128.16,
-                  "t": 270.08299999999997,
-                  "r": 136.8,
-                  "b": 279.42499999999995,
+                  "l": 59.76,
+                  "t": 130.519,
+                  "r": 91.2,
+                  "b": 141.97900000000004,
                   "coord_origin": "TOPLEFT"
                 },
-                "row_span": 1,
+                "row_span": 3,
                 "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 3,
                 "start_col_offset_idx": 0,
                 "end_col_offset_idx": 1,
-                "text": "년",
+                "text": "제출인",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -1932,917 +1521,19 @@
               },
               {
                 "bbox": {
-                  "l": 148.32,
-                  "t": 270.08299999999997,
-                  "r": 156.96,
-                  "b": 279.42499999999995,
+                  "l": 105.48,
+                  "t": 156.55399999999997,
+                  "r": 124.56,
+                  "b": 166.89200000000005,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
                 "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 168.6,
-                  "t": 270.08299999999997,
-                  "r": 185.766,
-                  "b": 279.90200000000004,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "일 ~",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 211.44,
-                  "t": 270.08299999999997,
-                  "r": 220.08,
-                  "b": 279.42499999999995,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 231.6,
-                  "t": 270.08299999999997,
-                  "r": 240.24,
-                  "b": 279.42499999999995,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 4,
-                "end_col_offset_idx": 5,
-                "text": "월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 255.961,
-                  "t": 270.08299999999997,
-                  "r": 264.601,
-                  "b": 279.42499999999995,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 5,
-                "end_col_offset_idx": 6,
-                "text": "일",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 281.281,
-                  "t": 270.08299999999997,
-                  "r": 289.921,
-                  "b": 279.42499999999995,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 6,
-                "end_col_offset_idx": 7,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 301.561,
-                  "t": 270.08299999999997,
-                  "r": 318.361,
-                  "b": 279.42499999999995,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 7,
-                "end_col_offset_idx": 8,
-                "text": "개월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 8,
-                "end_col_offset_idx": 9,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 9,
-                "end_col_offset_idx": 10,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              }
-            ],
-            [
-              {
-                "bbox": {
-                  "l": 128.16,
-                  "t": 292.76300000000003,
-                  "r": 136.8,
-                  "b": 302.105,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 1,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 148.32,
-                  "t": 292.76300000000003,
-                  "r": 177.24,
-                  "b": 302.105,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 1,
-                "end_col_offset_idx": 2,
-                "text": "월 일",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 180.72,
-                  "t": 294.25699999999995,
-                  "r": 185.766,
-                  "b": 302.582,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "~",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 211.44,
-                  "t": 292.76300000000003,
-                  "r": 220.08,
-                  "b": 302.105,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 231.6,
-                  "t": 292.76300000000003,
-                  "r": 240.24,
-                  "b": 302.105,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 4,
-                "end_col_offset_idx": 5,
-                "text": "월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 255.961,
-                  "t": 292.76300000000003,
-                  "r": 264.601,
-                  "b": 302.105,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 5,
-                "end_col_offset_idx": 6,
-                "text": "일",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 281.281,
-                  "t": 292.76300000000003,
-                  "r": 289.921,
-                  "b": 302.105,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 6,
-                "end_col_offset_idx": 7,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 301.561,
-                  "t": 292.76300000000003,
-                  "r": 318.361,
-                  "b": 302.105,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 7,
-                "end_col_offset_idx": 8,
-                "text": "개월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 8,
-                "end_col_offset_idx": 9,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 9,
-                "end_col_offset_idx": 10,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              }
-            ],
-            [
-              {
-                "bbox": {
-                  "l": 128.16,
-                  "t": 315.443,
-                  "r": 136.8,
-                  "b": 324.78499999999997,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 1,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 148.32,
-                  "t": 315.443,
-                  "r": 177.24,
-                  "b": 324.78499999999997,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 1,
-                "end_col_offset_idx": 2,
-                "text": "월 일",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 180.72,
-                  "t": 316.937,
-                  "r": 185.766,
-                  "b": 325.26199999999994,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "~",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 211.44,
-                  "t": 315.443,
-                  "r": 220.08,
-                  "b": 324.78499999999997,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 231.6,
-                  "t": 315.443,
-                  "r": 240.24,
-                  "b": 324.78499999999997,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 4,
-                "end_col_offset_idx": 5,
-                "text": "월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 255.961,
-                  "t": 315.443,
-                  "r": 264.601,
-                  "b": 324.78499999999997,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 5,
-                "end_col_offset_idx": 6,
-                "text": "일",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 281.281,
-                  "t": 315.443,
-                  "r": 289.921,
-                  "b": 324.78499999999997,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 6,
-                "end_col_offset_idx": 7,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 301.561,
-                  "t": 315.443,
-                  "r": 318.361,
-                  "b": 324.78499999999997,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 7,
-                "end_col_offset_idx": 8,
-                "text": "개월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 8,
-                "end_col_offset_idx": 9,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 9,
-                "end_col_offset_idx": 10,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              }
-            ],
-            [
-              {
-                "bbox": {
-                  "l": 128.16,
-                  "t": 338.243,
-                  "r": 136.8,
-                  "b": 347.585,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 1,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 148.32,
-                  "t": 338.243,
-                  "r": 156.96,
-                  "b": 347.585,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 1,
-                "end_col_offset_idx": 2,
-                "text": "월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 168.6,
-                  "t": 338.243,
-                  "r": 185.766,
-                  "b": 348.062,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "일 ~",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 211.44,
-                  "t": 338.243,
-                  "r": 220.08,
-                  "b": 347.585,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 231.6,
-                  "t": 338.243,
-                  "r": 240.24,
-                  "b": 347.585,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 4,
-                "end_col_offset_idx": 5,
-                "text": "월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 255.961,
-                  "t": 338.243,
-                  "r": 264.601,
-                  "b": 347.585,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 5,
-                "end_col_offset_idx": 6,
-                "text": "일",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 281.281,
-                  "t": 338.243,
-                  "r": 289.921,
-                  "b": 347.585,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 6,
-                "end_col_offset_idx": 7,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 301.561,
-                  "t": 338.243,
-                  "r": 318.361,
-                  "b": 347.585,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 7,
-                "end_col_offset_idx": 8,
-                "text": "개월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 8,
-                "end_col_offset_idx": 9,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 9,
-                "end_col_offset_idx": 10,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              }
-            ],
-            [
-              {
-                "bbox": {
-                  "l": 128.16,
-                  "t": 360.923,
-                  "r": 136.8,
-                  "b": 370.265,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 0,
-                "end_col_offset_idx": 1,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 148.32,
-                  "t": 360.923,
-                  "r": 156.96,
-                  "b": 370.265,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 1,
-                "end_col_offset_idx": 2,
-                "text": "월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 168.6,
-                  "t": 360.923,
-                  "r": 185.766,
-                  "b": 370.742,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "일 ~",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 211.44,
-                  "t": 360.923,
-                  "r": 220.08,
-                  "b": 370.265,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 231.6,
-                  "t": 360.923,
-                  "r": 240.24,
-                  "b": 370.265,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 4,
-                "end_col_offset_idx": 5,
-                "text": "월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 255.961,
-                  "t": 360.923,
-                  "r": 264.601,
-                  "b": 370.265,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 5,
-                "end_col_offset_idx": 6,
-                "text": "일",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 281.281,
-                  "t": 360.923,
-                  "r": 289.921,
-                  "b": 370.265,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 6,
-                "end_col_offset_idx": 7,
-                "text": "년",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 301.561,
-                  "t": 360.923,
-                  "r": 318.361,
-                  "b": 370.265,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 7,
-                "end_col_offset_idx": 8,
-                "text": "개월",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 8,
-                "end_col_offset_idx": 9,
-                "text": "",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 9,
-                "end_col_offset_idx": 10,
-                "text": "",
+                "text": "주소",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -2853,6 +1544,7 @@
         },
         "annotations": [],
         "merged_from_pages": [
+          7,
           7,
           8
         ]
@@ -2877,12 +1569,6 @@
       "page_no": 4,
       "title": "[군 경력의 인정 및 증명]",
       "disconnection_reason": "Table 2 -X-> 3: 페이지가 너무 멀리 떨어져 있음"
-    },
-    {
-      "table_idx": 3,
-      "page_no": 7,
-      "title": "※ 뒤쪽의 경력증명서 작성방법을 읽고 작성해 주시기 바랍니다.",
-      "disconnection_reason": "Table 3 -X-> 4: 연결 조건 미충족"
     },
     {
       "table_idx": 6,
@@ -2918,9 +1604,6 @@
     ],
     "2": [
       "Table 2 -X-> 3: 페이지가 너무 멀리 떨어져 있음"
-    ],
-    "3": [
-      "Table 3 -X-> 4: 연결 조건 미충족"
     ],
     "5": [
       "Table 5 -X-> 6: 두 번째 테이블에 새로운 타이틀 시작 ('입증인 인적사항')"

@@ -13,7 +13,7 @@
         8
       ],
       "connection_reasons": [
-        "Table 7 -> 8: 타이틀이 있는 헤더 테이블 뒤 데이터 테이블 (연속 페이지)"
+        "Table 7 -> 8: 타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
       ],
       "disconnection_reasons": [
         "Table 8 -X-> 9: 두 번째 테이블에 새로운 타이틀 시작 ('③ 캐 논(CANON)')"

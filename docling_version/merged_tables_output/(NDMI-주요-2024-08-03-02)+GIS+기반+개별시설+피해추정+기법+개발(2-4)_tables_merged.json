@@ -1523,7 +1523,7 @@
         14
       ],
       "connection_reasons": [
-        "Table 2 -> 3: 타이틀이 있는 데이터 테이블 뒤 계속 (열 3개, 연속 페이지)"
+        "Table 2 -> 3: 타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
       ],
       "disconnection_reasons": [
         "Table 3 -X-> 4: 같은 형식의 반복 테이블 (키값 1개 중복, 중복률 100%)"
@@ -16931,39 +16931,39 @@
     {
       "group_id": 4,
       "table_indices": [
-        24,
-        25
+        18,
+        19
       ],
       "pages": [
-        85,
-        86
+        75,
+        76
       ],
       "connection_reasons": [
-        "Table 24 -> 25: 헤더가 동일함 (4개 일치)"
+        "Table 18 -> 19: 타이틀이 같음 ('표 3.7 건축물의 용도별 체류율 산정')"
       ],
       "disconnection_reasons": [
-        "Table 25 -X-> 26: 페이지가 너무 멀리 떨어져 있음"
+        "Table 19 -X-> 20: 타이틀이 다름 ('표 3.7 건축물의 용도별 체류율 산정[계속]' vs '표 3.8 체류율 산정을 위한 변수 목록', 유사도: 0.00)"
       ],
       "merged_table": {
-        "self_ref": "#/tables/24",
+        "self_ref": "#/tables/18",
         "parent": {
           "$ref": "#/body"
         },
         "children": [
           {
-            "$ref": "#/texts/2061"
+            "$ref": "#/texts/1542"
           }
         ],
         "content_layer": "body",
         "label": "table",
         "prov": [
           {
-            "page_no": 85,
+            "page_no": 75,
             "bbox": {
-              "l": 108.23734283447266,
-              "t": 265.4266357421875,
-              "r": 495.20599365234375,
-              "b": 123.44232177734375,
+              "l": 108.18289947509766,
+              "t": 303.4586181640625,
+              "r": 502.91546630859375,
+              "b": 138.25836181640625,
               "coord_origin": "BOTTOMLEFT"
             },
             "charspan": [
@@ -16974,13 +16974,2162 @@
         ],
         "captions": [
           {
-            "$ref": "#/texts/2061"
+            "$ref": "#/texts/1542"
           }
         ],
         "references": [],
         "footnotes": [],
         "data": {
           "table_cells": [
+            {
+              "bbox": {
+                "l": 318.547,
+                "t": 543.726,
+                "r": 341.503,
+                "b": 552.716,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 3,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 4,
+              "text": "시간대",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 190.337,
+                "t": 561.227,
+                "r": 240.26,
+                "b": 570.217,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "00:01-06:00",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 304.995,
+                "t": 561.227,
+                "r": 355.036,
+                "b": 570.217,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "06:01-09:00",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 419.773,
+                "t": 561.227,
+                "r": 469.694,
+                "b": 570.217,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "09:01-16:00",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.971,
+                "t": 580.5260000000001,
+                "r": 139.195,
+                "b": 589.516,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "U1",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 193.935,
+                "t": 580.933,
+                "r": 236.739,
+                "b": 588.9639999999999,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "0.99×NRES",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 279.688,
+                "t": 575.779,
+                "r": 380.42,
+                "b": 594.119,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "{0.99+(0.15-0.99)×(t-6)/(9- 6)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 423.371,
+                "t": 580.933,
+                "r": 466.054,
+                "b": 588.9639999999999,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "0.75×DRES",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.971,
+                "t": 617.325,
+                "r": 139.195,
+                "b": 626.316,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "U2",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 191.176,
+                "t": 617.733,
+                "r": 239.399,
+                "b": 625.764,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "0.99×COMW",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 278.129,
+                "t": 596.876,
+                "r": 381.881,
+                "b": 646.501,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "{0.02+(0.98-0.02)×(t-6)/(9- 6)}×COMW+{0+(0.2-0)×(t-6 )/(9-6)}×DRES+{0+(0.8-0)×( t-6)/(9-6)}×HOTEL+{0+(0.8- 0)×(t-6)/(9-6)}×VISIT",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 393.507,
+                "t": 612.4590000000001,
+                "r": 495.981,
+                "b": 630.918,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "0.98×COMW+0.2×DRES+0. 8×HOTEL+0.8×VISIT",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.971,
+                "t": 654.125,
+                "r": 139.195,
+                "b": 663.115,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "U3",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 213.124,
+                "t": 654.533,
+                "r": 217.495,
+                "b": 662.564,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "0",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 279.449,
+                "t": 649.258,
+                "r": 380.552,
+                "b": 667.718,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "{0+(0.8-0)×(t-6)/(9-6)}×GR ADE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 422.531,
+                "t": 654.533,
+                "r": 466.837,
+                "b": 662.564,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "0.8×GRADE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.971,
+                "t": 670.547,
+                "r": 139.195,
+                "b": 679.537,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "U4",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 213.124,
+                "t": 670.955,
+                "r": 217.495,
+                "b": 678.986,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "0",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 327.782,
+                "t": 670.955,
+                "r": 332.153,
+                "b": 678.986,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "0",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 442.56,
+                "t": 670.955,
+                "r": 446.931,
+                "b": 678.986,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "0",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.971,
+                "t": 687.0889999999999,
+                "r": 139.195,
+                "b": 696.079,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "U5",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 202.81,
+                "t": 687.4970000000001,
+                "r": 227.748,
+                "b": 695.528,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "HOTEL",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 279.808,
+                "t": 682.342,
+                "r": 380.13,
+                "b": 700.682,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "{1+(0.19-1)×(t-6)/(9-6)}×H OTEL",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 420.972,
+                "t": 687.4970000000001,
+                "r": 468.457,
+                "b": 695.528,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "0.19×HOTEL",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 318.547,
+                "t": 184.95799999999997,
+                "r": 341.503,
+                "b": 193.94799999999998,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 3,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 4,
+              "text": "시간대",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 190.337,
+                "t": 202.33900000000006,
+                "r": 240.26,
+                "b": 211.32899999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "16:01-19:00",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 304.995,
+                "t": 202.33900000000006,
+                "r": 355.036,
+                "b": 211.32899999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "19:01-22:00",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 419.773,
+                "t": 202.33900000000006,
+                "r": 469.694,
+                "b": 211.32899999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "22:01-24:00",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.971,
+                "t": 224.515,
+                "r": 139.195,
+                "b": 233.505,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "U1",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 164.911,
+                "t": 219.76800000000003,
+                "r": 265.589,
+                "b": 238.22799999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "{0.15+(0.5-0.15)×(t-16)/(19 -16)}×NRES",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 310.872,
+                "t": 224.92200000000003,
+                "r": 349.238,
+                "b": 232.95299999999997,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "0.5×NRES",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 394.346,
+                "t": 219.76800000000003,
+                "r": 495.079,
+                "b": 238.22799999999995,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "{0.5+(0.99-0.5)×(t-22)/(24- 22}×NRES",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.971,
+                "t": 272.10299999999995,
+                "r": 139.195,
+                "b": 281.09299999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "U2",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 163.471,
+                "t": 246.61800000000005,
+                "r": 267.265,
+                "b": 306.553,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "{0.98+(0.5-0.98)×(t-16)/(19 -16)}×COMW+{0.2+(0.5-0.2 )×(t-16)/(19-16)}×DRES+{0. 8+(0.7-0.8)×(t-16)/(19-16)} ×HOTEL+{0.8+(0-0.8)×(t-1 6)/(19-16)}×VISIT",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 278.729,
+                "t": 267.356,
+                "r": 381.205,
+                "b": 285.81600000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "0.5×COMW+0.1×NRES+0.7 ×HOTEL",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 394.346,
+                "t": 267.356,
+                "r": 495.079,
+                "b": 285.81600000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "{0.5+(0.99-0.5)×(t-22)/(24- 22}×NRES",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.971,
+                "t": 319.80999999999995,
+                "r": 139.195,
+                "b": 328.80100000000004,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "U3",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 164.911,
+                "t": 315.06399999999996,
+                "r": 265.708,
+                "b": 333.404,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "{0.8+(0.1-0.8)×(t-16)/(19-1 6)}×GRADE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 307.873,
+                "t": 320.21799999999996,
+                "r": 352.179,
+                "b": 328.249,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "0.1×GRADE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 393.147,
+                "t": 315.06399999999996,
+                "r": 496.418,
+                "b": 333.404,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "{0.1+(0-0.1)×(t-22)/(24-22)} ×GRADE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.971,
+                "t": 341.986,
+                "r": 139.195,
+                "b": 350.976,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "U4",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 213.124,
+                "t": 342.394,
+                "r": 217.495,
+                "b": 350.425,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "0",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 327.782,
+                "t": 342.394,
+                "r": 332.153,
+                "b": 350.425,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "0",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 442.56,
+                "t": 342.394,
+                "r": 446.931,
+                "b": 350.425,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "0",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.971,
+                "t": 364.042,
+                "r": 139.195,
+                "b": 373.032,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "U5",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 164.911,
+                "t": 359.295,
+                "r": 265.663,
+                "b": 377.755,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "{0.19+(0.299-0.19)×(t-16)/( 19-16)}×HOTEL",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 304.035,
+                "t": 364.57,
+                "r": 355.957,
+                "b": 372.601,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "0.299×HOTEL",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 393.267,
+                "t": 359.295,
+                "r": 496.104,
+                "b": 377.755,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "{0.299+(1-0.299)×(t-22)/(24 -22)}×HOTEL",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          "num_rows": 7,
+          "num_cols": 4,
+          "grid": [
+            [
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 318.547,
+                  "t": 543.726,
+                  "r": 341.503,
+                  "b": 552.716,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 3,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 4,
+                "text": "시간대",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 318.547,
+                  "t": 543.726,
+                  "r": 341.503,
+                  "b": 552.716,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 3,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 4,
+                "text": "시간대",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 318.547,
+                  "t": 543.726,
+                  "r": 341.503,
+                  "b": 552.716,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 3,
+                "start_row_offset_idx": 0,
+                "end_row_offset_idx": 1,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 4,
+                "text": "시간대",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 190.337,
+                  "t": 561.227,
+                  "r": 240.26,
+                  "b": 570.217,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "00:01-06:00",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 304.995,
+                  "t": 561.227,
+                  "r": 355.036,
+                  "b": 570.217,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "06:01-09:00",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 419.773,
+                  "t": 561.227,
+                  "r": 469.694,
+                  "b": 570.217,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 1,
+                "end_row_offset_idx": 2,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "09:01-16:00",
+                "column_header": true,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 127.971,
+                  "t": 580.5260000000001,
+                  "r": 139.195,
+                  "b": 589.516,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "U1",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 193.935,
+                  "t": 580.933,
+                  "r": 236.739,
+                  "b": 588.9639999999999,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "0.99×NRES",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 279.688,
+                  "t": 575.779,
+                  "r": 380.42,
+                  "b": 594.119,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "{0.99+(0.15-0.99)×(t-6)/(9- 6)",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 423.371,
+                  "t": 580.933,
+                  "r": 466.054,
+                  "b": 588.9639999999999,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 2,
+                "end_row_offset_idx": 3,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "0.75×DRES",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 127.971,
+                  "t": 617.325,
+                  "r": 139.195,
+                  "b": 626.316,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "U2",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 191.176,
+                  "t": 617.733,
+                  "r": 239.399,
+                  "b": 625.764,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "0.99×COMW",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 278.129,
+                  "t": 596.876,
+                  "r": 381.881,
+                  "b": 646.501,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "{0.02+(0.98-0.02)×(t-6)/(9- 6)}×COMW+{0+(0.2-0)×(t-6 )/(9-6)}×DRES+{0+(0.8-0)×( t-6)/(9-6)}×HOTEL+{0+(0.8- 0)×(t-6)/(9-6)}×VISIT",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 393.507,
+                  "t": 612.4590000000001,
+                  "r": 495.981,
+                  "b": 630.918,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 3,
+                "end_row_offset_idx": 4,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "0.98×COMW+0.2×DRES+0. 8×HOTEL+0.8×VISIT",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 127.971,
+                  "t": 654.125,
+                  "r": 139.195,
+                  "b": 663.115,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "U3",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 213.124,
+                  "t": 654.533,
+                  "r": 217.495,
+                  "b": 662.564,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "0",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 279.449,
+                  "t": 649.258,
+                  "r": 380.552,
+                  "b": 667.718,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "{0+(0.8-0)×(t-6)/(9-6)}×GR ADE",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 422.531,
+                  "t": 654.533,
+                  "r": 466.837,
+                  "b": 662.564,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 4,
+                "end_row_offset_idx": 5,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "0.8×GRADE",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 127.971,
+                  "t": 670.547,
+                  "r": 139.195,
+                  "b": 679.537,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 6,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "U4",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 213.124,
+                  "t": 670.955,
+                  "r": 217.495,
+                  "b": 678.986,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 6,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "0",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 327.782,
+                  "t": 670.955,
+                  "r": 332.153,
+                  "b": 678.986,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 6,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "0",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 442.56,
+                  "t": 670.955,
+                  "r": 446.931,
+                  "b": 678.986,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 5,
+                "end_row_offset_idx": 6,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "0",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 127.971,
+                  "t": 687.0889999999999,
+                  "r": 139.195,
+                  "b": 696.079,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "U5",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 202.81,
+                  "t": 687.4970000000001,
+                  "r": 227.748,
+                  "b": 695.528,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "HOTEL",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 279.808,
+                  "t": 682.342,
+                  "r": 380.13,
+                  "b": 700.682,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 2,
+                "end_col_offset_idx": 3,
+                "text": "{1+(0.19-1)×(t-6)/(9-6)}×H OTEL",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 420.972,
+                  "t": 687.4970000000001,
+                  "r": 468.457,
+                  "b": 695.528,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 6,
+                "end_row_offset_idx": 7,
+                "start_col_offset_idx": 3,
+                "end_col_offset_idx": 4,
+                "text": "0.19×HOTEL",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ]
+          ]
+        },
+        "annotations": [],
+        "merged_from_pages": [
+          75,
+          76
+        ]
+      }
+    },
+    {
+      "group_id": 5,
+      "table_indices": [
+        23,
+        24,
+        25
+      ],
+      "pages": [
+        85,
+        85,
+        86
+      ],
+      "connection_reasons": [
+        "Table 23 -> 24: 타이틀이 같음 ('표 3.11 인구통계 데이터베이스 Column 내용')",
+        "Table 24 -> 25: 헤더가 동일함 (4개 일치)"
+      ],
+      "disconnection_reasons": [
+        "Table 25 -X-> 26: 페이지가 너무 멀리 떨어져 있음"
+      ],
+      "merged_table": {
+        "self_ref": "#/tables/23",
+        "parent": {
+          "$ref": "#/body"
+        },
+        "children": [
+          {
+            "$ref": "#/texts/2059"
+          }
+        ],
+        "content_layer": "body",
+        "label": "table",
+        "prov": [
+          {
+            "page_no": 85,
+            "bbox": {
+              "l": 108.28536224365234,
+              "t": 621.0310516357422,
+              "r": 495.2784729003906,
+              "b": 369.0550537109375,
+              "coord_origin": "BOTTOMLEFT"
+            },
+            "charspan": [
+              0,
+              0
+            ]
+          }
+        ],
+        "captions": [
+          {
+            "$ref": "#/texts/2059"
+          }
+        ],
+        "references": [],
+        "footnotes": [],
+        "data": {
+          "table_cells": [
+            {
+              "bbox": {
+                "l": 120.894,
+                "t": 226.19299999999998,
+                "r": 178.841,
+                "b": 235.183,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Column Name",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 325.024,
+                "t": 226.19299999999998,
+                "r": 359.973,
+                "b": 235.183,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "자료 내용",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 139.245,
+                "t": 243.57399999999996,
+                "r": 160.518,
+                "b": 252.56399999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "index",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 233.993,
+                "t": 243.57399999999996,
+                "r": 451.005,
+                "b": 252.56399999999996,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "자료의 관리를 위한 Key, 인명피해 추정에는 활용되지 않음",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 128.93,
+                "t": 261.07500000000005,
+                "r": 170.729,
+                "b": 270.06500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "sigunguCd",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 224.518,
+                "t": 261.07500000000005,
+                "r": 460.418,
+                "b": 270.06500000000005,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "건축물 대장 정보에 포함된 건축물의 행정구역 정보(시군구 단위)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.251,
+                "t": 278.576,
+                "r": 172.444,
+                "b": 287.56600000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "sigunguNm",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 323.225,
+                "t": 278.576,
+                "r": 361.654,
+                "b": 287.56600000000003,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "행정구역명",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 132.048,
+                "t": 297.275,
+                "r": 167.595,
+                "b": 306.265,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "totalArea",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 266.855,
+                "t": 295.885,
+                "r": 418.081,
+                "b": 307.88599999999997,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "해당 행정구역의 건축물 연면적 합계(   )",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 118.016,
+                "t": 317.413,
+                "r": 181.643,
+                "b": 326.403,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "totalArea_Home",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 253.063,
+                "t": 315.903,
+                "r": 431.874,
+                "b": 328.024,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "해당 행정구역의 주거용 건축물 연면적 합계(   )",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.851,
+                "t": 336.233,
+                "r": 171.808,
+                "b": 345.223,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "00to06_wd",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 267.575,
+                "t": 336.233,
+                "r": 417.424,
+                "b": 345.223,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "평일 00-06시 해당 행정구역의 상주인구",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 128.93,
+                "t": 353.614,
+                "r": 170.729,
+                "b": 362.604,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 7,
+              "end_row_offset_idx": 8,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "00to06_hd",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 257.141,
+                "t": 353.614,
+                "r": 427.858,
+                "b": 362.604,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 7,
+              "end_row_offset_idx": 8,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "주말(휴일) 00-06시 해당 행정구역의 상주인구",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.851,
+                "t": 371.114,
+                "r": 171.808,
+                "b": 380.105,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 8,
+              "end_row_offset_idx": 9,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "07to12_wd",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 267.575,
+                "t": 371.114,
+                "r": 417.424,
+                "b": 380.105,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 8,
+              "end_row_offset_idx": 9,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "평일 07-12시 해당 행정구역의 상주인구",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 128.93,
+                "t": 388.615,
+                "r": 170.729,
+                "b": 397.605,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 9,
+              "end_row_offset_idx": 10,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "07to12_hd",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 257.141,
+                "t": 388.615,
+                "r": 427.858,
+                "b": 397.605,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 9,
+              "end_row_offset_idx": 10,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "주말(휴일) 07-12시 해당 행정구역의 상주인구",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.851,
+                "t": 405.996,
+                "r": 171.808,
+                "b": 414.986,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 10,
+              "end_row_offset_idx": 11,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "13to18_wd",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 267.575,
+                "t": 405.996,
+                "r": 417.424,
+                "b": 414.986,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 10,
+              "end_row_offset_idx": 11,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "평일 13-18시 해당 행정구역의 상주인구",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 128.93,
+                "t": 423.497,
+                "r": 170.729,
+                "b": 432.487,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 11,
+              "end_row_offset_idx": 12,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "13to18_hd",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 257.141,
+                "t": 423.497,
+                "r": 427.858,
+                "b": 432.487,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 11,
+              "end_row_offset_idx": 12,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "주말(휴일) 13-18시 해당 행정구역의 상주인구",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 127.851,
+                "t": 440.998,
+                "r": 171.808,
+                "b": 449.988,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 12,
+              "end_row_offset_idx": 13,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "19to24_wd",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 267.575,
+                "t": 440.998,
+                "r": 417.424,
+                "b": 449.988,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 12,
+              "end_row_offset_idx": 13,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "평일 19-24시 해당 행정구역의 상주인구",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 128.93,
+                "t": 458.379,
+                "r": 170.729,
+                "b": 467.369,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 13,
+              "end_row_offset_idx": 14,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "19to24_hd",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 257.141,
+                "t": 458.379,
+                "r": 427.858,
+                "b": 467.369,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 13,
+              "end_row_offset_idx": 14,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "주말(휴일) 19-24시 해당 행정구역의 상주인구",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
             {
               "bbox": {
                 "l": 120.894,
@@ -18182,16 +20331,16 @@
               "fillable": false
             }
           ],
-          "num_rows": 8,
-          "num_cols": 4,
+          "num_rows": 14,
+          "num_cols": 2,
           "grid": [
             [
               {
                 "bbox": {
                   "l": 120.894,
-                  "t": 581.604,
+                  "t": 226.19299999999998,
                   "r": 178.841,
-                  "b": 590.595,
+                  "b": 235.183,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18208,10 +20357,10 @@
               },
               {
                 "bbox": {
-                  "l": 229.556,
-                  "t": 581.604,
-                  "r": 252.631,
-                  "b": 590.595,
+                  "l": 325.024,
+                  "t": 226.19299999999998,
+                  "r": 359.973,
+                  "b": 235.183,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18220,47 +20369,7 @@
                 "end_row_offset_idx": 1,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "자료형",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 334.739,
-                  "t": 581.604,
-                  "r": 350.138,
-                  "b": 590.595,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "길이",
-                "column_header": true,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 422.771,
-                  "t": 581.604,
-                  "r": 464.796,
-                  "b": 590.595,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 0,
-                "end_row_offset_idx": 1,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "NULL 허용",
+                "text": "자료 내용",
                 "column_header": true,
                 "row_header": false,
                 "row_section": false,
@@ -18271,9 +20380,9 @@
               {
                 "bbox": {
                   "l": 139.245,
-                  "t": 599.105,
+                  "t": 243.57399999999996,
                   "r": 160.518,
-                  "b": 608.095,
+                  "b": 252.56399999999996,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18290,10 +20399,10 @@
               },
               {
                 "bbox": {
-                  "l": 234.233,
-                  "t": 599.105,
-                  "r": 248.024,
-                  "b": 608.095,
+                  "l": 233.993,
+                  "t": 243.57399999999996,
+                  "r": 451.005,
+                  "b": 252.56399999999996,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18302,47 +20411,7 @@
                 "end_row_offset_idx": 2,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "INT",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 337.497,
-                  "t": 599.105,
-                  "r": 347.402,
-                  "b": 608.095,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "10",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 441.121,
-                  "t": 599.105,
-                  "r": 446.516,
-                  "b": 608.095,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 1,
-                "end_row_offset_idx": 2,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "X",
+                "text": "자료의 관리를 위한 Key, 인명피해 추정에는 활용되지 않음",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -18353,9 +20422,9 @@
               {
                 "bbox": {
                   "l": 128.93,
-                  "t": 616.606,
+                  "t": 261.07500000000005,
                   "r": 170.729,
-                  "b": 625.596,
+                  "b": 270.06500000000005,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18372,10 +20441,10 @@
               },
               {
                 "bbox": {
-                  "l": 220.68,
-                  "t": 616.606,
-                  "r": 261.583,
-                  "b": 625.596,
+                  "l": 224.518,
+                  "t": 261.07500000000005,
+                  "r": 460.418,
+                  "b": 270.06500000000005,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18384,47 +20453,7 @@
                 "end_row_offset_idx": 3,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "VARCHAR",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 340.016,
-                  "t": 616.606,
-                  "r": 345.003,
-                  "b": 625.596,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "6",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 441.121,
-                  "t": 616.606,
-                  "r": 446.516,
-                  "b": 625.596,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 2,
-                "end_row_offset_idx": 3,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "X",
+                "text": "건축물 대장 정보에 포함된 건축물의 행정구역 정보(시군구 단위)",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -18435,9 +20464,9 @@
               {
                 "bbox": {
                   "l": 127.251,
-                  "t": 633.987,
+                  "t": 278.576,
                   "r": 172.444,
-                  "b": 642.977,
+                  "b": 287.56600000000003,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18454,10 +20483,10 @@
               },
               {
                 "bbox": {
-                  "l": 220.68,
-                  "t": 633.987,
-                  "r": 261.583,
-                  "b": 642.977,
+                  "l": 323.225,
+                  "t": 278.576,
+                  "r": 361.654,
+                  "b": 287.56600000000003,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18466,47 +20495,7 @@
                 "end_row_offset_idx": 4,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "VARCHAR",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 337.497,
-                  "t": 633.987,
-                  "r": 347.402,
-                  "b": 642.977,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "50",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 441.121,
-                  "t": 633.987,
-                  "r": 446.516,
-                  "b": 642.977,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 3,
-                "end_row_offset_idx": 4,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "X",
+                "text": "행정구역명",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -18517,9 +20506,9 @@
               {
                 "bbox": {
                   "l": 132.048,
-                  "t": 651.488,
+                  "t": 297.275,
                   "r": 167.595,
-                  "b": 660.4780000000001,
+                  "b": 306.265,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18536,10 +20525,10 @@
               },
               {
                 "bbox": {
-                  "l": 222.0,
-                  "t": 651.488,
-                  "r": 260.379,
-                  "b": 660.4780000000001,
+                  "l": 266.855,
+                  "t": 295.885,
+                  "r": 418.081,
+                  "b": 307.88599999999997,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18548,47 +20537,7 @@
                 "end_row_offset_idx": 5,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "DECIMAL",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 333.659,
-                  "t": 651.488,
-                  "r": 351.24,
-                  "b": 660.4780000000001,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "25,6",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 440.521,
-                  "t": 651.488,
-                  "r": 447.236,
-                  "b": 660.4780000000001,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 4,
-                "end_row_offset_idx": 5,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "O",
+                "text": "해당 행정구역의 건축물 연면적 합계(   )",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -18599,9 +20548,9 @@
               {
                 "bbox": {
                   "l": 118.016,
-                  "t": 668.989,
+                  "t": 317.413,
                   "r": 181.643,
-                  "b": 677.979,
+                  "b": 326.403,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18618,10 +20567,10 @@
               },
               {
                 "bbox": {
-                  "l": 222.0,
-                  "t": 668.989,
-                  "r": 260.379,
-                  "b": 677.979,
+                  "l": 253.063,
+                  "t": 315.903,
+                  "r": 431.874,
+                  "b": 328.024,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18630,47 +20579,7 @@
                 "end_row_offset_idx": 6,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "DECIMAL",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 333.659,
-                  "t": 668.989,
-                  "r": 351.24,
-                  "b": 677.979,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "25,6",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 440.521,
-                  "t": 668.989,
-                  "r": 447.236,
-                  "b": 677.979,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 5,
-                "end_row_offset_idx": 6,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "O",
+                "text": "해당 행정구역의 주거용 건축물 연면적 합계(   )",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -18681,9 +20590,9 @@
               {
                 "bbox": {
                   "l": 127.851,
-                  "t": 686.37,
+                  "t": 336.233,
                   "r": 171.808,
-                  "b": 695.36,
+                  "b": 345.223,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18700,10 +20609,10 @@
               },
               {
                 "bbox": {
-                  "l": 222.0,
-                  "t": 686.37,
-                  "r": 260.379,
-                  "b": 695.36,
+                  "l": 267.575,
+                  "t": 336.233,
+                  "r": 417.424,
+                  "b": 345.223,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18712,47 +20621,7 @@
                 "end_row_offset_idx": 7,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "DECIMAL",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 333.659,
-                  "t": 686.37,
-                  "r": 351.24,
-                  "b": 695.36,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "11,3",
-                "column_header": false,
-                "row_header": false,
-                "row_section": false,
-                "fillable": false
-              },
-              {
-                "bbox": {
-                  "l": 441.121,
-                  "t": 686.37,
-                  "r": 446.516,
-                  "b": 695.36,
-                  "coord_origin": "TOPLEFT"
-                },
-                "row_span": 1,
-                "col_span": 1,
-                "start_row_offset_idx": 6,
-                "end_row_offset_idx": 7,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "X",
+                "text": "평일 00-06시 해당 행정구역의 상주인구",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -18763,9 +20632,9 @@
               {
                 "bbox": {
                   "l": 128.93,
-                  "t": 703.871,
+                  "t": 353.614,
                   "r": 170.729,
-                  "b": 712.861,
+                  "b": 362.604,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18782,10 +20651,10 @@
               },
               {
                 "bbox": {
-                  "l": 222.0,
-                  "t": 703.871,
-                  "r": 260.379,
-                  "b": 712.861,
+                  "l": 257.141,
+                  "t": 353.614,
+                  "r": 427.858,
+                  "b": 362.604,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
@@ -18794,7 +20663,29 @@
                 "end_row_offset_idx": 8,
                 "start_col_offset_idx": 1,
                 "end_col_offset_idx": 2,
-                "text": "DECIMAL",
+                "text": "주말(휴일) 00-06시 해당 행정구역의 상주인구",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 127.851,
+                  "t": 371.114,
+                  "r": 171.808,
+                  "b": 380.105,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 8,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "07to12_wd",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -18802,19 +20693,41 @@
               },
               {
                 "bbox": {
-                  "l": 333.659,
-                  "t": 703.871,
-                  "r": 351.24,
-                  "b": 712.861,
+                  "l": 267.575,
+                  "t": 371.114,
+                  "r": 417.424,
+                  "b": 380.105,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
                 "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 2,
-                "end_col_offset_idx": 3,
-                "text": "11,3",
+                "start_row_offset_idx": 8,
+                "end_row_offset_idx": 9,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "평일 07-12시 해당 행정구역의 상주인구",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 128.93,
+                  "t": 388.615,
+                  "r": 170.729,
+                  "b": 397.605,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 9,
+                "end_row_offset_idx": 10,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "07to12_hd",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -18822,19 +20735,187 @@
               },
               {
                 "bbox": {
-                  "l": 441.121,
-                  "t": 703.871,
-                  "r": 446.516,
-                  "b": 712.861,
+                  "l": 257.141,
+                  "t": 388.615,
+                  "r": 427.858,
+                  "b": 397.605,
                   "coord_origin": "TOPLEFT"
                 },
                 "row_span": 1,
                 "col_span": 1,
-                "start_row_offset_idx": 7,
-                "end_row_offset_idx": 8,
-                "start_col_offset_idx": 3,
-                "end_col_offset_idx": 4,
-                "text": "X",
+                "start_row_offset_idx": 9,
+                "end_row_offset_idx": 10,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "주말(휴일) 07-12시 해당 행정구역의 상주인구",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 127.851,
+                  "t": 405.996,
+                  "r": 171.808,
+                  "b": 414.986,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 10,
+                "end_row_offset_idx": 11,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "13to18_wd",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 267.575,
+                  "t": 405.996,
+                  "r": 417.424,
+                  "b": 414.986,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 10,
+                "end_row_offset_idx": 11,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "평일 13-18시 해당 행정구역의 상주인구",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 128.93,
+                  "t": 423.497,
+                  "r": 170.729,
+                  "b": 432.487,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 11,
+                "end_row_offset_idx": 12,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "13to18_hd",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 257.141,
+                  "t": 423.497,
+                  "r": 427.858,
+                  "b": 432.487,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 11,
+                "end_row_offset_idx": 12,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "주말(휴일) 13-18시 해당 행정구역의 상주인구",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 127.851,
+                  "t": 440.998,
+                  "r": 171.808,
+                  "b": 449.988,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 12,
+                "end_row_offset_idx": 13,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "19to24_wd",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 267.575,
+                  "t": 440.998,
+                  "r": 417.424,
+                  "b": 449.988,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 12,
+                "end_row_offset_idx": 13,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "평일 19-24시 해당 행정구역의 상주인구",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              }
+            ],
+            [
+              {
+                "bbox": {
+                  "l": 128.93,
+                  "t": 458.379,
+                  "r": 170.729,
+                  "b": 467.369,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 13,
+                "end_row_offset_idx": 14,
+                "start_col_offset_idx": 0,
+                "end_col_offset_idx": 1,
+                "text": "19to24_hd",
+                "column_header": false,
+                "row_header": false,
+                "row_section": false,
+                "fillable": false
+              },
+              {
+                "bbox": {
+                  "l": 257.141,
+                  "t": 458.379,
+                  "r": 427.858,
+                  "b": 467.369,
+                  "coord_origin": "TOPLEFT"
+                },
+                "row_span": 1,
+                "col_span": 1,
+                "start_row_offset_idx": 13,
+                "end_row_offset_idx": 14,
+                "start_col_offset_idx": 1,
+                "end_col_offset_idx": 2,
+                "text": "주말(휴일) 19-24시 해당 행정구역의 상주인구",
                 "column_header": false,
                 "row_header": false,
                 "row_section": false,
@@ -18845,6 +20926,7 @@
         },
         "annotations": [],
         "merged_from_pages": [
+          85,
           85,
           86
         ]
@@ -18907,18 +20989,6 @@
       "disconnection_reason": "Table 17 -X-> 18: 같은 페이지의 다른 테이블 ('건축물의 용도에 따른 연면적은 행정구역별로 수집된 건축물대장을 기준으로 산정될 수 있다. 이를 지진 취약성분석에 의한 피해산정방법과 연계하기 위해서 아래의 그림 3.5와 같 은 데이터 분류 방법이 필요하다.' vs '표 3.7 건축물의 용도별 체류율 산정', 유사도: 0.00)"
     },
     {
-      "table_idx": 18,
-      "page_no": 75,
-      "title": "표 3.7 건축물의 용도별 체류율 산정",
-      "disconnection_reason": "Table 18 -X-> 19: 연결 조건 미충족"
-    },
-    {
-      "table_idx": 19,
-      "page_no": 76,
-      "title": "표 3.7 건축물의 용도별 체류율 산정[계속]",
-      "disconnection_reason": "Table 19 -X-> 20: 타이틀이 다름 ('표 3.7 건축물의 용도별 체류율 산정[계속]' vs '표 3.8 체류율 산정을 위한 변수 목록', 유사도: 0.00)"
-    },
-    {
       "table_idx": 20,
       "page_no": 78,
       "title": "표 3.8 체류율 산정을 위한 변수 목록",
@@ -18935,12 +21005,6 @@
       "page_no": 81,
       "title": "표 3.10 경찰청 유동인구 자료정리",
       "disconnection_reason": "Table 22 -X-> 23: 페이지가 너무 멀리 떨어져 있음"
-    },
-    {
-      "table_idx": 23,
-      "page_no": 85,
-      "title": "표 3.11 인구통계 데이터베이스 Column 내용",
-      "disconnection_reason": "Table 23 -X-> 24: 연결 조건 미충족"
     },
     {
       "table_idx": 26,
@@ -19049,9 +21113,6 @@
     "17": [
       "Table 17 -X-> 18: 같은 페이지의 다른 테이블 ('건축물의 용도에 따른 연면적은 행정구역별로 수집된 건축물대장을 기준으로 산정될 수 있다. 이를 지진 취약성분석에 의한 피해산정방법과 연계하기 위해서 아래의 그림 3.5와 같 은 데이터 분류 방법이 필요하다.' vs '표 3.7 건축물의 용도별 체류율 산정', 유사도: 0.00)"
     ],
-    "18": [
-      "Table 18 -X-> 19: 연결 조건 미충족"
-    ],
     "19": [
       "Table 19 -X-> 20: 타이틀이 다름 ('표 3.7 건축물의 용도별 체류율 산정[계속]' vs '표 3.8 체류율 산정을 위한 변수 목록', 유사도: 0.00)"
     ],
@@ -19063,9 +21124,6 @@
     ],
     "22": [
       "Table 22 -X-> 23: 페이지가 너무 멀리 떨어져 있음"
-    ],
-    "23": [
-      "Table 23 -X-> 24: 연결 조건 미충족"
     ],
     "25": [
       "Table 25 -X-> 26: 페이지가 너무 멀리 떨어져 있음"

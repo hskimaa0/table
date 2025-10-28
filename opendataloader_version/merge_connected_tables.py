@@ -402,6 +402,13 @@ def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, 
                 if is_continuation_text(prev_text, curr_text):
                     return True, f"텍스트 연결: '{prev_text}' -> '{curr_text}'"
 
+    # 타이틀 있음 → 타이틀 없음 연결 체크 (텍스트 연결성과 함께)
+    # 첫 번째 테이블에 타이틀이 있고 두 번째에 없으며, 연속 페이지인 경우
+    if title1 and not title2 and page_diff == 1:
+        # 구조가 유사하면 연결 (계속되는 테이블로 판단)
+        if has_similar_structure(table1_info, table2_info):
+            return True, f"타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
+
     # 헤더가 동일한 경우
     if table1_info['headers'] and table2_info['headers']:
         headers1 = [normalize_text(h) for h in table1_info['headers'] if len(normalize_text(h)) > 0]
@@ -453,6 +460,19 @@ def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, 
                     return True, f"헤더가 동일함 ({len(common)}개 일치)"
                 else:
                     return True, f"헤더가 부분 일치함 ({partial_match_count}개 부분 일치)"
+
+    # 타이틀 유사도 확인 (헤더 체크 이후에 실행)
+    # 헤더가 동일하지 않은 경우에만 타이틀로 분리/연결 여부 판단
+    if title1 and title2:
+        title_similarity = calculate_title_similarity(title1, title2)
+
+        # 타이틀 유사도가 1.0이면 같은 표이므로 연결 (구조가 달라도)
+        if title_similarity >= 1.0:
+            return True, f"타이틀이 같음 ('{title1}')"
+
+        # 타이틀 유사도가 0.5 미만이면 다른 테이블로 판단
+        if title_similarity < 0.5:
+            return False, f"타이틀이 다름 ('{title1}' vs '{title2}', 유사도: {title_similarity:.2f})"
 
     # 첫 번째 테이블에만 헤더가 있는 경우
     elif table1_info['headers'] and not table2_info['headers']:
