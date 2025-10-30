@@ -548,8 +548,8 @@ def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, 
         if page_diff == 0 and title_similarity < 0.8:
             return False, f"같은 페이지의 다른 테이블 ('{title1}' vs '{title2}', 유사도: {title_similarity:.2f})"
 
-        # 다른 페이지인 경우 유사도 50% 미만일 때만 분리
-        if title_similarity < 0.5:
+        # 다른 페이지인 경우 유사도 85% 미만일 때만 분리
+        if title_similarity < 0.85:
             return False, f"타이틀이 다름 ('{title1}' vs '{title2}', 유사도: {title_similarity:.2f})"
 
     # 두 번째 테이블에만 타이틀이 있는 경우: 새로운 섹션 시작
@@ -606,10 +606,10 @@ def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, 
                             partial_match_count += 1
                             break
 
-            # 헤더가 60% 이상 일치하고 공통 헤더가 2개 이상이거나, 부분 일치가 50% 이상인 경우
+            # 헤더가 100% 일치하고 공통 헤더가 2개 이상이거나, 부분 일치가 50% 이상인 경우
             partial_similarity = partial_match_count / max(len(headers1), len(headers2))
 
-            if (similarity >= 0.6 and len(common) >= 2) or (partial_similarity >= 0.5 and partial_match_count >= 2):
+            if (similarity >= 1.0 and len(common) >= 2) or (partial_similarity >= 0.5 and partial_match_count >= 2):
                 # 헤더가 동일하더라도 타이틀 체크 먼저 수행
                 # 두 번째 테이블에만 타이틀이 있으면 새로운 섹션이므로 분리
                 title1 = table1_info.get('title', '')
@@ -648,8 +648,8 @@ def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, 
         if title_similarity >= 1.0:
             return True, f"타이틀이 같음 ('{title1}')"
 
-        # 타이틀 유사도가 0.5 미만이면 다른 테이블로 판단
-        if title_similarity < 0.5:
+        # 타이틀 유사도가 0.85 미만이면 다른 테이블로 판단
+        if title_similarity < 0.85:
             return False, f"타이틀이 다름 ('{title1}' vs '{title2}', 유사도: {title_similarity:.2f})"
 
     # 두 번째 테이블에만 타이틀이 있는 경우: 새로운 섹션 시작으로 판단
