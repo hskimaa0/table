@@ -675,17 +675,56 @@ def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, 
             if title1 and page_diff == 1:
                 return True, f"타이틀이 있는 헤더 테이블 뒤 데이터 테이블 (연속 페이지)"
 
+            # 헤더 있는 테이블 뒤 헤더 없는 테이블: 열 개수와 너비가 비슷하면 연결
+            # (페이지를 넘어가면서 헤더 없이 데이터만 계속되는 패턴)
+            if page_diff == 1:
+                col_diff = abs(table1_info['cols'] - table2_info['cols'])
+
+                # 테이블 너비 계산
+                bbox1 = table1_info['bbox']
+                bbox2 = table2_info['bbox']
+                if bbox1 and bbox2:
+                    width1 = abs(bbox1.get('r', 0) - bbox1.get('l', 0))
+                    width2 = abs(bbox2.get('r', 0) - bbox2.get('l', 0))
+
+                    # 너비 차이 비율 계산 (작은 쪽 대비)
+                    if width1 > 0 and width2 > 0:
+                        width_diff_ratio = abs(width1 - width2) / min(width1, width2)
+
+                        # 열 개수가 같거나 차이가 2 이하이고, 너비 차이가 30% 이내면 연결
+                        if col_diff <= 2 and table1_info['cols'] >= 2 and width_diff_ratio <= 0.3:
+                            return True, f"헤더 테이블 뒤 데이터 테이블 (열 {table1_info['cols']}개 vs {table2_info['cols']}개, 너비 유사도 {(1-width_diff_ratio)*100:.0f}%, 연속 페이지)"
+
     # 두 번째 테이블에만 헤더가 있는 경우는 일반적으로 새로운 테이블
     # (연결되지 않음)
 
     # 둘 다 헤더가 없고 타이틀도 없는 경우 (데이터 테이블 연속)
-    # 연속 페이지이고 열 개수가 비슷하면 연결
+    # 연속 페이지이고 열 개수와 너비가 비슷하면 연결
     if not table1_info['headers'] and not table2_info['headers']:
         if not title1 and not title2:
             if page_diff == 1:
                 # 열 개수가 같거나 차이가 1 이하
                 col_diff = abs(table1_info['cols'] - table2_info['cols'])
-                if col_diff <= 1 and table1_info['cols'] >= 2:
+
+                # 테이블 너비 계산
+                bbox1 = table1_info['bbox']
+                bbox2 = table2_info['bbox']
+                width_check_passed = False
+
+                if bbox1 and bbox2:
+                    width1 = abs(bbox1.get('r', 0) - bbox1.get('l', 0))
+                    width2 = abs(bbox2.get('r', 0) - bbox2.get('l', 0))
+
+                    # 너비 차이 비율 계산
+                    if width1 > 0 and width2 > 0:
+                        width_diff_ratio = abs(width1 - width2) / min(width1, width2)
+                        # 너비 차이가 30% 이내면 통과
+                        if width_diff_ratio <= 0.3:
+                            width_check_passed = True
+                        else:
+                            return False, f"테이블 너비 차이가 큼 (너비 {width1:.0f} vs {width2:.0f}, 차이 {width_diff_ratio*100:.0f}%)"
+
+                if col_diff <= 1 and table1_info['cols'] >= 2 and width_check_passed:
                     # 키값(첫 번째 열) 중복 체크
                     # 같은 형식의 반복 테이블(예: 요구사항별 개별 테이블)을 구분
                     keys1 = set([normalize_text(k) for k in table1_info['key_values'][:10]])
