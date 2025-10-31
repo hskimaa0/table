@@ -43,7 +43,9 @@ def extract_tables_from_json(input_dir: str, output_dir: str):
             }
 
             # 출력 파일명 생성 (원본 이름 + _tables.json)
-            output_filename = json_file.stem + '_tables.json'
+            # Windows에서 사용할 수 없는 문자 제거
+            safe_stem = json_file.stem.replace('+', '_').replace(':', '_').replace('?', '_').replace('*', '_').replace('"', '_').replace('<', '_').replace('>', '_').replace('|', '_')
+            output_filename = safe_stem + '_tables.json'
             output_path = os.path.join(output_dir, output_filename)
 
             # 저장

@@ -7,7 +7,8 @@ import os
 from pathlib import Path
 from typing import List, Dict, Tuple
 import re
-from difflib import SequenceMatcher
+# from difflib import SequenceMatcher  # 더 이상 사용하지 않음 (sentence-transformers로 대체)
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.units import cm
@@ -16,6 +17,36 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.enums import TA_LEFT, TA_CENTER
+
+# 타이틀 분류기: ML 모델 사용 (transformers 필요)
+# fallback으로 규칙 기반 시스템도 포함
+try:
+    from title_classifier_ml import select_best_title_with_model
+    USE_ML_CLASSIFIER = True
+except ImportError:
+    print("경고: transformers 라이브러리가 없어 규칙 기반 타이틀 선택 사용")
+    from title_classifier import select_best_title
+    USE_ML_CLASSIFIER = False
+
+# 타이틀 유사도 비교용 sentence-transformers
+try:
+    from sentence_transformers import SentenceTransformer
+    from sklearn.metrics.pairwise import cosine_similarity
+    _similarity_model = None
+
+    def get_similarity_model():
+        """전역 sentence-transformer 모델 (lazy loading)"""
+        global _similarity_model
+        if _similarity_model is None:
+            print("  📊 타이틀 유사도 모델 로딩 중... (최초 1회)", flush=True)
+            _similarity_model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')  # 다국어 지원, 50MB
+            print("  ✅ 유사도 모델 로드 완료", flush=True)
+        return _similarity_model
+
+    USE_SIMILARITY_MODEL = True
+except ImportError:
+    print("경고: sentence-transformers 없음, 기본 유사도 사용")
+    USE_SIMILARITY_MODEL = False
 
 
 def register_korean_font():
@@ -214,41 +245,35 @@ def find_table_title(table: Dict, all_texts: List[Dict], all_tables: List[Dict] 
                             'y_position': text_bottom_y
                         })
 
-    # 거리가 가장 가까운 텍스트를 타이틀로 선택
+    # ML 모델을 사용하여 최적의 타이틀 선택
     if title_candidates:
-        title_candidates.sort(key=lambda x: x['distance'])
-
-        # 유효한 타이틀 찾기 (숫자만 있거나 너무 짧은 것 제외)
+        # 반복 패턴 필터링 (전처리)
+        filtered_candidates = []
         for candidate in title_candidates:
             title_text = candidate['text']
             distance = candidate['distance']
 
-            # 숫자만 있는 경우 제외 (페이지 번호 등)
+            # 숫자만 있는 경우 제외
             if title_text.isdigit():
                 continue
 
-            # 너무 짧은 텍스트 제외 (3자 미만)
-            if len(title_text.strip()) < 3:
+            # 너무 짧은 텍스트 제외 (2자 미만)
+            if len(title_text.strip()) < 2:
                 continue
 
             # 반복되는 header/footer 패턴 제외
             if repeated_patterns and title_text in repeated_patterns:
                 continue
 
-            # 페이지 헤더/장 제목 패턴 제외
-            # "제X장", "│ 숫자" 패턴이 포함된 경우
+            # 페이지 헤더 패턴 제외
             import re
             if '│' in title_text or '|' in title_text:
-                # "│ 15", "88 │ 제목" 같은 페이지 번호 패턴
-                # 숫자와 │가 함께 있으면 페이지 헤더로 간주
                 if re.search(r'\d+\s*[│|]', title_text) or re.search(r'[│|]\s*\d+', title_text):
                     continue
-            # "제1장", "제2장" 등으로 시작하는 경우
             if re.match(r'^제\d+장', title_text):
                 continue
 
             # 다른 테이블 안에 있는지 확인
-            # 거리가 50px 이내면 다른 테이블 내부라도 허용 (타이틀일 가능성 높음)
             if distance > 50 and all_tables:
                 text_bbox = None
                 for text_obj in all_texts:
@@ -257,16 +282,24 @@ def find_table_title(table: Dict, all_texts: List[Dict], all_tables: List[Dict] 
                         break
 
                 if text_bbox and is_text_in_any_table(text_bbox, all_tables, table):
-                    continue  # 다른 테이블 안에 있으면 제외
+                    continue
 
-            return title_text
+            filtered_candidates.append(candidate)
 
-    # 타이틀이 없을 수도 있음
+        # ML 모델 또는 규칙 기반으로 최적의 타이틀 선택
+        if USE_ML_CLASSIFIER:
+            return select_best_title_with_model(filtered_candidates)
+        else:
+            return select_best_title(filtered_candidates)
+
     return ""
 
 
 def extract_table_info(table: Dict, all_texts: List[Dict] = None, all_tables: List[Dict] = None, repeated_patterns: set = None) -> Dict:
     """테이블에서 필요한 정보 추출"""
+    import time
+    start = time.time()
+
     cells = table.get('data', {}).get('table_cells', [])
     page_no = table.get('prov', [{}])[0].get('page_no', -1)
 
@@ -351,7 +384,15 @@ def extract_table_info(table: Dict, all_texts: List[Dict] = None, all_tables: Li
     # 타이틀 추출
     title = ""
     if all_texts:
+        title_start = time.time()
         title = find_table_title(table, all_texts, all_tables, repeated_patterns=repeated_patterns)
+        title_time = time.time() - title_start
+        if title_time > 0.1:
+            print(f"      [타이틀 추출 느림: {title_time:.2f}초, 페이지 {page_no}]")
+
+    total_time = time.time() - start
+    if total_time > 0.5:
+        print(f"      [extract_table_info 느림: {total_time:.2f}초, 페이지 {page_no}]")
 
     return {
         'page_no': page_no,
@@ -473,57 +514,110 @@ def has_similar_structure(table1_info: Dict, table2_info: Dict) -> bool:
 
 
 def calculate_title_similarity(title1: str, title2: str) -> float:
-    """두 타이틀의 유사도 계산 (0~1 사이 값)"""
+    """두 타이틀의 유사도 계산 (0~1 사이 값) - ML 모델 기반"""
     if not title1 or not title2:
         return 0.0
 
-    # 정규화
+    # 완전 일치
+    if title1 == title2:
+        return 1.0
+
+    if USE_SIMILARITY_MODEL:
+        try:
+            # Sentence-Transformers로 의미적 유사도 계산
+            model = get_similarity_model()
+            embeddings = model.encode([title1, title2])
+            similarity = cosine_similarity([embeddings[0]], [embeddings[1]])[0][0]
+
+            # 모델이 계산한 유사도를 그대로 사용 (하드코딩 금지)
+            # 0.7 이상이면 유사, 0.85 이상이면 거의 동일
+            if similarity >= 0.85:
+                return 1.0
+            elif similarity >= 0.7:
+                return 0.7
+            else:
+                return 0.0
+
+        except Exception as e:
+            print(f"  ⚠️  유사도 계산 실패: {e}, fallback 사용", flush=True)
+            # Fallback: 단순 문자열 비교
+            pass
+
+    # Fallback: 정규화 후 단순 비교
     t1 = normalize_text(title1)
     t2 = normalize_text(title2)
 
-    if not t1 or not t2:
-        return 0.0
-
-    # 완전 일치
     if t1 == t2:
         return 1.0
-
-    # 차이 부분(diff) 추출
-    matcher = SequenceMatcher(None, t1, t2)
-    diff1_parts = []
-    diff2_parts = []
-
-    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
-        if tag == 'replace':
-            diff1_parts.append(t1[i1:i2])
-            diff2_parts.append(t2[j1:j2])
-        elif tag == 'delete':
-            diff1_parts.append(t1[i1:i2])
-        elif tag == 'insert':
-            diff2_parts.append(t2[j1:j2])
-
-    diff1 = ''.join(diff1_parts)
-    diff2 = ''.join(diff2_parts)
-
-    # 차이가 숫자(와 점)로만 이루어져 있고 다르면 -> 다른 표 번호
-    if diff1 and diff2:
-        if re.match(r'^[\d.]+$', diff1) and re.match(r'^[\d.]+$', diff2):
-            if diff1 != diff2:
-                return 0.0  # 표 번호가 다름 (예: 표 3.3 vs 표 3.4)
-
-    # 전체 유사도 계산
-    ratio = matcher.ratio()
-
-    if ratio >= 0.85:
-        return 1.0
-    elif ratio >= 0.7:
+    elif t1 in t2 or t2 in t1:
         return 0.7
     else:
         return 0.0
 
 
+def _check_text_continuation(table1_info: Dict, table2_info: Dict) -> Tuple[bool, str]:
+    """텍스트 연결성 확인 (병렬 처리용)"""
+    if table1_info['texts'] and table2_info['texts']:
+        last_texts = table1_info['texts'][-5:]
+        first_texts = table2_info['texts'][:5]
+
+        for prev_text in last_texts:
+            for curr_text in first_texts:
+                if is_continuation_text(prev_text, curr_text):
+                    return True, f"텍스트 연결: '{prev_text}' -> '{curr_text}'"
+    return False, ""
+
+
+def _check_header_similarity(table1_info: Dict, table2_info: Dict) -> Tuple[bool, str, int, float]:
+    """헤더 유사도 확인 (병렬 처리용)"""
+    if table1_info['headers'] and table2_info['headers']:
+        headers1 = [normalize_text(h) for h in table1_info['headers'] if len(normalize_text(h)) > 0]
+        headers2 = [normalize_text(h) for h in table2_info['headers'] if len(normalize_text(h)) > 0]
+
+        if len(headers1) >= 2 and len(headers2) >= 2:
+            headers1_set = set(headers1)
+            headers2_set = set(headers2)
+
+            common = headers1_set & headers2_set
+            similarity = len(common) / max(len(headers1_set), len(headers2_set))
+
+            partial_match_count = 0
+            for h1 in headers1:
+                for h2 in headers2:
+                    if len(h1) >= 3 and len(h2) >= 3:
+                        if len(h1) > len(h2) + 2 and h2 in h1:
+                            partial_match_count += 1
+                            break
+                        elif len(h2) > len(h1) + 2 and h1 in h2:
+                            partial_match_count += 1
+                            break
+
+            partial_similarity = partial_match_count / max(len(headers1), len(headers2))
+
+            if (similarity >= 1.0 and len(common) >= 2) or (partial_similarity >= 0.5 and partial_match_count >= 2):
+                return True, "", len(common), partial_match_count
+
+    return False, "", 0, 0
+
+
+def _check_width_similarity(table1_info: Dict, table2_info: Dict) -> Tuple[bool, float, float, float]:
+    """테이블 너비 유사도 확인 (병렬 처리용)"""
+    bbox1 = table1_info['bbox']
+    bbox2 = table2_info['bbox']
+
+    if bbox1 and bbox2:
+        width1 = abs(bbox1.get('r', 0) - bbox1.get('l', 0))
+        width2 = abs(bbox2.get('r', 0) - bbox2.get('l', 0))
+
+        if width1 > 0 and width2 > 0:
+            width_diff_ratio = abs(width1 - width2) / min(width1, width2)
+            return True, width1, width2, width_diff_ratio
+
+    return False, 0, 0, 0
+
+
 def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, str]:
-    """두 테이블이 연결되어 있는지 확인"""
+    """두 테이블이 연결되어 있는지 확인 (조건 병렬 처리)"""
     # 페이지 차이 확인
     page_diff = table2_info['page_no'] - table1_info['page_no']
 
@@ -535,16 +629,38 @@ def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, 
     if not has_similar_structure(table1_info, table2_info):
         return False, "테이블 구조가 다름"
 
-    # 타이틀 체크 (텍스트 연결보다 우선)
-    # 둘 다 명확한 타이틀이 있고 다른 경우, 텍스트 연결이 있어도 분리
+    # 타이틀 정보
     title1 = table1_info.get('title', '')
     title2 = table2_info.get('title', '')
 
-    if title1 and title2:
-        title_similarity = calculate_title_similarity(title1, title2)
+    # 병렬로 처리할 조건들
+    from concurrent.futures import ThreadPoolExecutor
 
-        # 같은 페이지에 있으면서 타이틀이 다른 경우 (유사도 80% 미만)
-        # 더 엄격하게 분리 (같은 페이지의 서로 다른 테이블)
+    results = {}
+    futures = {}
+
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        # 모든 태스크를 먼저 제출 (병렬 실행 시작)
+        if title1 and title2:
+            futures['title'] = executor.submit(calculate_title_similarity, title1, title2)
+
+        futures['text'] = executor.submit(_check_text_continuation, table1_info, table2_info)
+        futures['header'] = executor.submit(_check_header_similarity, table1_info, table2_info)
+        futures['width'] = executor.submit(_check_width_similarity, table1_info, table2_info)
+
+        # 모든 결과를 한번에 수집 (병렬 실행 완료 대기)
+        if 'title' in futures:
+            results['title_similarity'] = futures['title'].result()
+
+        results['text_connected'], results['text_reason'] = futures['text'].result()
+        results['header_similar'], _, results['header_common_count'], results['header_partial_count'] = futures['header'].result()
+        results['width_available'], results['width1'], results['width2'], results['width_diff_ratio'] = futures['width'].result()
+
+    # === 타이틀 체크 (텍스트 연결보다 우선) ===
+    if title1 and title2:
+        title_similarity = results.get('title_similarity', 0)
+
+        # 같은 페이지에 있으면서 타이틀이 다른 경우
         if page_diff == 0 and title_similarity < 0.8:
             return False, f"같은 페이지의 다른 테이블 ('{title1}' vs '{title2}', 유사도: {title_similarity:.2f})"
 
@@ -552,181 +668,112 @@ def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, 
         if title_similarity < 0.85:
             return False, f"타이틀이 다름 ('{title1}' vs '{title2}', 유사도: {title_similarity:.2f})"
 
-    # 두 번째 테이블에만 타이틀이 있는 경우: 새로운 섹션 시작
+    # 두 번째 테이블에만 타이틀이 있는 경우
     elif not title1 and title2:
         return False, f"두 번째 테이블에 새로운 타이틀 시작 ('{title2}')"
 
-    # 텍스트 연결성 확인 (명확한 텍스트 이어짐)
-    if table1_info['texts'] and table2_info['texts']:
-        # 마지막 몇 개의 셀 텍스트와 첫 몇 개의 셀 텍스트 비교
-        last_texts = table1_info['texts'][-5:]
-        first_texts = table2_info['texts'][:5]
+    # === 텍스트 연결성 확인 ===
+    # 주의: 텍스트 연결성만으로는 불충분 (우연히 비슷한 단어로 시작/끝날 수 있음)
+    # 타이틀이나 헤더 등 더 명확한 증거가 필요
+    # if results['text_connected']:
+    #     return True, results['text_reason']
 
-        for prev_text in last_texts:
-            for curr_text in first_texts:
-                if is_continuation_text(prev_text, curr_text):
-                    return True, f"텍스트 연결: '{prev_text}' -> '{curr_text}'"
+    # === 타이틀 있음 → 타이틀 없음 연결 체크 ===
+    # 주의: 이 조건은 매우 신중하게 적용해야 함
+    # 타이틀이 있는 테이블 뒤에 타이틀 없는 테이블이 와도, 명확한 연결 증거가 있어야 병합
+    # 단순히 구조가 유사하다고 병합하면 안 됨 (별개의 테이블일 수 있음)
+    # 이 조건은 제거하거나 매우 제한적으로만 사용
+    # if title1 and not title2 and page_diff == 1:
+    #     if has_similar_structure(table1_info, table2_info):
+    #         return True, f"타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
 
-    # 타이틀 있음 → 타이틀 없음 연결 체크 (텍스트 연결성과 함께)
-    # 첫 번째 테이블에 타이틀이 있고 두 번째에 없으며, 연속 페이지인 경우
-    if title1 and not title2 and page_diff == 1:
-        # 구조가 유사하면 연결 (계속되는 테이블로 판단)
-        if has_similar_structure(table1_info, table2_info):
-            return True, f"타이틀이 있는 테이블 뒤 계속 (구조 유사, 연속 페이지)"
+    # === 헤더 동일 체크 ===
+    if results['header_similar']:
+        # 두 번째 테이블에만 타이틀이 있으면 분리
+        if not title1 and title2:
+            return False, f"두 번째 테이블에 새로운 타이틀 시작 ('{title2}')"
 
-    # 헤더가 동일한 경우도 연결된 테이블로 간주
-    # 첫 번째 테이블에 헤더가 있고, 두 번째 테이블에 헤더가 없는 경우도 허용
-    # (헤더가 있는 테이블 뒤에 데이터만 있는 테이블이 올 수 있음)
-    if table1_info['headers'] and table2_info['headers']:
-        # 둘 다 헤더가 있는 경우: 헤더 비교
-        headers1 = [normalize_text(h) for h in table1_info['headers'] if len(normalize_text(h)) > 0]
-        headers2 = [normalize_text(h) for h in table2_info['headers'] if len(normalize_text(h)) > 0]
+        # 키값 중복 체크
+        keys1 = set([normalize_text(k) for k in table1_info['key_values'][:10]])
+        keys2 = set([normalize_text(k) for k in table2_info['key_values'][:10]])
 
-        # 헤더가 충분히 있어야 함 (최소 2개)
-        if len(headers1) >= 2 and len(headers2) >= 2:
-            headers1_set = set(headers1)
-            headers2_set = set(headers2)
+        if keys1 and keys2:
+            common_keys = keys1 & keys2
+            key_overlap_ratio = len(common_keys) / min(len(keys1), len(keys2)) if min(len(keys1), len(keys2)) > 0 else 0
 
-            # 공통 헤더 개수와 비율 계산 (정확히 일치)
-            common = headers1_set & headers2_set
-            similarity = len(common) / max(len(headers1_set), len(headers2_set))
+            if key_overlap_ratio > 0.3:
+                return False, f"헤더는 동일하지만 키값이 겹침 ({len(common_keys)}개 중복)"
 
-            # 부분 일치 개수 계산 (포함 관계)
-            # 짧은 문자열이 긴 문자열에 포함되는지 확인 (길이 차이가 있어야 함)
-            partial_match_count = 0
-            for h1 in headers1:
-                for h2 in headers2:
-                    # 최소 3자 이상, 길이가 비슷하지 않아야 함
-                    if len(h1) >= 3 and len(h2) >= 3:
-                        # 더 긴 문자열에 짧은 문자열이 포함되고, 길이 차이가 최소 2자 이상
-                        if len(h1) > len(h2) + 2 and h2 in h1:
-                            partial_match_count += 1
-                            break
-                        elif len(h2) > len(h1) + 2 and h1 in h2:
-                            partial_match_count += 1
-                            break
+        if results['header_common_count'] >= 2:
+            return True, f"헤더가 동일함 ({results['header_common_count']}개 일치)"
+        else:
+            return True, f"헤더가 부분 일치함 ({results['header_partial_count']}개 부분 일치)"
 
-            # 헤더가 100% 일치하고 공통 헤더가 2개 이상이거나, 부분 일치가 50% 이상인 경우
-            partial_similarity = partial_match_count / max(len(headers1), len(headers2))
-
-            if (similarity >= 1.0 and len(common) >= 2) or (partial_similarity >= 0.5 and partial_match_count >= 2):
-                # 헤더가 동일하더라도 타이틀 체크 먼저 수행
-                # 두 번째 테이블에만 타이틀이 있으면 새로운 섹션이므로 분리
-                title1 = table1_info.get('title', '')
-                title2 = table2_info.get('title', '')
-
-                if not title1 and title2:
-                    return False, f"두 번째 테이블에 새로운 타이틀 시작 ('{title2}')"
-
-                # 헤더가 동일한 경우, 키값도 체크
-                keys1 = set([normalize_text(k) for k in table1_info['key_values'][:10]])  # 최대 10개만 비교
-                keys2 = set([normalize_text(k) for k in table2_info['key_values'][:10]])
-
-                # 키값이 겹치면 다른 테이블로 판단
-                if keys1 and keys2:
-                    common_keys = keys1 & keys2
-                    key_overlap_ratio = len(common_keys) / min(len(keys1), len(keys2)) if min(len(keys1), len(keys2)) > 0 else 0
-
-                    if key_overlap_ratio > 0.3:  # 30% 이상 겹치면 다른 테이블
-                        return False, f"헤더는 동일하지만 키값이 겹침 ({len(common_keys)}개 중복)"
-
-                if len(common) >= 2:
-                    return True, f"헤더가 동일함 ({len(common)}개 일치)"
-                else:
-                    return True, f"헤더가 부분 일치함 ({partial_match_count}개 부분 일치)"
-
-    # 타이틀 유사도 확인 (헤더 체크 이후에 실행)
-    # 헤더가 동일하지 않은 경우에만 타이틀로 분리/연결 여부 판단
-    title1 = table1_info.get('title', '')
-    title2 = table2_info.get('title', '')
-
-    # 둘 다 타이틀이 있는 경우: 유사도 체크
+    # === 타이틀 유사도 확인 (헤더 체크 이후) ===
     if title1 and title2:
-        title_similarity = calculate_title_similarity(title1, title2)
+        title_similarity = results.get('title_similarity', 0)
 
-        # 타이틀 유사도가 1.0이면 같은 표이므로 연결 (구조가 달라도)
         if title_similarity >= 1.0:
             return True, f"타이틀이 같음 ('{title1}')"
 
-        # 타이틀 유사도가 0.85 미만이면 다른 테이블로 판단
         if title_similarity < 0.85:
             return False, f"타이틀이 다름 ('{title1}' vs '{title2}', 유사도: {title_similarity:.2f})"
 
-    # 두 번째 테이블에만 타이틀이 있는 경우: 새로운 섹션 시작으로 판단
     elif not title1 and title2:
         return False, f"두 번째 테이블에 새로운 타이틀 시작 ('{title2}')"
 
-    # 첫 번째 테이블에만 헤더가 있는 경우
-    elif table1_info['headers'] and not table2_info['headers']:
-        # 페이지가 바로 이어지는 경우 (1-2페이지 차이)
+    # === 헤더 있음 -> 헤더 없음 패턴 ===
+    if table1_info['headers'] and not table2_info['headers']:
         if page_diff >= 1 and page_diff <= 2:
-            # 텍스트 연결성 체크
-            if table1_info['texts'] and table2_info['texts']:
-                last_texts = table1_info['texts'][-5:]
-                first_texts = table2_info['texts'][:5]
+            # 텍스트 연결성은 사용하지 않음 (너무 많은 오탐)
+            # if results['text_connected']:
+            #     return True, f"헤더 테이블 뒤 데이터 테이블 - {results['text_reason']}"
+            pass
 
-                for prev_text in last_texts:
-                    for curr_text in first_texts:
-                        if is_continuation_text(prev_text, curr_text):
-                            return True, f"헤더 테이블 뒤 데이터 테이블 - 텍스트 연결: '{prev_text}' -> '{curr_text}'"
-
-            # 첫 번째 테이블에 타이틀이 있고, 연속 페이지면 연결
-            # (헤더 테이블 뒤에 데이터 테이블이 이어지는 패턴)
+            # 타이틀 있는 헤더 테이블 뒤 데이터 테이블
+            # 조건: 타이틀이 있고, 헤더가 있고, 다음 테이블에 헤더가 없고, 열 개수와 너비가 유사한 경우
             if title1 and page_diff == 1:
-                return True, f"타이틀이 있는 헤더 테이블 뒤 데이터 테이블 (연속 페이지)"
+                col_diff = abs(table1_info['cols'] - table2_info['cols'])
 
-            # 헤더 있는 테이블 뒤 헤더 없는 테이블: 열 개수와 너비가 비슷하면 연결
-            # (페이지를 넘어가면서 헤더 없이 데이터만 계속되는 패턴)
+                # 열 개수와 너비도 함께 체크
+                if results['width_available']:
+                    width_diff_ratio = results['width_diff_ratio']
+
+                    # 열 개수가 같거나 차이가 1 이하이고, 너비 차이가 20% 이내면 연결
+                    if col_diff <= 1 and table1_info['cols'] >= 2 and width_diff_ratio <= 0.2:
+                        return True, f"타이틀이 있는 헤더 테이블 뒤 데이터 테이블 (열 {table1_info['cols']}개 vs {table2_info['cols']}개, 너비 유사도 {(1-width_diff_ratio)*100:.0f}%, 연속 페이지)"
+
+            # 열 개수와 너비 체크 (타이틀 없는 경우)
+            # 조건: 헤더 있는 테이블 뒤에 헤더 없는 테이블이 연속으로 오는 경우
             if page_diff == 1:
                 col_diff = abs(table1_info['cols'] - table2_info['cols'])
 
-                # 테이블 너비 계산
-                bbox1 = table1_info['bbox']
-                bbox2 = table2_info['bbox']
-                if bbox1 and bbox2:
-                    width1 = abs(bbox1.get('r', 0) - bbox1.get('l', 0))
-                    width2 = abs(bbox2.get('r', 0) - bbox2.get('l', 0))
+                if results['width_available']:
+                    width_diff_ratio = results['width_diff_ratio']
 
-                    # 너비 차이 비율 계산 (작은 쪽 대비)
-                    if width1 > 0 and width2 > 0:
-                        width_diff_ratio = abs(width1 - width2) / min(width1, width2)
+                    # 옵션 1: 열 개수 정확히 일치, 너비 차이 10% 이내
+                    if col_diff == 0 and table1_info['cols'] >= 2 and width_diff_ratio <= 0.1:
+                        return True, f"헤더 테이블 뒤 데이터 테이블 (열 {table1_info['cols']}개 동일, 너비 유사도 {(1-width_diff_ratio)*100:.0f}%, 연속 페이지)"
 
-                        # 열 개수가 같거나 차이가 2 이하이고, 너비 차이가 30% 이내면 연결
-                        if col_diff <= 2 and table1_info['cols'] >= 2 and width_diff_ratio <= 0.3:
-                            return True, f"헤더 테이블 뒤 데이터 테이블 (열 {table1_info['cols']}개 vs {table2_info['cols']}개, 너비 유사도 {(1-width_diff_ratio)*100:.0f}%, 연속 페이지)"
+                    # 옵션 2: 열 개수 차이 1, 너비 거의 동일 (1% 이내)
+                    # 같은 테이블이 페이지 넘김으로 인해 열이 약간 다르게 인식될 수 있음
+                    if col_diff == 1 and table1_info['cols'] >= 2 and width_diff_ratio <= 0.01:
+                        return True, f"헤더 테이블 뒤 데이터 테이블 (열 {table1_info['cols']}개 vs {table2_info['cols']}개, 너비 거의 동일 {(1-width_diff_ratio)*100:.1f}%, 연속 페이지)"
 
-    # 두 번째 테이블에만 헤더가 있는 경우는 일반적으로 새로운 테이블
-    # (연결되지 않음)
-
-    # 둘 다 헤더가 없고 타이틀도 없는 경우 (데이터 테이블 연속)
-    # 연속 페이지이고 열 개수와 너비가 비슷하면 연결
+    # === 둘 다 헤더 없음 패턴 ===
     if not table1_info['headers'] and not table2_info['headers']:
-        if not title1 and not title2:
-            if page_diff == 1:
-                # 열 개수가 같거나 차이가 1 이하
-                col_diff = abs(table1_info['cols'] - table2_info['cols'])
+        if not title1 and not title2 and page_diff == 1:
+            col_diff = abs(table1_info['cols'] - table2_info['cols'])
 
-                # 테이블 너비 계산
-                bbox1 = table1_info['bbox']
-                bbox2 = table2_info['bbox']
-                width_check_passed = False
+            if results['width_available']:
+                width_diff_ratio = results['width_diff_ratio']
 
-                if bbox1 and bbox2:
-                    width1 = abs(bbox1.get('r', 0) - bbox1.get('l', 0))
-                    width2 = abs(bbox2.get('r', 0) - bbox2.get('l', 0))
+                if width_diff_ratio > 0.3:
+                    return False, f"테이블 너비 차이가 큼 (너비 {results['width1']:.0f} vs {results['width2']:.0f}, 차이 {width_diff_ratio*100:.0f}%)"
 
-                    # 너비 차이 비율 계산
-                    if width1 > 0 and width2 > 0:
-                        width_diff_ratio = abs(width1 - width2) / min(width1, width2)
-                        # 너비 차이가 30% 이내면 통과
-                        if width_diff_ratio <= 0.3:
-                            width_check_passed = True
-                        else:
-                            return False, f"테이블 너비 차이가 큼 (너비 {width1:.0f} vs {width2:.0f}, 차이 {width_diff_ratio*100:.0f}%)"
-
-                if col_diff <= 1 and table1_info['cols'] >= 2 and width_check_passed:
-                    # 키값(첫 번째 열) 중복 체크
-                    # 같은 형식의 반복 테이블(예: 요구사항별 개별 테이블)을 구분
+                # 헤더 없는 데이터 테이블끼리는 열 개수가 정확히 일치해야 함
+                if col_diff == 0 and table1_info['cols'] >= 2:
+                    # 키값 중복 체크
                     keys1 = set([normalize_text(k) for k in table1_info['key_values'][:10]])
                     keys2 = set([normalize_text(k) for k in table2_info['key_values'][:10]])
 
@@ -734,14 +781,10 @@ def check_table_connection(table1_info: Dict, table2_info: Dict) -> Tuple[bool, 
                         common_keys = keys1 & keys2
                         key_overlap_ratio = len(common_keys) / min(len(keys1), len(keys2)) if min(len(keys1), len(keys2)) > 0 else 0
 
-                        # 키값이 50% 이상 겹치면 같은 형식의 반복 테이블이므로 분리
                         if key_overlap_ratio > 0.5:
                             return False, f"같은 형식의 반복 테이블 (키값 {len(common_keys)}개 중복, 중복률 {key_overlap_ratio:.0%})"
 
-                    return True, f"헤더 없는 데이터 테이블 연속 (열 {table1_info['cols']}개 vs {table2_info['cols']}개, 연속 페이지)"
-
-    # "연속 페이지, 유사 구조" 조건 제거
-    # 명확한 연결성(텍스트 이어짐, 헤더 동일, 헤더+데이터)만 인정
+                    return True, f"헤더 없는 데이터 테이블 연속 (열 {table1_info['cols']}개 동일, 연속 페이지)"
 
     return False, "연결 조건 미충족"
 
@@ -768,11 +811,37 @@ def merge_tables(table_group: List[Dict]) -> Dict:
     return merged
 
 
-def find_connected_table_groups(tables: List[Dict], all_texts: List[Dict] = None, repeated_patterns: set = None) -> List[List[int]]:
-    """연결된 테이블 그룹 찾기"""
-    table_infos = [extract_table_info(table, all_texts, tables, repeated_patterns) for table in tables]
+def _check_connection_pair(args):
+    """병렬 처리를 위한 테이블 쌍 비교 함수"""
+    table_info_i, table_info_j, i, j = args
+    is_connected, reason = check_table_connection(table_info_i, table_info_j)
+    return (i, j, is_connected, reason)
+
+
+def find_connected_table_groups(tables: List[Dict], all_texts: List[Dict] = None, repeated_patterns: set = None, use_parallel: bool = True, max_workers: int = None) -> List[List[int]]:
+    """연결된 테이블 그룹 찾기
+
+    Args:
+        tables: 테이블 목록
+        all_texts: 전체 텍스트 목록
+        repeated_patterns: 반복되는 패턴
+        use_parallel: 병렬 처리 사용 여부 (기본값: True)
+        max_workers: 병렬 처리 워커 수 (기본값: CPU 코어 수)
+    """
+    print(f"  [1/4] 테이블 정보 추출 중... ({len(tables)}개)", flush=True)
+
+    # 타이틀 추출은 순차 처리 (ML 모델 공유를 위해)
+    # 병렬 처리하면 각 프로세스마다 모델을 로드해서 오히려 느림
+    table_infos = []
+    for idx, table in enumerate(tables):
+        if (idx + 1) % 10 == 0 or (idx + 1) == len(tables):
+            print(f"      → 진행: {idx + 1}/{len(tables)} 테이블 처리 중", end='\r', flush=True)
+        table_infos.append(extract_table_info(table, all_texts, tables, repeated_patterns))
+
+    print(f"\n  [1/4] 완료 - 타이틀 추출됨", flush=True)
 
     # 페이지 번호순으로 정렬
+    print(f"  [2/4] 페이지 순서대로 정렬 중...", flush=True)
     sorted_indices = sorted(range(len(table_infos)),
                           key=lambda i: table_infos[i]['page_no'])
 
@@ -782,22 +851,61 @@ def find_connected_table_groups(tables: List[Dict], all_texts: List[Dict] = None
     all_disconnection_reasons = {}  # 모든 비연속 이유 저장 (테이블 인덱스별)
 
     # 먼저 모든 인접 테이블 쌍에 대해 연속성 체크
-    for idx in range(len(sorted_indices) - 1):
-        i = sorted_indices[idx]
-        j = sorted_indices[idx + 1]
+    connection_results = {}
 
-        is_connected, reason = check_table_connection(
-            table_infos[i],
-            table_infos[j]
-        )
+    print(f"  [3/4] 테이블 연결성 체크 중... ({len(sorted_indices)-1}개 쌍)", flush=True)
+    if use_parallel and len(sorted_indices) > 1:
+        # 병렬 처리: 모든 인접 쌍을 동시에 비교
+        comparison_tasks = []
+        for idx in range(len(sorted_indices) - 1):
+            i = sorted_indices[idx]
+            j = sorted_indices[idx + 1]
+            comparison_tasks.append((table_infos[i], table_infos[j], i, j))
 
-        if not is_connected:
-            # 비연속인 경우 저장
-            if i not in all_disconnection_reasons:
-                all_disconnection_reasons[i] = []
-            all_disconnection_reasons[i].append(f"Table {i} -X-> {j}: {reason}")
+        # ThreadPoolExecutor로 병렬 실행 (ProcessPool보다 오버헤드 적음)
+        print(f"      → 병렬 처리 모드 (워커: {max_workers or 'CPU 코어 수'})", flush=True)
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = [executor.submit(_check_connection_pair, task) for task in comparison_tasks]
+
+            completed = 0
+            total = len(futures)
+            for future in as_completed(futures):
+                i, j, is_connected, reason = future.result()
+                connection_results[(i, j)] = (is_connected, reason)
+
+                completed += 1
+                if completed % 10 == 0 or completed == total:
+                    print(f"      → 진행: {completed}/{total} 쌍 완료", end='\r', flush=True)
+
+                if not is_connected:
+                    if i not in all_disconnection_reasons:
+                        all_disconnection_reasons[i] = []
+                    all_disconnection_reasons[i].append(f"Table {i} -X-> {j}: {reason}")
+            print(flush=True)  # 줄바꿈
+    else:
+        # 순차 처리 (기존 방식)
+        print(f"      → 순차 처리 모드")
+        for idx in range(len(sorted_indices) - 1):
+            i = sorted_indices[idx]
+            j = sorted_indices[idx + 1]
+
+            is_connected, reason = check_table_connection(
+                table_infos[i],
+                table_infos[j]
+            )
+
+            connection_results[(i, j)] = (is_connected, reason)
+
+            if not is_connected:
+                # 비연속인 경우 저장
+                if i not in all_disconnection_reasons:
+                    all_disconnection_reasons[i] = []
+                all_disconnection_reasons[i].append(f"Table {i} -X-> {j}: {reason}")
+
+    print(f"  [3/4] 완료 - 연결성 체크 완료", flush=True)
 
     # 연결된 그룹 찾기
+    print(f"  [4/4] 테이블 그룹핑 중...", flush=True)
     for i in sorted_indices:
         if i in visited:
             continue
@@ -816,12 +924,8 @@ def find_connected_table_groups(tables: List[Dict], all_texts: List[Dict] = None
             if j in visited:
                 continue
 
-            # IMPORTANT: 정렬된 순서상 바로 다음 테이블만 비교
-            # visited된 테이블을 건너뛰고 다음 테이블 확인
-            is_connected, reason = check_table_connection(
-                table_infos[current_idx],
-                table_infos[j]
-            )
+            # 이미 계산된 연결 결과 사용
+            is_connected, reason = connection_results.get((current_idx, j), (False, "비교되지 않음"))
 
             if is_connected:
                 current_group.append(j)
@@ -834,6 +938,8 @@ def find_connected_table_groups(tables: List[Dict], all_texts: List[Dict] = None
 
         groups.append(current_group)
         connection_reasons.append(current_reasons)
+
+    print(f"  [4/4] 완료 - {len([g for g in groups if len(g) > 1])}개 그룹 생성", flush=True)
 
     return groups, connection_reasons, all_disconnection_reasons, table_infos
 
@@ -889,14 +995,10 @@ def create_visualization_pdf(json_files: List[str], output_dir: str, font_name: 
         tables = data.get('tables', [])
         groups, reasons, all_disconnections, table_infos = find_connected_table_groups(tables)
 
-        # 병합된 그룹만 필터링
+        # 병합된 그룹과 단일 그룹 분리
         merged_groups = [g for g in groups if len(g) > 1]
         merged_reasons = [r for g, r in zip(groups, reasons) if len(g) > 1]
-
-        if not merged_groups:
-            story.append(Paragraph("병합된 테이블 없음", normal_style))
-            story.append(Spacer(1, 0.3*cm))
-            continue
+        single_groups = [g for g in groups if len(g) == 1]
 
         total_merged += len(merged_groups)
 
@@ -907,6 +1009,12 @@ def create_visualization_pdf(json_files: List[str], output_dir: str, font_name: 
                 f"병합 그룹 {group_idx}: {len(group)}개 테이블 (페이지 {pages})",
                 normal_style
             ))
+
+            # 타이틀 정보 표시
+            titles = [table_infos[i]['title'] for i in group if table_infos[i]['title']]
+            if titles:
+                # 첫 번째 타이틀 (대표 타이틀)
+                story.append(Paragraph(f"  📋 타이틀: {titles[0]}", normal_style))
 
             # 연결 이유
             for reason in group_reasons:
@@ -919,21 +1027,23 @@ def create_visualization_pdf(json_files: List[str], output_dir: str, font_name: 
                         story.append(Paragraph(f"  • (비연속) {reason}", normal_style))
 
             # 테이블 미리보기 데이터 준비
-            preview_data = [["테이블", "페이지", "행수", "열수", "샘플 텍스트"]]
+            preview_data = [["테이블", "페이지", "행수", "열수", "타이틀", "샘플 텍스트"]]
 
             for idx in group:
                 info = table_infos[idx]
-                sample_text = info['texts'][0][:30] + "..." if info['texts'] else ""
+                sample_text = info['texts'][0][:20] + "..." if info['texts'] else ""
+                title_text = info['title'][:30] + "..." if info['title'] and len(info['title']) > 30 else (info['title'] or "")
                 preview_data.append([
                     f"#{idx}",
                     str(info['page_no']),
                     str(info['rows']),
                     str(info['cols']),
+                    title_text,
                     sample_text
                 ])
 
-            # 테이블 스타일
-            t = Table(preview_data, colWidths=[2*cm, 2*cm, 2*cm, 2*cm, 8*cm])
+            # 테이블 스타일 (타이틀 컬럼 추가로 너비 조정)
+            t = Table(preview_data, colWidths=[1.5*cm, 1.5*cm, 1.5*cm, 1.5*cm, 5*cm, 5*cm])
             t.setStyle(TableStyle([
                 ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#3498DB')),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
@@ -950,6 +1060,47 @@ def create_visualization_pdf(json_files: List[str], output_dir: str, font_name: 
             story.append(Spacer(1, 0.2*cm))
             story.append(t)
             story.append(Spacer(1, 0.5*cm))
+
+        # 단일 테이블 정보 표시
+        if single_groups:
+            story.append(Spacer(1, 0.5*cm))
+            story.append(Paragraph(f"단일 테이블 ({len(single_groups)}개)", normal_style))
+            story.append(Spacer(1, 0.3*cm))
+
+            # 단일 테이블 미리보기
+            single_preview_data = [["테이블", "페이지", "행수", "열수", "타이틀", "샘플 텍스트"]]
+
+            for group in single_groups[:20]:  # 최대 20개만 표시
+                idx = group[0]
+                info = table_infos[idx]
+                sample_text = info['texts'][0][:20] + "..." if info['texts'] else ""
+                title_text = info['title'][:30] + "..." if info['title'] and len(info['title']) > 30 else (info['title'] or "")
+                single_preview_data.append([
+                    f"#{idx}",
+                    str(info['page_no']),
+                    str(info['rows']),
+                    str(info['cols']),
+                    title_text,
+                    sample_text
+                ])
+
+            t_single = Table(single_preview_data, colWidths=[1.5*cm, 1.5*cm, 1.5*cm, 1.5*cm, 5*cm, 5*cm])
+            t_single.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#95A5A6')),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                ('FONTNAME', (0, 0), (-1, -1), font_name),
+                ('FONTSIZE', (0, 0), (-1, 0), 10),
+                ('FONTSIZE', (0, 1), (-1, -1), 8),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.lightgrey),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ]))
+
+            story.append(t_single)
+            if len(single_groups) > 20:
+                story.append(Paragraph(f"  (외 {len(single_groups) - 20}개 생략...)", normal_style))
 
         story.append(PageBreak())
 
@@ -972,8 +1123,10 @@ def process_json_files(input_dir: str, output_dir: str, original_json_dir: str =
 
     all_results = []
 
-    for json_file in json_files:
-        print(f"\n처리 중: {json_file.name}")
+    for file_idx, json_file in enumerate(json_files, 1):
+        print(f"\n" + "="*60, flush=True)
+        print(f"[{file_idx}/{len(json_files)}] 처리 중: {json_file.name}", flush=True)
+        print("="*60, flush=True)
 
         with open(json_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -1079,9 +1232,11 @@ def process_json_files(input_dir: str, output_dir: str, original_json_dir: str =
         all_results.append(result)
 
         # 개별 파일 결과 저장
+        # Windows에서 사용할 수 없는 문자 제거
+        safe_filename = json_file.stem.replace('+', '_').replace(':', '_').replace('?', '_').replace('*', '_').replace('"', '_').replace('<', '_').replace('>', '_').replace('|', '_')
         output_file = os.path.join(
             output_dir,
-            f"{json_file.stem}_merged.json"
+            f"{safe_filename}_merged.json"
         )
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(result, f, ensure_ascii=False, indent=2)
