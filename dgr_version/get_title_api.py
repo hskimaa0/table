@@ -95,14 +95,14 @@ def calculate_distance(text_bbox, table_bbox):
     return vertical_distance + (horizontal_distance * HORIZONTAL_WEIGHT)
 
 def extract_text_content(text_obj):
-    """text 객체에서 실제 텍스트 추출 (x 좌표 순서대로)"""
+    """text 객체에서 실제 텍스트 추출 (tid 순서대로)"""
     # 't' 배열 내부의 'text' 속성 (주어진 데이터 형식)
     if 't' in text_obj and isinstance(text_obj['t'], list) and len(text_obj['t']) > 0:
-        # 't' 배열을 x 좌표(bbox.l) 순서대로 정렬
+        # 't' 배열을 tid 순서대로 정렬 (원본 문서 순서)
         t_items = text_obj['t']
 
-        # bbox 정보가 있으면 x 좌표로 정렬
-        sorted_items = sorted(t_items, key=lambda item: item.get('bbox', [0, 0, 0, 0])[0] if item.get('bbox') else 0)
+        # tid로 정렬
+        sorted_items = sorted(t_items, key=lambda item: item.get('tid', 0))
 
         # 정렬된 순서대로 텍스트 추출
         texts = []
@@ -356,6 +356,18 @@ def find_title_for_table(table, texts):
             print(f"    {i+1}. ❌ '{text_preview}' - 빈 텍스트")
             continue
 
+        # 완전한 문장 형태 제외 (설명문은 제목이 아님)
+        text_stripped = text_content.strip()
+        # 동사로 끝나는 문장 제외 (제목은 명사구여야 함)
+        if re.search(r'[가-힣]다\.?\s*$', text_stripped):
+            print(f"    {i+1}. ❌ '{text_preview}' - 동사로 끝나는 문장 (제목 아님)")
+            continue
+
+        # 너무 긴 텍스트는 제목이 아닐 가능성이 높음
+        if len(text_stripped) > 100:
+            print(f"    {i+1}. ❌ '{text_preview}' - 너무 긴 텍스트 ({len(text_stripped)}자)")
+            continue
+
         # 점수 계산
         score = score_title_candidate(text, text_content, distance)
 
@@ -455,4 +467,4 @@ def get_title():
         return jsonify({'error': 'Data must be an object with tables and texts, or an array of tables'}), 400
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5555, debug=False)
+    app.run(host='0.0.0.0', port=5555, debug=True)
