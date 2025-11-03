@@ -8,20 +8,39 @@ import re
 
 app = Flask(__name__)
 
+# ========== 상수 정의 ==========
+# 거리 및 필터링 관련
+MAX_DISTANCE_THRESHOLD = 10000  # 타이틀 후보로 고려할 최대 거리 (px)
+MAX_TEXT_LENGTH = 150  # 타이틀로 고려할 최대 텍스트 길이
+Y_LINE_TOLERANCE = 50  # 같은 줄로 간주할 y 좌표 허용 오차 (px)
+X_GAP_THRESHOLD = 100  # 텍스트 사이 공백 추가 기준 간격 (px)
+HORIZONTAL_WEIGHT = 0.1  # 수평 거리 가중치 (수직 거리 대비)
+
+# ML 모델 관련
+ML_MODEL_NAME = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot classification 모델 (280MB, 다국어)
+ML_DEVICE = -1  # -1: CPU, 0: GPU
+ML_CONFIDENCE_THRESHOLD = 0.5  # ML 모델 제목 판단 임계값
+MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
+TOP_CANDIDATES_COUNT = 2  # ML 모델에 전달할 상위 후보 개수
+ML_CANDIDATE_LABELS = ["테이블 제목", "일반 텍스트"]  # 분류 라벨
+ML_HYPOTHESIS_TEMPLATE = "이 텍스트는 {}이다."  # 가설 템플릿
+
+# 거리 점수 계산 관련
+DISTANCE_SCORE_BASE = 100  # 거리 0일 때 기본 점수
+DISTANCE_SCORE_DIVIDER = 50  # 거리 점수 감소율
+
 # ML 모델 로드 (Zero-shot Classification)
-USE_ML_MODEL = False
+USE_ML_MODEL = True
 classifier = None
 
 try:
     from transformers import pipeline
-    # Zero-shot classification 모델 로드 (다국어 지원, 속도와 정확도 균형)
     classifier = pipeline(
         "zero-shot-classification",
-        model="MoritzLaurer/mDeBERTa-v3-base-mnli-xnli",  # 280MB, 다국어 최적
-        device=-1  # CPU 사용 (GPU 사용하려면 0)
+        model=ML_MODEL_NAME,
+        device=ML_DEVICE
     )
-    USE_ML_MODEL = True
-    print("✅ Zero-shot Classification 모델 로드 완료 (mDeBERTa-v3, 다국어)")
+    print(f"✅ Zero-shot Classification 모델 로드 완료 ({ML_MODEL_NAME})")
 except ImportError:
     print("⚠️  transformers 라이브러리 없음, 거리 기반만 사용")
 except Exception as e:
@@ -73,7 +92,7 @@ def calculate_distance(text_bbox, table_bbox):
     horizontal_distance = abs(text_center_x - table_center_x)
 
     # 수직 거리에 가중치를 더 주되, 수평 정렬도 약간 고려
-    return vertical_distance + (horizontal_distance * 0.1)
+    return vertical_distance + (horizontal_distance * HORIZONTAL_WEIGHT)
 
 def extract_text_content(text_obj):
     """text 객체에서 실제 텍스트 추출 (x 좌표 순서대로)"""
@@ -168,8 +187,8 @@ def merge_text_group(text_group):
         # 이전 텍스트와의 간격 확인 (x 좌표 차이)
         if prev_bbox and current_bbox:
             gap = current_bbox[0] - prev_bbox[2]  # 현재 left - 이전 right
-            # 간격이 크면 공백 추가 (100 픽셀 이상)
-            if gap > 100:
+            # 간격이 크면 공백 추가
+            if gap > X_GAP_THRESHOLD:
                 text_parts.append(' ')
 
         text_parts.append(text_content)
@@ -205,12 +224,12 @@ def is_title_candidate(text_content, distance):
 
     text = text_content.strip()
 
-    # 1. 너무 멀리 있는 텍스트 제외 (10000px 이상)
-    if distance > 10000:
+    # 1. 너무 멀리 있는 텍스트 제외
+    if distance > MAX_DISTANCE_THRESHOLD:
         return False, "너무 멀리 떨어짐"
 
-    # 2. 너무 긴 텍스트 제외 (150자 이상은 보통 본문)
-    if len(text) > 150:
+    # 2. 너무 긴 텍스트 제외
+    if len(text) > MAX_TEXT_LENGTH:
         return False, "너무 긴 텍스트"
 
     # 3. 단일 문자 제외 (마침표, 쉼표 등)
@@ -229,48 +248,53 @@ def is_title_candidate(text_content, distance):
 def score_title_candidate(text_obj, text_content, distance):
     """타이틀 후보에 점수 부여 - 거리 기반만 사용"""
     # 거리 점수만 사용 (가까울수록 높은 점수)
-    # 거리 0 = 100점, 거리가 멀어질수록 점수 감소
-    score = max(0, 100 - (distance / 50))
+    score = max(0, DISTANCE_SCORE_BASE - (distance / DISTANCE_SCORE_DIVIDER))
 
     return score
 
 def select_best_title_ml(candidates):
-    """Zero-shot Classification으로 최적의 타이틀 선택"""
+    """Zero-shot Classification으로 최적의 타이틀 선택 (배치 처리)"""
     if not USE_ML_MODEL or not classifier or not candidates:
         return None
 
     try:
-        candidate_texts = [c['text'] for c in candidates]
+        # 텍스트 전처리: 너무 긴 텍스트는 잘라서 처리
+        candidate_texts = [
+            c['text'][:MAX_TEXT_INPUT_LENGTH] if len(c['text']) > MAX_TEXT_INPUT_LENGTH else c['text']
+            for c in candidates
+        ]
 
-        print("  Zero-shot Classification 점수:")
+        print("  Zero-shot Classification 점수 (배치 처리):")
+
+        # 배치 처리: 모든 후보를 한번에 처리
+        results = classifier(
+            candidate_texts,
+            candidate_labels=ML_CANDIDATE_LABELS,
+            hypothesis_template=ML_HYPOTHESIS_TEMPLATE
+        )
+
+        # 단일 결과인 경우 리스트로 변환
+        if not isinstance(results, list):
+            results = [results]
 
         best_idx = -1
         best_score = -1
 
-        for i, text in enumerate(candidate_texts):
-            # 너무 긴 텍스트는 잘라서 처리 (모델 제한)
-            text_input = text[:512] if len(text) > 512 else text
-
-            result = classifier(
-                text_input,
-                candidate_labels=["테이블 제목", "일반 텍스트"],
-                hypothesis_template="이 텍스트는 {}이다."
-            )
-
-            # "테이블 제목" 라벨의 확률
+        # 각 결과에서 "테이블 제목" 확률 추출
+        for i, result in enumerate(results):
             title_score = result['scores'][result['labels'].index("테이블 제목")]
 
-            text_preview = text[:40] if len(text) > 40 else text
+            text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
             print(f"    {i+1}. '{text_preview}' → 제목 확률: {title_score:.3f}")
 
             if title_score > best_score:
                 best_score = title_score
                 best_idx = i
 
-        print(f"  ML 최고 확률: {best_score:.3f} (임계값: 0.5)")
+        print(f"  ML 최고 확률: {best_score:.3f} (임계값: {ML_CONFIDENCE_THRESHOLD})")
 
-        # 임계값: 0.5 이상이어야 제목으로 판단
-        if best_idx >= 0 and best_score > 0.5:
+        # 임계값 이상이어야 제목으로 판단
+        if best_idx >= 0 and best_score > ML_CONFIDENCE_THRESHOLD:
             return candidates[best_idx]
         else:
             print(f"  ML 임계값 미달 → 거리 기반 사용")
@@ -288,12 +312,12 @@ def find_title_for_table(table, texts):
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
         print("  테이블 bbox 없음")
-        return ""
+        return "", None
 
     print(f"  테이블 bbox: y={table_bbox[1]}")
 
     # Step 0: 같은 줄의 텍스트들을 그룹화
-    grouped_texts = group_texts_by_line(texts, y_tolerance=50)
+    grouped_texts = group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE)
     print(f"  원본 텍스트: {len(texts)}개 → 그룹화: {len(grouped_texts)}개")
 
     # 그룹화된 텍스트 처음 5개 출력
@@ -339,7 +363,7 @@ def find_title_for_table(table, texts):
         # 점수 계산
         score = score_title_candidate(text, text_content, distance)
 
-        print(f"    {i+1}. ✅ '{text_preview}' - 후보 (거리: {distance:.0f}, 길이: {len(text_content)})")
+        print(f"    {i+1}. ✅ '{text_preview}' - 후보 (거리: {distance:.0f}, 길이: {len(text_content)}, bbox: {text_bbox})")
         candidates.append({
             'text': text_content,
             'distance': distance,
@@ -354,16 +378,16 @@ def find_title_for_table(table, texts):
             print("  제외된 텍스트 샘플:")
             for reason in filtered_out[:5]:
                 print(f"    - {reason}")
-        return ""
+        return "", None
 
-    # Step 2: 거리 순으로 정렬하고 상위 3개만 선택 (거리가 가장 가까운 것들)
+    # Step 2: 거리 순으로 정렬하고 상위 N개만 선택 (거리가 가장 가까운 것들)
     candidates.sort(key=lambda x: x['distance'])  # 거리 오름차순 정렬
-    top_candidates = candidates[:3]  # 가장 가까운 3개만
+    top_candidates = candidates[:TOP_CANDIDATES_COUNT]
 
     print(f"  거리 기반 상위 후보 {len(top_candidates)}개 선택 (전체 {len(candidates)}개 중):")
     for i, c in enumerate(top_candidates):
         text_preview = c['text'][:50] if len(c['text']) > 50 else c['text']
-        print(f"    {i+1}. '{text_preview}' (거리: {c['distance']:.0f})")
+        print(f"    {i+1}. '{text_preview}' (거리: {c['distance']:.0f}, bbox: {c['bbox']})")
 
     # Step 3: ML 모델로 최종 선택 (후보가 2개 이상일 때만)
     if USE_ML_MODEL and len(top_candidates) > 1:
@@ -371,12 +395,12 @@ def find_title_for_table(table, texts):
         ml_result = select_best_title_ml(top_candidates)
         if ml_result:
             print(f"  ✅ ML 선택: '{ml_result['text']}'")
-            return ml_result['text']
+            return ml_result['text'], ml_result['bbox']
 
     # Step 4: 거리 기반 최종 선택 (점수 최고)
     best = top_candidates[0]
-    print(f"  ✅ 거리 기반 선택: '{best['text']}' (점수: {best['score']:.1f})")
-    return best['text']
+    print(f"  ✅ 거리 기반 선택: '{best['text']}' (점수: {best['score']:.1f}, bbox: {best['bbox']})")
+    return best['text'], best['bbox']
 
 @app.route('/get_title', methods=['POST'])
 def get_title():
@@ -402,13 +426,15 @@ def get_title():
         result_tables = []
         for idx, table in enumerate(tables):
             table_with_title = copy.deepcopy(table)
-            title = find_title_for_table(table, texts)
+            title, title_bbox = find_title_for_table(table, texts)
             print(f"테이블 {idx} 타이틀: '{title}'")
             table_with_title['title'] = title
+            table_with_title['title_bbox'] = title_bbox
 
             # title이 제대로 추가되었는지 확인
             if 'title' in table_with_title:
                 print(f"  ✓ title 프로퍼티 추가 확인: '{table_with_title['title']}'")
+                print(f"  ✓ title_bbox 프로퍼티 추가 확인: {table_with_title['title_bbox']}")
             else:
                 print(f"  ✗ title 프로퍼티 추가 실패!")
 
