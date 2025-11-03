@@ -19,7 +19,7 @@ HORIZONTAL_WEIGHT = 0.1  # 수평 거리 가중치 (수직 거리 대비)
 # ML 모델 관련
 ML_MODEL_NAME = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot classification 모델 (280MB, 다국어)
 ML_DEVICE = -1  # -1: CPU, 0: GPU
-ML_CONFIDENCE_THRESHOLD = 0.0  # ML 모델 제목 판단 임계값
+ML_CONFIDENCE_THRESHOLD = 0.5  # ML 모델 제목 판단 임계값
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 TOP_CANDIDATES_COUNT = 2  # ML 모델에 전달할 상위 후보 개수
 ML_CANDIDATE_LABELS = ["substantive title conveying the table's main subject matter", "parenthetical notes, units, symbols, or reference markers"]
@@ -380,15 +380,19 @@ def find_title_for_table(table, texts):
         text_preview = c['text'][:50] if len(c['text']) > 50 else c['text']
         print(f"    {i+1}. '{text_preview}' (거리: {c['distance']:.0f}, bbox: {c['bbox']})")
 
-    # Step 3: ML 모델로 최종 선택 (후보가 2개 이상일 때만)
-    if USE_ML_MODEL and len(top_candidates) > 1:
+    # Step 3: ML 모델로 최종 선택 (후보가 1개 이상일 때)
+    if USE_ML_MODEL and len(top_candidates) >= 1:
         print(f"\n  ML 모델에 {len(top_candidates)}개 후보 전달:")
         ml_result = select_best_title_ml(top_candidates)
         if ml_result:
             print(f"  ✅ ML 선택: '{ml_result['text']}'")
             return ml_result['text'], ml_result['bbox']
+        else:
+            print(f"  ❌ ML 임계값 미달 - 타이틀 없음")
+            return "", None
 
-    # Step 4: 거리 기반 최종 선택 (점수 최고)
+    # Step 4: ML 사용 안 하는 경우에만 거리 기반 선택
+    print("  ⚠️  ML 모델 미사용, 거리 기반 대체")
     best = top_candidates[0]
     print(f"  ✅ 거리 기반 선택: '{best['text']}' (점수: {best['score']:.1f}, bbox: {best['bbox']})")
     return best['text'], best['bbox']
