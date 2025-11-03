@@ -19,11 +19,11 @@ HORIZONTAL_WEIGHT = 0.1  # 수평 거리 가중치 (수직 거리 대비)
 # ML 모델 관련
 ML_MODEL_NAME = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot classification 모델 (280MB, 다국어)
 ML_DEVICE = -1  # -1: CPU, 0: GPU
-ML_CONFIDENCE_THRESHOLD = 0.5  # ML 모델 제목 판단 임계값
+ML_CONFIDENCE_THRESHOLD = 0.0  # ML 모델 제목 판단 임계값
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 TOP_CANDIDATES_COUNT = 2  # ML 모델에 전달할 상위 후보 개수
-ML_CANDIDATE_LABELS = ["테이블 제목", "일반 텍스트"]  # 분류 라벨
-ML_HYPOTHESIS_TEMPLATE = "이 텍스트는 {}이다."  # 가설 템플릿
+ML_CANDIDATE_LABELS = ["substantive title conveying the table's main subject matter", "parenthetical notes, units, symbols, or reference markers"]
+ML_HYPOTHESIS_TEMPLATE = "This is {}."  # 가설 템플릿
 
 # 거리 점수 계산 관련
 DISTANCE_SCORE_BASE = 100  # 거리 0일 때 기본 점수
@@ -280,9 +280,9 @@ def select_best_title_ml(candidates):
         best_idx = -1
         best_score = -1
 
-        # 각 결과에서 "테이블 제목" 확률 추출
+        # 각 결과에서 첫 번째 라벨(제목) 확률 추출
         for i, result in enumerate(results):
-            title_score = result['scores'][result['labels'].index("테이블 제목")]
+            title_score = result['scores'][result['labels'].index(ML_CANDIDATE_LABELS[0])]
 
             text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
             print(f"    {i+1}. '{text_preview}' → 제목 확률: {title_score:.3f}")
@@ -328,9 +328,8 @@ def find_title_for_table(table, texts):
             bbox = gt.get('merged_bbox') or get_bbox_from_text(gt)
             print(f"    {i+1}. y={bbox[1]}: '{text_preview}'")
 
-    # Step 1: 거리 기반 후보 수집
+    # Step 1: 테이블 위쪽 텍스트만 수집 (거리 무관, 상위 2개)
     candidates = []
-    filtered_out = []
 
     print("\n  필터링 상세 로그:")
     for i, text in enumerate(grouped_texts):
@@ -350,14 +349,11 @@ def find_title_for_table(table, texts):
 
         if distance == float('inf'):
             print(f"    {i+1}. ❌ '{text_preview}' - 테이블 아래 또는 겹침")
-            filtered_out.append(f"'{text_content[:30]}' - 테이블 아래 또는 겹침")
             continue
 
-        # 규칙 기반 필터링
-        is_candidate, reason = is_title_candidate(text_content, distance)
-        if not is_candidate:
-            print(f"    {i+1}. ❌ '{text_preview}' - {reason} (거리: {distance:.0f}, 길이: {len(text_content)})")
-            filtered_out.append(f"'{text_content[:30]}' - {reason}")
+        # 빈 텍스트만 제외
+        if not text_content or len(text_content.strip()) == 0:
+            print(f"    {i+1}. ❌ '{text_preview}' - 빈 텍스트")
             continue
 
         # 점수 계산
@@ -373,16 +369,11 @@ def find_title_for_table(table, texts):
 
     if not candidates:
         print("  ❌ 타이틀 후보 없음")
-        # 제외된 텍스트 샘플 출력
-        if filtered_out:
-            print("  제외된 텍스트 샘플:")
-            for reason in filtered_out[:5]:
-                print(f"    - {reason}")
         return "", None
 
-    # Step 2: 거리 순으로 정렬하고 상위 N개만 선택 (거리가 가장 가까운 것들)
+    # Step 2: 거리 순으로 정렬하고 상위 2개만 선택 (테이블에 가장 가까운 것들)
     candidates.sort(key=lambda x: x['distance'])  # 거리 오름차순 정렬
-    top_candidates = candidates[:TOP_CANDIDATES_COUNT]
+    top_candidates = candidates[:2]
 
     print(f"  거리 기반 상위 후보 {len(top_candidates)}개 선택 (전체 {len(candidates)}개 중):")
     for i, c in enumerate(top_candidates):
