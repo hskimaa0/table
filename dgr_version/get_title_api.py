@@ -19,7 +19,7 @@ HORIZONTAL_WEIGHT = 0.1  # 수평 거리 가중치 (수직 거리 대비)
 # ML 모델 관련
 ML_MODEL_NAME = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot classification 모델 (280MB, 다국어)
 ML_DEVICE = -1  # -1: CPU, 0: GPU
-ML_CONFIDENCE_THRESHOLD = 0.5  # ML 모델 제목 판단 임계값
+ML_CONFIDENCE_THRESHOLD = 0.0  # ML 모델 제목 판단 임계값
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 TOP_CANDIDATES_COUNT = 2  # ML 모델에 전달할 상위 후보 개수
 ML_CANDIDATE_LABELS = ["substantive title conveying the table's main subject matter", "parenthetical notes, units, symbols, or reference markers"]
