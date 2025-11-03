@@ -455,4 +455,4 @@ def get_title():
         return jsonify({'error': 'Data must be an object with tables and texts, or an array of tables'}), 400
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5555, debug=False)
