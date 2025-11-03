@@ -358,8 +358,8 @@ def find_title_for_table(table, texts):
 
         # 완전한 문장 형태 제외 (설명문은 제목이 아님)
         text_stripped = text_content.strip()
-        # 동사로 끝나는 문장 제외 (제목은 명사구여야 함)
-        if re.search(r'[가-힣]다\.?\s*$', text_stripped):
+        # 동사 어미로 끝나는 문장만 제외 (명사+"다"는 허용)
+        if re.search(r'(했|됐|됐|있|없|같|왔|났|이|가|하|되|한|할|된|는|ㄴ|ㄹ|음|기)다\.?\s*$', text_stripped):
             print(f"    {i+1}. ❌ '{text_preview}' - 동사로 끝나는 문장 (제목 아님)")
             continue
 
