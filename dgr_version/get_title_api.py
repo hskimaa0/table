@@ -1,64 +1,151 @@
 """
 타이틀 추출 API
-규칙 기반 필터링 + Zero-shot Classification
+하이브리드 방식: 규칙 기반 필터링 + NLI + 임베딩 유사도 + 레이아웃 점수
 """
 from flask import Flask, jsonify, request
 import copy
 import re
+import numpy as np
 
 app = Flask(__name__)
 
 # ========== 상수 정의 ==========
 # 거리 및 필터링 관련
-MAX_DISTANCE_THRESHOLD = 10000  # 타이틀 후보로 고려할 최대 거리 (px)
-MAX_TEXT_LENGTH = 150  # 타이틀로 고려할 최대 텍스트 길이
 Y_LINE_TOLERANCE = 100  # 같은 줄로 간주할 y 좌표 허용 오차 (px)
 X_GAP_THRESHOLD = 100  # 텍스트 사이 공백 추가 기준 간격 (px)
-HORIZONTAL_WEIGHT = 0.1  # 수평 거리 가중치 (수직 거리 대비)
+UP_MULTIPLIER = 1.5  # 표 위쪽 탐색 범위 (표 높이의 배수)
+X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
 # ML 모델 관련
-ZERO_SHOT_MODEL = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot classification 모델 (다국어)
+NLI_MODEL = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot NLI (다국어)
+EMBEDDING_MODEL = "BAAI/bge-m3"  # 문장 임베딩 (다국어)
 ML_DEVICE = -1  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
-TOP_CANDIDATES_COUNT = 5  # ML 모델에 전달할 상위 후보 개수
-ML_CANDIDATE_LABELS = ["표의 제목", "표의 제목이 아님"]  # 의미 기반 분류
 
-ML_HYPOTHESIS_TEMPLATES = [
-    "이 텍스트는 {}이다."
-]
+# 최종 점수 가중치
+WEIGHT_NLI = 0.55  # Zero-shot NLI (제목 확률)
+WEIGHT_EMBEDDING = 0.35  # 임베딩 유사도
+WEIGHT_LAYOUT = 0.10  # 레이아웃 점수
+SCORE_THRESHOLD = 0.45  # 제목 판정 최소 점수
 
 # ML 모델 로드
-classifier = None
+nli_classifier = None
+embedder = None
 
-# Zero-shot Classification 모델 로드
+# Zero-shot NLI 모델 로드
 try:
     from transformers import pipeline
-    classifier = pipeline(
+    nli_classifier = pipeline(
         "zero-shot-classification",
-        model=ZERO_SHOT_MODEL,
+        model=NLI_MODEL,
         device=ML_DEVICE
     )
-    print(f"✅ Zero-shot Classification 모델 로드 완료 ({ZERO_SHOT_MODEL})")
+    print(f"✅ NLI 모델 로드 완료 ({NLI_MODEL})")
 except ImportError:
     print("⚠️  transformers 라이브러리 없음")
-    classifier = None
+    nli_classifier = None
 except Exception as e:
-    print(f"⚠️  Zero-shot 모델 로드 실패: {e}")
-    classifier = None
+    print(f"⚠️  NLI 모델 로드 실패: {e}")
+    nli_classifier = None
 
+# 임베딩 모델 로드
+try:
+    from sentence_transformers import SentenceTransformer
+    embedder = SentenceTransformer(EMBEDDING_MODEL)
+    print(f"✅ 임베딩 모델 로드 완료 ({EMBEDDING_MODEL})")
+except ImportError:
+    print("⚠️  sentence-transformers 라이브러리 없음")
+    embedder = None
+except Exception as e:
+    print(f"⚠️  임베딩 모델 로드 실패: {e}")
+    embedder = None
+
+# ========== 유틸리티 함수 ==========
+def clean_text(s: str) -> str:
+    """텍스트 정리"""
+    return re.sub(r"\s+", " ", s).strip()
+
+def is_trivial(text: str) -> bool:
+    """무의미한 텍스트 필터링 (페이지 번호, 저작권 등)"""
+    s = text.strip()
+
+    # 1~3자리 숫자만
+    if re.fullmatch(r"\d{1,3}", s):
+        return True
+
+    # 저작권 표시
+    if "all rights reserved" in s.lower():
+        return True
+    if s.startswith("©"):
+        return True
+
+    # 너무 짧음
+    if len(s) <= 2:
+        return True
+
+    # 숫자만 포함
+    if re.match(r'^[\d\s\.\-]+$', s):
+        return True
+
+    # 특수문자만
+    if len(re.sub(r"[\W_]+", "", s)) <= 1:
+        return True
+
+    # 단위 표기 (다양한 형태)
+    if re.search(r'^\s*\(?단위\s*[:：]', s, re.IGNORECASE):
+        return True
+    if re.match(r'^\s*\(\s*단위\s*[:：]?.*\)\s*$', s, re.IGNORECASE):
+        return True
+    if re.match(r'^\s*\(\s*단위\s+[a-zA-Z가-힣%]+\s*\)\s*$', s, re.IGNORECASE):
+        return True
+
+    # 목록 항목 (1., 2., ①, ② 등으로 시작)
+    if re.match(r'^[\d①-⑳]\.\s+[A-Z_]+\s*[=:]+', s):
+        return True
+
+    return False
+
+def iou_1d(a: tuple, b: tuple) -> float:
+    """1차원 IoU (수평 겹침 계산)"""
+    overlap = max(0, min(a[1], b[1]) - max(a[0], b[0]))
+    union = (a[1] - a[0]) + (b[1] - b[0]) - overlap
+    return overlap / union if union > 0 else 0.0
+
+def horizontally_near(table_x: tuple, text_x: tuple, tol: int = X_TOLERANCE) -> bool:
+    """수평으로 겹치거나 근접한지 확인"""
+    if iou_1d(table_x, text_x) > 0:
+        return True
+    return (text_x[1] >= table_x[0] - tol and text_x[0] <= table_x[1] + tol)
+
+def layout_score(table_bbox, text_bbox) -> float:
+    """레이아웃 점수: 표와의 세로 거리 기반 (가까울수록 1)"""
+    _, ty1, _, ty2 = table_bbox
+    x1, y1, x2, y2 = text_bbox
+
+    # 텍스트가 표 위에 있을 때의 거리
+    dist = max(0, ty1 - y2)
+
+    # 0~3000px 구간에 대해 선형 스케일링
+    return max(0.0, 1.0 - min(dist, 3000) / 3000.0)
+
+def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
+    """코사인 유사도"""
+    na = np.linalg.norm(a)
+    nb = np.linalg.norm(b)
+    if na == 0 or nb == 0:
+        return 0.0
+    return float(np.dot(a, b) / (na * nb))
+
+# ========== bbox 추출 ==========
 def get_bbox_from_text(text):
     """text 객체에서 bbox 정보 추출 [l, t, r, b] 형식으로 반환"""
-    # rect가 있는 경우 (배열 형태: [l, t, r, b])
     if 'rect' in text and isinstance(text['rect'], list) and len(text['rect']) >= 4:
         return text['rect']
-    # bbox가 있는 경우 (배열 형태: [l, t, r, b])
     elif 'bbox' in text and isinstance(text['bbox'], list) and len(text['bbox']) >= 4:
         return text['bbox']
-    # bbox가 있는 경우 (객체 형태: {l, t, r, b})
     elif 'bbox' in text and isinstance(text['bbox'], dict):
         bbox = text['bbox']
         return [bbox.get('l', 0), bbox.get('t', 0), bbox.get('r', 0), bbox.get('b', 0)]
-    # merged_bbox가 있는 경우 (병합된 텍스트)
     elif 'merged_bbox' in text:
         return text['merged_bbox']
     return None
@@ -72,71 +159,33 @@ def get_bbox_from_table(table):
         return [bbox.get('l', 0), bbox.get('t', 0), bbox.get('r', 0), bbox.get('b', 0)]
     return None
 
-def calculate_distance(text_bbox, table_bbox):
-    """text와 table 사이의 거리 계산 (table 위쪽에 있는 text만 고려)"""
-    if not text_bbox or not table_bbox:
-        return float('inf')
-
-    # bbox 형식: [l, t, r, b]
-    # y 좌표는 아래로 갈수록 증가 (top < bottom)
-    text_bottom = text_bbox[3]  # text의 아래쪽
-    table_top = table_bbox[1]   # table의 위쪽
-
-    # text가 table 위에 있는지 확인 (text의 bottom이 table의 top보다 작아야 함)
-    if text_bottom >= table_top:
-        return float('inf')  # table 아래에 있거나 겹치면 무한대 거리
-
-    # 수직 거리 계산
-    vertical_distance = table_top - text_bottom
-
-    # 수평 정렬도 고려 (테이블과 텍스트의 중심이 가까울수록 좋음)
-    text_center_x = (text_bbox[0] + text_bbox[2]) / 2
-    table_center_x = (table_bbox[0] + table_bbox[2]) / 2
-    horizontal_distance = abs(text_center_x - table_center_x)
-
-    # 수직 거리에 가중치를 더 주되, 수평 정렬도 약간 고려
-    return vertical_distance + (horizontal_distance * HORIZONTAL_WEIGHT)
-
+# ========== 텍스트 추출 및 병합 ==========
 def extract_text_content(text_obj):
-    """text 객체에서 실제 텍스트 추출 (tid 순서대로)"""
-    # merged_text가 있는 경우 (이미 병합된 텍스트)
+    """text 객체에서 실제 텍스트 추출"""
     if 'merged_text' in text_obj:
         return text_obj['merged_text']
 
-    # 't' 배열 내부의 'text' 속성 (주어진 데이터 형식)
     if 't' in text_obj and isinstance(text_obj['t'], list) and len(text_obj['t']) > 0:
-        # 't' 배열을 tid 순서대로 정렬 (원본 문서 순서)
         t_items = text_obj['t']
-
-        # tid로 정렬
         sorted_items = sorted(t_items, key=lambda item: item.get('tid', 0))
-
-        # 정렬된 순서대로 텍스트 추출
         texts = []
         for t_item in sorted_items:
             if 'text' in t_item:
                 texts.append(t_item['text'])
-
         if texts:
-            return ''.join(texts)  # 공백 없이 붙임 (원본 텍스트 그대로)
+            return ''.join(texts)
 
-    # 'text' 속성에 텍스트가 있는 경우 (flatten된 개별 텍스트)
     if 'text' in text_obj:
         return text_obj['text']
-    # 'v' 속성에 텍스트가 있는 경우
     elif 'v' in text_obj:
         return text_obj['v']
     return ""
 
 def flatten_text_objects(texts):
-    """
-    paraIndex로 이미 그룹화된 텍스트를 개별 't' 요소로 분해
-    각 't' 요소를 독립적인 텍스트 객체로 변환
-    """
+    """paraIndex로 그룹화된 텍스트를 개별 't' 요소로 분해"""
     flattened = []
     for text_obj in texts:
         if 't' in text_obj and isinstance(text_obj['t'], list):
-            # 't' 배열의 각 항목을 개별 텍스트로 분리
             for t_item in text_obj['t']:
                 if 'bbox' in t_item and 'text' in t_item:
                     flattened.append({
@@ -145,40 +194,33 @@ def flatten_text_objects(texts):
                         'tid': t_item.get('tid', 0)
                     })
         else:
-            # 't' 배열이 없으면 원본 그대로 사용
             flattened.append(text_obj)
     return flattened
 
-def group_texts_by_line(texts, y_tolerance=50):
-    """같은 줄(y 좌표 비슷)에 있는 텍스트들을 그룹화하고 위에서 아래 순서로 정렬"""
+def group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE):
+    """같은 줄의 텍스트들을 그룹화"""
     if not texts:
         return []
 
-    # Step 1: paraIndex로 묶인 텍스트를 개별 't' 요소로 분해
     flattened = flatten_text_objects(texts)
-
-    # Step 2: y 좌표 기준으로 정렬 (위에서 아래로)
     sorted_texts = sorted(flattened, key=lambda t: get_bbox_from_text(t)[1] if get_bbox_from_text(t) else float('inf'))
 
     grouped = []
     current_group = []
-    group_y_min = None  # 그룹의 첫 번째 텍스트 y 중심값
+    group_y_min = None
 
     for text in sorted_texts:
         bbox = get_bbox_from_text(text)
         if not bbox:
             continue
 
-        # y 좌표 중심값 사용 (top + bottom) / 2
         y_center = (bbox[1] + bbox[3]) / 2
 
-        # 첫 텍스트이거나 그룹의 첫 텍스트와의 차이가 허용범위 내면 같은 그룹
         if group_y_min is None or abs(y_center - group_y_min) <= y_tolerance:
             current_group.append(text)
             if group_y_min is None:
                 group_y_min = y_center
         else:
-            # 새로운 줄 시작 - 이전 그룹 저장
             if current_group:
                 merged = merge_text_group(current_group)
                 if merged:
@@ -186,15 +228,12 @@ def group_texts_by_line(texts, y_tolerance=50):
             current_group = [text]
             group_y_min = y_center
 
-    # 마지막 그룹 추가
     if current_group:
         merged = merge_text_group(current_group)
         if merged:
             grouped.append(merged)
 
-    # 그룹화된 결과를 다시 y 좌표 순서로 정렬 (위에서 아래로)
     grouped.sort(key=lambda g: g.get('merged_bbox', [0, 0, 0, 0])[1] if g else float('inf'))
-
     return grouped
 
 def merge_text_group(text_group):
@@ -202,10 +241,8 @@ def merge_text_group(text_group):
     if not text_group:
         return None
 
-    # x 좌표 기준으로 정렬 (왼쪽에서 오른쪽)
     sorted_group = sorted(text_group, key=lambda t: get_bbox_from_text(t)[0] if get_bbox_from_text(t) else 0)
 
-    # 텍스트 추출 및 병합 (각 텍스트는 이미 내부적으로 정렬됨)
     text_parts = []
     prev_bbox = None
 
@@ -216,10 +253,8 @@ def merge_text_group(text_group):
 
         current_bbox = get_bbox_from_text(t)
 
-        # 이전 텍스트와의 간격 확인 (x 좌표 차이)
         if prev_bbox and current_bbox:
-            gap = current_bbox[0] - prev_bbox[2]  # 현재 left - 이전 right
-            # 간격이 크면 공백 추가
+            gap = current_bbox[0] - prev_bbox[2]
             if gap > X_GAP_THRESHOLD:
                 text_parts.append(' ')
 
@@ -228,7 +263,6 @@ def merge_text_group(text_group):
 
     merged_text = ''.join(text_parts)
 
-    # bbox 계산 (그룹 전체를 포함하는 영역)
     bboxes = [get_bbox_from_text(t) for t in sorted_group]
     bboxes = [b for b in bboxes if b]
 
@@ -236,205 +270,34 @@ def merge_text_group(text_group):
         return None
 
     merged_bbox = [
-        min(b[0] for b in bboxes),  # left
-        min(b[1] for b in bboxes),  # top
-        max(b[2] for b in bboxes),  # right
-        max(b[3] for b in bboxes)   # bottom
+        min(b[0] for b in bboxes),
+        min(b[1] for b in bboxes),
+        max(b[2] for b in bboxes),
+        max(b[3] for b in bboxes)
     ]
 
-    # 원본 객체 정보 유지하되, 병합된 정보로 업데이트
     merged_obj = text_group[0].copy() if text_group else {}
     merged_obj['merged_text'] = merged_text
     merged_obj['merged_bbox'] = merged_bbox
 
     return merged_obj
 
-def is_valid_title_candidate(text_content):
-    """텍스트가 타이틀 후보로 유효한지 확인"""
-    if not text_content or len(text_content.strip()) == 0:
-        return False, "빈 텍스트"
-
-    text = text_content.strip()
-
-    # 1. 단일 문자/숫자 제외
-    if len(text) <= 2:
-        return False, "너무 짧음 (2자 이하)"
-
-    # 2. 숫자만 있는 경우 제외
-    if re.match(r'^[\d\s\.\-]+$', text):
-        return False, "숫자만 포함"
-
-    # 3. IP 주소 패턴 제외
-    if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', text):
-        return False, "IP 주소"
-
-    # 4. 단위 표기 제외
-    if re.search(r'^\s*\(?단위\s*[:：]', text, re.IGNORECASE):
-        return False, "단위 표기"
-
-    # 5. "다." 단독으로 끝나는 경우 제외
-    if re.search(r'다\.\s*$', text):
-        return False, "'다.'로 끝나는 문장"
-
-    # 6. 동사/형용사 어미로 끝나는 문장 제외
-    if re.search(r'([가-힣]+(다|며|고|자|라|ㄴ다|는다|ㄹ다|ㅂ니다|습니다|이다|한다|된다|있다|없다|같다|왔다|났다|하였다|되었다|였다|았다|었다))[\.?!]?\s*$', text):
-        return False, "동사로 끝나는 문장"
-
-    # 7. 너무 긴 텍스트 제외
-    if len(text) > 100:
-        return False, f"너무 긴 텍스트 ({len(text)}자)"
-
-    return True, "후보"
-
-def select_best_title_ml(candidates):
-    """Zero-shot Classification으로 최적의 타이틀 선택 (다국어 가설)"""
-    if not candidates or not classifier:
-        print("\n  ML 모델 없음, 거리 기반 선택")
-        return None
-
-    try:
-        # 텍스트 전처리: 너무 긴 텍스트는 잘라서 처리
-        candidate_texts = [
-            c['text'][:MAX_TEXT_INPUT_LENGTH] if len(c['text']) > MAX_TEXT_INPUT_LENGTH else c['text']
-            for c in candidates
-        ]
-
-        best_idx, best_score = None, -1.0
-        all_scores = {i: [] for i in range(len(candidates))}  # 각 후보의 모든 가설 점수 저장
-
-        print("  Zero-shot Classification 점수:")
-
-        # 각 가설 템플릿으로 점수 계산
-        for hyp_idx, hyp in enumerate(ML_HYPOTHESIS_TEMPLATES):
-            hyp_name = "영어" if hyp_idx == 0 else "한국어"
-            print(f"\n  [한국어 가설] '{hyp}'")
-
-            # 개별 텍스트에 대해 classifier 호출
-            for i, text in enumerate(candidate_texts):
-                result = classifier(
-                    text,
-                    candidate_labels=ML_CANDIDATE_LABELS,
-                    hypothesis_template=hyp,
-                    truncation=True
-                )
-
-                # "table title" 라벨의 점수 추출
-                try:
-                    idx = result['labels'].index(ML_CANDIDATE_LABELS[0])
-                    score = float(result['scores'][idx])
-                except Exception:
-                    score = 0.0
-
-                all_scores[i].append(score)
-                text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
-                print(f"    {i+1}. '{text_preview}' → {score:.3f}")
-
-                # 현재까지의 최고 점수 업데이트 (동점이면 거리가 가까운 것, 그다음 짧은 것 우선)
-                tie_break = (-candidates[i]['distance'], -len(candidate_texts[i]))
-                if best_idx is None:
-                    best_idx, best_score = i, score
-                else:
-                    current_tie_break = (-candidates[best_idx]['distance'], -len(candidate_texts[best_idx]))
-                    if (score, *tie_break) > (best_score, *current_tie_break):
-                        best_idx, best_score = i, score
-
-        # 평균 점수 계산 및 출력
-        print(f"\n  [평균 점수]")
-        avg_scores = []
-        for i in range(len(candidates)):
-            avg = sum(all_scores[i]) / len(all_scores[i]) if all_scores[i] else 0.0
-            avg_scores.append(avg)
-            text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
-            print(f"    {i+1}. '{text_preview}' → {avg:.3f} (거리: {candidates[i]['distance']:.0f})")
-
-        # 평균 점수로 최종 선택 (동점이면 거리가 가까운 것 우선)
-        best_idx = max(range(len(avg_scores)), key=lambda i: (avg_scores[i], -candidates[i]['distance'], -len(candidate_texts[i])))
-        best_score = avg_scores[best_idx]
-
-        print(f"  최종 선택: 후보 {best_idx+1}, 평균 점수: {best_score:.3f}, 거리: {candidates[best_idx]['distance']:.0f}")
-
-        return candidates[best_idx] if best_idx is not None else None
-
-    except Exception as e:
-        print(f"  ML 모델 오류: {e}")
-        import traceback
-        traceback.print_exc()
-
-    return None
-
-def is_bbox_overlapping(text_bbox, table_bbox):
-    """두 bbox가 겹치는지 확인 (겹치면 True)"""
-    if not text_bbox or not table_bbox:
-        return False
-
-    # bbox 형식: [l, t, r, b]
-    # 겹치지 않는 조건: text가 table의 완전히 왼쪽/오른쪽/위/아래에 있음
-    # - text가 table 왼쪽: text_r <= table_l
-    # - text가 table 오른쪽: text_l >= table_r
-    # - text가 table 위: text_b <= table_t
-    # - text가 table 아래: text_t >= table_b
-
-    text_l, text_t, text_r, text_b = text_bbox
-    table_l, table_t, table_r, table_b = table_bbox
-
-    # 겹치지 않으면 False, 겹치면 True
-    if text_r <= table_l or text_l >= table_r or text_b <= table_t or text_t >= table_b:
-        return False
-    return True
-
-def find_title_for_table(table, texts, all_tables=None, used_titles=None):
-    """Zero-shot Classification으로 table의 title 찾기"""
+# ========== 후보 수집 ==========
+def collect_candidates_for_table(table, texts, all_tables=None):
+    """표 위쪽에 있는 텍스트 후보 수집 (규칙 기반 필터링)"""
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
-        print("  테이블 bbox 없음")
-        return "", None
+        return []
 
-    print(f"  테이블 bbox: y={table_bbox[1]}")
+    tbx1, tby1, tbx2, tby2 = table_bbox
+    h = tby2 - tby1
+    y_min = max(0, tby1 - int(UP_MULTIPLIER * h))
 
-    # 이미 사용된 타이틀 초기화
-    if used_titles is None:
-        used_titles = set()
+    # 그룹화된 텍스트
+    grouped_texts = group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE)
 
-    # all_tables가 없으면 현재 테이블만 포함
-    if all_tables is None:
-        all_tables = [table]
-
-    # Step 1: 테이블 내부에 있는 텍스트 필터링
-    filtered_texts = []
-    for text in texts:
-        text_bbox = get_bbox_from_text(text)
-        if not text_bbox:
-            continue
-
-        # 모든 테이블과 겹치는지 체크
-        overlaps_any = any(
-            is_bbox_overlapping(text_bbox, get_bbox_from_table(tbl))
-            for tbl in all_tables
-            if get_bbox_from_table(tbl)
-        )
-
-        if not overlaps_any:
-            filtered_texts.append(text)
-
-    print(f"  원본 텍스트: {len(texts)}개 → 테이블 외부: {len(filtered_texts)}개")
-
-    # Step 2: 같은 줄의 텍스트들을 그룹화
-    grouped_texts = group_texts_by_line(filtered_texts, y_tolerance=Y_LINE_TOLERANCE)
-    print(f"  그룹화: {len(grouped_texts)}개")
-
-    # 그룹화된 텍스트 샘플 출력
-    print("  그룹화된 텍스트 샘플 (위에서 아래 순서):")
-    for i, gt in enumerate(grouped_texts[:5]):
-        if gt:
-            text_preview = (gt.get('merged_text') or extract_text_content(gt))[:40]
-            bbox = gt.get('merged_bbox') or get_bbox_from_text(gt)
-            print(f"    {i+1}. y={bbox[1]}: '{text_preview}'")
-
-    # Step 3: 테이블 위쪽 텍스트 후보 수집
     candidates = []
-
-    print("\n  필터링 상세 로그:")
-    for i, text in enumerate(grouped_texts):
+    for text in grouped_texts:
         if not text:
             continue
 
@@ -442,59 +305,187 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         if not text_bbox:
             continue
 
-        text_content = text.get('merged_text') or extract_text_content(text)
-        text_preview = text_content[:40] if len(text_content) > 40 else text_content
+        px1, py1, px2, py2 = text_bbox
 
-        # 거리 계산
-        distance = calculate_distance(text_bbox, table_bbox)
-
-        if distance == float('inf'):
-            print(f"    {i+1}. ❌ '{text_preview}' - 테이블 아래")
+        # 표 위쪽에 있는지 확인
+        if not (py2 <= tby1 and py1 >= y_min):
             continue
 
-        # 유효성 검사
-        is_valid, reason = is_valid_title_candidate(text_content)
-        if not is_valid:
-            print(f"    {i+1}. ❌ '{text_preview}' - {reason}")
+        # 수평으로 겹치거나 근접한지 확인
+        if not horizontally_near((tbx1, tbx2), (px1, px2), tol=X_TOLERANCE):
             continue
 
-        # 이미 사용된 타이틀인지 확인
-        if text_content in used_titles:
-            print(f"    {i+1}. ❌ '{text_preview}' - 이미 사용된 타이틀")
+        text_content = clean_text(text.get('merged_text') or extract_text_content(text))
+
+        # 무의미한 텍스트 필터링
+        if not text_content or is_trivial(text_content):
             continue
 
-        print(f"    {i+1}. ✅ '{text_preview}' - 후보 (거리: {distance:.0f}, 길이: {len(text_content)}, bbox: {text_bbox})")
         candidates.append({
             'text': text_content,
-            'distance': distance,
             'bbox': text_bbox
         })
 
-    if not candidates:
-        print("  ❌ 타이틀 후보 없음")
+    # 중복 제거
+    unique = {}
+    for c in candidates:
+        unique.setdefault(c['text'], c)
+
+    return list(unique.values())
+
+# ========== 표 문맥 구축 ==========
+def build_table_context(table, max_cells=10):
+    """표의 헤더와 첫 행으로 문맥 구축"""
+    headers = []
+    if 'rows' in table and table['rows']:
+        for cell in table['rows'][0]:
+            cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
+            if cell_texts:
+                headers.append(clean_text(" ".join(cell_texts)))
+
+    header_str = " | ".join(headers[:max_cells]) if headers else ""
+
+    first_row = []
+    if 'rows' in table and len(table['rows']) >= 2:
+        for cell in table['rows'][1]:
+            cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
+            if cell_texts:
+                first_row.append(clean_text(" ".join(cell_texts)))
+
+    first_row_str = " | ".join(first_row[:max_cells]) if first_row else ""
+
+    parts = []
+    if header_str:
+        parts.append(f"헤더: {header_str}")
+    if first_row_str:
+        parts.append(f"첫행: {first_row_str}")
+
+    return " / ".join(parts) if parts else "표 정보 없음"
+
+# ========== ML 스코어링 ==========
+def nli_title_prob(text: str) -> float:
+    """Zero-shot NLI로 제목 확률 계산"""
+    if not nli_classifier:
+        return 0.0
+
+    try:
+        result = nli_classifier(
+            text,
+            candidate_labels=["제목", "일반 문장"],
+            hypothesis_template="이 문장은 {}이다."
+        )
+        labels = result["labels"]
+        scores = result["scores"]
+        score_dict = {l: s for l, s in zip(labels, scores)}
+        return float(score_dict.get("제목", 0.0))
+    except Exception as e:
+        print(f"  NLI 오류: {e}")
+        return 0.0
+
+def embedding_similarity(text_a: str, text_b: str) -> float:
+    """임베딩 유사도 계산"""
+    if not embedder:
+        return 0.0
+
+    try:
+        vecs = embedder.encode([text_a, text_b])
+        return cosine_similarity(vecs[0], vecs[1])
+    except Exception as e:
+        print(f"  임베딩 오류: {e}")
+        return 0.0
+
+def score_candidate(cand_text: str, cand_bbox, table_bbox, table_ctx: str) -> dict:
+    """후보 점수 계산 (NLI + 임베딩 + 레이아웃 + 보너스)"""
+    # NLI 점수
+    nli_score = nli_title_prob(cand_text)
+
+    # 임베딩 유사도
+    emb_score = embedding_similarity(cand_text, table_ctx)
+
+    # 레이아웃 점수
+    lay_score = layout_score(table_bbox, cand_bbox)
+
+    # 제목 패턴 보너스
+    title_bonus = 0.0
+    # "표 X.X ..." 또는 "Table X.X ..." 패턴
+    if re.match(r'^(표|table)\s*[\d\.]+', cand_text, re.IGNORECASE):
+        title_bonus = 0.15
+    # "<그림>" 등은 페널티
+    elif re.match(r'^<.*>$', cand_text):
+        title_bonus = -0.2
+    # 단위 표기는 페널티
+    elif re.search(r'\(\s*단위', cand_text, re.IGNORECASE):
+        title_bonus = -0.3
+
+    # 최종 점수
+    final_score = (WEIGHT_NLI * nli_score +
+                   WEIGHT_EMBEDDING * emb_score +
+                   WEIGHT_LAYOUT * lay_score +
+                   title_bonus)
+
+    return {
+        'final_score': final_score,
+        'nli': nli_score,
+        'embedding': emb_score,
+        'layout': lay_score,
+        'bonus': title_bonus
+    }
+
+# ========== 메인 로직 ==========
+def find_title_for_table(table, texts, all_tables=None, used_titles=None):
+    """하이브리드 방식으로 표 제목 찾기"""
+    table_bbox = get_bbox_from_table(table)
+    if not table_bbox:
+        print("  테이블 bbox 없음")
         return "", None
 
-    # Step 4: 거리 순으로 정렬하고 상위 N개 선택
-    candidates.sort(key=lambda x: x['distance'])
-    top_candidates = candidates[:TOP_CANDIDATES_COUNT]
+    print(f"  테이블 bbox: y={table_bbox[1]}")
 
-    print(f"  거리 기반 상위 후보 {len(top_candidates)}개 선택 (전체 {len(candidates)}개 중):")
-    for i, c in enumerate(top_candidates):
+    if used_titles is None:
+        used_titles = set()
+
+    # Step 1: 후보 수집 (규칙 기반 필터링)
+    candidates = collect_candidates_for_table(table, texts, all_tables)
+
+    # 이미 사용된 제목 제외
+    candidates = [c for c in candidates if c['text'] not in used_titles]
+
+    print(f"  후보 수집: {len(candidates)}개")
+
+    if not candidates:
+        print("  ❌ 후보 없음")
+        return "", None
+
+    # Step 2: 표 문맥 구축
+    table_ctx = build_table_context(table)
+    print(f"  표 문맥: {table_ctx[:80]}")
+
+    # Step 3: ML 스코어링
+    print("\n  후보 점수:")
+    scored = []
+    for c in candidates:
+        scores = score_candidate(c['text'], c['bbox'], table_bbox, table_ctx)
         text_preview = c['text'][:50] if len(c['text']) > 50 else c['text']
-        print(f"    {i+1}. '{text_preview}' (거리: {c['distance']:.0f}, bbox: {c['bbox']})")
+        print(f"    '{text_preview}'")
+        print(f"      NLI: {scores['nli']:.3f}, Emb: {scores['embedding']:.3f}, Layout: {scores['layout']:.3f}, Bonus: {scores['bonus']:.3f}, Final: {scores['final_score']:.3f}")
 
-    # Step 5: Zero-shot Classification으로 최종 선택
-    if classifier and len(top_candidates) >= 1:
-        print(f"\n  Zero-shot Classification에 {len(top_candidates)}개 후보 전달:")
-        ml_result = select_best_title_ml(top_candidates)
-        if ml_result:
-            print(f"  ✅ 선택: '{ml_result['text']}'")
-            return ml_result['text'], ml_result['bbox']
+        scored.append({
+            'text': c['text'],
+            'bbox': c['bbox'],
+            'score': scores['final_score'],
+            'details': scores
+        })
 
-    # Step 6: ML 미사용 시 거리 기반 선택
-    print("  ⚠️  ML 모델 미사용, 거리 기반 선택")
-    best = top_candidates[0]
-    print(f"  ✅ 선택: '{best['text']}' (bbox: {best['bbox']})")
+    # 최고 점수 선택
+    scored.sort(key=lambda x: x['score'], reverse=True)
+    best = scored[0]
+
+    # 임계값 체크
+    if best['score'] < SCORE_THRESHOLD:
+        print(f"  ⚠️  최고 점수({best['score']:.3f})가 임계값({SCORE_THRESHOLD}) 미만")
+        return "", None
+
+    print(f"\n  ✅ 선택: '{best['text']}' (점수: {best['score']:.3f})")
     return best['text'], best['bbox']
 
 @app.route('/get_title', methods=['POST'])
@@ -502,7 +493,6 @@ def get_title():
     """받은 데이터(tables, texts)에 각 테이블마다 title 프로퍼티를 추가해서 되돌려주는 API"""
     data = request.get_json()
 
-    # 데이터가 딕셔너리인지 확인 (tables와 texts를 포함)
     if isinstance(data, dict):
         tables = data.get('tables', [])
         texts = data.get('texts', [])
@@ -510,16 +500,8 @@ def get_title():
         print(f"받은 테이블 수: {len(tables)}")
         print(f"받은 텍스트 수: {len(texts)}")
 
-        # 첫 번째 테이블과 텍스트 샘플 출력
-        if tables:
-            print(f"첫 번째 테이블 bbox: {get_bbox_from_table(tables[0])}")
-        if texts:
-            print(f"첫 번째 텍스트: {texts[0]}")
-            print(f"첫 번째 텍스트 bbox: {get_bbox_from_text(texts[0])}")
-
-        # 각 테이블에 title 추가
         result_tables = []
-        used_titles = set()  # 이미 사용된 타이틀 추적
+        used_titles = set()
 
         for idx, table in enumerate(tables):
             table_with_title = copy.deepcopy(table)
@@ -528,27 +510,14 @@ def get_title():
             table_with_title['title'] = title
             table_with_title['title_bbox'] = title_bbox
 
-            # 선택된 타이틀을 used_titles에 추가
             if title:
                 used_titles.add(title)
-
-            # title이 제대로 추가되었는지 확인
-            if 'title' in table_with_title:
-                print(f"  ✓ title 프로퍼티 추가 확인: '{table_with_title['title']}'")
-                print(f"  ✓ title_bbox 프로퍼티 추가 확인: {table_with_title['title_bbox']}")
-            else:
-                print(f"  ✗ title 프로퍼티 추가 실패!")
 
             result_tables.append(table_with_title)
 
         print(f"\n최종 반환: {len(result_tables)}개 테이블")
-        # 첫 번째 테이블의 키 확인
-        if result_tables:
-            print(f"첫 번째 테이블 키: {list(result_tables[0].keys())}")
-
         return jsonify(result_tables)
 
-    # 하위 호환성: 배열만 오는 경우 (기존 방식)
     elif isinstance(data, list):
         result = []
         for idx, table in enumerate(data):
