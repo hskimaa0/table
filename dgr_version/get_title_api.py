@@ -21,10 +21,9 @@ ZERO_SHOT_MODEL = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot classif
 ML_DEVICE = -1  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 TOP_CANDIDATES_COUNT = 5  # ML 모델에 전달할 상위 후보 개수
-ML_CANDIDATE_LABELS = ["table title", "not a title"]  # 단순 양/음 라벨
+ML_CANDIDATE_LABELS = ["표의 제목", "표의 제목이 아님"]  # 의미 기반 분류
 
 ML_HYPOTHESIS_TEMPLATES = [
-    "This text is a {}.",
     "이 텍스트는 {}이다."
 ]
 
@@ -285,10 +284,6 @@ def is_valid_title_candidate(text_content):
     if len(text) > 100:
         return False, f"너무 긴 텍스트 ({len(text)}자)"
 
-    # 8. 특수문자만 있거나 특수문자로 시작하는 경우
-    if re.match(r'^[^\w가-힣]', text):
-        return False, "특수문자로 시작"
-
     return True, "후보"
 
 def select_best_title_ml(candidates):
@@ -312,23 +307,21 @@ def select_best_title_ml(candidates):
         # 각 가설 템플릿으로 점수 계산
         for hyp_idx, hyp in enumerate(ML_HYPOTHESIS_TEMPLATES):
             hyp_name = "영어" if hyp_idx == 0 else "한국어"
-            print(f"\n  [{hyp_name} 가설] '{hyp}'")
+            print(f"\n  [한국어 가설] '{hyp}'")
 
-            results = classifier(
-                candidate_texts,
-                candidate_labels=ML_CANDIDATE_LABELS,
-                hypothesis_template=hyp,
-                truncation=True
-            )
+            # 개별 텍스트에 대해 classifier 호출
+            for i, text in enumerate(candidate_texts):
+                result = classifier(
+                    text,
+                    candidate_labels=ML_CANDIDATE_LABELS,
+                    hypothesis_template=hyp,
+                    truncation=True
+                )
 
-            if not isinstance(results, list):
-                results = [results]
-
-            # "table title" 라벨의 점수 추출
-            for i, r in enumerate(results):
+                # "table title" 라벨의 점수 추출
                 try:
-                    idx = r['labels'].index(ML_CANDIDATE_LABELS[0])
-                    score = float(r['scores'][idx])
+                    idx = result['labels'].index(ML_CANDIDATE_LABELS[0])
+                    score = float(result['scores'][idx])
                 except Exception:
                     score = 0.0
 
@@ -389,7 +382,7 @@ def is_bbox_overlapping(text_bbox, table_bbox):
         return False
     return True
 
-def find_title_for_table(table, texts, all_tables=None):
+def find_title_for_table(table, texts, all_tables=None, used_titles=None):
     """Zero-shot Classification으로 table의 title 찾기"""
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
@@ -397,6 +390,10 @@ def find_title_for_table(table, texts, all_tables=None):
         return "", None
 
     print(f"  테이블 bbox: y={table_bbox[1]}")
+
+    # 이미 사용된 타이틀 초기화
+    if used_titles is None:
+        used_titles = set()
 
     # all_tables가 없으면 현재 테이블만 포함
     if all_tables is None:
@@ -461,6 +458,11 @@ def find_title_for_table(table, texts, all_tables=None):
             print(f"    {i+1}. ❌ '{text_preview}' - {reason}")
             continue
 
+        # 이미 사용된 타이틀인지 확인
+        if text_content in used_titles:
+            print(f"    {i+1}. ❌ '{text_preview}' - 이미 사용된 타이틀")
+            continue
+
         print(f"    {i+1}. ✅ '{text_preview}' - 후보 (거리: {distance:.0f}, 길이: {len(text_content)}, bbox: {text_bbox})")
         candidates.append({
             'text': text_content,
@@ -517,12 +519,18 @@ def get_title():
 
         # 각 테이블에 title 추가
         result_tables = []
+        used_titles = set()  # 이미 사용된 타이틀 추적
+
         for idx, table in enumerate(tables):
             table_with_title = copy.deepcopy(table)
-            title, title_bbox = find_title_for_table(table, texts, all_tables=tables)
+            title, title_bbox = find_title_for_table(table, texts, all_tables=tables, used_titles=used_titles)
             print(f"테이블 {idx} 타이틀: '{title}'")
             table_with_title['title'] = title
             table_with_title['title_bbox'] = title_bbox
+
+            # 선택된 타이틀을 used_titles에 추가
+            if title:
+                used_titles.add(title)
 
             # title이 제대로 추가되었는지 확인
             if 'title' in table_with_title:
