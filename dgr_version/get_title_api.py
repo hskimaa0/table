@@ -1,6 +1,6 @@
 """
-하이브리드 타이틀 추출 API
-규칙 기반 필터링 + ML 모델 선택
+타이틀 추출 API
+규칙 기반 필터링 + Zero-shot Classification
 """
 from flask import Flask, jsonify, request
 import copy
@@ -18,55 +18,34 @@ HORIZONTAL_WEIGHT = 0.1  # 수평 거리 가중치 (수직 거리 대비)
 
 # ML 모델 관련
 ZERO_SHOT_MODEL = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot classification 모델 (다국어)
-RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # Cross-encoder reranker 모델 (다국어)
 ML_DEVICE = -1  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 TOP_CANDIDATES_COUNT = 5  # ML 모델에 전달할 상위 후보 개수
-ML_CANDIDATE_LABELS = ["concise table title", "reference text mentioning tables, subsection headings, full explanatory sentences, descriptions, units, notes, symbols, page numbers, or other non-title text"]
-ML_HYPOTHESIS_TEMPLATE = "This is {}."  # 가설 템플릿
-USE_ZEROSHOT = False  # Zero-shot 모델 사용 여부
-USE_RERANKER = True  # Reranker 사용 여부
+ML_CANDIDATE_LABELS = ["table title", "not a title"]  # 단순 양/음 라벨
 
-# 거리 점수 계산 관련
-DISTANCE_SCORE_BASE = 100  # 거리 0일 때 기본 점수
-DISTANCE_SCORE_DIVIDER = 50  # 거리 점수 감소율
+ML_HYPOTHESIS_TEMPLATES = [
+    "This text is a {}.",
+    "이 텍스트는 {}이다."
+]
 
 # ML 모델 로드
-USE_ML_MODEL = True
 classifier = None
-reranker = None
 
 # Zero-shot Classification 모델 로드
-if USE_ZEROSHOT:
-    try:
-        from transformers import pipeline
-        classifier = pipeline(
-            "zero-shot-classification",
-            model=ZERO_SHOT_MODEL,
-            device=ML_DEVICE
-        )
-        print(f"✅ Zero-shot Classification 모델 로드 완료 ({ZERO_SHOT_MODEL})")
-    except ImportError:
-        print("⚠️  transformers 라이브러리 없음, Zero-shot 미사용")
-        USE_ML_MODEL = False
-    except Exception as e:
-        print(f"⚠️  Zero-shot 모델 로드 실패: {e}, Zero-shot 미사용")
-        USE_ML_MODEL = False
-else:
-    print("ℹ️  Zero-shot 모델 사용 안 함 (USE_ZEROSHOT=False)")
-
-# Cross-Encoder Reranker 모델 로드
-if USE_RERANKER:
-    try:
-        from sentence_transformers import CrossEncoder
-        reranker = CrossEncoder(RERANKER_MODEL, max_length=512, device='cpu' if ML_DEVICE == -1 else f'cuda:{ML_DEVICE}')
-        print(f"✅ Reranker 모델 로드 완료 ({RERANKER_MODEL})")
-    except ImportError:
-        print("⚠️  sentence-transformers 라이브러리 없음, Reranker 미사용")
-        reranker = None
-    except Exception as e:
-        print(f"⚠️  Reranker 모델 로드 실패: {e}, Reranker 미사용")
-        reranker = None
+try:
+    from transformers import pipeline
+    classifier = pipeline(
+        "zero-shot-classification",
+        model=ZERO_SHOT_MODEL,
+        device=ML_DEVICE
+    )
+    print(f"✅ Zero-shot Classification 모델 로드 완료 ({ZERO_SHOT_MODEL})")
+except ImportError:
+    print("⚠️  transformers 라이브러리 없음")
+    classifier = None
+except Exception as e:
+    print(f"⚠️  Zero-shot 모델 로드 실패: {e}")
+    classifier = None
 
 def get_bbox_from_text(text):
     """text 객체에서 bbox 정보 추출 [l, t, r, b] 형식으로 반환"""
@@ -271,44 +250,51 @@ def merge_text_group(text_group):
 
     return merged_obj
 
-def is_title_candidate(text_content, distance):
-    """규칙 기반 타이틀 후보 필터링 - 명백히 제목이 아닌 것만 제외"""
+def is_valid_title_candidate(text_content):
+    """텍스트가 타이틀 후보로 유효한지 확인"""
     if not text_content or len(text_content.strip()) == 0:
         return False, "빈 텍스트"
 
     text = text_content.strip()
 
-    # 1. 너무 멀리 있는 텍스트 제외
-    if distance > MAX_DISTANCE_THRESHOLD:
-        return False, "너무 멀리 떨어짐"
+    # 1. 단일 문자/숫자 제외
+    if len(text) <= 2:
+        return False, "너무 짧음 (2자 이하)"
 
-    # 2. 너무 긴 텍스트 제외
-    if len(text) > MAX_TEXT_LENGTH:
-        return False, "너무 긴 텍스트"
+    # 2. 숫자만 있는 경우 제외
+    if re.match(r'^[\d\s\.\-]+$', text):
+        return False, "숫자만 포함"
 
-    # 3. 단일 문자 제외 (마침표, 쉼표 등)
-    if len(text) == 1:
-        return False, "단일 문자"
+    # 3. IP 주소 패턴 제외
+    if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', text):
+        return False, "IP 주소"
 
-    # 4. 페이지 번호 패턴 제외 (예: "- 8 -", "184")
-    if re.match(r'^-?\s*\d+\s*-?$', text):
-        return False, "페이지 번호"
+    # 4. 단위 표기 제외
+    if re.search(r'^\s*\(?단위\s*[:：]', text, re.IGNORECASE):
+        return False, "단위 표기"
 
-    # 5. 단위만 있는 경우 우선순위 낮춤 (완전 제외는 안 함)
-    # "(단위: cm)" 같은 건 후보로 남기되 점수를 낮춤
+    # 5. "다." 단독으로 끝나는 경우 제외
+    if re.search(r'다\.\s*$', text):
+        return False, "'다.'로 끝나는 문장"
+
+    # 6. 동사/형용사 어미로 끝나는 문장 제외
+    if re.search(r'([가-힣]+(다|며|고|자|라|ㄴ다|는다|ㄹ다|ㅂ니다|습니다|이다|한다|된다|있다|없다|같다|왔다|났다|하였다|되었다|였다|았다|었다))[\.?!]?\s*$', text):
+        return False, "동사로 끝나는 문장"
+
+    # 7. 너무 긴 텍스트 제외
+    if len(text) > 100:
+        return False, f"너무 긴 텍스트 ({len(text)}자)"
+
+    # 8. 특수문자만 있거나 특수문자로 시작하는 경우
+    if re.match(r'^[^\w가-힣]', text):
+        return False, "특수문자로 시작"
 
     return True, "후보"
 
-def score_title_candidate(text_obj, text_content, distance):
-    """타이틀 후보에 점수 부여 - 거리 기반만 사용"""
-    # 거리 점수만 사용 (가까울수록 높은 점수)
-    score = max(0, DISTANCE_SCORE_BASE - (distance / DISTANCE_SCORE_DIVIDER))
-
-    return score
-
 def select_best_title_ml(candidates):
-    """하이브리드 방식: Zero-shot + Reranker로 최적의 타이틀 선택"""
-    if not candidates:
+    """Zero-shot Classification으로 최적의 타이틀 선택 (다국어 가설)"""
+    if not candidates or not classifier:
+        print("\n  ML 모델 없음, 거리 기반 선택")
         return None
 
     try:
@@ -318,106 +304,63 @@ def select_best_title_ml(candidates):
             for c in candidates
         ]
 
-        zeroshot_scores = None
-        reranker_scores = None
+        best_idx, best_score = None, -1.0
+        all_scores = {i: [] for i in range(len(candidates))}  # 각 후보의 모든 가설 점수 저장
 
-        # ===== Step 1: Zero-shot Classification (USE_ZEROSHOT=True일 때만) =====
-        if USE_ZEROSHOT and classifier:
-            print("  [1단계] Zero-shot Classification 점수:")
+        print("  Zero-shot Classification 점수:")
+
+        # 각 가설 템플릿으로 점수 계산
+        for hyp_idx, hyp in enumerate(ML_HYPOTHESIS_TEMPLATES):
+            hyp_name = "영어" if hyp_idx == 0 else "한국어"
+            print(f"\n  [{hyp_name} 가설] '{hyp}'")
+
             results = classifier(
                 candidate_texts,
                 candidate_labels=ML_CANDIDATE_LABELS,
-                hypothesis_template=ML_HYPOTHESIS_TEMPLATE
+                hypothesis_template=hyp,
+                truncation=True
             )
 
-            # 단일 결과인 경우 리스트로 변환
             if not isinstance(results, list):
                 results = [results]
 
-            # Zero-shot 점수 추출
-            zeroshot_scores = []
-            for i, result in enumerate(results):
-                score = result['scores'][result['labels'].index(ML_CANDIDATE_LABELS[0])]
-                zeroshot_scores.append(score)
+            # "table title" 라벨의 점수 추출
+            for i, r in enumerate(results):
+                try:
+                    idx = r['labels'].index(ML_CANDIDATE_LABELS[0])
+                    score = float(r['scores'][idx])
+                except Exception:
+                    score = 0.0
+
+                all_scores[i].append(score)
                 text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
                 print(f"    {i+1}. '{text_preview}' → {score:.3f}")
 
-        # ===== Step 2: Reranker (USE_RERANKER=True일 때만) =====
-        if USE_RERANKER and reranker:
-            step_num = 2 if USE_ZEROSHOT else 1
-            print(f"\n  [{step_num}단계] Cross-Encoder Reranker 점수:")
+                # 현재까지의 최고 점수 업데이트 (동점이면 거리가 가까운 것, 그다음 짧은 것 우선)
+                tie_break = (-candidates[i]['distance'], -len(candidate_texts[i]))
+                if best_idx is None:
+                    best_idx, best_score = i, score
+                else:
+                    current_tie_break = (-candidates[best_idx]['distance'], -len(candidate_texts[best_idx]))
+                    if (score, *tie_break) > (best_score, *current_tie_break):
+                        best_idx, best_score = i, score
 
-            # 긍정적인 쿼리 (제목일 가능성)와 부정적인 쿼리 (제목이 아닐 가능성)를 분리
-            positive_queries = [
-                "This is a table title",
-                "This is a table caption",
-                "This is a concise table heading",
-                "This is a short descriptive title for a table",
-                "This text describes what the table shows",
-                "A brief label that explains table content",
-                "표 제목",
-                "테이블 제목",
-                "표 캡션",
-                "간결한 표 제목",
-                "표 내용을 설명하는 제목",
-                "표가 무엇을 보여주는지 설명하는 문구"
-            ]
+        # 평균 점수 계산 및 출력
+        print(f"\n  [평균 점수]")
+        avg_scores = []
+        for i in range(len(candidates)):
+            avg = sum(all_scores[i]) / len(all_scores[i]) if all_scores[i] else 0.0
+            avg_scores.append(avg)
+            text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
+            print(f"    {i+1}. '{text_preview}' → {avg:.3f} (거리: {candidates[i]['distance']:.0f})")
 
-            # 긍정 쿼리 점수 계산
-            positive_scores = []
-            for query in positive_queries:
-                pairs = [[query, text] for text in candidate_texts]
-                scores = reranker.predict(pairs, convert_to_numpy=True)
-                positive_scores.append(scores)
+        # 평균 점수로 최종 선택 (동점이면 거리가 가까운 것 우선)
+        best_idx = max(range(len(avg_scores)), key=lambda i: (avg_scores[i], -candidates[i]['distance'], -len(candidate_texts[i])))
+        best_score = avg_scores[best_idx]
 
-            # 긍정 점수 평균만 사용
-            import numpy as np
-            pos_avg = np.mean(positive_scores, axis=0)
-            reranker_scores = pos_avg  # 제목 점수만 사용
+        print(f"  최종 선택: 후보 {best_idx+1}, 평균 점수: {best_score:.3f}, 거리: {candidates[best_idx]['distance']:.0f}")
 
-            for i, score in enumerate(reranker_scores):
-                text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
-                print(f"    {i+1}. '{text_preview}' → 제목점수:{score:.3f}")
-
-        # ===== Step 3: 점수 결합 및 선택 =====
-        if reranker_scores is not None and zeroshot_scores is not None:
-            # 둘 다 있으면 혼합
-            print("\n  [3단계] 혼합 점수 (Reranker 100% + Zero-shot 0%):")
-            combined_scores = []
-            for i in range(len(candidates)):
-                combined = 1.0 * reranker_scores[i] + 0.0 * zeroshot_scores[i]
-                combined_scores.append(combined)
-                text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
-                print(f"    {i+1}. '{text_preview}' → {combined:.3f}")
-
-            # 점수가 같으면 거리가 가까운 것 선택
-            best_idx = int(max(range(len(combined_scores)), key=lambda i: (combined_scores[i], -candidates[i]['distance'])))
-            best_score = combined_scores[best_idx]
-            print(f"  최종 선택: 후보 {best_idx+1}, 점수: {best_score:.3f}")
-
-        elif reranker_scores is not None:
-            # Reranker만 사용
-            print("\n  Reranker만 사용")
-            # 점수가 같으면 거리가 가까운 것 선택
-            best_idx = int(max(range(len(reranker_scores)), key=lambda i: (reranker_scores[i], -candidates[i]['distance'])))
-            best_score = reranker_scores[best_idx]
-            print(f"  최종 선택: 후보 {best_idx+1}, Reranker 점수: {best_score:.3f}")
-
-        elif zeroshot_scores is not None:
-            # Zero-shot만 사용
-            print("\n  Zero-shot만 사용")
-            # 점수가 같으면 거리가 가까운 것 선택
-            best_idx = int(max(range(len(zeroshot_scores)), key=lambda i: (zeroshot_scores[i], -candidates[i]['distance'])))
-            best_score = zeroshot_scores[best_idx]
-            print(f"  최종 선택: 후보 {best_idx+1}, Zero-shot 점수: {best_score:.3f}")
-
-        else:
-            # 둘 다 없으면 거리 기반
-            print("\n  ML 모델 없음, 거리 기반 선택")
-            return None
-
-        # 최고 점수 후보 반환
-        return candidates[best_idx]
+        return candidates[best_idx] if best_idx is not None else None
 
     except Exception as e:
         print(f"  ML 모델 오류: {e}")
@@ -447,7 +390,7 @@ def is_bbox_overlapping(text_bbox, table_bbox):
     return True
 
 def find_title_for_table(table, texts, all_tables=None):
-    """하이브리드 방식으로 table의 title 찾기"""
+    """Zero-shot Classification으로 table의 title 찾기"""
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
         print("  테이블 bbox 없음")
@@ -459,7 +402,7 @@ def find_title_for_table(table, texts, all_tables=None):
     if all_tables is None:
         all_tables = [table]
 
-    # Step 0-1: 테이블 내부에 있는 텍스트 먼저 필터링
+    # Step 1: 테이블 내부에 있는 텍스트 필터링
     filtered_texts = []
     for text in texts:
         text_bbox = get_bbox_from_text(text)
@@ -467,23 +410,22 @@ def find_title_for_table(table, texts, all_tables=None):
             continue
 
         # 모든 테이블과 겹치는지 체크
-        overlaps_any = False
-        for tbl in all_tables:
-            tbl_bbox = get_bbox_from_table(tbl)
-            if tbl_bbox and is_bbox_overlapping(text_bbox, tbl_bbox):
-                overlaps_any = True
-                break
+        overlaps_any = any(
+            is_bbox_overlapping(text_bbox, get_bbox_from_table(tbl))
+            for tbl in all_tables
+            if get_bbox_from_table(tbl)
+        )
 
         if not overlaps_any:
             filtered_texts.append(text)
 
     print(f"  원본 텍스트: {len(texts)}개 → 테이블 외부: {len(filtered_texts)}개")
 
-    # Step 0-2: 같은 줄의 텍스트들을 그룹화
+    # Step 2: 같은 줄의 텍스트들을 그룹화
     grouped_texts = group_texts_by_line(filtered_texts, y_tolerance=Y_LINE_TOLERANCE)
     print(f"  그룹화: {len(grouped_texts)}개")
 
-    # 그룹화된 텍스트 처음 5개 출력
+    # 그룹화된 텍스트 샘플 출력
     print("  그룹화된 텍스트 샘플 (위에서 아래 순서):")
     for i, gt in enumerate(grouped_texts[:5]):
         if gt:
@@ -491,7 +433,7 @@ def find_title_for_table(table, texts, all_tables=None):
             bbox = gt.get('merged_bbox') or get_bbox_from_text(gt)
             print(f"    {i+1}. y={bbox[1]}: '{text_preview}'")
 
-    # Step 1: 테이블 위쪽 텍스트만 수집 (거리 무관, 상위 2개)
+    # Step 3: 테이블 위쪽 텍스트 후보 수집
     candidates = []
 
     print("\n  필터링 상세 로그:")
@@ -499,63 +441,30 @@ def find_title_for_table(table, texts, all_tables=None):
         if not text:
             continue
 
-        # 병합된 텍스트 사용
         text_bbox = text.get('merged_bbox') or get_bbox_from_text(text)
         if not text_bbox:
             continue
 
-        # 병합된 텍스트 우선 사용
         text_content = text.get('merged_text') or extract_text_content(text)
         text_preview = text_content[:40] if len(text_content) > 40 else text_content
 
-        # 현재 테이블과의 거리 계산 (이미 테이블 내부 텍스트는 필터링됨)
+        # 거리 계산
         distance = calculate_distance(text_bbox, table_bbox)
 
         if distance == float('inf'):
             print(f"    {i+1}. ❌ '{text_preview}' - 테이블 아래")
             continue
 
-        # 빈 텍스트만 제외
-        if not text_content or len(text_content.strip()) == 0:
-            print(f"    {i+1}. ❌ '{text_preview}' - 빈 텍스트")
+        # 유효성 검사
+        is_valid, reason = is_valid_title_candidate(text_content)
+        if not is_valid:
+            print(f"    {i+1}. ❌ '{text_preview}' - {reason}")
             continue
-
-        # 완전한 문장 형태 제외 (설명문은 제목이 아님)
-        text_stripped = text_content.strip()
-
-        # 1) 단위 표기 제외 (단위:, unit:, mm, cm, %, 원, 명 등)
-        if re.search(r'^\s*\(?단위\s*[:：]', text_stripped, re.IGNORECASE):
-            print(f"    {i+1}. ❌ '{text_preview}' - 단위 표기 (제목 아님)")
-            continue
-
-        # 2) "다." 단독으로 끝나는 경우 제외
-        if re.search(r'다\.\s*$', text_stripped):
-            print(f"    {i+1}. ❌ '{text_preview}' - '다.'로 끝나는 문장 (제목 아님)")
-            continue
-
-        # 3) 동사/형용사 어미로 끝나는 문장 모두 제외
-        # 과거: ~했다, ~됐다, ~였다, ~았다, ~었다
-        # 현재: ~한다, ~된다, ~인다, ~는다
-        # 명령/청유: ~하자, ~되자, ~하라, ~되라
-        # 연결: ~하고, ~되고, ~하며, ~되며
-        # 기타: ~한, ~된, ~하는, ~되는, ~할, ~될, ~있다, ~없다, ~같다, ~이다
-        if re.search(r'([가-힣]+(다|며|고|자|라|ㄴ다|는다|ㄹ다|ㅂ니다|습니다|이다|한다|된다|있다|없다|같다|왔다|났다|하였다|되었다|였다|았다|었다))[\.?!]?\s*$', text_stripped):
-            print(f"    {i+1}. ❌ '{text_preview}' - 동사로 끝나는 문장 (제목 아님)")
-            continue
-
-        # 4) 너무 긴 텍스트는 제목이 아닐 가능성이 높음
-        if len(text_stripped) > 100:
-            print(f"    {i+1}. ❌ '{text_preview}' - 너무 긴 텍스트 ({len(text_stripped)}자)")
-            continue
-
-        # 점수 계산
-        score = score_title_candidate(text, text_content, distance)
 
         print(f"    {i+1}. ✅ '{text_preview}' - 후보 (거리: {distance:.0f}, 길이: {len(text_content)}, bbox: {text_bbox})")
         candidates.append({
             'text': text_content,
             'distance': distance,
-            'score': score,
             'bbox': text_bbox
         })
 
@@ -563,8 +472,8 @@ def find_title_for_table(table, texts, all_tables=None):
         print("  ❌ 타이틀 후보 없음")
         return "", None
 
-    # Step 2: 거리 순으로 정렬하고 상위 N개만 선택 (테이블에 가장 가까운 것들)
-    candidates.sort(key=lambda x: x['distance'])  # 거리 오름차순 정렬
+    # Step 4: 거리 순으로 정렬하고 상위 N개 선택
+    candidates.sort(key=lambda x: x['distance'])
     top_candidates = candidates[:TOP_CANDIDATES_COUNT]
 
     print(f"  거리 기반 상위 후보 {len(top_candidates)}개 선택 (전체 {len(candidates)}개 중):")
@@ -572,21 +481,18 @@ def find_title_for_table(table, texts, all_tables=None):
         text_preview = c['text'][:50] if len(c['text']) > 50 else c['text']
         print(f"    {i+1}. '{text_preview}' (거리: {c['distance']:.0f}, bbox: {c['bbox']})")
 
-    # Step 3: ML 모델로 최종 선택 (후보가 1개 이상일 때)
-    if USE_ML_MODEL and len(top_candidates) >= 1:
-        print(f"\n  ML 모델에 {len(top_candidates)}개 후보 전달:")
+    # Step 5: Zero-shot Classification으로 최종 선택
+    if classifier and len(top_candidates) >= 1:
+        print(f"\n  Zero-shot Classification에 {len(top_candidates)}개 후보 전달:")
         ml_result = select_best_title_ml(top_candidates)
         if ml_result:
-            print(f"  ✅ ML 선택: '{ml_result['text']}'")
+            print(f"  ✅ 선택: '{ml_result['text']}'")
             return ml_result['text'], ml_result['bbox']
-        else:
-            print(f"  ❌ ML 모델이 타이틀을 선택하지 못함")
-            return "", None
 
-    # Step 4: ML 사용 안 하는 경우에만 거리 기반 선택
-    print("  ⚠️  ML 모델 미사용, 거리 기반 대체")
+    # Step 6: ML 미사용 시 거리 기반 선택
+    print("  ⚠️  ML 모델 미사용, 거리 기반 선택")
     best = top_candidates[0]
-    print(f"  ✅ 거리 기반 선택: '{best['text']}' (점수: {best['score']:.1f}, bbox: {best['bbox']})")
+    print(f"  ✅ 선택: '{best['text']}' (bbox: {best['bbox']})")
     return best['text'], best['bbox']
 
 @app.route('/get_title', methods=['POST'])
