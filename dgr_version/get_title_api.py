@@ -12,7 +12,7 @@ app = Flask(__name__)
 # 거리 및 필터링 관련
 MAX_DISTANCE_THRESHOLD = 10000  # 타이틀 후보로 고려할 최대 거리 (px)
 MAX_TEXT_LENGTH = 150  # 타이틀로 고려할 최대 텍스트 길이
-Y_LINE_TOLERANCE = 50  # 같은 줄로 간주할 y 좌표 허용 오차 (px)
+Y_LINE_TOLERANCE = 100  # 같은 줄로 간주할 y 좌표 허용 오차 (px)
 X_GAP_THRESHOLD = 100  # 텍스트 사이 공백 추가 기준 간격 (px)
 HORIZONTAL_WEIGHT = 0.1  # 수평 거리 가중치 (수직 거리 대비)
 
@@ -22,7 +22,7 @@ ML_DEVICE = -1  # -1: CPU, 0: GPU
 ML_CONFIDENCE_THRESHOLD = 0.0  # ML 모델 제목 판단 임계값
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 TOP_CANDIDATES_COUNT = 2  # ML 모델에 전달할 상위 후보 개수
-ML_CANDIDATE_LABELS = ["substantive title conveying the table's main subject matter", "parenthetical notes, units, symbols, or reference markers"]
+ML_CANDIDATE_LABELS = ["concise table title", "reference text mentioning tables, subsection headings, full explanatory sentences, descriptions, units, notes, symbols, page numbers, or other non-title text"]
 ML_HYPOTHESIS_TEMPLATE = "This is {}."  # 가설 템플릿
 
 # 거리 점수 계산 관련
@@ -253,7 +253,7 @@ def score_title_candidate(text_obj, text_content, distance):
     return score
 
 def select_best_title_ml(candidates):
-    """Zero-shot Classification으로 최적의 타이틀 선택 (배치 처리)"""
+    """Zero-shot Classification으로 최적의 타이틀 선택 (배치 처리) + 거리 보너스"""
     if not USE_ML_MODEL or not classifier or not candidates:
         return None
 
@@ -282,16 +282,16 @@ def select_best_title_ml(candidates):
 
         # 각 결과에서 첫 번째 라벨(제목) 확률 추출
         for i, result in enumerate(results):
-            title_score = result['scores'][result['labels'].index(ML_CANDIDATE_LABELS[0])]
+            ml_score = result['scores'][result['labels'].index(ML_CANDIDATE_LABELS[0])]
 
             text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
-            print(f"    {i+1}. '{text_preview}' → 제목 확률: {title_score:.3f}")
+            print(f"    {i+1}. '{text_preview}' → 제목 확률: {ml_score:.3f}")
 
-            if title_score > best_score:
-                best_score = title_score
+            if ml_score > best_score:
+                best_score = ml_score
                 best_idx = i
 
-        print(f"  ML 최고 확률: {best_score:.3f} (임계값: {ML_CONFIDENCE_THRESHOLD})")
+        print(f"  ML 최고 점수: {best_score:.3f} (임계값: {ML_CONFIDENCE_THRESHOLD})")
 
         # 임계값 이상이어야 제목으로 판단
         if best_idx >= 0 and best_score > ML_CONFIDENCE_THRESHOLD:
@@ -307,7 +307,27 @@ def select_best_title_ml(candidates):
 
     return None
 
-def find_title_for_table(table, texts):
+def is_bbox_overlapping(text_bbox, table_bbox):
+    """두 bbox가 겹치는지 확인 (겹치면 True)"""
+    if not text_bbox or not table_bbox:
+        return False
+
+    # bbox 형식: [l, t, r, b]
+    # 겹치지 않는 조건: text가 table의 완전히 왼쪽/오른쪽/위/아래에 있음
+    # - text가 table 왼쪽: text_r <= table_l
+    # - text가 table 오른쪽: text_l >= table_r
+    # - text가 table 위: text_b <= table_t
+    # - text가 table 아래: text_t >= table_b
+
+    text_l, text_t, text_r, text_b = text_bbox
+    table_l, table_t, table_r, table_b = table_bbox
+
+    # 겹치지 않으면 False, 겹치면 True
+    if text_r <= table_l or text_l >= table_r or text_b <= table_t or text_t >= table_b:
+        return False
+    return True
+
+def find_title_for_table(table, texts, all_tables=None):
     """하이브리드 방식으로 table의 title 찾기"""
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
@@ -316,9 +336,33 @@ def find_title_for_table(table, texts):
 
     print(f"  테이블 bbox: y={table_bbox[1]}")
 
-    # Step 0: 같은 줄의 텍스트들을 그룹화
-    grouped_texts = group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE)
-    print(f"  원본 텍스트: {len(texts)}개 → 그룹화: {len(grouped_texts)}개")
+    # all_tables가 없으면 현재 테이블만 포함
+    if all_tables is None:
+        all_tables = [table]
+
+    # Step 0-1: 테이블 내부에 있는 텍스트 먼저 필터링
+    filtered_texts = []
+    for text in texts:
+        text_bbox = get_bbox_from_text(text)
+        if not text_bbox:
+            continue
+
+        # 모든 테이블과 겹치는지 체크
+        overlaps_any = False
+        for tbl in all_tables:
+            tbl_bbox = get_bbox_from_table(tbl)
+            if tbl_bbox and is_bbox_overlapping(text_bbox, tbl_bbox):
+                overlaps_any = True
+                break
+
+        if not overlaps_any:
+            filtered_texts.append(text)
+
+    print(f"  원본 텍스트: {len(texts)}개 → 테이블 외부: {len(filtered_texts)}개")
+
+    # Step 0-2: 같은 줄의 텍스트들을 그룹화
+    grouped_texts = group_texts_by_line(filtered_texts, y_tolerance=Y_LINE_TOLERANCE)
+    print(f"  그룹화: {len(grouped_texts)}개")
 
     # 그룹화된 텍스트 처음 5개 출력
     print("  그룹화된 텍스트 샘플 (위에서 아래 순서):")
@@ -341,14 +385,15 @@ def find_title_for_table(table, texts):
         if not text_bbox:
             continue
 
-        distance = calculate_distance(text_bbox, table_bbox)
-
         # 병합된 텍스트 우선 사용
         text_content = text.get('merged_text') or extract_text_content(text)
         text_preview = text_content[:40] if len(text_content) > 40 else text_content
 
+        # 현재 테이블과의 거리 계산 (이미 테이블 내부 텍스트는 필터링됨)
+        distance = calculate_distance(text_bbox, table_bbox)
+
         if distance == float('inf'):
-            print(f"    {i+1}. ❌ '{text_preview}' - 테이블 아래 또는 겹침")
+            print(f"    {i+1}. ❌ '{text_preview}' - 테이블 아래")
             continue
 
         # 빈 텍스트만 제외
@@ -433,7 +478,7 @@ def get_title():
         result_tables = []
         for idx, table in enumerate(tables):
             table_with_title = copy.deepcopy(table)
-            title, title_bbox = find_title_for_table(table, texts)
+            title, title_bbox = find_title_for_table(table, texts, all_tables=tables)
             print(f"테이블 {idx} 타이틀: '{title}'")
             table_with_title['title'] = title
             table_with_title['title_bbox'] = title_bbox
