@@ -17,47 +17,72 @@ X_GAP_THRESHOLD = 100  # 텍스트 사이 공백 추가 기준 간격 (px)
 HORIZONTAL_WEIGHT = 0.1  # 수평 거리 가중치 (수직 거리 대비)
 
 # ML 모델 관련
-ML_MODEL_NAME = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot classification 모델 (280MB, 다국어)
+ZERO_SHOT_MODEL = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot classification 모델 (다국어)
+RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # Cross-encoder reranker 모델 (다국어)
 ML_DEVICE = -1  # -1: CPU, 0: GPU
-ML_CONFIDENCE_THRESHOLD = 0.0  # ML 모델 제목 판단 임계값
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
-TOP_CANDIDATES_COUNT = 2  # ML 모델에 전달할 상위 후보 개수
+TOP_CANDIDATES_COUNT = 5  # ML 모델에 전달할 상위 후보 개수
 ML_CANDIDATE_LABELS = ["concise table title", "reference text mentioning tables, subsection headings, full explanatory sentences, descriptions, units, notes, symbols, page numbers, or other non-title text"]
 ML_HYPOTHESIS_TEMPLATE = "This is {}."  # 가설 템플릿
+USE_ZEROSHOT = False  # Zero-shot 모델 사용 여부
+USE_RERANKER = True  # Reranker 사용 여부
 
 # 거리 점수 계산 관련
 DISTANCE_SCORE_BASE = 100  # 거리 0일 때 기본 점수
 DISTANCE_SCORE_DIVIDER = 50  # 거리 점수 감소율
 
-# ML 모델 로드 (Zero-shot Classification)
+# ML 모델 로드
 USE_ML_MODEL = True
 classifier = None
+reranker = None
 
-try:
-    from transformers import pipeline
-    classifier = pipeline(
-        "zero-shot-classification",
-        model=ML_MODEL_NAME,
-        device=ML_DEVICE
-    )
-    print(f"✅ Zero-shot Classification 모델 로드 완료 ({ML_MODEL_NAME})")
-except ImportError:
-    print("⚠️  transformers 라이브러리 없음, 거리 기반만 사용")
-except Exception as e:
-    print(f"⚠️  모델 로드 실패: {e}, 거리 기반만 사용")
+# Zero-shot Classification 모델 로드
+if USE_ZEROSHOT:
+    try:
+        from transformers import pipeline
+        classifier = pipeline(
+            "zero-shot-classification",
+            model=ZERO_SHOT_MODEL,
+            device=ML_DEVICE
+        )
+        print(f"✅ Zero-shot Classification 모델 로드 완료 ({ZERO_SHOT_MODEL})")
+    except ImportError:
+        print("⚠️  transformers 라이브러리 없음, Zero-shot 미사용")
+        USE_ML_MODEL = False
+    except Exception as e:
+        print(f"⚠️  Zero-shot 모델 로드 실패: {e}, Zero-shot 미사용")
+        USE_ML_MODEL = False
+else:
+    print("ℹ️  Zero-shot 모델 사용 안 함 (USE_ZEROSHOT=False)")
+
+# Cross-Encoder Reranker 모델 로드
+if USE_RERANKER:
+    try:
+        from sentence_transformers import CrossEncoder
+        reranker = CrossEncoder(RERANKER_MODEL, max_length=512, device='cpu' if ML_DEVICE == -1 else f'cuda:{ML_DEVICE}')
+        print(f"✅ Reranker 모델 로드 완료 ({RERANKER_MODEL})")
+    except ImportError:
+        print("⚠️  sentence-transformers 라이브러리 없음, Reranker 미사용")
+        reranker = None
+    except Exception as e:
+        print(f"⚠️  Reranker 모델 로드 실패: {e}, Reranker 미사용")
+        reranker = None
 
 def get_bbox_from_text(text):
     """text 객체에서 bbox 정보 추출 [l, t, r, b] 형식으로 반환"""
     # rect가 있는 경우 (배열 형태: [l, t, r, b])
     if 'rect' in text and isinstance(text['rect'], list) and len(text['rect']) >= 4:
         return text['rect']
+    # bbox가 있는 경우 (배열 형태: [l, t, r, b])
+    elif 'bbox' in text and isinstance(text['bbox'], list) and len(text['bbox']) >= 4:
+        return text['bbox']
     # bbox가 있는 경우 (객체 형태: {l, t, r, b})
     elif 'bbox' in text and isinstance(text['bbox'], dict):
         bbox = text['bbox']
         return [bbox.get('l', 0), bbox.get('t', 0), bbox.get('r', 0), bbox.get('b', 0)]
-    # bbox가 배열 형태인 경우
-    elif 'bbox' in text and isinstance(text['bbox'], list) and len(text['bbox']) >= 4:
-        return text['bbox']
+    # merged_bbox가 있는 경우 (병합된 텍스트)
+    elif 'merged_bbox' in text:
+        return text['merged_bbox']
     return None
 
 def get_bbox_from_table(table):
@@ -96,6 +121,10 @@ def calculate_distance(text_bbox, table_bbox):
 
 def extract_text_content(text_obj):
     """text 객체에서 실제 텍스트 추출 (tid 순서대로)"""
+    # merged_text가 있는 경우 (이미 병합된 텍스트)
+    if 'merged_text' in text_obj:
+        return text_obj['merged_text']
+
     # 't' 배열 내부의 'text' 속성 (주어진 데이터 형식)
     if 't' in text_obj and isinstance(text_obj['t'], list) and len(text_obj['t']) > 0:
         # 't' 배열을 tid 순서대로 정렬 (원본 문서 순서)
@@ -113,38 +142,63 @@ def extract_text_content(text_obj):
         if texts:
             return ''.join(texts)  # 공백 없이 붙임 (원본 텍스트 그대로)
 
-    # 'v' 속성에 텍스트가 있는 경우
-    if 'v' in text_obj:
-        return text_obj['v']
-    # 'text' 속성에 텍스트가 있는 경우
-    elif 'text' in text_obj:
+    # 'text' 속성에 텍스트가 있는 경우 (flatten된 개별 텍스트)
+    if 'text' in text_obj:
         return text_obj['text']
+    # 'v' 속성에 텍스트가 있는 경우
+    elif 'v' in text_obj:
+        return text_obj['v']
     return ""
+
+def flatten_text_objects(texts):
+    """
+    paraIndex로 이미 그룹화된 텍스트를 개별 't' 요소로 분해
+    각 't' 요소를 독립적인 텍스트 객체로 변환
+    """
+    flattened = []
+    for text_obj in texts:
+        if 't' in text_obj and isinstance(text_obj['t'], list):
+            # 't' 배열의 각 항목을 개별 텍스트로 분리
+            for t_item in text_obj['t']:
+                if 'bbox' in t_item and 'text' in t_item:
+                    flattened.append({
+                        'bbox': t_item['bbox'],
+                        'text': t_item['text'],
+                        'tid': t_item.get('tid', 0)
+                    })
+        else:
+            # 't' 배열이 없으면 원본 그대로 사용
+            flattened.append(text_obj)
+    return flattened
 
 def group_texts_by_line(texts, y_tolerance=50):
     """같은 줄(y 좌표 비슷)에 있는 텍스트들을 그룹화하고 위에서 아래 순서로 정렬"""
     if not texts:
         return []
 
-    # y 좌표 기준으로 정렬 (위에서 아래로)
-    sorted_texts = sorted(texts, key=lambda t: get_bbox_from_text(t)[1] if get_bbox_from_text(t) else float('inf'))
+    # Step 1: paraIndex로 묶인 텍스트를 개별 't' 요소로 분해
+    flattened = flatten_text_objects(texts)
+
+    # Step 2: y 좌표 기준으로 정렬 (위에서 아래로)
+    sorted_texts = sorted(flattened, key=lambda t: get_bbox_from_text(t)[1] if get_bbox_from_text(t) else float('inf'))
 
     grouped = []
     current_group = []
-    current_y = None
+    group_y_min = None  # 그룹의 첫 번째 텍스트 y 중심값
 
     for text in sorted_texts:
         bbox = get_bbox_from_text(text)
         if not bbox:
             continue
 
-        y_top = bbox[1]
+        # y 좌표 중심값 사용 (top + bottom) / 2
+        y_center = (bbox[1] + bbox[3]) / 2
 
-        # 첫 텍스트이거나 y 좌표가 비슷하면 같은 그룹
-        if current_y is None or abs(y_top - current_y) <= y_tolerance:
+        # 첫 텍스트이거나 그룹의 첫 텍스트와의 차이가 허용범위 내면 같은 그룹
+        if group_y_min is None or abs(y_center - group_y_min) <= y_tolerance:
             current_group.append(text)
-            if current_y is None:
-                current_y = y_top
+            if group_y_min is None:
+                group_y_min = y_center
         else:
             # 새로운 줄 시작 - 이전 그룹 저장
             if current_group:
@@ -152,7 +206,7 @@ def group_texts_by_line(texts, y_tolerance=50):
                 if merged:
                     grouped.append(merged)
             current_group = [text]
-            current_y = y_top
+            group_y_min = y_center
 
     # 마지막 그룹 추가
     if current_group:
@@ -253,8 +307,8 @@ def score_title_candidate(text_obj, text_content, distance):
     return score
 
 def select_best_title_ml(candidates):
-    """Zero-shot Classification으로 최적의 타이틀 선택 (배치 처리) + 거리 보너스"""
-    if not USE_ML_MODEL or not classifier or not candidates:
+    """하이브리드 방식: Zero-shot + Reranker로 최적의 타이틀 선택"""
+    if not candidates:
         return None
 
     try:
@@ -264,41 +318,106 @@ def select_best_title_ml(candidates):
             for c in candidates
         ]
 
-        print("  Zero-shot Classification 점수 (배치 처리):")
+        zeroshot_scores = None
+        reranker_scores = None
 
-        # 배치 처리: 모든 후보를 한번에 처리
-        results = classifier(
-            candidate_texts,
-            candidate_labels=ML_CANDIDATE_LABELS,
-            hypothesis_template=ML_HYPOTHESIS_TEMPLATE
-        )
+        # ===== Step 1: Zero-shot Classification (USE_ZEROSHOT=True일 때만) =====
+        if USE_ZEROSHOT and classifier:
+            print("  [1단계] Zero-shot Classification 점수:")
+            results = classifier(
+                candidate_texts,
+                candidate_labels=ML_CANDIDATE_LABELS,
+                hypothesis_template=ML_HYPOTHESIS_TEMPLATE
+            )
 
-        # 단일 결과인 경우 리스트로 변환
-        if not isinstance(results, list):
-            results = [results]
+            # 단일 결과인 경우 리스트로 변환
+            if not isinstance(results, list):
+                results = [results]
 
-        best_idx = -1
-        best_score = -1
+            # Zero-shot 점수 추출
+            zeroshot_scores = []
+            for i, result in enumerate(results):
+                score = result['scores'][result['labels'].index(ML_CANDIDATE_LABELS[0])]
+                zeroshot_scores.append(score)
+                text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
+                print(f"    {i+1}. '{text_preview}' → {score:.3f}")
 
-        # 각 결과에서 첫 번째 라벨(제목) 확률 추출
-        for i, result in enumerate(results):
-            ml_score = result['scores'][result['labels'].index(ML_CANDIDATE_LABELS[0])]
+        # ===== Step 2: Reranker (USE_RERANKER=True일 때만) =====
+        if USE_RERANKER and reranker:
+            step_num = 2 if USE_ZEROSHOT else 1
+            print(f"\n  [{step_num}단계] Cross-Encoder Reranker 점수:")
 
-            text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
-            print(f"    {i+1}. '{text_preview}' → 제목 확률: {ml_score:.3f}")
+            # 긍정적인 쿼리 (제목일 가능성)와 부정적인 쿼리 (제목이 아닐 가능성)를 분리
+            positive_queries = [
+                "This is a table title",
+                "This is a table caption",
+                "This is a concise table heading",
+                "This is a short descriptive title for a table",
+                "This text describes what the table shows",
+                "A brief label that explains table content",
+                "표 제목",
+                "테이블 제목",
+                "표 캡션",
+                "간결한 표 제목",
+                "표 내용을 설명하는 제목",
+                "표가 무엇을 보여주는지 설명하는 문구"
+            ]
 
-            if ml_score > best_score:
-                best_score = ml_score
-                best_idx = i
+            # 긍정 쿼리 점수 계산
+            positive_scores = []
+            for query in positive_queries:
+                pairs = [[query, text] for text in candidate_texts]
+                scores = reranker.predict(pairs, convert_to_numpy=True)
+                positive_scores.append(scores)
 
-        print(f"  ML 최고 점수: {best_score:.3f} (임계값: {ML_CONFIDENCE_THRESHOLD})")
+            # 긍정 점수 평균만 사용
+            import numpy as np
+            pos_avg = np.mean(positive_scores, axis=0)
+            reranker_scores = pos_avg  # 제목 점수만 사용
 
-        # 임계값 이상이어야 제목으로 판단
-        if best_idx >= 0 and best_score > ML_CONFIDENCE_THRESHOLD:
-            return candidates[best_idx]
+            for i, score in enumerate(reranker_scores):
+                text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
+                print(f"    {i+1}. '{text_preview}' → 제목점수:{score:.3f}")
+
+        # ===== Step 3: 점수 결합 및 선택 =====
+        if reranker_scores is not None and zeroshot_scores is not None:
+            # 둘 다 있으면 혼합
+            print("\n  [3단계] 혼합 점수 (Reranker 100% + Zero-shot 0%):")
+            combined_scores = []
+            for i in range(len(candidates)):
+                combined = 1.0 * reranker_scores[i] + 0.0 * zeroshot_scores[i]
+                combined_scores.append(combined)
+                text_preview = candidate_texts[i][:40] if len(candidate_texts[i]) > 40 else candidate_texts[i]
+                print(f"    {i+1}. '{text_preview}' → {combined:.3f}")
+
+            # 점수가 같으면 거리가 가까운 것 선택
+            best_idx = int(max(range(len(combined_scores)), key=lambda i: (combined_scores[i], -candidates[i]['distance'])))
+            best_score = combined_scores[best_idx]
+            print(f"  최종 선택: 후보 {best_idx+1}, 점수: {best_score:.3f}")
+
+        elif reranker_scores is not None:
+            # Reranker만 사용
+            print("\n  Reranker만 사용")
+            # 점수가 같으면 거리가 가까운 것 선택
+            best_idx = int(max(range(len(reranker_scores)), key=lambda i: (reranker_scores[i], -candidates[i]['distance'])))
+            best_score = reranker_scores[best_idx]
+            print(f"  최종 선택: 후보 {best_idx+1}, Reranker 점수: {best_score:.3f}")
+
+        elif zeroshot_scores is not None:
+            # Zero-shot만 사용
+            print("\n  Zero-shot만 사용")
+            # 점수가 같으면 거리가 가까운 것 선택
+            best_idx = int(max(range(len(zeroshot_scores)), key=lambda i: (zeroshot_scores[i], -candidates[i]['distance'])))
+            best_score = zeroshot_scores[best_idx]
+            print(f"  최종 선택: 후보 {best_idx+1}, Zero-shot 점수: {best_score:.3f}")
+
         else:
-            print(f"  ML 임계값 미달 → 거리 기반 사용")
+            # 둘 다 없으면 거리 기반
+            print("\n  ML 모델 없음, 거리 기반 선택")
             return None
+
+        # 최고 점수 후보 반환
+        return candidates[best_idx]
 
     except Exception as e:
         print(f"  ML 모델 오류: {e}")
@@ -403,12 +522,28 @@ def find_title_for_table(table, texts, all_tables=None):
 
         # 완전한 문장 형태 제외 (설명문은 제목이 아님)
         text_stripped = text_content.strip()
-        # 동사 어미로 끝나는 문장만 제외 (명사+"다"는 허용)
-        if re.search(r'(했|됐|됐|있|없|같|왔|났|이|가|하|되|한|할|된|는|ㄴ|ㄹ|음|기)다\.?\s*$', text_stripped):
+
+        # 1) 단위 표기 제외 (단위:, unit:, mm, cm, %, 원, 명 등)
+        if re.search(r'^\s*\(?단위\s*[:：]', text_stripped, re.IGNORECASE):
+            print(f"    {i+1}. ❌ '{text_preview}' - 단위 표기 (제목 아님)")
+            continue
+
+        # 2) "다." 단독으로 끝나는 경우 제외
+        if re.search(r'다\.\s*$', text_stripped):
+            print(f"    {i+1}. ❌ '{text_preview}' - '다.'로 끝나는 문장 (제목 아님)")
+            continue
+
+        # 3) 동사/형용사 어미로 끝나는 문장 모두 제외
+        # 과거: ~했다, ~됐다, ~였다, ~았다, ~었다
+        # 현재: ~한다, ~된다, ~인다, ~는다
+        # 명령/청유: ~하자, ~되자, ~하라, ~되라
+        # 연결: ~하고, ~되고, ~하며, ~되며
+        # 기타: ~한, ~된, ~하는, ~되는, ~할, ~될, ~있다, ~없다, ~같다, ~이다
+        if re.search(r'([가-힣]+(다|며|고|자|라|ㄴ다|는다|ㄹ다|ㅂ니다|습니다|이다|한다|된다|있다|없다|같다|왔다|났다|하였다|되었다|였다|았다|었다))[\.?!]?\s*$', text_stripped):
             print(f"    {i+1}. ❌ '{text_preview}' - 동사로 끝나는 문장 (제목 아님)")
             continue
 
-        # 너무 긴 텍스트는 제목이 아닐 가능성이 높음
+        # 4) 너무 긴 텍스트는 제목이 아닐 가능성이 높음
         if len(text_stripped) > 100:
             print(f"    {i+1}. ❌ '{text_preview}' - 너무 긴 텍스트 ({len(text_stripped)}자)")
             continue
@@ -428,9 +563,9 @@ def find_title_for_table(table, texts, all_tables=None):
         print("  ❌ 타이틀 후보 없음")
         return "", None
 
-    # Step 2: 거리 순으로 정렬하고 상위 2개만 선택 (테이블에 가장 가까운 것들)
+    # Step 2: 거리 순으로 정렬하고 상위 N개만 선택 (테이블에 가장 가까운 것들)
     candidates.sort(key=lambda x: x['distance'])  # 거리 오름차순 정렬
-    top_candidates = candidates[:2]
+    top_candidates = candidates[:TOP_CANDIDATES_COUNT]
 
     print(f"  거리 기반 상위 후보 {len(top_candidates)}개 선택 (전체 {len(candidates)}개 중):")
     for i, c in enumerate(top_candidates):
@@ -445,7 +580,7 @@ def find_title_for_table(table, texts, all_tables=None):
             print(f"  ✅ ML 선택: '{ml_result['text']}'")
             return ml_result['text'], ml_result['bbox']
         else:
-            print(f"  ❌ ML 임계값 미달 - 타이틀 없음")
+            print(f"  ❌ ML 모델이 타이틀을 선택하지 못함")
             return "", None
 
     # Step 4: ML 사용 안 하는 경우에만 거리 기반 선택
