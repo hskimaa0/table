@@ -23,9 +23,9 @@ ML_DEVICE = -1  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
 # 최종 점수 가중치
-WEIGHT_NLI = 0.40  # Zero-shot NLI (제목 확률)
-WEIGHT_EMBEDDING = 0.35  # 임베딩 유사도
-WEIGHT_LAYOUT = 0.25  # 레이아웃 점수
+WEIGHT_NLI = 0.45  # Zero-shot NLI (제목 확률)
+WEIGHT_EMBEDDING = 0.45  # 임베딩 유사도
+WEIGHT_LAYOUT = 0.10  # 레이아웃 점수
 SCORE_THRESHOLD = 0.0  # 제목 판정 최소 점수
 
 # ML 모델 로드
@@ -352,21 +352,21 @@ def build_table_context(table, max_cells=10):
 
 # ========== ML 스코어링 ==========
 def nli_title_prob(text: str) -> float:
-    """Zero-shot Classification으로 제목 확률 계산"""
+    """Zero-shot Classification으로 제목 확률 계산 (패턴 기반 단위 제외)"""
     if not nli_classifier:
         return 0.0
 
     try:
         result = nli_classifier(
             text,
-            candidate_labels=["table or figure title", "unit notation", "body text"],
-            hypothesis_template="This is a {}."
+            candidate_labels=["a title or caption for a table", "a measurement unit notation", "a sentence or paragraph"],
+            hypothesis_template="This text is {}."
         )
         labels = result["labels"]
         scores = result["scores"]
         score_dict = {l: s for l, s in zip(labels, scores)}
 
-        return float(score_dict.get("table or figure title", 0.0))
+        return float(score_dict.get("a title or caption for a table", 0.0))
     except Exception as e:
         print(f"  NLI 오류: {e}")
         return 0.0
