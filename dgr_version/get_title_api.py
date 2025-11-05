@@ -23,10 +23,10 @@ ML_DEVICE = -1  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
 # 최종 점수 가중치
-WEIGHT_NLI = 0.55  # Zero-shot NLI (제목 확률)
+WEIGHT_NLI = 0.40  # Zero-shot NLI (제목 확률)
 WEIGHT_EMBEDDING = 0.35  # 임베딩 유사도
-WEIGHT_LAYOUT = 0.10  # 레이아웃 점수
-SCORE_THRESHOLD = 0  # 제목 판정 최소 점수
+WEIGHT_LAYOUT = 0.25  # 레이아웃 점수
+SCORE_THRESHOLD = 0.0  # 제목 판정 최소 점수
 
 # ML 모델 로드
 nli_classifier = None
@@ -89,18 +89,6 @@ def is_trivial(text: str) -> bool:
 
     # 특수문자만
     if len(re.sub(r"[\W_]+", "", s)) <= 1:
-        return True
-
-    # 단위 표기 (다양한 형태)
-    if re.search(r'^\s*\(?단위\s*[:：]', s, re.IGNORECASE):
-        return True
-    if re.match(r'^\s*\(\s*단위\s*[:：]?.*\)\s*$', s, re.IGNORECASE):
-        return True
-    if re.match(r'^\s*\(\s*단위\s+[a-zA-Z가-힣%]+\s*\)\s*$', s, re.IGNORECASE):
-        return True
-
-    # 목록 항목 (1., 2., ①, ② 등으로 시작)
-    if re.match(r'^[\d①-⑳]\.\s+[A-Z_]+\s*[=:]+', s):
         return True
 
     return False
@@ -371,13 +359,14 @@ def nli_title_prob(text: str) -> float:
     try:
         result = nli_classifier(
             text,
-            candidate_labels=["table title", "not a title"],
-            hypothesis_template="This text is a {}."
+            candidate_labels=["table or figure title", "unit notation", "body text"],
+            hypothesis_template="This is a {}."
         )
         labels = result["labels"]
         scores = result["scores"]
         score_dict = {l: s for l, s in zip(labels, scores)}
-        return float(score_dict.get("table title", 0.0))
+
+        return float(score_dict.get("table or figure title", 0.0))
     except Exception as e:
         print(f"  NLI 오류: {e}")
         return 0.0
