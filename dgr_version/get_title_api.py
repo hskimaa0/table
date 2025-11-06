@@ -1,12 +1,11 @@
 """
 타이틀 추출 API
-하이브리드 방식: 규칙 기반 필터링 + NLI + 임베딩 유사도 + 레이아웃 점수 + 퍼지 매칭
+하이브리드 방식: 규칙 기반 필터링 + NLI + 임베딩 유사도 + 레이아웃 점수
 """
 from flask import Flask, jsonify, request
 import copy
 import re
 import numpy as np
-from rapidfuzz import fuzz
 
 app = Flask(__name__)
 
@@ -31,21 +30,11 @@ TOPK_CANDIDATES = 8  # 표당 리랭커에 보낼 최대 후보 수
 
 # 최종 점수 가중치
 WEIGHT_ZEROSHOT = 0.50   # Zero-shot 분류 점수 (제목 vs 비제목 판별)
-WEIGHT_RERANKER = 0.28   # 리랭커 점수 (상대 순위)
+WEIGHT_RERANKER = 0.42   # 리랭커 점수 (상대 순위)
 WEIGHT_PRIOR = 0.06      # Prior 점수 (패턴 기반 규칙)
 WEIGHT_EMBEDDING = 0.04  # 임베딩 유사도 (타이브레이커)
-WEIGHT_LAYOUT = 0.03     # 레이아웃 점수 (타이브레이커)
-WEIGHT_FUZZY_HDR = 0.06  # 헤더와의 퍼지 유사도
-WEIGHT_FUZZY_TPL = 0.03  # 템플릿과의 퍼지 유사도
+WEIGHT_LAYOUT = 0.04     # 레이아웃 점수 (타이브레이커)
 SCORE_THRESHOLD = 0.01   # 제목 판정 최소 점수
-
-# 도메인별 제목 템플릿
-TITLE_TEMPLATES = [
-    "프로그램 기본 사양", "월별", "요구사항", "평가 지표", "연간 실적", "변동 현황",
-    "서비스 구성", "시스템 사양", "데이터 사양", "오류 코드", "비용 산정",
-    "기온", "강수량", "토지이용", "사업 내역", "예산", "인력 현황", "장비 목록",
-    "성능 지표", "품질 기준", "설계 사양", "시험 항목", "검사 기준"
-]
 
 # ML 모델 로드
 embedder = None
@@ -657,25 +646,42 @@ def zeroshot_title_score_batch(candidates):
     try:
         texts = [clamp_text_len(c['text']) for c in candidates]
 
-        # 간소화된 라벨
+        # 세분화된 다중 라벨 (긍정 + 부정)
         labels = [
-            "표 제목",
-            "본문 설명문",
-            "단위 표기",
+            "표의 제목/표제/캡션",
+            "소제목(섹션 내 소단락 제목)",
+            "섹션 헤더(장/절/항 제목)",
+            "본문 설명문/서술문",
+            "단위 표기/비고/주:",
+            "그림/도 제목·캡션",
         ]
 
-        # 한글 템플릿
+        # 3가지 다양한 한글 템플릿 (✅ 반드시 '{}' 만 사용)
         templates = [
             "이 텍스트는 {}이다.",
+            "다음 문구의 용도는 {}이다.",
             "이 문장은 {}에 해당한다.",
         ]
 
         # 라벨별 가중치 (긍정: +, 부정: -)
         base_weights = {
-            "표 제목": 1.0,
-            "본문 설명문": -0.70,
-            "단위 표기": -0.80,
+            "표의 제목/표제/캡션": 0.85,
+            "소제목(섹션 내 소단락 제목)": 0.25,
+            "섹션 헤더(장/절/항 제목)": -0.25,  # near-top일 때만 +0.10으로 조정
+            "본문 설명문/서술문": -0.60,
+            "단위 표기/비고/주:": -0.65,
+            "그림/도 제목·캡션": -0.25,
         }
+
+        # 표 상단 근접 마스크 (≤120px)
+        table_bbox = globals().get("_current_table_bbox")
+        if table_bbox:
+            top = table_bbox[1]
+            near_top_mask = np.array([
+                max(0, top - (c.get("bbox", [0, 0, 0, 0])[3])) <= 120 for c in candidates
+            ], dtype=bool)
+        else:
+            near_top_mask = np.ones(len(candidates), dtype=bool)
 
         def score_once(tmpl: str) -> np.ndarray:
             """특정 템플릿으로 multi-label 분류 후 가중합 계산"""
@@ -684,20 +690,23 @@ def zeroshot_title_score_batch(candidates):
                     texts, labels,
                     hypothesis_template=tmpl,
                     multi_label=True,
-                    truncation=True
+                    truncation=True  # 긴 텍스트 안전 처리
                 )
             except Exception as e:
-                print(f"  Zero-shot 예외: {e}")
+                print(f"  Zero-shot 템플릿 '{tmpl[:20]}...' 예외: {e}")
                 return np.ones(len(candidates)) * 0.5
 
             sc = np.zeros(len(candidates), dtype=float)
             for i, r in enumerate(res):
                 probs = {lab: float(p) for lab, p in zip(r["labels"], r["scores"])}
-                s = sum(base_weights[k] * probs.get(k, 0.0) for k in base_weights)
-                sc[i] = np.clip(s * 0.5 + 0.5, 0.0, 1.0)  # [-1,1] → [0,1] 정규화
+                w = base_weights.copy()
+                # 섹션 헤더는 표 상단 근접 시만 가산
+                w["섹션 헤더(장/절/항 제목)"] = 0.10 if near_top_mask[i] else -0.25
+                s = sum(w[k] * probs.get(k, 0.0) for k in w)
+                sc[i] = np.clip(s + 0.35, 0.0, 1.0)  # 약간의 오프셋 후 [0,1] 클립
             return sc
 
-        # 2개 템플릿 평균
+        # 3개 템플릿 평균
         scores = np.mean([score_once(t) for t in templates], axis=0)
         return scores
 
@@ -729,34 +738,8 @@ def build_table_context_rich(table, max_cells=10):
 
     return " / ".join(parts) if parts else "표 정보 없음"
 
-# ========== 퍼지 매칭 함수 ==========
-def fuzzy_sim(a: str, b: str) -> float:
-    """0~1 스케일 퍼지 유사도 (token_sort_ratio)"""
-    return fuzz.token_sort_ratio(a, b) / 100.0
-
-def best_fuzzy_to_list(s: str, candidates: list) -> float:
-    """후보 리스트에서 가장 높은 퍼지 유사도 반환"""
-    if not candidates:
-        return 0.0
-    return max(fuzzy_sim(s, c) for c in candidates)
-
-def header_keywords_from_table(table, max_per_cell=3):
-    """표 헤더에서 키워드 추출"""
-    hdrs = []
-    if 'rows' in table and table['rows']:
-        for cell in table['rows'][0]:
-            toks = [t['v'] for t in cell.get('texts', []) if t.get('v')]
-            if toks:
-                text = " ".join(toks)
-                # 공백 분할 후 상위 n개만
-                words = re.split(r"\s+", text.strip())
-                hdrs.extend(words[:max_per_cell])
-    # 중복/짧은 토큰 정리
-    hdrs = [w for w in set(hdrs) if len(w) >= 2]
-    return hdrs[:20]
-
-def score_candidates_with_logits(candidates, table_ctx, table_bbox, table):
-    """하이브리드 스코어링: Zero-shot + 리랭커 + prior + 보조항 + 퍼지 매칭"""
+def score_candidates_with_logits(candidates, table_ctx, table_bbox):
+    """하이브리드 스코어링: Zero-shot + 리랭커 + prior + 보조항"""
     import numpy as np
 
     # 1) Zero-shot 분류: 각 후보가 '표 제목'일 절대 확률
@@ -769,10 +752,6 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox, table):
     logits = reranker_logits_batch(pairs) if USE_RERANKER else np.zeros(len(candidates))
     rer_prob = softmax_with_temp_from_logits(logits, tau=0.6)
 
-    # 3) 퍼지 매칭용 헤더 키워드 추출 (표당 1회)
-    hdr_keys = header_keywords_from_table(table)
-    print(f"  헤더 키워드: {hdr_keys[:10]}")
-
     scored = []
     for i, c in enumerate(candidates):
         txt, bb = c['text'], c['bbox']
@@ -783,10 +762,6 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox, table):
         # 보조 점수 (미세 타이브레이커)
         emb = embedding_similarity(txt, table_ctx)
         lay = layout_score(table_bbox, bb)
-
-        # 퍼지 매칭 점수
-        fuzzy_hdr = best_fuzzy_to_list(txt, hdr_keys)
-        fuzzy_tpl = best_fuzzy_to_list(txt, TITLE_TEMPLATES)
 
         # Zero-shot 점수 + 하한 보정
         zs = float(zs_scores[i])
@@ -801,14 +776,12 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox, table):
         if is_unit_like(txt) or re.search(r"(주:|비고|참고)\b", txt):
             bonus -= 0.08
 
-        # 최종 점수: Zero-shot(하한 보정) + 리랭커(상대) + 보조항 + 퍼지 매칭
+        # 최종 점수: Zero-shot(하한 보정) + 리랭커(상대) + 보조항
         final = (WEIGHT_ZEROSHOT * zs
                  + WEIGHT_RERANKER * float(rer_prob[i])
                  + WEIGHT_PRIOR * p
                  + WEIGHT_EMBEDDING * emb
                  + WEIGHT_LAYOUT * lay
-                 + WEIGHT_FUZZY_HDR * fuzzy_hdr
-                 + WEIGHT_FUZZY_TPL * fuzzy_tpl
                  + bonus)
 
         scored.append({
@@ -817,9 +790,7 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox, table):
                 "zeroshot": zs,
                 "rer_logits": float(logits[i]),
                 "rer_prob_norm": float(rer_prob[i]),
-                "prior": p, "emb": emb, "lay": lay,
-                "fuzzy_hdr": fuzzy_hdr, "fuzzy_tpl": fuzzy_tpl,
-                "bonus": bonus
+                "prior": p, "emb": emb, "lay": lay, "bonus": bonus
             }
         })
     return scored
@@ -916,16 +887,16 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         print("  ❌ 필터링 후 후보 없음")
         return "", None
 
-    # Step 3: 배치 리랭커(로짓) → 소프트맥스 확률 → prior/보조 결합 + 퍼지 매칭
+    # Step 3: 배치 리랭커(로짓) → 소프트맥스 확률 → prior/보조 결합
     print("\n  후보 점수:")
-    scored = score_candidates_with_logits(candidates, table_ctx, table_bbox, table)
+    scored = score_candidates_with_logits(candidates, table_ctx, table_bbox)
     for x in scored:
         t = x["text"][:50] if len(x["text"]) > 50 else x["text"]
         d = x["details"]
         print(f"    '{t}'")
-        print(f"      zs: {d['zeroshot']:.3f}, rer: {d['rer_prob_norm']:.3f}, "
-              f"prior: {d['prior']:.3f}, fhdr: {d['fuzzy_hdr']:.3f}, ftpl: {d['fuzzy_tpl']:.3f}, "
-              f"Final: {x['score']:.3f}")
+        print(f"      zs: {d['zeroshot']:.3f}, logit: {d['rer_logits']:.3f}, prob*: {d['rer_prob_norm']:.3f}, "
+              f"prior: {d['prior']:.3f}, emb: {d['emb']:.3f}, lay: {d['lay']:.3f}, "
+              f"bonus: {d['bonus']:+.2f}, Final: {x['score']:.3f}")
 
     # 최고 점수 선택
     scored.sort(key=lambda x: x['score'], reverse=True)
