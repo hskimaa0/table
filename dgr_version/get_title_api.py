@@ -41,11 +41,33 @@ embedder = None
 reranker = None
 zeroshot_classifier = None
 
+# 디바이스 설정
+import torch
+
+def _resolve_device():
+    """ML_DEVICE 설정과 CUDA 가용성에 따라 디바이스 결정"""
+    use_gpu = (ML_DEVICE == 0 and torch.cuda.is_available())
+    return "cuda:0" if use_gpu else "cpu"
+
+DEVICE_STR = _resolve_device()
+print(f"▶ Inference device = {DEVICE_STR}")
+
+# GPU 성능 최적화 (A100/RTX40 계열)
+if DEVICE_STR.startswith("cuda"):
+    torch.set_float32_matmul_precision("high")
+    try:
+        torch.backends.cuda.matmul.allow_tf32 = True
+        torch.backends.cudnn.allow_tf32 = True
+    except Exception:
+        pass
+
 # 임베딩 모델 로드
 try:
     from sentence_transformers import SentenceTransformer
-    embedder = SentenceTransformer(EMBEDDING_MODEL)
-    print(f"✅ 임베딩 모델 로드 완료 ({EMBEDDING_MODEL})")
+    embedder = SentenceTransformer(EMBEDDING_MODEL, device=DEVICE_STR)
+    # 워밍업 (CUDA 상주, 콜드스타트 단축)
+    _ = embedder.encode(["warmup"], normalize_embeddings=True, convert_to_numpy=True)
+    print(f"✅ 임베딩 모델 로드 완료 ({EMBEDDING_MODEL}, device={DEVICE_STR})")
 except ImportError:
     print("⚠️  sentence-transformers 라이브러리 없음")
     embedder = None
@@ -56,23 +78,12 @@ except Exception as e:
 # 리랭커 모델 로드
 try:
     from sentence_transformers import CrossEncoder
-    import torch
-
-    # GPU 사용 가능 여부 확인
-    if ML_DEVICE == 0 and torch.cuda.is_available():
-        device_str = "cuda:0"
-    else:
-        device_str = "cpu"
-        if ML_DEVICE == 0:
-            print("  ℹ️  GPU 요청되었으나 사용 불가 → CPU 사용")
-
-    # activation_fn=None => predict()가 로짓 반환 (deprecated 경고 제거)
     reranker = CrossEncoder(
         RERANKER_MODEL,
-        device=device_str,
-        activation_fn=None  # logits mode (deprecated 경고 제거)
+        device=DEVICE_STR,
+        activation_fn=None  # logits mode
     )
-    print(f"✅ 리랭커 로드 완료 ({RERANKER_MODEL}, device={device_str})")
+    print(f"✅ 리랭커 로드 완료 ({RERANKER_MODEL}, device={DEVICE_STR})")
 except ImportError:
     print("⚠️  sentence-transformers 라이브러리 없음 (CrossEncoder)")
     reranker = None
@@ -80,23 +91,29 @@ except Exception as e:
     print(f"⚠️  리랭커 로드 실패: {e}")
     reranker = None
 
-# Zero-shot 분류기 로드 (현재 모델만 사용)
+# Zero-shot 분류기 로드 (FP16 지원)
 try:
     from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
-    device_id = 0 if ML_DEVICE == 0 else -1
-
-    # SentencePiece 기반 slow tokenizer 사용
     import sentencepiece  # noqa: F401
-    tokenizer = AutoTokenizer.from_pretrained(ZEROSHOT_MODEL, use_fast=False)
-    model = AutoModelForSequenceClassification.from_pretrained(ZEROSHOT_MODEL)
 
+    # SentencePiece 기반 slow tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(ZEROSHOT_MODEL, use_fast=False)
+
+    # FP16 로드 (GPU면 FP16, CPU면 FP32)
+    dtype = torch.float16 if DEVICE_STR.startswith("cuda") else torch.float32
+    model = AutoModelForSequenceClassification.from_pretrained(
+        ZEROSHOT_MODEL,
+        torch_dtype=dtype
+    )
+
+    device_id = 0 if DEVICE_STR.startswith("cuda") else -1
     zeroshot_classifier = pipeline(
         "zero-shot-classification",
         model=model,
         tokenizer=tokenizer,
         device=device_id
     )
-    print(f"✅ Zero-shot 분류기 로드 완료 ({ZEROSHOT_MODEL})")
+    print(f"✅ Zero-shot 로드 완료 ({ZEROSHOT_MODEL}, device={DEVICE_STR}, dtype={dtype})")
     print(f"✅ Zero-shot 분류 활성화 (가중치: {WEIGHT_ZEROSHOT:.0%})")
 except ImportError as e:
     print(f"⚠️  라이브러리 없음: {e}")
