@@ -22,7 +22,6 @@ RUN pip3 install --upgrade pip && \
       sentencepiece==0.2.0 \
       accelerate==1.0.1 \
       safetensors==0.4.5 \
-      einops==0.8.1 \
       hf_transfer==0.1.7 \
       flask>=3.0.0 \
       numpy>=1.24.0
@@ -33,8 +32,7 @@ COPY get_title_api.py .
 # 환경 변수 설정
 ENV HF_HUB_ENABLE_HF_TRANSFER=1 \
     TOKENIZERS_PARALLELISM=false \
-    CUDA_VISIBLE_DEVICES=0 \
-    TRANSFORMERS_OFFLINE=0
+    CUDA_VISIBLE_DEVICES=0
 
 # 포트 노출
 EXPOSE 5555
