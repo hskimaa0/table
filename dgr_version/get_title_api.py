@@ -20,7 +20,7 @@ X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 EMBEDDING_MODEL = "BAAI/bge-m3"  # 문장 임베딩 (다국어)
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 크로스-인코더 리랭커 (다국어 SOTA)
 ZEROSHOT_MODEL = "joeddav/xlm-roberta-large-xnli"  # Zero-shot 분류 (다국어, 한국어 우수)
-ML_DEVICE = -1  # -1: CPU, 0: GPU
+ML_DEVICE = 0  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
 # 리랭커 설정
