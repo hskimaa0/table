@@ -27,10 +27,11 @@ USE_RERANKER = True  # 리랭커 사용 여부
 TOPK_CANDIDATES = 8  # 표당 리랭커에 보낼 최대 후보 수
 
 # 최종 점수 가중치
-WEIGHT_RERANKER = 0.88  # 리랭커 점수 (정확도 최우선)
-WEIGHT_EMBEDDING = 0.08  # 임베딩 유사도 (타이브레이커)
+WEIGHT_RERANKER = 0.92  # 리랭커 점수 (의미 유사도)
+WEIGHT_PRIOR = 0.06     # Prior 점수 (패턴 기반 규칙)
+WEIGHT_EMBEDDING = 0.04  # 임베딩 유사도 (타이브레이커)
 WEIGHT_LAYOUT = 0.04  # 레이아웃 점수 (타이브레이커)
-SCORE_THRESHOLD = 0.01  # 제목 판정 최소 점수 (리랭커 × prior)
+SCORE_THRESHOLD = 0.01  # 제목 판정 최소 점수
 
 # ML 모델 로드
 embedder = None
@@ -181,8 +182,8 @@ def is_unit_like(s: str) -> bool:
 
 def is_table_title_like(s: str) -> bool:
     """표 제목 패턴 판별"""
-    # '표 B.8 월별 기온', '표 3-2 연간 실적' 등
-    if re.search(r"^표\s*[A-Za-z]?\s*\d+([\-\.]\d+)?", s.strip()):
+    # '표 B.8 월별 기온', '표 A.6 토지이용현황', '표 B .4' (공백 포함), '표 3-2 연간 실적' 등
+    if re.search(r"^표\s*[A-Za-z]?\s*[\.\-]?\s*\d+([\-\.]\d+)?", s.strip()):
         return True
     # 섹션/표 제목 형태(숫자.숫자 제목)
     if re.search(r"^\d+(\.\d+){0,2}\s+[^\[\(]{2,}", s.strip()):
@@ -192,15 +193,23 @@ def is_table_title_like(s: str) -> bool:
 def is_cross_reference(s: str) -> bool:
     """교차 참조/설명 문장 판별 (강화)"""
     t = s.strip().replace(" ", "")
-    # '상세한 내용은 다음 표 B.12와 같다' 류
-    if re.search(r"(다음표|하기표|본표|아래표)\s*[A-Za-z]?\d+.*(같다|나타낸다|보인다|정리|참조)", t):
+
+    # '표 A.20에의하면', '표 B .4에서', '표 3.2에따르면' 등 (표 번호로 시작하는 참조 문장)
+    if re.search(r"^표[A-Za-z]?[\.\-]?\d+([\-\.]\d+)?(에의하면|에따르면|에서|을보면|에나타난|에서와같이|과같이)", t):
         return True
+
+    # '상세한 내용은 다음 표 B.12와 같다' 류
+    if re.search(r"(다음표|하기표|본표|아래표)[A-Za-z]?\d+.*(같다|나타낸다|보인다|정리|참조)", t):
+        return True
+
     # '상세한내용은다음표B.12와같다' 같이 붙어쓴 OCR도 커버
     if re.search(r"(상세한내용|자세한내용).*(다음표|아래표).*(같다|나타난다|참조)", t):
         return True
+
     # 명확한 설명 문장만 (동사 어미로 끝나는 긴 문장)
     if len(t) >= 35 and re.search(r"(바랍니다|바란다|협의대로|안내하|요청)", t):
         return True
+
     return False
 
 # === 일반 '문장' 판별 (설명/서술형) ===
@@ -208,20 +217,28 @@ KOREAN_SENT_END_RX = r"(이다|였다|하였다|했다|된다|되었다|나타�
 CLAUSE_TOKENS = r"(이며|면서|면서도|고서|고 있으며|으로|로써|으로서|에 따라|에 의하면)"
 
 def is_sentence_like(s: str) -> bool:
-    """일반 문장(설명/서술형) 판별"""
+    """일반 문장(설명/서술형) 판별
+
+    주의: 제목 패턴 체크 후 사용할 것 (표 A.3 ... 같은 제목을 문장으로 오판 방지)
+    """
     t = s.strip()
-    # 마침표/쉼표가 많고 길면 문장 확률↑
-    if len(t) >= 20 and ("," in t or "。" in t or "．" in t or t.endswith(".")):
-        return True
-    # 한국어 서술어/종결 어미
+
+    # 한국어 서술어/종결 어미 (가장 확실한 문장 패턴)
     if re.search(KOREAN_SENT_END_RX, t):
         return True
+
     # 분사/이어주는 절 표시 & 길이
     if len(t) >= 18 and re.search(CLAUSE_TOKENS, t):
         return True
-    # 라인 내 공백 거의 없고 길이 긴 경우(붙어쓴 문장 OCR)
-    if len(t) >= 24 and re.search(r"[가-힣]{10,}", t):
+
+    # 마침표로 끝나고 길면 문장 (쉼표는 제목에도 많아서 제외)
+    if len(t) >= 30 and (t.endswith(".") or "。" in t or "．" in t):
         return True
+
+    # 라인 내 공백 거의 없고 길이 긴 경우(붙어쓴 문장 OCR)
+    if len(t) >= 40 and re.search(r"[가-힣]{15,}", t):
+        return True
+
     return False
 
 def prior_score(cand_text: str, cand_bbox, table_bbox) -> float:
@@ -604,13 +621,13 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
         # 게이팅/가산 방식: 제목 패턴 보너스, 유닛/주석 강감점
         bonus = 0.0
         if is_table_title_like(txt):
-            bonus += 0.10
+            bonus += 0.03
         if is_unit_like(txt) or re.search(r"(주:|비고|참고)\b", txt):
-            bonus -= 0.15
+            bonus -= 0.08
 
-        # 최종 점수: 리랭커 정규화 확률(분리력 핵심) + prior(게이팅/가산) + 보조항
+        # 최종 점수: 리랭커 중심, prior는 보조 힌트
         final = (WEIGHT_RERANKER * float(rer_prob[i])
-                 + 0.10 * p              # prior은 '곱'보다 '가산'이 안정적
+                 + WEIGHT_PRIOR * p      # 명시적 가중치 사용
                  + WEIGHT_EMBEDDING * emb
                  + WEIGHT_LAYOUT * lay
                  + bonus)
@@ -670,20 +687,30 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         candidates = [c for c in candidates if not is_unit_like(c['text'])]
         print(f"  유닛 필터링 후: {len(candidates)}개")
 
-    # ★ 하드 게이트 1: '표 제목 패턴'이 하나라도 있으면 그 '패턴'만 남김
+    # ★ 제목 패턴 통계 출력 (필터링 안 함, ML이 판단)
     titles = [c for c in candidates if is_table_title_like(c['text'])]
-    if titles:
-        before = len(candidates)
-        candidates = titles
-        print(f"  제목패턴 우선: {before}→{len(candidates)}개")
+    if len(titles) >= 1:
+        print(f"  제목패턴 후보: {len(titles)}개 (ML 기반 점수 적용)")
 
-    # ★ 하드 게이트 2: 남은 후보에서 '설명문/교차참조' 제거
-    # 단, 제목 패턴이 있는 텍스트는 보호
+    # ★ 하드 게이트: 명확한 노이즈만 제거 (교차참조, 긴 설명문)
     before = len(candidates)
-    candidates = [c for c in candidates
-                  if is_table_title_like(c['text']) or not (is_sentence_like(c['text']) or is_cross_reference(c['text']))]
+    filtered_out = []
+    kept = []
+    for c in candidates:
+        txt = c['text']
+        # 교차 참조는 확실히 제목 아님
+        if is_cross_reference(txt):
+            filtered_out.append(f"{txt[:40]}... (교차참조)")
+        # 길고 명확한 설명문 (40자 이상 + 종결어미)
+        elif len(txt) >= 40 and re.search(r"(다|였다|한다|였다)\.$", txt.strip()):
+            filtered_out.append(f"{txt[:40]}... (긴 설명문)")
+        else:
+            kept.append(c)
+    candidates = kept
     if len(candidates) != before:
-        print(f"  설명문/교차참조 제거: {before}→{len(candidates)}개")
+        print(f"  노이즈 제거: {before}→{len(candidates)}개")
+        for fo in filtered_out[:3]:  # 최대 3개만 출력
+            print(f"    제거: {fo}")
 
     # ★ 소제목 우선 모드: 창 내 소제목이 있으면 소제목만 사용
     subtitle_priority_window = 220  # px
@@ -701,13 +728,7 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
 
         # 최근접 소제목을 맨 앞으로(동률 시 tie-break에 유리)
         candidates.sort(key=lambda c: dy_to_table_top(c['bbox']))
-    else:
-        # 소제목이 있긴 하나 창 밖이면 섹션 헤더만 제거(기존 로직 유지)
-        if any(is_subtitle_like(c['text']) for c in candidates):
-            before = len(candidates)
-            candidates = [c for c in candidates if not is_section_header_like(c['text'])]
-            if len(candidates) != before:
-                print(f"  소제목 우선 규칙: 섹션 헤더 제외 → {len(candidates)}개")
+    # 섹션 헤더 필터링 제거: ML이 판단하도록 함
 
     if not candidates:
         print("  ❌ 필터링 후 후보 없음")
