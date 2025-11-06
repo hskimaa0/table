@@ -946,22 +946,6 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
     scored.sort(key=lambda x: x['score'], reverse=True)
     best = scored[0]
 
-    # ★ 타이브레이커: 제목패턴 > 소제목 > 기타, 그리고 더 가까운 쪽
-    if len(scored) >= 2:
-        second = scored[1]
-        gap = best['score'] - second['score']
-        if gap <= 0.03:
-            def rank(c):
-                t = c['text']
-                if is_table_title_like(t): return 0
-                if is_subtitle_like(t):    return 1
-                return 2
-            def dy(bb): return max(0, table_bbox[1] - bb[3])
-            bR, sR = rank(best), rank(second)
-            if (sR < bR) or (sR == bR and dy(second['bbox']) < dy(best['bbox'])):
-                print("  타이브레이커 적용: 제목/소제목 및 근접도 우선")
-                best = second
-
     # 제목 패턴 검증: 모든 후보가 일반 문장이면 제목 없음으로 처리
     has_title_pattern = any(is_table_title_like(s['text']) for s in scored)
     if not has_title_pattern:
