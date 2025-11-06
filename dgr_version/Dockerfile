@@ -6,7 +6,16 @@ WORKDIR /app
 COPY get_title_api.py .
 
 # 필요한 패키지 설치
-RUN pip install --no-cache-dir flask transformers torch
+RUN pip install --no-cache-dir \
+    flask \
+    transformers \
+    torch \
+    sentencepiece \
+    sentence-transformers \
+    numpy
+
+# 환경 변수 설정
+ENV TOKENIZERS_PARALLELISM=false
 
 # 포트 노출
 EXPOSE 5555
