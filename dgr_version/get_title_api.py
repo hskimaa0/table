@@ -78,11 +78,15 @@ except Exception as e:
 # 리랭커 모델 로드
 try:
     from sentence_transformers import CrossEncoder
-    reranker = CrossEncoder(
-        RERANKER_MODEL,
-        device=DEVICE_STR,
-        activation_fn=None  # logits mode
-    )
+    try:
+        reranker = CrossEncoder(
+            RERANKER_MODEL,
+            device=DEVICE_STR,
+            default_activation_function=None  # logits 모드 (softmax 미적용)
+        )
+    except TypeError:
+        # 일부 구버전은 인자 없이도 logits 반환 가능
+        reranker = CrossEncoder(RERANKER_MODEL, device=DEVICE_STR)
     print(f"✅ 리랭커 로드 완료 ({RERANKER_MODEL}, device={DEVICE_STR})")
 except ImportError:
     print("⚠️  sentence-transformers 라이브러리 없음 (CrossEncoder)")
