@@ -6,3 +6,15 @@ services:
     ports:
       - "5555:5555"
     restart: always
+    environment:
+      - HF_HUB_ENABLE_HF_TRANSFER=1
+      - TOKENIZERS_PARALLELISM=false
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
