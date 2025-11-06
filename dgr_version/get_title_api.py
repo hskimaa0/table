@@ -56,14 +56,23 @@ except Exception as e:
 # 리랭커 모델 로드
 try:
     from sentence_transformers import CrossEncoder
-    device_str = "cuda:0" if ML_DEVICE == 0 else "cpu"
-    # default_activation_function=None => predict()가 '확률'이 아닌 '로짓'을 반환
+    import torch
+
+    # GPU 사용 가능 여부 확인
+    if ML_DEVICE == 0 and torch.cuda.is_available():
+        device_str = "cuda:0"
+    else:
+        device_str = "cpu"
+        if ML_DEVICE == 0:
+            print("  ℹ️  GPU 요청되었으나 사용 불가 → CPU 사용")
+
+    # activation_fn=None => predict()가 로짓 반환 (deprecated 경고 제거)
     reranker = CrossEncoder(
         RERANKER_MODEL,
         device=device_str,
-        default_activation_function=None  # ★ 중요: 로짓으로 받는다
+        activation_fn=None  # logits mode (deprecated 경고 제거)
     )
-    print(f"✅ 리랭커 로드 완료 ({RERANKER_MODEL}, logits mode)")
+    print(f"✅ 리랭커 로드 완료 ({RERANKER_MODEL}, device={device_str})")
 except ImportError:
     print("⚠️  sentence-transformers 라이브러리 없음 (CrossEncoder)")
     reranker = None
