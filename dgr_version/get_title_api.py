@@ -19,23 +19,27 @@ X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 # ML 모델 관련
 EMBEDDING_MODEL = "BAAI/bge-m3"  # 문장 임베딩 (다국어)
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 크로스-인코더 리랭커 (다국어 SOTA)
+ZEROSHOT_MODEL = "MoritzLaurer/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7"  # Zero-shot 분류 (다국어)
 ML_DEVICE = -1  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
 # 리랭커 설정
 USE_RERANKER = True  # 리랭커 사용 여부
+USE_ZEROSHOT = True  # Zero-shot 분류 사용 여부
 TOPK_CANDIDATES = 8  # 표당 리랭커에 보낼 최대 후보 수
 
 # 최종 점수 가중치
-WEIGHT_RERANKER = 0.92  # 리랭커 점수 (의미 유사도)
-WEIGHT_PRIOR = 0.06     # Prior 점수 (패턴 기반 규칙)
+WEIGHT_ZEROSHOT = 0.50   # Zero-shot 분류 점수 (제목 vs 비제목 판별)
+WEIGHT_RERANKER = 0.42   # 리랭커 점수 (상대 순위)
+WEIGHT_PRIOR = 0.06      # Prior 점수 (패턴 기반 규칙)
 WEIGHT_EMBEDDING = 0.04  # 임베딩 유사도 (타이브레이커)
-WEIGHT_LAYOUT = 0.04  # 레이아웃 점수 (타이브레이커)
-SCORE_THRESHOLD = 0.01  # 제목 판정 최소 점수
+WEIGHT_LAYOUT = 0.04     # 레이아웃 점수 (타이브레이커)
+SCORE_THRESHOLD = 0.01   # 제목 판정 최소 점수
 
 # ML 모델 로드
 embedder = None
 reranker = None
+zeroshot_classifier = None
 
 # 임베딩 모델 로드
 try:
@@ -66,6 +70,23 @@ except ImportError:
 except Exception as e:
     print(f"⚠️  리랭커 로드 실패: {e}")
     reranker = None
+
+# Zero-shot 분류기 로드
+try:
+    from transformers import pipeline
+    device_id = 0 if ML_DEVICE == 0 else -1
+    zeroshot_classifier = pipeline(
+        "zero-shot-classification",
+        model=ZEROSHOT_MODEL,
+        device=device_id
+    )
+    print(f"✅ Zero-shot 분류기 로드 완료 ({ZEROSHOT_MODEL})")
+except ImportError:
+    print("⚠️  transformers 라이브러리 없음")
+    zeroshot_classifier = None
+except Exception as e:
+    print(f"⚠️  Zero-shot 분류기 로드 실패: {e}")
+    zeroshot_classifier = None
 
 # ========== 유틸리티 함수 ==========
 def clean_text(s: str) -> str:
@@ -572,6 +593,42 @@ def embedding_similarity(text_a: str, text_b: str) -> float:
         print(f"  임베딩 오류: {e}")
         return 0.0
 
+def zeroshot_title_score_batch(candidates):
+    """Zero-shot 분류: 각 후보가 '표 제목'일 확률 반환
+
+    Returns:
+        numpy array of scores (0~1), 높을수록 제목일 확률 높음
+    """
+    import numpy as np
+    if not zeroshot_classifier or not USE_ZEROSHOT or not candidates:
+        return np.ones(len(candidates)) * 0.5  # 중립 점수
+
+    try:
+        texts = [clamp_text_len(c['text']) for c in candidates]
+        candidate_labels = ["표 제목", "설명문", "단위 정보"]
+        hypothesis_template = "이 텍스트는 {}이다."
+
+        results = zeroshot_classifier(
+            texts,
+            candidate_labels,
+            hypothesis_template=hypothesis_template,
+            multi_label=False
+        )
+
+        # '표 제목' 레이블의 확률 추출
+        scores = []
+        for result in results:
+            labels = result['labels']
+            probs = result['scores']
+            # '표 제목' 레이블 찾기
+            title_idx = labels.index("표 제목") if "표 제목" in labels else 0
+            scores.append(probs[title_idx])
+
+        return np.array(scores, dtype=float)
+    except Exception as e:
+        print(f"  Zero-shot 오류: {e}")
+        return np.ones(len(candidates)) * 0.5
+
 def build_table_context_rich(table, max_cells=10):
     """표 문맥 구축 (헤더 레이블 명시)"""
     headers = []
@@ -597,14 +654,15 @@ def build_table_context_rich(table, max_cells=10):
     return " / ".join(parts) if parts else "표 정보 없음"
 
 def score_candidates_with_logits(candidates, table_ctx, table_bbox):
-    """로짓 기반 스코어링: 리랭커 확률 + prior 가산 + 보조항"""
+    """하이브리드 스코어링: Zero-shot + 리랭커 + prior + 보조항"""
     import numpy as np
 
-    # 1) 리랭커 입력 생성
+    # 1) Zero-shot 분류: 각 후보가 '표 제목'일 절대 확률
+    zs_scores = zeroshot_title_score_batch(candidates) if USE_ZEROSHOT else np.ones(len(candidates)) * 0.5
+
+    # 2) 리랭커: 후보 집합 내 상대 순위
     pairs = [make_reranker_pair(c['text'], table_ctx) for c in candidates]
     logits = reranker_logits_batch(pairs) if USE_RERANKER else np.zeros(len(candidates))
-
-    # 2) 온도 소프트맥스 확률 (후보 집합 내 분리력↑)
     rer_prob = softmax_with_temp_from_logits(logits, tau=0.6)
 
     scored = []
@@ -625,9 +683,10 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
         if is_unit_like(txt) or re.search(r"(주:|비고|참고)\b", txt):
             bonus -= 0.08
 
-        # 최종 점수: 리랭커 중심, prior는 보조 힌트
-        final = (WEIGHT_RERANKER * float(rer_prob[i])
-                 + WEIGHT_PRIOR * p      # 명시적 가중치 사용
+        # 최종 점수: Zero-shot(절대) + 리랭커(상대) + 보조항
+        final = (WEIGHT_ZEROSHOT * float(zs_scores[i])
+                 + WEIGHT_RERANKER * float(rer_prob[i])
+                 + WEIGHT_PRIOR * p
                  + WEIGHT_EMBEDDING * emb
                  + WEIGHT_LAYOUT * lay
                  + bonus)
@@ -635,6 +694,7 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
         scored.append({
             "text": txt, "bbox": bb, "score": final,
             "details": {
+                "zeroshot": float(zs_scores[i]),
                 "rer_logits": float(logits[i]),
                 "rer_prob_norm": float(rer_prob[i]),
                 "prior": p, "emb": emb, "lay": lay, "bonus": bonus
@@ -741,7 +801,7 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         t = x["text"][:50] if len(x["text"]) > 50 else x["text"]
         d = x["details"]
         print(f"    '{t}'")
-        print(f"      logit: {d['rer_logits']:.3f}, prob*: {d['rer_prob_norm']:.3f}, "
+        print(f"      zs: {d['zeroshot']:.3f}, logit: {d['rer_logits']:.3f}, prob*: {d['rer_prob_norm']:.3f}, "
               f"prior: {d['prior']:.3f}, emb: {d['emb']:.3f}, lay: {d['lay']:.3f}, "
               f"bonus: {d['bonus']:+.2f}, Final: {x['score']:.3f}")
 
