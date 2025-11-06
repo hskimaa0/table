@@ -17,36 +17,24 @@ UP_MULTIPLIER = 1.5  # 표 위쪽 탐색 범위 (표 높이의 배수)
 X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
 # ML 모델 관련
-NLI_MODEL = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot NLI (다국어)
 EMBEDDING_MODEL = "BAAI/bge-m3"  # 문장 임베딩 (다국어)
+RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 크로스-인코더 리랭커 (다국어 SOTA)
 ML_DEVICE = -1  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
+# 리랭커 설정
+USE_RERANKER = True  # 리랭커 사용 여부
+TOPK_CANDIDATES = 8  # 표당 리랭커에 보낼 최대 후보 수
+
 # 최종 점수 가중치
-WEIGHT_NLI = 0.45  # Zero-shot NLI (제목 확률)
-WEIGHT_EMBEDDING = 0.45  # 임베딩 유사도
-WEIGHT_LAYOUT = 0.10  # 레이아웃 점수
-SCORE_THRESHOLD = 0.0  # 제목 판정 최소 점수
+WEIGHT_RERANKER = 0.88  # 리랭커 점수 (정확도 최우선)
+WEIGHT_EMBEDDING = 0.08  # 임베딩 유사도 (타이브레이커)
+WEIGHT_LAYOUT = 0.04  # 레이아웃 점수 (타이브레이커)
+SCORE_THRESHOLD = 0.01  # 제목 판정 최소 점수 (리랭커 × prior)
 
 # ML 모델 로드
-nli_classifier = None
 embedder = None
-
-# Zero-shot NLI 모델 로드
-try:
-    from transformers import pipeline
-    nli_classifier = pipeline(
-        "zero-shot-classification",
-        model=NLI_MODEL,
-        device=ML_DEVICE
-    )
-    print(f"✅ NLI 모델 로드 완료 ({NLI_MODEL})")
-except ImportError:
-    print("⚠️  transformers 라이브러리 없음")
-    nli_classifier = None
-except Exception as e:
-    print(f"⚠️  NLI 모델 로드 실패: {e}")
-    nli_classifier = None
+reranker = None
 
 # 임베딩 모델 로드
 try:
@@ -60,10 +48,34 @@ except Exception as e:
     print(f"⚠️  임베딩 모델 로드 실패: {e}")
     embedder = None
 
+# 리랭커 모델 로드
+try:
+    from sentence_transformers import CrossEncoder
+    device_str = "cuda:0" if ML_DEVICE == 0 else "cpu"
+    # default_activation_function=None => predict()가 '확률'이 아닌 '로짓'을 반환
+    reranker = CrossEncoder(
+        RERANKER_MODEL,
+        device=device_str,
+        default_activation_function=None  # ★ 중요: 로짓으로 받는다
+    )
+    print(f"✅ 리랭커 로드 완료 ({RERANKER_MODEL}, logits mode)")
+except ImportError:
+    print("⚠️  sentence-transformers 라이브러리 없음 (CrossEncoder)")
+    reranker = None
+except Exception as e:
+    print(f"⚠️  리랭커 로드 실패: {e}")
+    reranker = None
+
 # ========== 유틸리티 함수 ==========
 def clean_text(s: str) -> str:
     """텍스트 정리"""
     return re.sub(r"\s+", " ", s).strip()
+
+def clamp_text_len(s: str, max_chars=MAX_TEXT_INPUT_LENGTH):
+    """텍스트 길이 제한"""
+    s = clean_text(s)
+    return s[:max_chars] if len(s) > max_chars else s
+
 
 def is_trivial(text: str) -> bool:
     """무의미한 텍스트 필터링 (페이지 번호, 저작권 등)"""
@@ -123,6 +135,152 @@ def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     if na == 0 or nb == 0:
         return 0.0
     return float(np.dot(a, b) / (na * nb))
+
+# ========== 패턴 스코어/페널티 ==========
+UNIT_TOKENS = ["단위", "unit", "u.", "℃", "°c", "%", "mm", "kg", "km", "원", "개", "회"]
+
+# 소제목/섹션 패턴
+CIRCLED_RX = r"[\u2460-\u2473\u3251-\u325F]"  # ①-⑳, 21-35
+BULLET_RX = r"[•∙·\-–—]"  # 불릿/대시
+PAREN_NUM_RX = r"\(?\d{1,2}\)?[.)]"  # (1) 1) 1.
+
+def is_subtitle_like(s: str) -> bool:
+    """테이블 바로 위에 자주 오는 '소제목' 패턴:
+    - ① ② … / (1) 1) 1. / • - 등 불릿 시작
+    - 길이 4~40자 권장
+    """
+    t = s.strip()
+    if re.match(rf"^({CIRCLED_RX}|{PAREN_NUM_RX}|{BULLET_RX})\s*\S+", t):
+        if 4 <= len(t) <= 40:
+            return True
+    return False
+
+def is_section_header_like(s: str) -> bool:
+    """상위 섹션 헤더(문서 구조용):
+    - 1. 1.1 1.1.1 형태
+    - 제3장, 제2절 등
+    """
+    t = s.strip()
+    if re.match(r"^\d+(\.\d+){0,3}\s+\S+", t):
+        return True
+    if re.match(r"^제\s*\d+\s*(장|절|항)\b", t):
+        return True
+    return False
+
+def is_unit_like(s: str) -> bool:
+    """단위 표기 라인 판별"""
+    t = s.strip().lower()
+    # [단위: ℃], (단위 : %), <단위: mm> 등
+    if re.match(r"^[\[\(\<]?\s*(단위|unit)\s*[:：]?\s*[\w%°℃㎜\-/]+[\]\)\>]?\s*$", t):
+        return True
+    # 길이 아주 짧고(<=12) 유닛 토큰만 있는 경우
+    if len(t) <= 12 and any(tok in t for tok in UNIT_TOKENS):
+        letters = re.sub(r"[^가-힣a-zA-Z]", "", t)
+        return len(letters) <= 1
+    return False
+
+def is_table_title_like(s: str) -> bool:
+    """표 제목 패턴 판별"""
+    # '표 B.8 월별 기온', '표 3-2 연간 실적' 등
+    if re.search(r"^표\s*[A-Za-z]?\s*\d+([\-\.]\d+)?", s.strip()):
+        return True
+    # 섹션/표 제목 형태(숫자.숫자 제목)
+    if re.search(r"^\d+(\.\d+){0,2}\s+[^\[\(]{2,}", s.strip()):
+        return True
+    return False
+
+def is_cross_reference(s: str) -> bool:
+    """교차 참조/설명 문장 판별 (강화)"""
+    t = s.strip().replace(" ", "")
+    # '상세한 내용은 다음 표 B.12와 같다' 류
+    if re.search(r"(다음표|하기표|본표|아래표)\s*[A-Za-z]?\d+.*(같다|나타낸다|보인다|정리|참조)", t):
+        return True
+    # '상세한내용은다음표B.12와같다' 같이 붙어쓴 OCR도 커버
+    if re.search(r"(상세한내용|자세한내용).*(다음표|아래표).*(같다|나타난다|참조)", t):
+        return True
+    # 명확한 설명 문장만 (동사 어미로 끝나는 긴 문장)
+    if len(t) >= 35 and re.search(r"(바랍니다|바란다|협의대로|안내하|요청)", t):
+        return True
+    return False
+
+# === 일반 '문장' 판별 (설명/서술형) ===
+KOREAN_SENT_END_RX = r"(이다|였다|하였다|했다|된다|되었다|나타난다|나타났다|보인다|보였다|이다\.|다\.|다,)$"
+CLAUSE_TOKENS = r"(이며|면서|면서도|고서|고 있으며|으로|로써|으로서|에 따라|에 의하면)"
+
+def is_sentence_like(s: str) -> bool:
+    """일반 문장(설명/서술형) 판별"""
+    t = s.strip()
+    # 마침표/쉼표가 많고 길면 문장 확률↑
+    if len(t) >= 20 and ("," in t or "。" in t or "．" in t or t.endswith(".")):
+        return True
+    # 한국어 서술어/종결 어미
+    if re.search(KOREAN_SENT_END_RX, t):
+        return True
+    # 분사/이어주는 절 표시 & 길이
+    if len(t) >= 18 and re.search(CLAUSE_TOKENS, t):
+        return True
+    # 라인 내 공백 거의 없고 길이 긴 경우(붙어쓴 문장 OCR)
+    if len(t) >= 24 and re.search(r"[가-힣]{10,}", t):
+        return True
+    return False
+
+def prior_score(cand_text: str, cand_bbox, table_bbox) -> float:
+    """룰 기반 사전확률(0~1). 유닛/주석/설명문 강한 감점, 표제/소제목 패턴 가점"""
+    s = cand_text.strip()
+    prior = 0.5  # 기본값
+
+    # 표제 패턴 가점
+    if is_table_title_like(s):
+        prior += 0.45        # ★ +0.40 → +0.45
+
+    # === 소제목/섹션 헤더 처리 ===
+    if is_subtitle_like(s):
+        prior += 0.35
+    if is_section_header_like(s):
+        prior -= 0.35
+
+    # 유닛/주석 강한 감점
+    if is_unit_like(s):
+        prior -= 0.65        # ★ 강화
+
+    # 교차 참조/설명 문장 강한 감점
+    if is_cross_reference(s):
+        prior -= 0.60        # ★ 강화
+
+    # ★ NEW: 설명문 강감점
+    if is_sentence_like(s):
+        prior -= 0.55
+
+    # 근접도 기반 보정(표 바로 위일수록 ↑)
+    _, ty1, _, _ = table_bbox
+    _, _, _, cy2 = cand_bbox
+    dy = max(0, ty1 - cy2)
+
+    # ★ 근접 보너스
+    if dy <= 120:
+        prior += 0.08 + (0.22 if is_subtitle_like(s) else 0.0)
+    elif dy <= 300:
+        prior += 0.04 + (0.10 if is_subtitle_like(s) else 0.0)
+    elif dy >= 800:
+        prior -= 0.10
+
+    # '대괄호 한 줄' & 표와 초근접(유닛 가능성↑) 감점
+    bracket_line = bool(re.match(r"^[\[\(＜〈].+[\]\)＞〉]$", s))
+    if bracket_line and dy <= 80:
+        prior -= 0.25
+
+    # 길이 보정: 제목은 보통 5~60자
+    L = len(s)
+    if L < 5:
+        prior -= 0.15
+    if L > 60:
+        prior -= 0.15
+
+    # 거의 기호/숫자뿐
+    if re.search(r"^[\d\W_]+$", s):
+        prior -= 0.20
+
+    return max(0.0, min(1.0, prior))
 
 # ========== bbox 추출 ==========
 def get_bbox_from_text(text):
@@ -351,25 +509,37 @@ def build_table_context(table, max_cells=10):
     return " / ".join(parts) if parts else "표 정보 없음"
 
 # ========== ML 스코어링 ==========
-def nli_title_prob(text: str) -> float:
-    """Zero-shot Classification으로 제목 확률 계산 (패턴 기반 단위 제외)"""
-    if not nli_classifier:
-        return 0.0
+def make_reranker_pair(cand_text: str, table_ctx: str):
+    """리랭커 입력 쌍 생성 (명시적 역할 프롬프트)"""
+    q = f"[표제목 후보] {clamp_text_len(cand_text)}"
+    p = f"[표 문맥] {clamp_text_len(table_ctx)}"
+    return (q, p)
 
+def reranker_logits_batch(pairs):
+    """배치 리랭커 로짓 반환
+    pairs: [(cand_text, table_ctx), ...]
+    반환: numpy array of logits (float)
+    """
+    import numpy as np
+    if not reranker or not pairs:
+        return np.zeros((len(pairs),), dtype=float)
     try:
-        result = nli_classifier(
-            text,
-            candidate_labels=["a title or caption for a table", "a measurement unit notation", "a sentence or paragraph"],
-            hypothesis_template="This text is {}."
-        )
-        labels = result["labels"]
-        scores = result["scores"]
-        score_dict = {l: s for l, s in zip(labels, scores)}
-
-        return float(score_dict.get("a title or caption for a table", 0.0))
+        out = reranker.predict(pairs, convert_to_numpy=True)  # shape (N,1) or (N,)
+        logits = np.asarray(out).reshape(-1)
+        return logits
     except Exception as e:
-        print(f"  NLI 오류: {e}")
-        return 0.0
+        print(f"  리랭커 오류: {e}")
+        return np.zeros((len(pairs),), dtype=float)
+
+def softmax_with_temp_from_logits(logits, tau=0.6):
+    """로짓에 온도를 적용한 소프트맥스 (후보 집합 내 대비 ↑)
+    tau < 1 -> 대비 강화, tau ~0.5~0.7 권장
+    """
+    import numpy as np
+    x = np.asarray(logits, dtype=float) / max(tau, 1e-6)
+    x = x - x.max()  # overflow 방지
+    ex = np.exp(x)
+    return ex / (ex.sum() + 1e-12)
 
 def embedding_similarity(text_a: str, text_b: str) -> float:
     """임베딩 유사도 계산"""
@@ -377,48 +547,83 @@ def embedding_similarity(text_a: str, text_b: str) -> float:
         return 0.0
 
     try:
-        vecs = embedder.encode([text_a, text_b])
+        a = clamp_text_len(text_a)
+        b = clamp_text_len(text_b)
+        vecs = embedder.encode([a, b], normalize_embeddings=True)
         return cosine_similarity(vecs[0], vecs[1])
     except Exception as e:
         print(f"  임베딩 오류: {e}")
         return 0.0
 
-def score_candidate(cand_text: str, cand_bbox, table_bbox, table_ctx: str) -> dict:
-    """후보 점수 계산 (NLI + 임베딩 + 레이아웃 + 보너스)"""
-    # NLI 점수
-    nli_score = nli_title_prob(cand_text)
+def build_table_context_rich(table, max_cells=10):
+    """표 문맥 구축 (헤더 레이블 명시)"""
+    headers = []
+    if 'rows' in table and table['rows']:
+        for cell in table['rows'][0]:
+            cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
+            if cell_texts:
+                headers.append(clean_text(" ".join(cell_texts)))
 
-    # 임베딩 유사도
-    emb_score = embedding_similarity(cand_text, table_ctx)
+    first_row = []
+    if 'rows' in table and len(table['rows']) >= 2:
+        for cell in table['rows'][1]:
+            cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
+            if cell_texts:
+                first_row.append(clean_text(" ".join(cell_texts)))
 
-    # 레이아웃 점수
-    lay_score = layout_score(table_bbox, cand_bbox)
+    parts = []
+    if headers:
+        parts.append(f"헤더: [{', '.join(headers[:max_cells])}]")
+    if first_row:
+        parts.append(f"첫행: [{', '.join(first_row[:max_cells])}]")
 
-    # 제목 패턴 보너스
-    title_bonus = 0.0
-    # "표 X.X ..." 또는 "Table X.X ..." 패턴
-    if re.match(r'^(표|table)\s*[\d\.]+', cand_text, re.IGNORECASE):
-        title_bonus = 0.15
-    # "<그림>" 등은 페널티
-    elif re.match(r'^<.*>$', cand_text):
-        title_bonus = -0.2
-    # 단위 표기는 페널티
-    elif re.search(r'\(\s*단위', cand_text, re.IGNORECASE):
-        title_bonus = -0.3
+    return " / ".join(parts) if parts else "표 정보 없음"
 
-    # 최종 점수
-    final_score = (WEIGHT_NLI * nli_score +
-                   WEIGHT_EMBEDDING * emb_score +
-                   WEIGHT_LAYOUT * lay_score +
-                   title_bonus)
+def score_candidates_with_logits(candidates, table_ctx, table_bbox):
+    """로짓 기반 스코어링: 리랭커 확률 + prior 가산 + 보조항"""
+    import numpy as np
 
-    return {
-        'final_score': final_score,
-        'nli': nli_score,
-        'embedding': emb_score,
-        'layout': lay_score,
-        'bonus': title_bonus
-    }
+    # 1) 리랭커 입력 생성
+    pairs = [make_reranker_pair(c['text'], table_ctx) for c in candidates]
+    logits = reranker_logits_batch(pairs) if USE_RERANKER else np.zeros(len(candidates))
+
+    # 2) 온도 소프트맥스 확률 (후보 집합 내 분리력↑)
+    rer_prob = softmax_with_temp_from_logits(logits, tau=0.6)
+
+    scored = []
+    for i, c in enumerate(candidates):
+        txt, bb = c['text'], c['bbox']
+
+        # prior (0~1): 패턴/유닛/참조/길이 보정
+        p = prior_score(txt, bb, table_bbox)
+
+        # 보조 점수 (미세 타이브레이커)
+        emb = embedding_similarity(txt, table_ctx)
+        lay = layout_score(table_bbox, bb)
+
+        # 게이팅/가산 방식: 제목 패턴 보너스, 유닛/주석 강감점
+        bonus = 0.0
+        if is_table_title_like(txt):
+            bonus += 0.10
+        if is_unit_like(txt) or re.search(r"(주:|비고|참고)\b", txt):
+            bonus -= 0.15
+
+        # 최종 점수: 리랭커 정규화 확률(분리력 핵심) + prior(게이팅/가산) + 보조항
+        final = (WEIGHT_RERANKER * float(rer_prob[i])
+                 + 0.10 * p              # prior은 '곱'보다 '가산'이 안정적
+                 + WEIGHT_EMBEDDING * emb
+                 + WEIGHT_LAYOUT * lay
+                 + bonus)
+
+        scored.append({
+            "text": txt, "bbox": bb, "score": final,
+            "details": {
+                "rer_logits": float(logits[i]),
+                "rer_prob_norm": float(rer_prob[i]),
+                "prior": p, "emb": emb, "lay": lay, "bonus": bonus
+            }
+        })
+    return scored
 
 # ========== 메인 로직 ==========
 def find_title_for_table(table, texts, all_tables=None, used_titles=None):
@@ -445,29 +650,107 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         print("  ❌ 후보 없음")
         return "", None
 
-    # Step 2: 표 문맥 구축
-    table_ctx = build_table_context(table)
+    # Step 2: 표 문맥 구축 (풍부한 레이블링)
+    table_ctx = build_table_context_rich(table)
     print(f"  표 문맥: {table_ctx[:80]}")
 
-    # Step 3: ML 스코어링
-    print("\n  후보 점수:")
-    scored = []
-    for c in candidates:
-        scores = score_candidate(c['text'], c['bbox'], table_bbox, table_ctx)
-        text_preview = c['text'][:50] if len(c['text']) > 50 else c['text']
-        print(f"    '{text_preview}'")
-        print(f"      NLI: {scores['nli']:.3f}, Emb: {scores['embedding']:.3f}, Layout: {scores['layout']:.3f}, Bonus: {scores['bonus']:.3f}, Final: {scores['final_score']:.3f}")
+    # Step 2.5: 후보 프리랭킹 (후보가 많을 경우)
+    if len(candidates) > TOPK_CANDIDATES and embedder:
+        print(f"  후보 프리랭킹: {len(candidates)}개 → {TOPK_CANDIDATES}개")
+        prelim = []
+        for c in candidates:
+            prelim_score = (0.8 * embedding_similarity(c['text'], table_ctx) +
+                           0.2 * layout_score(table_bbox, c['bbox']))
+            prelim.append((prelim_score, c))
+        prelim.sort(key=lambda x: x[0], reverse=True)
+        candidates = [c for _, c in prelim[:TOPK_CANDIDATES]]
 
-        scored.append({
-            'text': c['text'],
-            'bbox': c['bbox'],
-            'score': scores['final_score'],
-            'details': scores
-        })
+    # Step 2.9: 유닛 후보 삭제
+    if any(is_table_title_like(c['text']) for c in candidates):
+        candidates = [c for c in candidates if not is_unit_like(c['text'])]
+        print(f"  유닛 필터링 후: {len(candidates)}개")
+
+    # ★ 하드 게이트 1: '표 제목 패턴'이 하나라도 있으면 그 '패턴'만 남김
+    titles = [c for c in candidates if is_table_title_like(c['text'])]
+    if titles:
+        before = len(candidates)
+        candidates = titles
+        print(f"  제목패턴 우선: {before}→{len(candidates)}개")
+
+    # ★ 하드 게이트 2: 남은 후보에서 '설명문/교차참조' 제거
+    # 단, 제목 패턴이 있는 텍스트는 보호
+    before = len(candidates)
+    candidates = [c for c in candidates
+                  if is_table_title_like(c['text']) or not (is_sentence_like(c['text']) or is_cross_reference(c['text']))]
+    if len(candidates) != before:
+        print(f"  설명문/교차참조 제거: {before}→{len(candidates)}개")
+
+    # ★ 소제목 우선 모드: 창 내 소제목이 있으면 소제목만 사용
+    subtitle_priority_window = 220  # px
+    tbx1, tby1, tbx2, tby2 = table_bbox
+
+    def dy_to_table_top(bb):
+        return max(0, tby1 - bb[3])
+
+    subs_in_win = [c for c in candidates if is_subtitle_like(c['text']) and dy_to_table_top(c['bbox']) <= subtitle_priority_window]
+    if subs_in_win:
+        # 섹션/기타 제거하고 소제목만 남김
+        before = len(candidates)
+        candidates = subs_in_win
+        print(f"  소제목 우선 모드: {before}→{len(candidates)}개 (≤{subtitle_priority_window}px)")
+
+        # 최근접 소제목을 맨 앞으로(동률 시 tie-break에 유리)
+        candidates.sort(key=lambda c: dy_to_table_top(c['bbox']))
+    else:
+        # 소제목이 있긴 하나 창 밖이면 섹션 헤더만 제거(기존 로직 유지)
+        if any(is_subtitle_like(c['text']) for c in candidates):
+            before = len(candidates)
+            candidates = [c for c in candidates if not is_section_header_like(c['text'])]
+            if len(candidates) != before:
+                print(f"  소제목 우선 규칙: 섹션 헤더 제외 → {len(candidates)}개")
+
+    if not candidates:
+        print("  ❌ 필터링 후 후보 없음")
+        return "", None
+
+    # Step 3: 배치 리랭커(로짓) → 소프트맥스 확률 → prior/보조 결합
+    print("\n  후보 점수:")
+    scored = score_candidates_with_logits(candidates, table_ctx, table_bbox)
+    for x in scored:
+        t = x["text"][:50] if len(x["text"]) > 50 else x["text"]
+        d = x["details"]
+        print(f"    '{t}'")
+        print(f"      logit: {d['rer_logits']:.3f}, prob*: {d['rer_prob_norm']:.3f}, "
+              f"prior: {d['prior']:.3f}, emb: {d['emb']:.3f}, lay: {d['lay']:.3f}, "
+              f"bonus: {d['bonus']:+.2f}, Final: {x['score']:.3f}")
 
     # 최고 점수 선택
     scored.sort(key=lambda x: x['score'], reverse=True)
     best = scored[0]
+
+    # ★ 타이브레이커: 제목패턴 > 소제목 > 기타, 그리고 더 가까운 쪽
+    if len(scored) >= 2:
+        second = scored[1]
+        gap = best['score'] - second['score']
+        if gap <= 0.03:
+            def rank(c):
+                t = c['text']
+                if is_table_title_like(t): return 0
+                if is_subtitle_like(t):    return 1
+                return 2
+            def dy(bb): return max(0, table_bbox[1] - bb[3])
+            bR, sR = rank(best), rank(second)
+            if (sR < bR) or (sR == bR and dy(second['bbox']) < dy(best['bbox'])):
+                print("  타이브레이커 적용: 제목/소제목 및 근접도 우선")
+                best = second
+
+    # 제목 패턴 검증: 모든 후보가 일반 문장이면 제목 없음으로 처리
+    has_title_pattern = any(is_table_title_like(s['text']) for s in scored)
+    if not has_title_pattern:
+        # Prior 점수가 낮으면(유닛/주석/일반문장) 제목 없음
+        if best['details']['prior'] < 0.4:
+            print(f"  ⚠️  제목 패턴 없음 (최고 prior: {best['details']['prior']:.3f})")
+            return "", None
 
     # 임계값 체크
     if best['score'] < SCORE_THRESHOLD:
