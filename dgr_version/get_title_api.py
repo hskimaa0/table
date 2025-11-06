@@ -19,7 +19,7 @@ X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 # ML 모델 관련
 EMBEDDING_MODEL = "BAAI/bge-m3"  # 문장 임베딩 (다국어)
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 크로스-인코더 리랭커 (다국어 SOTA)
-ZEROSHOT_MODEL = "MoritzLaurer/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7"  # Zero-shot 분류 (다국어)
+ZEROSHOT_MODEL = "joeddav/xlm-roberta-large-xnli"  # Zero-shot 분류 (다국어, 한국어 우수)
 ML_DEVICE = -1  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
@@ -71,22 +71,33 @@ except Exception as e:
     print(f"⚠️  리랭커 로드 실패: {e}")
     reranker = None
 
-# Zero-shot 분류기 로드
+# Zero-shot 분류기 로드 (현재 모델만 사용)
 try:
-    from transformers import pipeline
+    from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
     device_id = 0 if ML_DEVICE == 0 else -1
+
+    # SentencePiece 기반 slow tokenizer 사용
+    import sentencepiece  # noqa: F401
+    tokenizer = AutoTokenizer.from_pretrained(ZEROSHOT_MODEL, use_fast=False)
+    model = AutoModelForSequenceClassification.from_pretrained(ZEROSHOT_MODEL)
+
     zeroshot_classifier = pipeline(
         "zero-shot-classification",
-        model=ZEROSHOT_MODEL,
+        model=model,
+        tokenizer=tokenizer,
         device=device_id
     )
     print(f"✅ Zero-shot 분류기 로드 완료 ({ZEROSHOT_MODEL})")
-except ImportError:
-    print("⚠️  transformers 라이브러리 없음")
+    print(f"✅ Zero-shot 분류 활성화 (가중치: {WEIGHT_ZEROSHOT:.0%})")
+except ImportError as e:
+    print(f"⚠️  라이브러리 없음: {e}")
+    print("   → pip install sentencepiece transformers 실행 필요")
     zeroshot_classifier = None
+    USE_ZEROSHOT = False
 except Exception as e:
-    print(f"⚠️  Zero-shot 분류기 로드 실패: {e}")
+    print(f"⚠️  Zero-shot 로드 실패: {e}")
     zeroshot_classifier = None
+    USE_ZEROSHOT = False
 
 # ========== 유틸리티 함수 ==========
 def clean_text(s: str) -> str:
@@ -357,7 +368,7 @@ def extract_text_content(text_obj):
             if 'text' in t_item:
                 texts.append(t_item['text'])
         if texts:
-            return ''.join(texts)
+            return ' '.join(texts)  # 공백으로 연결
 
     if 'text' in text_obj:
         return text_obj['text']
@@ -437,10 +448,9 @@ def merge_text_group(text_group):
 
         current_bbox = get_bbox_from_text(t)
 
+        # 텍스트 조각 사이에 항상 공백 추가 (첫 조각 제외)
         if prev_bbox and current_bbox:
-            gap = current_bbox[0] - prev_bbox[2]
-            if gap > X_GAP_THRESHOLD:
-                text_parts.append(' ')
+            text_parts.append(' ')
 
         text_parts.append(text_content)
         prev_bbox = current_bbox
@@ -605,26 +615,71 @@ def zeroshot_title_score_batch(candidates):
 
     try:
         texts = [clamp_text_len(c['text']) for c in candidates]
-        candidate_labels = ["표 제목", "설명문", "단위 정보"]
-        hypothesis_template = "이 텍스트는 {}이다."
 
-        results = zeroshot_classifier(
-            texts,
-            candidate_labels,
-            hypothesis_template=hypothesis_template,
-            multi_label=False
-        )
+        # 세분화된 다중 라벨 (긍정 + 부정)
+        labels = [
+            "표의 제목/표제/캡션",
+            "소제목(섹션 내 소단락 제목)",
+            "섹션 헤더(장/절/항 제목)",
+            "본문 설명문/서술문",
+            "단위 표기/비고/주:",
+            "그림/도 제목·캡션",
+        ]
 
-        # '표 제목' 레이블의 확률 추출
-        scores = []
-        for result in results:
-            labels = result['labels']
-            probs = result['scores']
-            # '표 제목' 레이블 찾기
-            title_idx = labels.index("표 제목") if "표 제목" in labels else 0
-            scores.append(probs[title_idx])
+        # 3가지 다양한 한글 템플릿 (✅ 반드시 '{}' 만 사용)
+        templates = [
+            "이 텍스트는 {}이다.",
+            "다음 문구의 용도는 {}이다.",
+            "이 문장은 {}에 해당한다.",
+        ]
 
-        return np.array(scores, dtype=float)
+        # 라벨별 가중치 (긍정: +, 부정: -)
+        base_weights = {
+            "표의 제목/표제/캡션": 0.85,
+            "소제목(섹션 내 소단락 제목)": 0.25,
+            "섹션 헤더(장/절/항 제목)": -0.25,  # near-top일 때만 +0.10으로 조정
+            "본문 설명문/서술문": -0.60,
+            "단위 표기/비고/주:": -0.65,
+            "그림/도 제목·캡션": -0.25,
+        }
+
+        # 표 상단 근접 마스크 (≤120px)
+        table_bbox = globals().get("_current_table_bbox")
+        if table_bbox:
+            top = table_bbox[1]
+            near_top_mask = np.array([
+                max(0, top - (c.get("bbox", [0, 0, 0, 0])[3])) <= 120 for c in candidates
+            ], dtype=bool)
+        else:
+            near_top_mask = np.ones(len(candidates), dtype=bool)
+
+        def score_once(tmpl: str) -> np.ndarray:
+            """특정 템플릿으로 multi-label 분류 후 가중합 계산"""
+            try:
+                res = zeroshot_classifier(
+                    texts, labels,
+                    hypothesis_template=tmpl,
+                    multi_label=True,
+                    truncation=True  # 긴 텍스트 안전 처리
+                )
+            except Exception as e:
+                print(f"  Zero-shot 템플릿 '{tmpl[:20]}...' 예외: {e}")
+                return np.ones(len(candidates)) * 0.5
+
+            sc = np.zeros(len(candidates), dtype=float)
+            for i, r in enumerate(res):
+                probs = {lab: float(p) for lab, p in zip(r["labels"], r["scores"])}
+                w = base_weights.copy()
+                # 섹션 헤더는 표 상단 근접 시만 가산
+                w["섹션 헤더(장/절/항 제목)"] = 0.10 if near_top_mask[i] else -0.25
+                s = sum(w[k] * probs.get(k, 0.0) for k in w)
+                sc[i] = np.clip(s + 0.35, 0.0, 1.0)  # 약간의 오프셋 후 [0,1] 클립
+            return sc
+
+        # 3개 템플릿 평균
+        scores = np.mean([score_once(t) for t in templates], axis=0)
+        return scores
+
     except Exception as e:
         print(f"  Zero-shot 오류: {e}")
         return np.ones(len(candidates)) * 0.5
@@ -658,6 +713,8 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
     import numpy as np
 
     # 1) Zero-shot 분류: 각 후보가 '표 제목'일 절대 확률
+    # table_bbox를 전역으로 전달 (근접도 판단용)
+    globals()["_current_table_bbox"] = table_bbox
     zs_scores = zeroshot_title_score_batch(candidates) if USE_ZEROSHOT else np.ones(len(candidates)) * 0.5
 
     # 2) 리랭커: 후보 집합 내 상대 순위
@@ -676,6 +733,12 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
         emb = embedding_similarity(txt, table_ctx)
         lay = layout_score(table_bbox, bb)
 
+        # Zero-shot 점수 + 하한 보정
+        zs = float(zs_scores[i])
+        # 표 번호/패턴 매칭 시 ZS 하한 보정 (패턴이 명확하면 최소 0.80 보장)
+        if is_table_title_like(txt):
+            zs = max(zs, 0.80)
+
         # 게이팅/가산 방식: 제목 패턴 보너스, 유닛/주석 강감점
         bonus = 0.0
         if is_table_title_like(txt):
@@ -683,8 +746,8 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
         if is_unit_like(txt) or re.search(r"(주:|비고|참고)\b", txt):
             bonus -= 0.08
 
-        # 최종 점수: Zero-shot(절대) + 리랭커(상대) + 보조항
-        final = (WEIGHT_ZEROSHOT * float(zs_scores[i])
+        # 최종 점수: Zero-shot(하한 보정) + 리랭커(상대) + 보조항
+        final = (WEIGHT_ZEROSHOT * zs
                  + WEIGHT_RERANKER * float(rer_prob[i])
                  + WEIGHT_PRIOR * p
                  + WEIGHT_EMBEDDING * emb
@@ -694,7 +757,7 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
         scored.append({
             "text": txt, "bbox": bb, "score": final,
             "details": {
-                "zeroshot": float(zs_scores[i]),
+                "zeroshot": zs,
                 "rer_logits": float(logits[i]),
                 "rer_prob_norm": float(rer_prob[i]),
                 "prior": p, "emb": emb, "lay": lay, "bonus": bonus
