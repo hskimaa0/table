@@ -1,20 +1,33 @@
 version: '3.8'
 
 services:
-  api:
-    build: .
+  title-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: title-api:latest
+    container_name: title-api-server
     ports:
       - "5555:5555"
-    restart: always
+    restart: unless-stopped
     environment:
+      - CUDA_VISIBLE_DEVICES=0
       - HF_HUB_ENABLE_HF_TRANSFER=1
       - TOKENIZERS_PARALLELISM=false
+      - TRANSFORMERS_OFFLINE=0
     volumes:
+      # Hugging Face 캐시를 호스트와 공유 (모델 재다운로드 방지)
       - ~/.cache/huggingface:/root/.cache/huggingface
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              count: all
+              count: 1
               capabilities: [gpu]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5555/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s

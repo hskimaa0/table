@@ -17,9 +17,9 @@ UP_MULTIPLIER = 1.5  # 표 위쪽 탐색 범위 (표 높이의 배수)
 X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
 # ML 모델 관련
-EMBEDDING_MODEL = "BAAI/bge-m3"  # 문장 임베딩 (다국어)
-RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 크로스-인코더 리랭커 (다국어 SOTA)
-ZEROSHOT_MODEL = "joeddav/xlm-roberta-large-xnli"  # Zero-shot 분류 (다국어, 한국어 우수)
+EMBEDDING_MODEL = "intfloat/multilingual-e5-large"  # 문장 임베딩 (다국어, 품질 최우선)
+RERANKER_MODEL = "jinaai/jina-reranker-v2-base-multilingual"  # 크로스-인코더 리랭커 (다국어)
+ZEROSHOT_MODEL = "MoritzLaurer/deberta-v3-large-zeroshot-v1"  # Zero-shot 분류 (다국어 이해 좋음, 무거움)
 ML_DEVICE = 0  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
@@ -29,11 +29,11 @@ USE_ZEROSHOT = True  # Zero-shot 분류 사용 여부
 TOPK_CANDIDATES = 8  # 표당 리랭커에 보낼 최대 후보 수
 
 # 최종 점수 가중치
-WEIGHT_ZEROSHOT = 0.50   # Zero-shot 분류 점수 (제목 vs 비제목 판별)
-WEIGHT_RERANKER = 0.42   # 리랭커 점수 (상대 순위)
-WEIGHT_PRIOR = 0.06      # Prior 점수 (패턴 기반 규칙)
-WEIGHT_EMBEDDING = 0.04  # 임베딩 유사도 (타이브레이커)
-WEIGHT_LAYOUT = 0.04     # 레이아웃 점수 (타이브레이커)
+WEIGHT_ZEROSHOT = 0.33   # Zero-shot 분류 점수 (제목 vs 비제목 판별)
+WEIGHT_RERANKER = 0.33   # 리랭커 점수 (상대 순위)
+WEIGHT_PRIOR = 0.01      # Prior 점수 (패턴 기반 규칙)
+WEIGHT_EMBEDDING = 0.33  # 임베딩 유사도
+WEIGHT_LAYOUT = 0.00     # 레이아웃 점수 (미사용)
 SCORE_THRESHOLD = 0.01   # 제목 판정 최소 점수
 
 # ML 모델 로드
@@ -77,19 +77,35 @@ except Exception as e:
 
 # 리랭커 모델 로드
 try:
-    from sentence_transformers import CrossEncoder
-    try:
-        reranker = CrossEncoder(
+    # Jina 모델은 AutoModel로 직접 로드
+    if "jina" in RERANKER_MODEL.lower():
+        from transformers import AutoModelForSequenceClassification, AutoTokenizer
+        reranker_tokenizer = AutoTokenizer.from_pretrained(RERANKER_MODEL, trust_remote_code=True)
+        dtype = torch.float16 if DEVICE_STR.startswith("cuda") else torch.float32
+        reranker_model = AutoModelForSequenceClassification.from_pretrained(
             RERANKER_MODEL,
-            device=DEVICE_STR,
-            default_activation_function=None  # logits 모드 (softmax 미적용)
+            trust_remote_code=True,
+            torch_dtype=dtype
         )
-    except TypeError:
-        # 일부 구버전은 인자 없이도 logits 반환 가능
-        reranker = CrossEncoder(RERANKER_MODEL, device=DEVICE_STR)
-    print(f"✅ 리랭커 로드 완료 ({RERANKER_MODEL}, device={DEVICE_STR})")
-except ImportError:
-    print("⚠️  sentence-transformers 라이브러리 없음 (CrossEncoder)")
+        reranker_model.to(DEVICE_STR)
+        reranker_model.eval()
+        reranker = {"model": reranker_model, "tokenizer": reranker_tokenizer, "type": "jina"}
+        print(f"✅ 리랭커 로드 완료 ({RERANKER_MODEL}, device={DEVICE_STR}, dtype={dtype})")
+    else:
+        # 기존 CrossEncoder 방식
+        from sentence_transformers import CrossEncoder
+        try:
+            reranker = CrossEncoder(
+                RERANKER_MODEL,
+                device=DEVICE_STR,
+                activation_fn=None  # logits 모드
+            )
+        except TypeError:
+            reranker = CrossEncoder(RERANKER_MODEL, device=DEVICE_STR)
+        reranker = {"model": reranker, "type": "cross_encoder"}
+        print(f"✅ 리랭커 로드 완료 ({RERANKER_MODEL}, device={DEVICE_STR})")
+except ImportError as e:
+    print(f"⚠️  필요 라이브러리 없음: {e}")
     reranker = None
 except Exception as e:
     print(f"⚠️  리랭커 로드 실패: {e}")
@@ -602,11 +618,40 @@ def reranker_logits_batch(pairs):
     if not reranker or not pairs:
         return np.zeros((len(pairs),), dtype=float)
     try:
-        out = reranker.predict(pairs, convert_to_numpy=True)  # shape (N,1) or (N,)
-        logits = np.asarray(out).reshape(-1)
-        return logits
+        if isinstance(reranker, dict):
+            if reranker.get("type") == "jina":
+                # Jina 모델 처리
+                model = reranker["model"]
+                tokenizer = reranker["tokenizer"]
+
+                # 입력 텍스트 쌍 준비
+                inputs = tokenizer(
+                    pairs,
+                    padding=True,
+                    truncation=True,
+                    return_tensors="pt",
+                    max_length=512
+                ).to(model.device)
+
+                with torch.no_grad():
+                    outputs = model(**inputs)
+                    logits = outputs.logits[:, 0].cpu().numpy()  # 첫 번째 클래스 로짓
+                return logits
+            elif reranker.get("type") == "cross_encoder":
+                # CrossEncoder 방식 (dict로 감싸진 경우)
+                model = reranker["model"]
+                out = model.predict(pairs, convert_to_numpy=True)
+                logits = np.asarray(out).reshape(-1)
+                return logits
+        else:
+            # CrossEncoder 직접 객체
+            out = reranker.predict(pairs, convert_to_numpy=True)
+            logits = np.asarray(out).reshape(-1)
+            return logits
     except Exception as e:
         print(f"  리랭커 오류: {e}")
+        import traceback
+        traceback.print_exc()
         return np.zeros((len(pairs),), dtype=float)
 
 def softmax_with_temp_from_logits(logits, tau=0.6):
@@ -894,9 +939,8 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         t = x["text"][:50] if len(x["text"]) > 50 else x["text"]
         d = x["details"]
         print(f"    '{t}'")
-        print(f"      zs: {d['zeroshot']:.3f}, logit: {d['rer_logits']:.3f}, prob*: {d['rer_prob_norm']:.3f}, "
-              f"prior: {d['prior']:.3f}, emb: {d['emb']:.3f}, lay: {d['lay']:.3f}, "
-              f"bonus: {d['bonus']:+.2f}, Final: {x['score']:.3f}")
+        print(f"      zeroshot: {d['zeroshot']:.3f}, reranker: {d['rer_prob_norm']:.3f}, "
+              f"embedding: {d['emb']:.3f}, final: {x['score']:.3f}")
 
     # 최고 점수 선택
     scored.sort(key=lambda x: x['score'], reverse=True)
