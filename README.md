@@ -293,3 +293,259 @@ POST /get_title
 ### 프리랭킹 ([dgr_version/get_title_api.py:836](dgr_version/get_title_api.py#L836))
 - 후보 > 8개일 때 임베딩 유사도로 상위 8개 선택
 - ML 추론 비용 절감
+
+---
+
+## Docker 실행 방법
+
+### 사전 요구사항
+- Docker 설치
+- Docker Compose 설치
+- NVIDIA Docker Runtime 설치 (GPU 사용 시)
+- NVIDIA GPU 드라이버 설치 (GPU 사용 시)
+
+### 1. Docker Compose로 실행 (권장)
+
+```bash
+# dgr_version 디렉토리로 이동
+cd dgr_version
+
+# Docker 이미지 빌드 및 컨테이너 실행
+docker-compose up -d
+
+# 로그 확인
+docker-compose logs -f
+
+# 컨테이너 중지
+docker-compose down
+```
+
+### 2. Docker 명령어로 직접 실행
+
+#### 2-1. 이미지 빌드
+```bash
+cd dgr_version
+
+# GPU 지원 이미지 빌드
+docker build -t title-extractor:latest .
+```
+
+#### 2-2. 컨테이너 실행 (GPU 사용)
+```bash
+docker run -d \
+  --name title-api \
+  --gpus all \
+  -p 5555:5555 \
+  -e HF_HUB_ENABLE_HF_TRANSFER=1 \
+  -e TOKENIZERS_PARALLELISM=false \
+  -v ~/.cache/huggingface:/root/.cache/huggingface \
+  --restart always \
+  title-extractor:latest
+```
+
+#### 2-3. 컨테이너 실행 (CPU만 사용)
+```bash
+docker run -d \
+  --name title-api \
+  -p 5555:5555 \
+  -e HF_HUB_ENABLE_HF_TRANSFER=1 \
+  -e TOKENIZERS_PARALLELISM=false \
+  -e CUDA_VISIBLE_DEVICES=-1 \
+  -v ~/.cache/huggingface:/root/.cache/huggingface \
+  --restart always \
+  title-extractor:latest
+```
+
+### 3. 로컬 실행 (Docker 없이)
+
+#### 3-1. 의존성 설치
+```bash
+cd dgr_version
+
+# Python 가상환경 생성 (선택사항)
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# 패키지 설치
+pip install -r requirements.txt
+
+# GPU 사용 시 (CUDA 12.1)
+pip install torch==2.4.0+cu121 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
+
+#### 3-2. API 서버 실행
+```bash
+# GPU 사용
+python get_title_api.py
+
+# CPU 사용
+ML_DEVICE=-1 python get_title_api.py
+```
+
+### 4. API 테스트
+
+```bash
+# 서버 헬스체크
+curl http://localhost:5555/
+
+# 제목 추출 테스트
+curl -X POST http://localhost:5555/get_title \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tables": [
+      {
+        "bbox": [100, 200, 500, 400],
+        "rows": [[{"texts": [{"v": "날짜"}]}]]
+      }
+    ],
+    "texts": [
+      {
+        "bbox": [150, 180, 450, 195],
+        "text": "표 A.8 월별 기온 현황"
+      }
+    ]
+  }'
+```
+
+---
+
+## Docker 설정 파일 설명
+
+### Dockerfile ([dgr_version/Dockerfile](dgr_version/Dockerfile))
+- **베이스 이미지**: `nvidia/cuda:12.1.1-runtime-ubuntu22.04` (GPU 지원)
+- **Python 버전**: Python 3 (Ubuntu 22.04 기본)
+- **PyTorch**: 2.4.0+cu121 (CUDA 12.1)
+- **포트**: 5555
+- **환경변수**:
+  - `HF_HUB_ENABLE_HF_TRANSFER=1`: Hugging Face 모델 다운로드 가속
+  - `TOKENIZERS_PARALLELISM=false`: 토크나이저 병렬화 경고 비활성화
+  - `CUDA_VISIBLE_DEVICES=0`: GPU 0번 사용
+
+### docker-compose.yml ([dgr_version/docker-compose.yml](dgr_version/docker-compose.yml))
+- **서비스명**: `api`
+- **포트 매핑**: 5555:5555
+- **재시작 정책**: `always`
+- **볼륨 마운트**: `~/.cache/huggingface` (모델 캐시 공유)
+- **GPU 설정**: 모든 GPU 사용 (`count: all`)
+
+### requirements.txt ([dgr_version/requirements.txt](dgr_version/requirements.txt))
+- `flask>=3.0.0`: REST API 서버
+- `transformers>=4.35.0`: Hugging Face Transformers
+- `torch>=2.0.0`: PyTorch
+- `sentencepiece>=0.1.99`: 토크나이저
+- `sentence-transformers>=2.2.0`: 임베딩 및 리랭커
+- `numpy>=1.24.0`: 수치 연산
+
+---
+
+## 환경 변수
+
+| 변수명 | 기본값 | 설명 |
+|--------|--------|------|
+| `ML_DEVICE` | `0` | ML 모델 디바이스 (-1: CPU, 0: GPU 0번) |
+| `HF_HUB_ENABLE_HF_TRANSFER` | `1` | Hugging Face 모델 다운로드 가속 |
+| `TOKENIZERS_PARALLELISM` | `false` | 토크나이저 병렬화 (false 권장) |
+| `CUDA_VISIBLE_DEVICES` | `0` | 사용할 GPU 번호 (-1: CPU) |
+
+---
+
+## 컨테이너 관리 명령어
+
+```bash
+# 로그 확인
+docker logs -f title-api
+
+# 컨테이너 상태 확인
+docker ps -a | grep title-api
+
+# 컨테이너 재시작
+docker restart title-api
+
+# 컨테이너 중지
+docker stop title-api
+
+# 컨테이너 삭제
+docker rm title-api
+
+# 이미지 삭제
+docker rmi title-extractor:latest
+
+# 실행 중인 컨테이너 내부 접속
+docker exec -it title-api bash
+```
+
+---
+
+## 모델 캐시 관리
+
+첫 실행 시 Hugging Face Hub에서 모델을 다운로드합니다 (약 3-5GB):
+- `BAAI/bge-m3` (~2GB)
+- `BAAI/bge-reranker-v2-m3` (~1.5GB)
+- `joeddav/xlm-roberta-large-xnli` (~1.5GB)
+
+**캐시 경로**:
+- 로컬: `~/.cache/huggingface`
+- 컨테이너: `/root/.cache/huggingface`
+- Docker 볼륨 마운트로 캐시 공유 가능
+
+**수동 다운로드** (선택사항):
+```bash
+# 컨테이너 내부에서
+python3 -c "
+from sentence_transformers import SentenceTransformer, CrossEncoder
+from transformers import pipeline
+
+SentenceTransformer('BAAI/bge-m3')
+CrossEncoder('BAAI/bge-reranker-v2-m3')
+pipeline('zero-shot-classification', model='joeddav/xlm-roberta-large-xnli')
+"
+```
+
+---
+
+## 성능 및 리소스
+
+### GPU 사용 시 (권장)
+- **GPU 메모리**: 최소 6GB (RTX 3060 이상 권장)
+- **추론 속도**: 표 1개당 약 0.5-1초
+- **배치 처리**: 후보 8개 동시 처리
+
+### CPU 사용 시
+- **RAM**: 최소 8GB (16GB 권장)
+- **추론 속도**: 표 1개당 약 3-5초
+- **FP32 정밀도**: GPU 대비 느림
+
+---
+
+## 트러블슈팅
+
+### GPU 인식 안 됨
+```bash
+# NVIDIA Docker Runtime 확인
+docker run --rm --gpus all nvidia/cuda:12.1.1-base-ubuntu22.04 nvidia-smi
+
+# CUDA 버전 확인
+nvidia-smi
+```
+
+### 포트 충돌
+```bash
+# 포트 변경 (docker-compose.yml)
+ports:
+  - "5556:5555"  # 호스트 포트를 5556으로 변경
+```
+
+### 모델 다운로드 실패
+```bash
+# Hugging Face 토큰 설정 (private 모델인 경우)
+docker run -e HUGGING_FACE_HUB_TOKEN=your_token ...
+```
+
+### 메모리 부족
+```bash
+# Docker 메모리 제한 증가 (docker-compose.yml)
+deploy:
+  resources:
+    limits:
+      memory: 16G
+```

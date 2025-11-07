@@ -508,7 +508,11 @@ def merge_text_group(text_group):
 
 # ========== 후보 수집 ==========
 def collect_candidates_for_table(table, texts, all_tables=None):
-    """표 위쪽에 있는 텍스트 후보 수집 (규칙 기반 필터링)"""
+    """표 위쪽 + 아래쪽 텍스트 후보 수집 (규칙 기반 필터링)
+
+    표 위: 모든 후보 수집
+    표 아래: 가장 가까운 후보 1개만 수집
+    """
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
         return []
@@ -516,11 +520,14 @@ def collect_candidates_for_table(table, texts, all_tables=None):
     tbx1, tby1, tbx2, tby2 = table_bbox
     h = tby2 - tby1
     y_min = max(0, tby1 - int(UP_MULTIPLIER * h))
+    y_max = tby2 + int(UP_MULTIPLIER * h)  # 표 아래쪽 범위
 
     # 그룹화된 텍스트
     grouped_texts = group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE)
 
-    candidates = []
+    candidates_above = []  # 표 위 후보
+    candidates_below = []  # 표 아래 후보
+
     for text in grouped_texts:
         if not text:
             continue
@@ -530,10 +537,6 @@ def collect_candidates_for_table(table, texts, all_tables=None):
             continue
 
         px1, py1, px2, py2 = text_bbox
-
-        # 표 위쪽에 있는지 확인
-        if not (py2 <= tby1 and py1 >= y_min):
-            continue
 
         # 수평으로 겹치거나 근접한지 확인
         if not horizontally_near((tbx1, tbx2), (px1, px2), tol=X_TOLERANCE):
@@ -545,10 +548,25 @@ def collect_candidates_for_table(table, texts, all_tables=None):
         if not text_content or is_trivial(text_content):
             continue
 
-        candidates.append({
+        cand = {
             'text': text_content,
             'bbox': text_bbox
-        })
+        }
+
+        # 표 위쪽에 있는지 확인
+        if py2 <= tby1 and py1 >= y_min:
+            candidates_above.append(cand)
+        # 표 아래쪽에 있는지 확인
+        elif py1 >= tby2 and py2 <= y_max:
+            candidates_below.append(cand)
+
+    # 표 아래 후보 중 가장 가까운 2개만 선택
+    if candidates_below:
+        candidates_below.sort(key=lambda c: c['bbox'][1] - tby2)  # 표 아래와의 거리 기준
+        candidates_below = candidates_below[:2]  # 가장 가까운 2개만
+
+    # 위 + 아래 후보 병합
+    candidates = candidates_above + candidates_below
 
     # 중복 제거
     unique = {}
