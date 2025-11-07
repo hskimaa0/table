@@ -181,15 +181,23 @@ def horizontally_near(table_x: tuple, text_x: tuple, tol: int = X_TOLERANCE) -> 
     return (text_x[1] >= table_x[0] - tol and text_x[0] <= table_x[1] + tol)
 
 def layout_score(table_bbox, text_bbox) -> float:
-    """레이아웃 점수: 표와의 세로 거리 기반 (가까울수록 1)"""
+    """레이아웃 점수: 표와의 세로 거리 기반 (가까울수록 1)
+
+    표 위: 거리 기반 점수
+    표 아래: 강한 페널티 (표 아래는 다음 섹션일 가능성 높음)
+    """
     _, ty1, _, ty2 = table_bbox
     x1, y1, x2, y2 = text_bbox
 
-    # 텍스트가 표 위에 있을 때의 거리
-    dist = max(0, ty1 - y2)
+    # 텍스트가 표 위에 있는 경우
+    if y2 <= ty1:
+        dist = max(0, ty1 - y2)
+        # 0~3000px 구간에 대해 선형 스케일링
+        return max(0.0, 1.0 - min(dist, 3000) / 3000.0)
 
-    # 0~3000px 구간에 대해 선형 스케일링
-    return max(0.0, 1.0 - min(dist, 3000) / 3000.0)
+    # 텍스트가 표 아래에 있는 경우 - 강한 페널티
+    else:
+        return -0.5  # 표 아래는 다음 섹션일 가능성이 높음
 
 def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     """코사인 유사도"""
@@ -331,22 +339,31 @@ def prior_score(cand_text: str, cand_bbox, table_bbox) -> float:
         prior -= 0.55
 
     # 근접도 기반 보정(표 바로 위일수록 ↑)
-    _, ty1, _, _ = table_bbox
-    _, _, _, cy2 = cand_bbox
-    dy = max(0, ty1 - cy2)
+    _, ty1, _, ty2 = table_bbox
+    _, cy1, _, cy2 = cand_bbox
 
-    # ★ 근접 보너스
-    if dy <= 120:
-        prior += 0.08 + (0.22 if is_subtitle_like(s) else 0.0)
-    elif dy <= 300:
-        prior += 0.04 + (0.10 if is_subtitle_like(s) else 0.0)
-    elif dy >= 800:
-        prior -= 0.10
+    # 표 위/아래 판별
+    is_below = (cy1 >= ty2)
 
-    # '대괄호 한 줄' & 표와 초근접(유닛 가능성↑) 감점
-    bracket_line = bool(re.match(r"^[\[\(＜〈].+[\]\)＞〉]$", s))
-    if bracket_line and dy <= 80:
-        prior -= 0.25
+    if is_below:
+        # ★ 표 아래에 있는 경우: 강한 페널티 (다음 섹션일 가능성 높음)
+        prior -= 0.60
+    else:
+        # 표 위에 있는 경우: 기존 근접도 로직
+        dy = max(0, ty1 - cy2)
+
+        # ★ 근접 보너스
+        if dy <= 120:
+            prior += 0.08 + (0.22 if is_subtitle_like(s) else 0.0)
+        elif dy <= 300:
+            prior += 0.04 + (0.10 if is_subtitle_like(s) else 0.0)
+        elif dy >= 800:
+            prior -= 0.10
+
+        # '대괄호 한 줄' & 표와 초근접(유닛 가능성↑) 감점
+        bracket_line = bool(re.match(r"^[\[\(＜〈].+[\]\)＞〉]$", s))
+        if bracket_line and dy <= 80:
+            prior -= 0.25
 
     # 길이 보정: 제목은 보통 5~60자
     L = len(s)
@@ -605,9 +622,10 @@ def build_table_context(table, max_cells=10):
     return " / ".join(parts) if parts else "표 정보 없음"
 
 # ========== ML 스코어링 ==========
-def make_reranker_pair(cand_text: str, table_ctx: str):
-    """리랭커 입력 쌍 생성 (명시적 역할 프롬프트)"""
-    q = f"[표제목 후보] {clamp_text_len(cand_text)}"
+def make_reranker_pair(cand_text: str, table_ctx: str, is_above_table: bool = True):
+    """리랭커 입력 쌍 생성 (명시적 역할 프롬프트 + 위치 정보)"""
+    pos_tag = "표 위쪽" if is_above_table else "표 아래쪽"
+    q = f"[{pos_tag} 텍스트] {clamp_text_len(cand_text)}"
     p = f"[표 문맥] {clamp_text_len(table_ctx)}"
     return (q, p)
 
@@ -662,7 +680,15 @@ def zeroshot_title_score_batch(candidates):
         return np.ones(len(candidates)) * 0.5  # 중립 점수
 
     try:
-        texts = [clamp_text_len(c['text']) for c in candidates]
+        # ★ 위치 컨텍스트 추가: 표 위/아래 정보를 텍스트에 명시
+        table_bbox = globals().get("_current_table_bbox")
+        texts = []
+        for c in candidates:
+            pos_tag = ""
+            if table_bbox:
+                is_above = c.get("bbox", [0, 0, 0, 0])[3] <= table_bbox[1]
+                pos_tag = "[표 위쪽] " if is_above else "[표 아래쪽] "
+            texts.append(clamp_text_len(pos_tag + c['text']))
 
         # 세분화된 다중 라벨 (긍정 + 부정)
         labels = [
@@ -773,8 +799,12 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
     globals()["_current_table_bbox"] = table_bbox
     zs_scores = zeroshot_title_score_batch(candidates) if USE_ZEROSHOT else np.ones(len(candidates)) * 0.5
 
-    # 2) 리랭커: 후보 집합 내 상대 순위
-    pairs = [make_reranker_pair(c['text'], table_ctx) for c in candidates]
+    # 2) 리랭커: 후보 집합 내 상대 순위 (위치 정보 포함)
+    _, ty1, _, _ = table_bbox
+    pairs = []
+    for c in candidates:
+        is_above = c['bbox'][3] <= ty1
+        pairs.append(make_reranker_pair(c['text'], table_ctx, is_above_table=is_above))
     logits = reranker_logits_batch(pairs) if USE_RERANKER else np.zeros(len(candidates))
     rer_prob = softmax_with_temp_from_logits(logits, tau=0.6)
 
@@ -829,8 +859,6 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         print("  테이블 bbox 없음")
         return "", None
 
-    print(f"  테이블 bbox: y={table_bbox[1]}")
-
     if used_titles is None:
         used_titles = set()
 
@@ -840,19 +868,14 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
     # 이미 사용된 제목 제외
     candidates = [c for c in candidates if c['text'] not in used_titles]
 
-    print(f"  후보 수집: {len(candidates)}개")
-
     if not candidates:
-        print("  ❌ 후보 없음")
         return "", None
 
     # Step 2: 표 문맥 구축 (풍부한 레이블링)
     table_ctx = build_table_context_rich(table)
-    print(f"  표 문맥: {table_ctx[:80]}")
 
     # Step 2.5: 후보 프리랭킹 (후보가 많을 경우)
     if len(candidates) > TOPK_CANDIDATES and embedder:
-        print(f"  후보 프리랭킹: {len(candidates)}개 → {TOPK_CANDIDATES}개")
         prelim = []
         for c in candidates:
             prelim_score = (0.8 * embedding_similarity(c['text'], table_ctx) +
@@ -861,103 +884,88 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         prelim.sort(key=lambda x: x[0], reverse=True)
         candidates = [c for _, c in prelim[:TOPK_CANDIDATES]]
 
-    # Step 2.9: 유닛 후보 삭제
-    if any(is_table_title_like(c['text']) for c in candidates):
-        candidates = [c for c in candidates if not is_unit_like(c['text'])]
-        print(f"  유닛 필터링 후: {len(candidates)}개")
+    # # Step 2.9: 유닛 후보 삭제
+    # if any(is_table_title_like(c['text']) for c in candidates):
+    #     candidates = [c for c in candidates if not is_unit_like(c['text'])]
+    #     print(f"  유닛 필터링 후: {len(candidates)}개")
 
-    # ★ 제목 패턴 통계 출력 (필터링 안 함, ML이 판단)
-    titles = [c for c in candidates if is_table_title_like(c['text'])]
-    if len(titles) >= 1:
-        print(f"  제목패턴 후보: {len(titles)}개 (ML 기반 점수 적용)")
+    # # ★ 제목 패턴 통계 출력 (필터링 안 함, ML이 판단)
+    # titles = [c for c in candidates if is_table_title_like(c['text'])]
+    # if len(titles) >= 1:
+    #     print(f"  제목패턴 후보: {len(titles)}개 (ML 기반 점수 적용)")
 
-    # ★ 하드 게이트: 명확한 노이즈만 제거 (교차참조, 긴 설명문)
-    before = len(candidates)
-    filtered_out = []
-    kept = []
-    for c in candidates:
-        txt = c['text']
-        # 교차 참조는 확실히 제목 아님
-        if is_cross_reference(txt):
-            filtered_out.append(f"{txt[:40]}... (교차참조)")
-        # 길고 명확한 설명문 (40자 이상 + 종결어미)
-        elif len(txt) >= 40 and re.search(r"(다|였다|한다|였다)\.$", txt.strip()):
-            filtered_out.append(f"{txt[:40]}... (긴 설명문)")
-        else:
-            kept.append(c)
-    candidates = kept
-    if len(candidates) != before:
-        print(f"  노이즈 제거: {before}→{len(candidates)}개")
-        for fo in filtered_out[:3]:  # 최대 3개만 출력
-            print(f"    제거: {fo}")
+    # # ★ 하드 게이트: 명확한 노이즈만 제거 (교차참조, 긴 설명문)
+    # before = len(candidates)
+    # filtered_out = []
+    # kept = []
+    # for c in candidates:
+    #     txt = c['text']
+    #     # 교차 참조는 확실히 제목 아님
+    #     if is_cross_reference(txt):
+    #         filtered_out.append(f"{txt[:40]}... (교차참조)")
+    #     # 길고 명확한 설명문 (40자 이상 + 종결어미)
+    #     elif len(txt) >= 40 and re.search(r"(다|였다|한다|였다)\.$", txt.strip()):
+    #         filtered_out.append(f"{txt[:40]}... (긴 설명문)")
+    #     else:
+    #         kept.append(c)
+    # candidates = kept
+    # if len(candidates) != before:
+    #     print(f"  노이즈 제거: {before}→{len(candidates)}개")
+    #     for fo in filtered_out[:3]:  # 최대 3개만 출력
+    #         print(f"    제거: {fo}")
 
-    # ★ 소제목 우선 모드: 창 내 소제목이 있으면 소제목만 사용
-    subtitle_priority_window = 220  # px
-    tbx1, tby1, tbx2, tby2 = table_bbox
+    # # ★ 소제목 우선 모드: 창 내 소제목이 있으면 소제목만 사용 (표 위만, 표 제목 패턴 제외)
+    # subtitle_priority_window = 220  # px
+    # tbx1, tby1, tbx2, tby2 = table_bbox
 
-    def dy_to_table_top(bb):
-        return max(0, tby1 - bb[3])
+    # def dy_to_table_top(bb):
+    #     return max(0, tby1 - bb[3])
 
-    subs_in_win = [c for c in candidates if is_subtitle_like(c['text']) and dy_to_table_top(c['bbox']) <= subtitle_priority_window]
-    if subs_in_win:
-        # 섹션/기타 제거하고 소제목만 남김
-        before = len(candidates)
-        candidates = subs_in_win
-        print(f"  소제목 우선 모드: {before}→{len(candidates)}개 (≤{subtitle_priority_window}px)")
+    # def is_above_table(bb):
+    #     return bb[3] <= tby1  # 텍스트 하단이 표 상단보다 위에 있음
 
-        # 최근접 소제목을 맨 앞으로(동률 시 tie-break에 유리)
-        candidates.sort(key=lambda c: dy_to_table_top(c['bbox']))
-    # 섹션 헤더 필터링 제거: ML이 판단하도록 함
+    # # 표 위쪽 소제목만 우선 모드 적용 (단, 표 제목 패턴이 있으면 소제목 모드 비활성)
+    # has_table_title_above = any(is_table_title_like(c['text']) and is_above_table(c['bbox']) for c in candidates)
+
+    # if not has_table_title_above:
+    #     # 표 제목이 없을 때만 소제목 우선 모드 활성화
+    #     subs_in_win = [c for c in candidates if is_subtitle_like(c['text']) and is_above_table(c['bbox']) and dy_to_table_top(c['bbox']) <= subtitle_priority_window]
+    #     if subs_in_win:
+    #         # 표 위쪽 후보만 소제목으로 필터링, 표 아래 후보는 유지
+    #         above_candidates = [c for c in candidates if is_above_table(c['bbox'])]
+    #         below_candidates = [c for c in candidates if not is_above_table(c['bbox'])]
+
+    #         before = len(candidates)
+    #         candidates = subs_in_win + below_candidates  # 표 위 소제목 + 표 아래 후보
+    #         print(f"  소제목 우선 모드 (표 위만): {before}→{len(candidates)}개 (≤{subtitle_priority_window}px)")
+
+    #         # 최근접 소제목을 맨 앞으로(동률 시 tie-break에 유리)
+    #         candidates.sort(key=lambda c: (0 if is_above_table(c['bbox']) else 1, dy_to_table_top(c['bbox']) if is_above_table(c['bbox']) else c['bbox'][1] - tby2))
+    # # 섹션 헤더 필터링 제거: ML이 판단하도록 함
 
     if not candidates:
-        print("  ❌ 필터링 후 후보 없음")
         return "", None
 
-    # Step 3: 배치 리랭커(로짓) → 소프트맥스 확률 → prior/보조 결합
-    print("\n  후보 점수:")
+    # Step 3: ML 스코어링
     scored = score_candidates_with_logits(candidates, table_ctx, table_bbox)
+
+    # 디버깅: 후보 점수 출력
+    print("\n  [ML 스코어링 결과]")
     for x in scored:
-        t = x["text"][:50] if len(x["text"]) > 50 else x["text"]
+        t = x["text"][:60] if len(x["text"]) > 60 else x["text"]
         d = x["details"]
         print(f"    '{t}'")
-        print(f"      zs: {d['zeroshot']:.3f}, logit: {d['rer_logits']:.3f}, prob*: {d['rer_prob_norm']:.3f}, "
-              f"prior: {d['prior']:.3f}, emb: {d['emb']:.3f}, lay: {d['lay']:.3f}, "
-              f"bonus: {d['bonus']:+.2f}, Final: {x['score']:.3f}")
+        print(f"      Zero-shot: {d['zeroshot']:.3f} | Reranker: {d['rer_prob_norm']:.3f} | Embedding: {d['emb']:.3f} | Final: {x['score']:.3f}")
 
     # 최고 점수 선택
     scored.sort(key=lambda x: x['score'], reverse=True)
     best = scored[0]
 
-    # ★ 타이브레이커: 제목패턴 > 소제목 > 기타, 그리고 더 가까운 쪽
-    if len(scored) >= 2:
-        second = scored[1]
-        gap = best['score'] - second['score']
-        if gap <= 0.03:
-            def rank(c):
-                t = c['text']
-                if is_table_title_like(t): return 0
-                if is_subtitle_like(t):    return 1
-                return 2
-            def dy(bb): return max(0, table_bbox[1] - bb[3])
-            bR, sR = rank(best), rank(second)
-            if (sR < bR) or (sR == bR and dy(second['bbox']) < dy(best['bbox'])):
-                print("  타이브레이커 적용: 제목/소제목 및 근접도 우선")
-                best = second
-
-    # 제목 패턴 검증: 모든 후보가 일반 문장이면 제목 없음으로 처리
-    has_title_pattern = any(is_table_title_like(s['text']) for s in scored)
-    if not has_title_pattern:
-        # Prior 점수가 낮으면(유닛/주석/일반문장) 제목 없음
-        if best['details']['prior'] < 0.4:
-            print(f"  ⚠️  제목 패턴 없음 (최고 prior: {best['details']['prior']:.3f})")
-            return "", None
-
     # 임계값 체크
     if best['score'] < SCORE_THRESHOLD:
-        print(f"  ⚠️  최고 점수({best['score']:.3f})가 임계값({SCORE_THRESHOLD}) 미만")
         return "", None
 
-    print(f"\n  ✅ 선택: '{best['text']}' (점수: {best['score']:.3f})")
+    print(f"  ✅ 선택: '{best['text'][:60]}' (Final: {best['score']:.3f})\n")
     return best['text'], best['bbox']
 
 @app.route('/get_title', methods=['POST'])
@@ -978,7 +986,6 @@ def get_title():
         for idx, table in enumerate(tables):
             table_with_title = copy.deepcopy(table)
             title, title_bbox = find_title_for_table(table, texts, all_tables=tables, used_titles=used_titles)
-            print(f"테이블 {idx} 타이틀: '{title}'")
             table_with_title['title'] = title
             table_with_title['title_bbox'] = title_bbox
 
@@ -987,7 +994,6 @@ def get_title():
 
             result_tables.append(table_with_title)
 
-        print(f"\n최종 반환: {len(result_tables)}개 테이블")
         return jsonify(result_tables)
 
     elif isinstance(data, list):
