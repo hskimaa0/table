@@ -1,4 +1,3 @@
-flask
 docling
 pandas
 numpy
@@ -8,6 +7,5 @@ Pillow
 transformers
 torch
 sentence-transformers
-sentencepiece
 konlpy
 jpype1
