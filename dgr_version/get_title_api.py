@@ -670,14 +670,14 @@ def embedding_similarity(text_a: str, text_b: str) -> float:
         return 0.0
 
 def zeroshot_title_score_batch(candidates):
-    """Zero-shot 분류: 각 후보가 '표 제목'일 확률 반환
+    """Zero-shot 분류: 각 후보가 '표 제목'/'설명'일 확률 반환
 
     Returns:
-        numpy array of scores (0~1), 높을수록 제목일 확률 높음
+        tuple: (title_scores, desc_scores) - 각각 numpy array of scores (0~1)
     """
     import numpy as np
     if not zeroshot_classifier or not USE_ZEROSHOT or not candidates:
-        return np.ones(len(candidates)) * 0.5  # 중립 점수
+        return np.ones(len(candidates)) * 0.5, np.zeros(len(candidates))  # 중립 점수
 
     try:
         # ★ 위치 컨텍스트 추가: 표 위/아래 정보를 텍스트에 명시
@@ -690,9 +690,10 @@ def zeroshot_title_score_batch(candidates):
                 pos_tag = "[표 위쪽] " if is_above else "[표 아래쪽] "
             texts.append(clamp_text_len(pos_tag + c['text']))
 
-        # ★ 단순화된 라벨
+        # ★ 라벨 (제목, 설명, 기타)
         labels = [
             "표 제목",
+            "표 설명",
             "본문 텍스트",
             "페이지 번호",
             "단위 표기",
@@ -703,16 +704,8 @@ def zeroshot_title_score_batch(candidates):
             "이것은 {}이다.",
         ]
 
-        # ★ 라벨별 가중치
-        base_weights = {
-            "표 제목": 1.0,
-            "본문 텍스트": -0.8,
-            "페이지 번호": -0.95,
-            "단위 표기": -0.9,
-        }
-
-        def score_once(tmpl: str) -> np.ndarray:
-            """특정 템플릿으로 multi-label 분류 후 가중합 계산"""
+        def score_once(tmpl: str) -> tuple:
+            """특정 템플릿으로 multi-label 분류 후 제목/설명 점수 반환"""
             try:
                 res = zeroshot_classifier(
                     texts, labels,
@@ -722,27 +715,34 @@ def zeroshot_title_score_batch(candidates):
                 )
             except Exception as e:
                 print(f"  Zero-shot 템플릿 '{tmpl[:20]}...' 예외: {e}")
-                return np.ones(len(candidates)) * 0.5
+                return np.ones(len(candidates)) * 0.5, np.zeros(len(candidates))
 
-            sc = np.zeros(len(candidates), dtype=float)
+            title_sc = np.zeros(len(candidates), dtype=float)
+            desc_sc = np.zeros(len(candidates), dtype=float)
+
             for i, r in enumerate(res):
                 probs = {lab: float(p) for lab, p in zip(r["labels"], r["scores"])}
 
-                # ★ 단순화: "표 제목" 확률만 사용
-                sc[i] = probs.get("표 제목", 0.0)
+                # ★ 제목/설명 확률 분리
+                title_sc[i] = probs.get("표 제목", 0.0)
+                desc_sc[i] = probs.get("표 설명", 0.0)
 
                 # 디버그: 첫 3개만 출력
                 if i < 3:
-                    print(f"    [Zero-shot Debug] '{texts[i][:30]}...' -> {probs}")
-            return sc
+                    print(f"    [Zero-shot Debug] '{texts[i][:30]}...' -> 제목:{probs.get('표 제목', 0):.3f}, 설명:{probs.get('표 설명', 0):.3f}")
 
-        # 3개 템플릿 평균
-        scores = np.mean([score_once(t) for t in templates], axis=0)
-        return scores
+            return title_sc, desc_sc
+
+        # 템플릿 평균
+        results = [score_once(t) for t in templates]
+        title_scores = np.mean([r[0] for r in results], axis=0)
+        desc_scores = np.mean([r[1] for r in results], axis=0)
+
+        return title_scores, desc_scores
 
     except Exception as e:
         print(f"  Zero-shot 오류: {e}")
-        return np.ones(len(candidates)) * 0.5
+        return np.ones(len(candidates)) * 0.5, np.zeros(len(candidates))
 
 def build_table_context_rich(table, max_cells=10):
     """표 문맥 구축 (헤더 레이블 명시)"""
@@ -772,10 +772,14 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
     """하이브리드 스코어링: Zero-shot + 리랭커 + prior + 보조항"""
     import numpy as np
 
-    # 1) Zero-shot 분류: 각 후보가 '표 제목'일 절대 확률
+    # 1) Zero-shot 분류: 각 후보가 '표 제목'/'설명'일 절대 확률
     # table_bbox를 전역으로 전달 (근접도 판단용)
     globals()["_current_table_bbox"] = table_bbox
-    zs_scores = zeroshot_title_score_batch(candidates) if USE_ZEROSHOT else np.ones(len(candidates)) * 0.5
+    if USE_ZEROSHOT:
+        zs_title_scores, zs_desc_scores = zeroshot_title_score_batch(candidates)
+    else:
+        zs_title_scores = np.ones(len(candidates)) * 0.5
+        zs_desc_scores = np.zeros(len(candidates))
 
     # 2) 리랭커: 후보 집합 내 상대 순위 (위치 정보 포함)
     _, ty1, _, _ = table_bbox
@@ -798,7 +802,9 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
         lay = layout_score(table_bbox, bb)
 
         # Zero-shot 점수 + 하한 보정
-        zs = float(zs_scores[i])
+        zs = float(zs_title_scores[i])
+        desc_score = float(zs_desc_scores[i])
+
         # 표 번호/패턴 매칭 시 ZS 하한 보정 (패턴이 명확하면 최소 0.80 보장)
         if is_table_title_like(txt):
             zs = max(zs, 0.80)
@@ -820,8 +826,10 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
 
         scored.append({
             "text": txt, "bbox": bb, "score": final,
+            "desc_score": desc_score,  # ★ 설명 점수 추가
             "details": {
                 "zeroshot": zs,
+                "zeroshot_desc": desc_score,  # ★ 설명 점수 추가
                 "rer_logits": float(logits[i]),
                 "rer_prob_norm": float(rer_prob[i]),
                 "prior": p, "emb": emb, "lay": lay, "bonus": bonus
@@ -831,11 +839,17 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
 
 # ========== 메인 로직 ==========
 def find_title_for_table(table, texts, all_tables=None, used_titles=None):
-    """하이브리드 방식으로 표 제목 찾기"""
+    """하이브리드 방식으로 표 제목 및 설명 찾기
+
+    Returns:
+        tuple: (title, title_bbox, descriptions, desc_bboxes)
+            - descriptions: 설명 텍스트 리스트
+            - desc_bboxes: 설명 bbox 리스트
+    """
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
         print("  테이블 bbox 없음")
-        return "", None
+        return "", None, [], []
 
     if used_titles is None:
         used_titles = set()
@@ -847,7 +861,7 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
     candidates = [c for c in candidates if c['text'] not in used_titles]
 
     if not candidates:
-        return "", None
+        return "", None, [], []
 
     # Step 2: 표 문맥 구축 (풍부한 레이블링)
     table_ctx = build_table_context_rich(table)
@@ -922,7 +936,7 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
     # # 섹션 헤더 필터링 제거: ML이 판단하도록 함
 
     if not candidates:
-        return "", None
+        return "", None, [], []
 
     # Step 3: ML 스코어링
     scored = score_candidates_with_logits(candidates, table_ctx, table_bbox)
@@ -933,22 +947,38 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         t = x["text"][:60] if len(x["text"]) > 60 else x["text"]
         d = x["details"]
         print(f"    '{t}'")
-        print(f"      Zero-shot: {d['zeroshot']:.3f} | Reranker: {d['rer_prob_norm']:.3f} | Embedding: {d['emb']:.3f} | Final: {x['score']:.3f}")
+        print(f"      Zero-shot 제목: {d['zeroshot']:.3f} | 설명: {d['zeroshot_desc']:.3f} | Reranker: {d['rer_prob_norm']:.3f} | Final: {x['score']:.3f}")
 
-    # 최고 점수 선택
+    # 제목 선택 (최고 점수)
     scored.sort(key=lambda x: x['score'], reverse=True)
     best = scored[0]
 
     # 임계값 체크
     if best['score'] < SCORE_THRESHOLD:
-        return "", None
+        return "", None, [], []
 
-    print(f"  ✅ 선택: '{best['text'][:60]}' (Final: {best['score']:.3f})\n")
-    return best['text'], best['bbox']
+    # 설명 선택 (제목 제외, 설명 점수가 높은 모든 후보)
+    desc_candidates = [x for x in scored if x['text'] != best['text']]
+    descriptions = []
+    desc_bboxes = []
+
+    if desc_candidates:
+        # 설명 점수 기준으로 정렬
+        desc_candidates.sort(key=lambda x: x['desc_score'], reverse=True)
+
+        # 설명 점수가 0.3 이상인 모든 후보를 설명으로 선택
+        for desc_cand in desc_candidates:
+            if desc_cand['desc_score'] >= 0.3:
+                descriptions.append(desc_cand['text'])
+                desc_bboxes.append(desc_cand['bbox'])
+                print(f"  ✅ 설명: '{desc_cand['text'][:60]}' (설명 점수: {desc_cand['desc_score']:.3f})")
+
+    print(f"  ✅ 제목: '{best['text'][:60]}' (Final: {best['score']:.3f})\n")
+    return best['text'], best['bbox'], descriptions, desc_bboxes
 
 @app.route('/get_title', methods=['POST'])
 def get_title():
-    """받은 데이터(tables, texts)에 각 테이블마다 title 프로퍼티를 추가해서 되돌려주는 API"""
+    """받은 데이터(tables, texts)에 각 테이블마다 title, descriptions 프로퍼티를 추가해서 되돌려주는 API"""
     data = request.get_json()
 
     if isinstance(data, dict):
@@ -963,9 +993,13 @@ def get_title():
 
         for idx, table in enumerate(tables):
             table_with_title = copy.deepcopy(table)
-            title, title_bbox = find_title_for_table(table, texts, all_tables=tables, used_titles=used_titles)
+            title, title_bbox, descriptions, desc_bboxes = find_title_for_table(
+                table, texts, all_tables=tables, used_titles=used_titles
+            )
             table_with_title['title'] = title
             table_with_title['title_bbox'] = title_bbox
+            table_with_title['descriptions'] = descriptions  # ★ 설명 리스트
+            table_with_title['description_bboxes'] = desc_bboxes  # ★ 설명 bbox 리스트
 
             if title:
                 used_titles.add(title)
@@ -979,6 +1013,7 @@ def get_title():
         for idx, table in enumerate(data):
             table_with_title = copy.deepcopy(table)
             table_with_title['title'] = f'테이블 {idx + 1}의 타이틀'
+            table_with_title['descriptions'] = []  # ★ 설명 리스트
             result.append(table_with_title)
         return jsonify(result)
 
