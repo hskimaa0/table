@@ -608,57 +608,18 @@ def merge_text_group(text_group):
 def collect_candidates_for_table(table, texts, all_tables=None):
     """표 위쪽 + 아래쪽 텍스트 후보 수집 (규칙 기반 필터링)
 
-    표 위: 모든 후보 수집 (단, 다른 표가 중간에 있으면 그 너머는 제외)
-    표 아래: 가장 가까운 후보 2개만 수집 (단, 다른 표가 중간에 있으면 그 너머는 제외)
+    모든 위치 제한 제거: 표 위/아래 거리 제한 없음, 개수 제한 없음, 다른 표 차단 없음
     """
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
         return []
 
     tbx1, tby1, tbx2, tby2 = table_bbox
-    h = tby2 - tby1
-    y_min = max(0, tby1 - int(UP_MULTIPLIER * h))
-    y_max = tby2 + int(UP_MULTIPLIER * h)  # 표 아래쪽 범위
-
-    # 다른 표들의 경계 찾기 (현재 표 제외)
-    other_tables_above = []  # 현재 표 위에 있는 다른 표들
-    other_tables_below = []  # 현재 표 아래에 있는 다른 표들
-
-    if all_tables:
-        for other_table in all_tables:
-            other_bbox = get_bbox_from_table(other_table)
-            if not other_bbox or other_bbox == table_bbox:
-                continue
-
-            ox1, oy1, ox2, oy2 = other_bbox
-
-            # 수평으로 겹치는지 확인
-            if not horizontally_near((tbx1, tbx2), (ox1, ox2), tol=X_TOLERANCE):
-                continue
-
-            # 현재 표 위에 있는 표
-            if oy2 <= tby1:
-                other_tables_above.append(oy2)  # 다른 표의 하단 y 좌표
-
-            # 현재 표 아래에 있는 표
-            elif oy1 >= tby2:
-                other_tables_below.append(oy1)  # 다른 표의 상단 y 좌표
-
-    # 표 위쪽: 가장 가까운 다른 표의 하단까지만 탐색
-    upper_limit = y_min
-    if other_tables_above:
-        upper_limit = max(max(other_tables_above), y_min)  # 가장 가까운 표의 하단
-
-    # 표 아래쪽: 가장 가까운 다른 표의 상단까지만 탐색
-    lower_limit = y_max
-    if other_tables_below:
-        lower_limit = min(min(other_tables_below), y_max)  # 가장 가까운 표의 상단
 
     # 그룹화된 텍스트
     grouped_texts = group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE)
 
-    candidates_above = []  # 표 위 후보
-    candidates_below = []  # 표 아래 후보
+    candidates = []  # 모든 후보
 
     for text in grouped_texts:
         if not text:
@@ -680,25 +641,13 @@ def collect_candidates_for_table(table, texts, all_tables=None):
         if not text_content or is_trivial(text_content):
             continue
 
-        cand = {
-            'text': text_content,
-            'bbox': text_bbox
-        }
-
-        # 표 위쪽에 있는지 확인 (다른 표 너머는 제외)
-        if py2 <= tby1 and py1 >= upper_limit:
-            candidates_above.append(cand)
-        # 표 아래쪽에 있는지 확인 (다른 표 너머는 제외)
-        elif py1 >= tby2 and py2 <= lower_limit:
-            candidates_below.append(cand)
-
-    # 표 아래 후보 중 가장 가까운 2개만 선택
-    if candidates_below:
-        candidates_below.sort(key=lambda c: c['bbox'][1] - tby2)  # 표 아래와의 거리 기준
-        candidates_below = candidates_below[:2]  # 가장 가까운 2개만
-
-    # 위 + 아래 후보 병합
-    candidates = candidates_above + candidates_below
+        # 표와 겹치지 않는 텍스트만 수집
+        if py2 <= tby1 or py1 >= tby2:
+            cand = {
+                'text': text_content,
+                'bbox': text_bbox
+            }
+            candidates.append(cand)
 
     # 중복 제거
     unique = {}
