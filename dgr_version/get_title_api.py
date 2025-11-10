@@ -27,6 +27,8 @@ DESC_SCORE_THRESHOLD = 0.3   # 설명 판정 최소 점수
 
 # ML 모델 로드
 zeroshot_classifier = None
+embedding_model = None
+mecab = None  # 형태소 분석기
 
 # 디바이스 설정
 import torch
@@ -78,6 +80,81 @@ except ImportError as e:
 except Exception as e:
     print(f"⚠️  Zero-shot 로드 실패: {e}")
     zeroshot_classifier = None
+
+# Sentence Transformer 임베딩 모델 로드
+try:
+    from sentence_transformers import SentenceTransformer
+    embedding_model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2', device=DEVICE_STR)
+    print(f"✅ Embedding 모델 로드 완료 (paraphrase-multilingual-MiniLM-L12-v2, device={DEVICE_STR})")
+except ImportError as e:
+    print(f"⚠️  라이브러리 없음: {e}")
+    print("   → pip install sentence-transformers 실행 필요")
+    embedding_model = None
+except Exception as e:
+    print(f"⚠️  Embedding 모델 로드 실패: {e}")
+    embedding_model = None
+
+# 형태소 분석기 로드 (MeCab-ko)
+try:
+    # 방법 1: python-mecab-ko (Windows 전용, 사전 포함)
+    import mecab as mecab_module
+    mecab_tagger = mecab_module.MeCab()
+
+    class MecabWrapper:
+        """MeCab wrapper to match konlpy interface"""
+        def __init__(self, tagger):
+            self.tagger = tagger
+
+        def pos(self, text):
+            """형태소 분석 [(단어, 품사), ...]"""
+            try:
+                result = self.tagger.pos(text)
+                return result
+            except Exception as e:
+                print(f"  형태소 분석 예외: {e}")
+                return []
+
+    mecab = MecabWrapper(mecab_tagger)
+    # 테스트
+    test_result = mecab.pos("테스트")
+    print(f"✅ 형태소 분석기 로드 완료 (python-mecab-ko) - 테스트: {len(test_result)}개 형태소")
+except Exception as e:
+    try:
+        # 방법 2: konlpy.tag.Mecab (Linux/Mac 또는 mecab 직접 설치한 경우)
+        from konlpy.tag import Mecab
+        mecab = Mecab()
+        print(f"✅ 형태소 분석기 로드 완료 (konlpy.Mecab)")
+    except:
+        try:
+            # 방법 3: mecab-python (pip install mecab-python)
+            import MeCab
+            mecab_tagger = MeCab.Tagger()
+
+            class MecabWrapper2:
+                """MeCab wrapper to match konlpy interface"""
+                def __init__(self, tagger):
+                    self.tagger = tagger
+
+                def pos(self, text):
+                    """형태소 분석 [(단어, 품사), ...]"""
+                    result = []
+                    node = self.tagger.parseToNode(text)
+                    while node:
+                        if node.surface:  # 빈 노드 제외
+                            word = node.surface
+                            features = node.feature.split(',')
+                            pos_tag = features[0] if features else 'UNKNOWN'
+                            result.append((word, pos_tag))
+                        node = node.next
+                    return result
+
+            mecab = MecabWrapper2(mecab_tagger)
+            print(f"✅ 형태소 분석기 로드 완료 (mecab-python)")
+        except Exception as e:
+            print(f"⚠️  형태소 분석기 로드 실패: {e}")
+            print(f"   Windows: pip install python-mecab-ko")
+            print(f"   Linux/Mac: pip install konlpy && apt-get install mecab-ko mecab-ko-dic")
+            mecab = None
 
 # ========== 유틸리티 함수 ==========
 def clean_text(s: str) -> str:
@@ -154,12 +231,47 @@ def is_section_header_like(s: str) -> bool:
     """상위 섹션 헤더(문서 구조용):
     - 1. 1.1 1.1.1 형태
     - 제3장, 제2절 등
+    - ㅇ, ※ 등으로 시작
     """
     t = s.strip()
-    if re.match(r"^\d+(\.\d+){0,3}\s+\S+", t):
+    # 1. 1.1 1.1.1 형태
+    if re.match(r"^\d+(\.\d+){0,3}[\.\s]+\S+", t):
         return True
+    # 제3장, 제2절 등
     if re.match(r"^제\s*\d+\s*(장|절|항)\b", t):
         return True
+    # ㅇ, ※, - 등으로 시작하는 항목
+    if re.match(r"^[ㅇ※\-•]\s+", t):
+        return True
+    return False
+
+def is_datetime_like(s: str) -> bool:
+    """날짜/시간 패턴 판별 (제목으로 부적절)
+
+    주의: 날짜/시간이 '주요 내용'인 텍스트만 필터링 (언급만 하는 경우는 허용)
+    """
+    t = s.strip()
+
+    # 텍스트가 짧고 주로 날짜/시간으로 구성된 경우만 필터
+    # 예: "(산업기사) 2025.11.15.(토) [오후] 14:00 ~"
+
+    # 날짜 + 시간이 함께 있고 텍스트가 짧은 경우
+    has_date = re.search(r"\d{4}\.\d{1,2}\.\d{1,2}", t)
+    has_time = re.search(r"\d{1,2}:\d{2}", t)
+    has_ampm = re.search(r"\[(오전|오후|AM|PM)\]", t)
+    has_day = re.search(r"\(월|화|수|목|금|토|일\)", t)
+
+    datetime_count = sum([has_date is not None, has_time is not None,
+                          has_ampm is not None, has_day is not None])
+
+    # 날짜/시간 요소가 2개 이상이고, 전체 길이가 짧으면 날짜/시간 텍스트로 판단
+    if datetime_count >= 2 and len(t) < 80:
+        return True
+
+    # 시간 형식으로 시작하거나 끝나는 경우
+    if re.match(r"^\d{1,2}:\d{2}", t) or re.search(r"\d{1,2}:\d{2}\s*[~\-]?\s*$", t):
+        return True
+
     return False
 
 def is_unit_like(s: str) -> bool:
@@ -234,6 +346,117 @@ def is_sentence_like(s: str) -> bool:
         return True
 
     return False
+
+def is_noun_phrase(s: str) -> bool:
+    """명사형 종결인지 판별 (표 제목은 명사형으로 끝나야 함)
+
+    Returns:
+        True: 명사형으로 끝남 (표 제목 가능)
+        False: 동사/형용사 어미로 끝남 (표 제목 불가)
+    """
+    t = s.strip()
+
+    # 빈 문자열
+    if not t:
+        return False
+
+    # 형태소 분석기 사용 가능하면 우선 사용
+    if mecab:
+        try:
+            # 마침표 제거
+            text_to_analyze = t.rstrip(".").rstrip("~").strip()
+
+            # 형태소 분석
+            pos_tags = mecab.pos(text_to_analyze)
+
+            if not pos_tags:
+                # 분석 실패시 regex로 fallback
+                pass
+            else:
+                # 마지막 형태소의 품사 확인
+                last_word, last_pos = pos_tags[-1]
+
+                # 명사형 품사: NNG(일반명사), NNP(고유명사), NNB(의존명사),
+                #             XSN(명사파생접미사), SN(숫자), SL(외국어), SH(한자)
+                noun_tags = ['NNG', 'NNP', 'NNB', 'XSN', 'SN', 'SL', 'SH']
+
+                # 동사/형용사 관련 품사: VV(동사), VA(형용사), VX(보조용언),
+                #                      EC(연결어미), EF(종결어미), EP(선어말어미)
+                verb_tags = ['VV', 'VA', 'VX', 'EC', 'EF', 'EP']
+
+                # 조사/부사 (제목으로 부적절): JKB(부사격조사), JX(보조사), JC(접속조사)
+                bad_tags = ['JKB', 'JX', 'JC']
+
+                # 기호/구두점은 무시하고 그 앞 형태소 확인
+                if last_pos in ['SF', 'SP', 'SS', 'SE', 'SO', 'SW']:
+                    if len(pos_tags) >= 2:
+                        last_word, last_pos = pos_tags[-2]
+                    else:
+                        return True  # 기호만 있으면 허용
+
+                # 마지막이 명사형이면 OK
+                if last_pos in noun_tags:
+                    return True
+
+                # 마지막이 동사/형용사/어미이면 제목 불가
+                if last_pos in verb_tags or last_pos in bad_tags:
+                    return False
+
+                # 불확실한 경우 fallback to regex
+
+        except Exception as e:
+            # fallback to regex
+            pass
+
+    # Regex 기반 fallback (형태소 분석기 없거나 실패시)
+    verb_endings = [
+        # 현재형
+        r"한다$", r"된다$", r"있다$", r"없다$", r"같다$",
+        r"받는다$", r"준다$", r"진다$", r"난다$", r"란다$",
+        r"싶다$", r"좋다$", r"크다$", r"작다$", r"높다$", r"낮다$",
+
+        # 과거형
+        r"였다$", r"했다$", r"이다$", r"았다$", r"었다$",
+        r"하였다$", r"되었다$", r"나타났다$", r"보였다$",
+        r"받았다$", r"주었다$", r"졌다$", r"났다$",
+
+        # 현재진행/상태
+        r"하고있다$", r"되고있다$", r"하고$", r"하며$", r"되며$",
+        r"이며$", r"면서$", r"지만$", r"으나$", r"지$",
+
+        # 요청/명령형
+        r"바란다$", r"바랍니다$", r"바라며$", r"요청한다$",
+        r"주시기바란다$", r"주시기바랍니다$", r"참고하여주시기바랍니다$",
+        r"하여주시기바랍니다$", r"해주시기바랍니다$",
+        r"주십시오$", r"하십시오$", r"하시오$",
+
+        # 보조용언
+        r"나타난다$", r"보인다$", r"시킨다$", r"시켰다$",
+        r"드린다$", r"드렸다$", r"올린다$", r"올렸다$",
+
+        # 부사형/조사 결합
+        r"대로$", r"따라$", r"따르면$", r"의하면$", r"통하여$",
+        r"위하여$", r"통해$", r"위해$", r"같이$", r"처럼$",
+
+        # 마침표 포함
+        r"한다\.$", r"된다\.$", r"있다\.$", r"없다\.$",
+        r"였다\.$", r"했다\.$", r"이다\.$", r"바랍니다\.$"
+    ]
+
+    for pattern in verb_endings:
+        if re.search(pattern, t):
+            return False
+
+    # 마침표로 끝나는 문장 (단, "표 X.X ..." 패턴은 제외)
+    if t.endswith(".") and not is_table_title_like(t):
+        # 마침표 제거 후 다시 체크
+        t_no_period = t.rstrip(".")
+        for pattern in verb_endings:
+            if re.search(pattern, t_no_period):
+                return False
+
+    # 명사형으로 간주
+    return True
 
 
 # ========== bbox 추출 ==========
@@ -385,8 +608,8 @@ def merge_text_group(text_group):
 def collect_candidates_for_table(table, texts, all_tables=None):
     """표 위쪽 + 아래쪽 텍스트 후보 수집 (규칙 기반 필터링)
 
-    표 위: 모든 후보 수집
-    표 아래: 가장 가까운 후보 1개만 수집
+    표 위: 모든 후보 수집 (단, 다른 표가 중간에 있으면 그 너머는 제외)
+    표 아래: 가장 가까운 후보 2개만 수집 (단, 다른 표가 중간에 있으면 그 너머는 제외)
     """
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
@@ -396,6 +619,40 @@ def collect_candidates_for_table(table, texts, all_tables=None):
     h = tby2 - tby1
     y_min = max(0, tby1 - int(UP_MULTIPLIER * h))
     y_max = tby2 + int(UP_MULTIPLIER * h)  # 표 아래쪽 범위
+
+    # 다른 표들의 경계 찾기 (현재 표 제외)
+    other_tables_above = []  # 현재 표 위에 있는 다른 표들
+    other_tables_below = []  # 현재 표 아래에 있는 다른 표들
+
+    if all_tables:
+        for other_table in all_tables:
+            other_bbox = get_bbox_from_table(other_table)
+            if not other_bbox or other_bbox == table_bbox:
+                continue
+
+            ox1, oy1, ox2, oy2 = other_bbox
+
+            # 수평으로 겹치는지 확인
+            if not horizontally_near((tbx1, tbx2), (ox1, ox2), tol=X_TOLERANCE):
+                continue
+
+            # 현재 표 위에 있는 표
+            if oy2 <= tby1:
+                other_tables_above.append(oy2)  # 다른 표의 하단 y 좌표
+
+            # 현재 표 아래에 있는 표
+            elif oy1 >= tby2:
+                other_tables_below.append(oy1)  # 다른 표의 상단 y 좌표
+
+    # 표 위쪽: 가장 가까운 다른 표의 하단까지만 탐색
+    upper_limit = y_min
+    if other_tables_above:
+        upper_limit = max(max(other_tables_above), y_min)  # 가장 가까운 표의 하단
+
+    # 표 아래쪽: 가장 가까운 다른 표의 상단까지만 탐색
+    lower_limit = y_max
+    if other_tables_below:
+        lower_limit = min(min(other_tables_below), y_max)  # 가장 가까운 표의 상단
 
     # 그룹화된 텍스트
     grouped_texts = group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE)
@@ -428,11 +685,11 @@ def collect_candidates_for_table(table, texts, all_tables=None):
             'bbox': text_bbox
         }
 
-        # 표 위쪽에 있는지 확인
-        if py2 <= tby1 and py1 >= y_min:
+        # 표 위쪽에 있는지 확인 (다른 표 너머는 제외)
+        if py2 <= tby1 and py1 >= upper_limit:
             candidates_above.append(cand)
-        # 표 아래쪽에 있는지 확인
-        elif py1 >= tby2 and py2 <= y_max:
+        # 표 아래쪽에 있는지 확인 (다른 표 너머는 제외)
+        elif py1 >= tby2 and py2 <= lower_limit:
             candidates_below.append(cand)
 
     # 표 아래 후보 중 가장 가까운 2개만 선택
@@ -527,12 +784,60 @@ def zeroshot_title_score_batch(candidates, table_bbox):
         print(f"  Zero-shot 오류: {e}")
         return np.ones(len(candidates)) * 0.5, np.zeros(len(candidates))
 
-def score_candidates_zeroshot(candidates, table_bbox):
-    """Zero-shot 분류 기반 스코어링"""
+def extract_table_text(table):
+    """표 안의 모든 row 텍스트를 추출하여 하나의 문자열로 반환"""
+    all_texts = []
+
+    if 'rows' not in table:
+        return ""
+
+    for row in table['rows']:
+        if not isinstance(row, list):
+            continue
+        for cell in row:
+            if 'texts' in cell and isinstance(cell['texts'], list):
+                for text_obj in cell['texts']:
+                    if 'v' in text_obj:
+                        all_texts.append(text_obj['v'])
+
+    return ' '.join(all_texts)
+
+def compute_embedding_similarity(table_text, candidate_text, model):
+    """임베딩 코사인 유사도 계산
+
+    Returns:
+        float: 유사도 (0~1)
+    """
+    if not model or not table_text or not candidate_text:
+        return 0.5  # 중립 점수
+
+    try:
+        # 임베딩 생성
+        embeddings = model.encode([table_text, candidate_text])
+        table_emb = embeddings[0]
+        cand_emb = embeddings[1]
+
+        # 코사인 유사도
+        similarity = np.dot(table_emb, cand_emb) / (
+            np.linalg.norm(table_emb) * np.linalg.norm(cand_emb)
+        )
+
+        return float(similarity)
+    except Exception as e:
+        print(f"  임베딩 유사도 계산 오류: {e}")
+        return 0.5
+
+def score_candidates_zeroshot(candidates, table_bbox, table=None):
+    """Zero-shot 분류 + 임베딩 유사도 + 패턴 기반 스코어링"""
     import numpy as np
 
     # Zero-shot 분류: 각 후보가 '표 제목'/'설명'일 확률
     title_scores, desc_scores = zeroshot_title_score_batch(candidates, table_bbox)
+
+    # 표 내용 추출 (임베딩 유사도용)
+    table_text = ""
+    if table:
+        table_text = extract_table_text(table)
 
     scored = []
     for i, c in enumerate(candidates):
@@ -541,11 +846,87 @@ def score_candidates_zeroshot(candidates, table_bbox):
         title_score = float(title_scores[i])
         desc_score = float(desc_scores[i])
 
+        # 임베딩 유사도 계산
+        embedding_sim = 0.5
+        if embedding_model and table_text:
+            embedding_sim = compute_embedding_similarity(table_text, txt, embedding_model)
+
+        # 패턴 기반 보너스/페널티
+        pattern_title_boost = 0.0
+        pattern_desc_boost = 0.0
+
+        # 날짜/시간 패턴은 제목 불가
+        if is_datetime_like(txt):
+            pattern_title_boost = -0.6  # 매우 강력한 페널티
+            pattern_desc_boost = 0.1
+
+        # 명사형이 아니면 제목 불가 (강력한 필터)
+        elif not is_noun_phrase(txt):
+            pattern_title_boost = -0.5  # 강력한 페널티
+            pattern_desc_boost = 0.2    # 설명 가능성 증가
+
+        # "표 X.X ..." 패턴은 강력한 제목 신호
+        elif is_table_title_like(txt):
+            pattern_title_boost = 0.3
+            # 표 제목 패턴이면 설명 가능성 낮춤
+            pattern_desc_boost = -0.2
+
+        # 섹션 헤더 (1. 제목, ㅇ 제목 등)
+        elif is_section_header_like(txt):
+            pattern_desc_boost = 0.15
+            pattern_title_boost = -0.15  # 제목보다는 설명에 가까움
+
+        # 문장형 패턴은 설명 신호
+        elif is_sentence_like(txt):
+            pattern_desc_boost = 0.2
+            pattern_title_boost = -0.1
+
+        # 단위 표기는 제목도 설명도 아님
+        elif is_unit_like(txt):
+            pattern_title_boost = -0.2
+            pattern_desc_boost = -0.1
+
+        # 교차 참조는 설명
+        elif is_cross_reference(txt):
+            pattern_desc_boost = 0.25
+            pattern_title_boost = -0.3
+
+        # 표 위쪽 위치 보너스 (제목은 보통 표 위에 있음)
+        position_boost = 0.0
+        if table_bbox:
+            is_above = bb[3] <= table_bbox[1]
+            if is_above:
+                position_boost = 0.15  # 위쪽 제목 보너스
+            else:
+                position_boost = -0.1  # 아래쪽 제목 페널티
+
+        # 최종 점수 계산
+        # Zero-shot 50% + 임베딩 30% + 패턴 15% + 위치 5%
+        combined_title_score = (
+            title_score * 0.5 +
+            embedding_sim * 0.3 +
+            pattern_title_boost +
+            position_boost
+        )
+
+        combined_desc_score = (
+            desc_score * 0.5 +
+            embedding_sim * 0.3 +
+            pattern_desc_boost
+        )
+
+        # 0~1 범위로 클리핑
+        combined_title_score = max(0.0, min(1.0, combined_title_score))
+        combined_desc_score = max(0.0, min(1.0, combined_desc_score))
+
         scored.append({
             "text": txt,
             "bbox": bb,
-            "title_score": title_score,
-            "desc_score": desc_score,
+            "title_score": combined_title_score,
+            "desc_score": combined_desc_score,
+            "embedding_sim": embedding_sim,  # 디버깅용
+            "pattern_title": pattern_title_boost,  # 디버깅용
+            "pattern_desc": pattern_desc_boost,  # 디버깅용
         })
 
     return scored
@@ -576,15 +957,17 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
     if not candidates:
         return "", None, [], []
 
-    # Step 2: Zero-shot 분류
-    scored = score_candidates_zeroshot(candidates, table_bbox)
+    # Step 2: Zero-shot 분류 + 임베딩 유사도
+    scored = score_candidates_zeroshot(candidates, table_bbox, table=table)
 
     # 디버깅: 후보 점수 출력
-    print("\n  [Zero-shot 분류 결과]")
+    print("\n  [하이브리드 분류 결과 (ZeroShot + 임베딩 + 패턴)]")
     for x in scored:
-        t = x["text"][:60] if len(x["text"]) > 60 else x["text"]
+        t = x["text"][:50] if len(x["text"]) > 50 else x["text"]
         print(f"    '{t}'")
-        print(f"      제목: {x['title_score']:.3f} | 설명: {x['desc_score']:.3f}")
+        print(f"      제목: {x['title_score']:.3f} (패턴: {x.get('pattern_title', 0):+.2f}) | "
+              f"설명: {x['desc_score']:.3f} (패턴: {x.get('pattern_desc', 0):+.2f}) | "
+              f"임베딩: {x.get('embedding_sim', 0):.3f}")
 
     # 제목 선택 (제목 점수가 가장 높은 것)
     scored.sort(key=lambda x: x['title_score'], reverse=True)
@@ -592,10 +975,22 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
 
     # 임계값 체크
     if best['title_score'] < TITLE_SCORE_THRESHOLD:
-        return "", None, [], []
+        # 제목 점수가 임계값 미만이면 제목 없음
+        # 하지만 설명은 여전히 수집
+        print(f"  ⚠️  제목 없음 (최고 점수: {best['title_score']:.3f} < {TITLE_SCORE_THRESHOLD})")
+        best_title = ""
+        best_bbox = None
+    else:
+        best_title = best['text']
+        best_bbox = best['bbox']
+        print(f"  ✅ 제목: '{best_title[:60]}' (제목 점수: {best['title_score']:.3f})")
 
     # 설명 선택 (제목 제외, 설명 점수가 높은 모든 후보)
-    desc_candidates = [x for x in scored if x['text'] != best['text']]
+    if best_title:
+        desc_candidates = [x for x in scored if x['text'] != best_title]
+    else:
+        desc_candidates = scored  # 제목이 없으면 모든 후보를 설명 후보로
+
     descriptions = []
     desc_bboxes = []
 
@@ -610,8 +1005,8 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
                 desc_bboxes.append(desc_cand['bbox'])
                 print(f"  ✅ 설명: '{desc_cand['text'][:60]}' (설명 점수: {desc_cand['desc_score']:.3f})")
 
-    print(f"  ✅ 제목: '{best['text'][:60]}' (제목 점수: {best['title_score']:.3f})\n")
-    return best['text'], best['bbox'], descriptions, desc_bboxes
+    print()  # 빈 줄
+    return best_title, best_bbox, descriptions, desc_bboxes
 
 @app.route('/get_title', methods=['POST'])
 def get_title():
