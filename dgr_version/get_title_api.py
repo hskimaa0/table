@@ -94,67 +94,22 @@ except Exception as e:
     print(f"⚠️  Embedding 모델 로드 실패: {e}")
     embedding_model = None
 
-# 형태소 분석기 로드 (MeCab-ko)
+# 형태소 분석기 로드 (Okt 또는 Mecab)
 try:
-    # 방법 1: python-mecab-ko (Windows 전용, 사전 포함)
-    import mecab as mecab_module
-    mecab_tagger = mecab_module.MeCab()
-
-    class MecabWrapper:
-        """MeCab wrapper to match konlpy interface"""
-        def __init__(self, tagger):
-            self.tagger = tagger
-
-        def pos(self, text):
-            """형태소 분석 [(단어, 품사), ...]"""
-            try:
-                result = self.tagger.pos(text)
-                return result
-            except Exception as e:
-                print(f"  형태소 분석 예외: {e}")
-                return []
-
-    mecab = MecabWrapper(mecab_tagger)
-    # 테스트
+    # 방법 1: Okt (설치 가장 쉬움, Java만 필요)
+    from konlpy.tag import Okt
+    mecab = Okt()
     test_result = mecab.pos("테스트")
-    print(f"✅ 형태소 분석기 로드 완료 (python-mecab-ko) - 테스트: {len(test_result)}개 형태소")
-except Exception as e:
+    print(f"✅ 형태소 분석기 로드 완료 (Okt) - 테스트: {len(test_result)}개 형태소")
+except:
     try:
-        # 방법 2: konlpy.tag.Mecab (Linux/Mac 또는 mecab 직접 설치한 경우)
+        # 방법 2: konlpy.tag.Mecab
         from konlpy.tag import Mecab
         mecab = Mecab()
-        print(f"✅ 형태소 분석기 로드 완료 (konlpy.Mecab)")
+        print(f"✅ 형태소 분석기 로드 완료 (Mecab)")
     except:
-        try:
-            # 방법 3: mecab-python (pip install mecab-python)
-            import MeCab
-            mecab_tagger = MeCab.Tagger()
-
-            class MecabWrapper2:
-                """MeCab wrapper to match konlpy interface"""
-                def __init__(self, tagger):
-                    self.tagger = tagger
-
-                def pos(self, text):
-                    """형태소 분석 [(단어, 품사), ...]"""
-                    result = []
-                    node = self.tagger.parseToNode(text)
-                    while node:
-                        if node.surface:  # 빈 노드 제외
-                            word = node.surface
-                            features = node.feature.split(',')
-                            pos_tag = features[0] if features else 'UNKNOWN'
-                            result.append((word, pos_tag))
-                        node = node.next
-                    return result
-
-            mecab = MecabWrapper2(mecab_tagger)
-            print(f"✅ 형태소 분석기 로드 완료 (mecab-python)")
-        except Exception as e:
-            print(f"⚠️  형태소 분석기 로드 실패: {e}")
-            print(f"   Windows: pip install python-mecab-ko")
-            print(f"   Linux/Mac: pip install konlpy && apt-get install mecab-ko mecab-ko-dic")
-            mecab = None
+        print(f"⚠️  형태소 분석기 로드 실패 - Regex fallback 모드 사용")
+        mecab = None
 
 # ========== 유틸리티 함수 ==========
 def clean_text(s: str) -> str:
