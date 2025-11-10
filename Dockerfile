@@ -36,9 +36,16 @@ RUN cd /tmp && \
     make install && \
     rm -rf /tmp/mecab-*
 
+# MeCab 환경변수 설정
+ENV MECAB_PATH=/usr/local/lib/libmecab.so
+ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
 # Python 패키지 설치
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+# konlpy Mecab 테스트 (실패해도 계속 진행)
+RUN python3 -c "from konlpy.tag import Mecab; m = Mecab(); print('✅ Mecab test OK:', m.morphs('테스트'))" || echo "⚠️  Mecab not working, using fallback mode"
 
 # 애플리케이션 파일 복사
 COPY . .
