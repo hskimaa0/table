@@ -520,8 +520,110 @@ def flatten_text_objects(texts):
             flattened.append(text_obj)
     return flattened
 
-def group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE):
-    """같은 줄의 텍스트들을 그룹화"""
+def is_sentence_complete(text: str) -> bool:
+    """문장이 완결되었는지 판단 (종결 어미로 끝나는지 확인)"""
+    if not text:
+        return True
+
+    text = text.strip()
+
+    # 구두점으로 끝나면 문장 완결
+    if re.search(r'[.!?。．！？]$', text):
+        return True
+
+    # 한국어 종결 어미 패턴
+    # EF(종결어미): 다, 요, 니, 까, 지, 세요, 습니다, 하다, 이다 등
+    sentence_endings = [
+        r'(습니다|ㅂ니다|입니다)$',  # 합쇼체
+        r'(어요|아요|에요|네요|죠)$',  # 해요체
+        r'(한다|된다|이다|있다|없다)$',  # 해라체 (서술)
+        r'(합니다|됩니다|습니까|ㅂ니까)$',  # 하십시오체
+        r'(하오|하게|하라|하자|하지)$',  # 명령/권유
+        r'(던가|던지|든가|든지)$',  # 의문
+        r'(거든|거나|지만|면서)$',  # 연결 어미 (문장 종결로도 사용)
+    ]
+
+    for pattern in sentence_endings:
+        if re.search(pattern, text):
+            return True
+
+    # 형태소 분석기 사용 가능하면 품사 확인
+    if mecab:
+        try:
+            pos_tags = mecab.pos(text)
+            if pos_tags:
+                last_word, last_pos = pos_tags[-1]
+                # EF(종결어미), SF(마침표) 등으로 끝나면 문장 완결
+                if last_pos in ['EF', 'SF']:
+                    return True
+        except:
+            pass
+
+    return False
+
+def merge_sentences(grouped_lines):
+    """문장 종결 여부를 판단하여 인접한 줄들을 결합"""
+    if not grouped_lines:
+        return []
+
+    merged = []
+    current_sentence = None
+    current_bboxes = []
+
+    for line in grouped_lines:
+        text = line.get('merged_text', '')
+        bbox = line.get('merged_bbox')
+
+        if not text:
+            continue
+
+        if current_sentence is None:
+            # 첫 문장 시작
+            current_sentence = text
+            current_bboxes = [bbox] if bbox else []
+        else:
+            # 이전 문장이 완결되지 않았으면 결합
+            if not is_sentence_complete(current_sentence):
+                current_sentence += ' ' + text
+                if bbox:
+                    current_bboxes.append(bbox)
+            else:
+                # 이전 문장 저장 후 새 문장 시작
+                if current_sentence:
+                    merged_bbox = None
+                    if current_bboxes:
+                        merged_bbox = [
+                            min(b[0] for b in current_bboxes),
+                            min(b[1] for b in current_bboxes),
+                            max(b[2] for b in current_bboxes),
+                            max(b[3] for b in current_bboxes)
+                        ]
+                    merged.append({
+                        'merged_text': current_sentence,
+                        'merged_bbox': merged_bbox
+                    })
+                current_sentence = text
+                current_bboxes = [bbox] if bbox else []
+
+    # 마지막 문장 저장
+    if current_sentence:
+        merged_bbox = None
+        if current_bboxes:
+            merged_bbox = [
+                min(b[0] for b in current_bboxes),
+                min(b[1] for b in current_bboxes),
+                max(b[2] for b in current_bboxes),
+                max(b[3] for b in current_bboxes)
+            ]
+        merged.append({
+            'merged_text': current_sentence,
+            'merged_bbox': merged_bbox
+        })
+
+    return merged
+
+def group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE, merge_by_sentence=True):
+    """같은 줄의 텍스트들을 그룹화하고, 선택적으로 문장 단위로 결합"""
     if not texts:
         return []
 
@@ -557,6 +659,11 @@ def group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE):
             grouped.append(merged)
 
     grouped.sort(key=lambda g: g.get('merged_bbox', [0, 0, 0, 0])[1] if g else float('inf'))
+
+    # 문장 단위 결합
+    if merge_by_sentence:
+        grouped = merge_sentences(grouped)
+
     return grouped
 
 def merge_text_group(text_group):

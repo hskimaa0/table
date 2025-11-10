@@ -6,3 +6,6 @@ PyMuPDF
 Pillow
 transformers
 torch
+sentence-transformers
+konlpy
+jpype1
