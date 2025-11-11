@@ -892,36 +892,15 @@ def zeroshot_title_score_batch(candidates, table_bbox, batch_size=4):
                 pos_tag = "[표 위쪽] " if is_above else "[표 아래쪽] "
             texts.append(clamp_text_len(pos_tag + c['text']))
 
-        # 한국어 라벨 & 템플릿 (negative labels 추가로 contrast 강화)
+        # 한국어 라벨만 사용 (심플하게)
         labels_ko = [
             "표 제목",
-            "표 소제목",
-            "표 제목 아님",  # negative
             "표 설명",
-            "표 주석",
-            "출처 정보",
-            "단위 설명",
-            "표 설명 아님",  # negative
+            "관련 없음",  # negative
         ]
-        # 템플릿 최소화: 가장 효과적인 1개만 (속도 4배 향상)
+        # 템플릿 1개
         templates_ko = [
-            "이 텍스트는 정확히 표의 {}입니다.",  # 가장 구체적
-        ]
-
-        # 영어 라벨 & 템플릿 (negative labels 추가)
-        labels_en = [
-            "table title",
-            "table subtitle",
-            "not table title",  # negative
-            "table description",
-            "table note",
-            "source information",
-            "unit explanation",
-            "not table description",  # negative
-        ]
-        # 템플릿 최소화: 가장 효과적인 1개만 (속도 4배 향상)
-        templates_en = [
-            "This text is exactly a {} of the table.",  # 가장 구체적
+            "이 텍스트는 {}입니다.",
         ]
 
         def score_once(tmpl: str, labels: list, batch_texts: list) -> tuple:
@@ -969,44 +948,18 @@ def zeroshot_title_score_batch(candidates, table_bbox, batch_size=4):
             for i, r in enumerate(res if isinstance(res, list) else [res]):
                 probs = {lab: float(p) for lab, p in zip(r["labels"], r["scores"])}
 
-                # 제목/설명 확률 분리 (한국어/영어 라벨에 따라)
-                # positive max - negative * 0.5 (contrast 강화)
-                if labels == labels_ko:
-                    title_pos = max(probs.get("표 제목", 0.0), probs.get("표 소제목", 0.0))
-                    title_neg = probs.get("표 제목 아님", 0.0)
-                    title_sc[i] = max(0.0, title_pos - title_neg * 0.5)  # negative 페널티
-
-                    desc_pos = max(
-                        probs.get("표 설명", 0.0),
-                        probs.get("표 주석", 0.0),
-                        probs.get("출처 정보", 0.0),
-                        probs.get("단위 설명", 0.0)
-                    )
-                    desc_neg = probs.get("표 설명 아님", 0.0)
-                    desc_sc[i] = max(0.0, desc_pos - desc_neg * 0.5)
-                else:  # 영어
-                    title_pos = max(probs.get("table title", 0.0), probs.get("table subtitle", 0.0))
-                    title_neg = probs.get("not table title", 0.0)
-                    title_sc[i] = max(0.0, title_pos - title_neg * 0.5)
-
-                    desc_pos = max(
-                        probs.get("table description", 0.0),
-                        probs.get("table note", 0.0),
-                        probs.get("source information", 0.0),
-                        probs.get("unit explanation", 0.0)
-                    )
-                    desc_neg = probs.get("not table description", 0.0)
-                    desc_sc[i] = max(0.0, desc_pos - desc_neg * 0.5)
+                # 심플한 3-way 분류
+                title_sc[i] = probs.get("표 제목", 0.0)
+                desc_sc[i] = probs.get("표 설명", 0.0)
 
                 # 디버그: 첫 3개만 출력
                 if i < 3:
-                    lang = "KO" if labels == labels_ko else "EN"
-                    print(f"    [Zero-shot {lang}] '{batch_texts[i][:30]}...' -> 제목:{title_sc[i]:.3f}, 설명:{desc_sc[i]:.3f}")
+                    print(f"    [Zero-shot] '{batch_texts[i][:30]}...' -> 제목:{title_sc[i]:.3f}, 설명:{desc_sc[i]:.3f}, 무관:{probs.get('관련 없음', 0.0):.3f}")
 
             return title_sc, desc_sc
 
-        # ★ 배치 처리 (OOM 방지) + 템플릿 최소화 (속도 4배 향상)
-        print(f"  [배치 처리] 총 후보 수: {len(texts)}, 배치 크기: {batch_size}, 템플릿: 한/영 각 1개 (총 2회 추론)")
+        # ★ 배치 처리 (OOM 방지) + 심플한 한국어 라벨만
+        print(f"  [배치 처리] 총 후보 수: {len(texts)}, 배치 크기: {batch_size}, 템플릿: 한국어 1개")
 
         all_title_scores = []
         all_desc_scores = []
@@ -1017,20 +970,8 @@ def zeroshot_title_score_batch(candidates, table_bbox, batch_size=4):
             print(f"  [배치 {start//batch_size + 1}/{(len(texts)-1)//batch_size + 1}] 처리 중 ({len(batch_texts)}개 텍스트)")
 
             try:
-                # 한국어 + 영어 템플릿 (각 1개, 총 2회 추론)
-                batch_results = []
-
-                # 한국어 템플릿 (1개)
-                for tmpl in templates_ko:
-                    batch_results.append(score_once(tmpl, labels_ko, batch_texts))
-
-                # 영어 템플릿 (1개)
-                for tmpl in templates_en:
-                    batch_results.append(score_once(tmpl, labels_en, batch_texts))
-
-                # 배치 평균
-                batch_title = np.mean([r[0] for r in batch_results], axis=0)
-                batch_desc = np.mean([r[1] for r in batch_results], axis=0)
+                # 한국어 템플릿만 사용 (1회 추론)
+                batch_title, batch_desc = score_once(templates_ko[0], labels_ko, batch_texts)
 
                 all_title_scores.append(batch_title)
                 all_desc_scores.append(batch_desc)
