@@ -13,14 +13,16 @@ X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 # 모델 설정
 ZEROSHOT_MODEL = "MoritzLaurer/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7"
 EMBEDDING_MODEL = "BAAI/bge-m3"
+NSP_MODEL = "google-bert/bert-base-multilingual-cased"
 USE_GPU = True  # GPU 사용 여부
 
 # 모델 로드
 import torch
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer, AutoModelForNextSentencePrediction
 
 device = 0 if USE_GPU and torch.cuda.is_available() else -1
-print(f"▶ Device: {'cuda' if device == 0 else 'cpu'}")
+device_str = "cuda" if device == 0 else "cpu"
+print(f"▶ Device: {device_str}")
 
 # Zero-shot 분류기 로드
 try:
@@ -37,12 +39,22 @@ except Exception as e:
 # Embedding 모델 로드
 try:
     from sentence_transformers import SentenceTransformer
-    device_str = "cuda" if device == 0 else "cpu"
     embedding_model = SentenceTransformer(EMBEDDING_MODEL, device=device_str)
     print(f"✅ Embedding 모델 로드 완료: {EMBEDDING_MODEL}")
 except Exception as e:
     print(f"⚠️ Embedding 모델 로드 실패: {e}")
     embedding_model = None
+
+# NSP (Next Sentence Prediction) 모델 로드
+try:
+    nsp_tokenizer = AutoTokenizer.from_pretrained(NSP_MODEL)
+    nsp_model = AutoModelForNextSentencePrediction.from_pretrained(NSP_MODEL).to(device_str)
+    nsp_model.eval()
+    print(f"✅ NSP 모델 로드 완료: {NSP_MODEL}")
+except Exception as e:
+    print(f"⚠️ NSP 모델 로드 실패: {e}")
+    nsp_tokenizer = None
+    nsp_model = None
 
 # 형태소 분석기 로드 (kiwipiepy)
 try:
@@ -101,19 +113,38 @@ def group_texts_by_line(texts, y_tolerance=150):
     if not texts:
         return []
 
-    # 모든 개별 텍스트 항목 추출
+    print(f"  [디버그-원본] 전체 texts 개수: {len(texts)}")
+    # 첫 3개 texts 객체의 구조 확인
+    for i, text_obj in enumerate(texts[:3]):
+        print(f"    texts[{i}] keys: {text_obj.keys()}")
+        if 't' in text_obj and isinstance(text_obj['t'], list):
+            print(f"      t 배열 길이: {len(text_obj['t'])}")
+            if text_obj['t']:
+                print(f"      t[0] keys: {text_obj['t'][0].keys()}")
+                print(f"      t[0] tid: {text_obj['t'][0].get('tid', 'N/A')}")
+
+    # 모든 개별 텍스트 항목 추출 (t 배열 안의 tid 사용)
     all_items = []
     for text_obj in texts:
         if 't' in text_obj and isinstance(text_obj['t'], list):
             for t_item in text_obj['t']:
                 if 'text' in t_item and 'bbox' in t_item:
-                    all_items.append(t_item)
+                    # t_item에 이미 tid가 있음
+                    all_items.append(t_item.copy())
 
     if not all_items:
         return []
 
-    # y 좌표 중심으로 정렬
-    all_items.sort(key=lambda x: (x['bbox'][1] + x['bbox'][3]) / 2)
+    # tid 순으로 정렬
+    all_items.sort(key=lambda x: x.get('tid', 0))
+
+    print(f"  [디버그-정렬후] 추출된 개별 텍스트 항목: {len(all_items)}")
+    for i, item in enumerate(all_items[:20]):  # 첫 20개만 출력
+        tid = item.get('tid', 'N/A')
+        text = item.get('text', '')
+        bbox = item.get('bbox', [])
+        y_center = (bbox[1] + bbox[3]) / 2 if len(bbox) >= 4 else 0
+        print(f"    {i+1}. tid={tid}, y={y_center:.1f}, text='{text[:30]}'")
 
     # 같은 줄끼리 그룹화
     lines = []
@@ -159,7 +190,89 @@ def group_texts_by_line(texts, y_tolerance=150):
             'bbox': merged_bbox
         })
 
+    print(f"  [디버그-줄병합] 병합된 줄 개수: {len(merged_lines)}")
+    for i, line in enumerate(merged_lines[:10]):
+        print(f"    줄{i+1}: '{line['text'][:50]}'")
+
+    # NSP를 사용해서 연결된 줄 병합
+    if nsp_model and nsp_tokenizer and len(merged_lines) > 1:
+        print(f"  [디버그-NSP] NSP 기반 줄 병합 시작...")
+        merged_lines = merge_lines_with_nsp(merged_lines)
+        print(f"  [디버그-NSP] NSP 병합 후 줄 개수: {len(merged_lines)}")
+        for i, line in enumerate(merged_lines[:10]):
+            print(f"    줄{i+1}: '{line['text'][:50]}'")
+
     return merged_lines
+
+def merge_lines_with_nsp(lines, nsp_threshold=0.95):
+    """NSP를 사용해서 문맥적으로 연결된 줄들을 병합
+
+    Args:
+        lines: [{"text": "...", "bbox": [...]}, ...]
+        nsp_threshold: NSP 확률 임계값 (이 값보다 높으면 연결)
+
+    Returns:
+        병합된 줄 리스트
+    """
+    if not lines or not nsp_model or not nsp_tokenizer:
+        return lines
+
+    merged = []
+    i = 0
+
+    while i < len(lines):
+        current = lines[i].copy()
+        merge_count = 0
+
+        # 다음 줄과 연결 가능한지 확인
+        while i + 1 < len(lines):
+            next_line = lines[i + 1]
+
+            # NSP 점수 계산
+            try:
+                inputs = nsp_tokenizer(
+                    current['text'],
+                    next_line['text'],
+                    return_tensors='pt',
+                    truncation=True,
+                    max_length=512
+                ).to(device_str)
+
+                with torch.no_grad():
+                    outputs = nsp_model(**inputs)
+                    logits = outputs.logits
+                    probs = torch.softmax(logits, dim=1)
+                    # 0: IsNext, 1: NotNext
+                    is_next_prob = probs[0][0].item()
+
+                print(f"    NSP: '{current['text'][-20:]}' -> '{next_line['text'][:20]}' = {is_next_prob:.3f}")
+
+                # 연결 가능하면 병합
+                if is_next_prob >= nsp_threshold:
+                    # 텍스트 병합
+                    current['text'] = current['text'] + ' ' + next_line['text']
+                    # bbox 병합
+                    current['bbox'] = [
+                        min(current['bbox'][0], next_line['bbox'][0]),
+                        min(current['bbox'][1], next_line['bbox'][1]),
+                        max(current['bbox'][2], next_line['bbox'][2]),
+                        max(current['bbox'][3], next_line['bbox'][3])
+                    ]
+                    i += 1  # 다음 줄도 처리했으므로 건너뜀
+                    merge_count += 1
+                    print(f"      ✅ 병합됨 (누적: {merge_count}개)")
+                else:
+                    print(f"      ❌ 병합 안됨 (점수 부족)")
+                    break
+
+            except Exception as e:
+                print(f"    NSP 오류: {e}")
+                break
+
+        merged.append(current)
+        i += 1
+
+    return merged
 
 def collect_candidates_for_table(table, texts, all_tables=None):
     """표 위/아래 텍스트 후보 수집
@@ -567,7 +680,7 @@ def get_title():
         # 후보 수집
         candidates = collect_candidates_for_table(table, texts, all_tables=tables)
 
-        # 제목 판단 (Reranker)
+        # 제목 판단 (Zero-shot)
         table_bbox = get_bbox_from_table(table)
         title, title_bbox, descriptions, desc_bboxes = find_title_from_candidates(candidates, table_bbox, table)
 
