@@ -17,17 +17,21 @@ UP_MULTIPLIER = 1.5  # 표 위쪽 탐색 범위 (표 높이의 배수)
 X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
 # ML 모델 관련
-ZEROSHOT_MODEL = "joeddav/xlm-roberta-large-xnli"  # Zero-shot 분류 (다국어, 한국어 우수)
+ZEROSHOT_MODEL = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot 분류 (다국어 NLI SOTA)
+EMBEDDING_MODEL_NAME = "BAAI/bge-m3"  # 임베딩 (다국어 강력)
+RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 리랭커 (크로스인코더)
 ML_DEVICE = 0  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
 # Zero-shot 설정
-TITLE_SCORE_THRESHOLD = 0.5  # 제목 판정 최소 점수
-DESC_SCORE_THRESHOLD = 0.3   # 설명 판정 최소 점수
+TITLE_SCORE_THRESHOLD = 0.6  # 제목 판정 최소 점수 (0.5→0.6 상향)
+DESC_SCORE_THRESHOLD = 0.28   # 설명 판정 최소 점수 (0.3→0.28 하향)
 
 # ML 모델 로드
 zeroshot_classifier = None
 embedding_model = None
+reranker_model = None
+reranker_tokenizer = None
 mecab = None  # 형태소 분석기
 
 # 디바이스 설정
@@ -84,8 +88,8 @@ except Exception as e:
 # Sentence Transformer 임베딩 모델 로드
 try:
     from sentence_transformers import SentenceTransformer
-    embedding_model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2', device=DEVICE_STR)
-    print(f"✅ Embedding 모델 로드 완료 (paraphrase-multilingual-MiniLM-L12-v2, device={DEVICE_STR})")
+    embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME, device=DEVICE_STR)
+    print(f"✅ Embedding 모델 로드 완료 ({EMBEDDING_MODEL_NAME}, device={DEVICE_STR})")
 except ImportError as e:
     print(f"⚠️  라이브러리 없음: {e}")
     print("   → pip install sentence-transformers 실행 필요")
@@ -93,6 +97,28 @@ except ImportError as e:
 except Exception as e:
     print(f"⚠️  Embedding 모델 로드 실패: {e}")
     embedding_model = None
+
+# Reranker 모델 로드
+try:
+    from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+    dtype = torch.float16 if DEVICE_STR.startswith("cuda") else torch.float32
+    reranker_tokenizer = AutoTokenizer.from_pretrained(RERANKER_MODEL)
+    reranker_model = AutoModelForSequenceClassification.from_pretrained(
+        RERANKER_MODEL,
+        torch_dtype=dtype
+    ).to(DEVICE_STR)
+    reranker_model.eval()
+    print(f"✅ Reranker 모델 로드 완료 ({RERANKER_MODEL}, device={DEVICE_STR}, dtype={dtype})")
+except ImportError as e:
+    print(f"⚠️  라이브러리 없음: {e}")
+    print("   → pip install transformers 실행 필요")
+    reranker_model = None
+    reranker_tokenizer = None
+except Exception as e:
+    print(f"⚠️  Reranker 모델 로드 실패: {e}")
+    reranker_model = None
+    reranker_tokenizer = None
 
 # 형태소 분석기 로드 (MeCab-ko)
 try:
@@ -701,7 +727,7 @@ def collect_candidates_for_table(table, texts, all_tables=None):
 # ========== Zero-shot 분류 ==========
 
 def zeroshot_title_score_batch(candidates, table_bbox):
-    """Zero-shot 분류: 각 후보가 '표 제목'/'설명'일 확률 반환
+    """Zero-shot 분류: 각 후보가 '표 제목'/'설명'일 확률 반환 (한/영 이중 가설)
 
     Returns:
         tuple: (title_scores, desc_scores) - 각각 numpy array of scores (0~1)
@@ -720,21 +746,27 @@ def zeroshot_title_score_batch(candidates, table_bbox):
                 pos_tag = "[표 위쪽] " if is_above else "[표 아래쪽] "
             texts.append(clamp_text_len(pos_tag + c['text']))
 
-        # 라벨 (제목, 설명, 기타)
-        labels = [
+        # 한국어 라벨 & 템플릿
+        labels_ko = [
             "표 제목",
             "표 설명",
             "본문 텍스트",
             "페이지 번호",
             "단위 표기",
         ]
+        template_ko = "이것은 {}이다."
 
-        # 템플릿
-        templates = [
-            "이것은 {}이다.",
+        # 영어 라벨 & 템플릿 (NLI 안정성 향상)
+        labels_en = [
+            "table title",
+            "table description",
+            "body text",
+            "page number",
+            "unit notation",
         ]
+        template_en = "This is a {}."
 
-        def score_once(tmpl: str) -> tuple:
+        def score_once(tmpl: str, labels: list) -> tuple:
             """특정 템플릿으로 multi-label 분류 후 제목/설명 점수 반환"""
             try:
                 res = zeroshot_classifier(
@@ -753,18 +785,26 @@ def zeroshot_title_score_batch(candidates, table_bbox):
             for i, r in enumerate(res):
                 probs = {lab: float(p) for lab, p in zip(r["labels"], r["scores"])}
 
-                # 제목/설명 확률 분리
-                title_sc[i] = probs.get("표 제목", 0.0)
-                desc_sc[i] = probs.get("표 설명", 0.0)
+                # 제목/설명 확률 분리 (한국어/영어 라벨에 따라)
+                if labels == labels_ko:
+                    title_sc[i] = probs.get("표 제목", 0.0)
+                    desc_sc[i] = probs.get("표 설명", 0.0)
+                else:  # 영어
+                    title_sc[i] = probs.get("table title", 0.0)
+                    desc_sc[i] = probs.get("table description", 0.0)
 
                 # 디버그: 첫 3개만 출력
                 if i < 3:
-                    print(f"    [Zero-shot] '{texts[i][:30]}...' -> 제목:{probs.get('표 제목', 0):.3f}, 설명:{probs.get('표 설명', 0):.3f}")
+                    lang = "KO" if labels == labels_ko else "EN"
+                    print(f"    [Zero-shot {lang}] '{texts[i][:30]}...' -> 제목:{title_sc[i]:.3f}, 설명:{desc_sc[i]:.3f}")
 
             return title_sc, desc_sc
 
-        # 템플릿 평균
-        results = [score_once(t) for t in templates]
+        # 한국어 + 영어 가설 평균 (NLI 안정성 향상)
+        results = [
+            score_once(template_ko, labels_ko),
+            score_once(template_en, labels_en),
+        ]
         title_scores = np.mean([r[0] for r in results], axis=0)
         desc_scores = np.mean([r[1] for r in results], axis=0)
 
@@ -791,6 +831,73 @@ def extract_table_text(table):
                         all_texts.append(text_obj['v'])
 
     return ' '.join(all_texts)
+
+def summarize_table_context(table, max_length=256):
+    """표 컨텍스트 요약: 헤더/상단 행 위주, 숫자 과잉 비중 낮춤
+
+    Returns:
+        str: "[TABLE] 헤더/상단행 요약" 형태
+    """
+    if 'rows' not in table or not table['rows']:
+        return "[TABLE]"
+
+    headers = []
+    rows = table['rows']
+
+    # 상단 1~2행만 추출 (헤더 위주)
+    for i, row in enumerate(rows[:2]):
+        if not isinstance(row, list):
+            continue
+        for cell in row:
+            if 'texts' in cell and isinstance(cell['texts'], list):
+                for text_obj in cell['texts']:
+                    if 'v' in text_obj:
+                        text = text_obj['v'].strip()
+                        # 숫자만 있는 셀은 가중치 낮춤 (10% 확률로만 포함)
+                        if re.match(r'^[\d\s\.\-,]+$', text):
+                            import random
+                            if random.random() < 0.1:
+                                headers.append(text)
+                        else:
+                            headers.append(text)
+
+    # 길이 제한
+    ctx = " ".join(headers)[:max_length]
+    return "[TABLE] " + ctx if ctx else "[TABLE]"
+
+def rerank_score(query, doc):
+    """리랭커로 query-doc 연관도 점수 계산
+
+    Args:
+        query: 쿼리 텍스트 (예: "[TABLE] 헤더 요약")
+        doc: 문서 텍스트 (예: 후보 제목/설명)
+
+    Returns:
+        float: 연관도 점수 (0~1)
+    """
+    if not reranker_model or not reranker_tokenizer:
+        return 0.5  # 중립 점수
+
+    try:
+        # 토큰화
+        inputs = reranker_tokenizer(
+            query, doc,
+            truncation=True,
+            max_length=512,
+            return_tensors="pt"
+        ).to(DEVICE_STR)
+
+        # 추론
+        with torch.no_grad():
+            logits = reranker_model(**inputs).logits.squeeze().float()
+
+        # 시그모이드로 0~1 변환
+        score = torch.sigmoid(logits).item()
+        return float(score)
+
+    except Exception as e:
+        print(f"  리랭커 점수 계산 오류: {e}")
+        return 0.5
 
 def compute_embedding_similarity(table_text, candidate_text, model):
     """임베딩 코사인 유사도 계산
@@ -824,6 +931,11 @@ def score_candidates_zeroshot(candidates, table_bbox, table=None):
     # Zero-shot 분류: 각 후보가 '표 제목'/'설명'일 확률
     title_scores, desc_scores = zeroshot_title_score_batch(candidates, table_bbox)
 
+    # 표 컨텍스트 요약 (리랭커용)
+    table_ctx = ""
+    if table:
+        table_ctx = summarize_table_context(table)
+
     # 표 내용 추출 (임베딩 유사도용)
     table_text = ""
     if table:
@@ -841,6 +953,11 @@ def score_candidates_zeroshot(candidates, table_bbox, table=None):
         if embedding_model and table_text:
             embedding_sim = compute_embedding_similarity(table_text, txt, embedding_model)
 
+        # 리랭커 점수 계산
+        rerank_sim = 0.5
+        if reranker_model and table_ctx:
+            rerank_sim = rerank_score(table_ctx, txt)
+
         # 패턴 기반 보너스/페널티
         pattern_title_boost = 0.0
         pattern_desc_boost = 0.0
@@ -857,7 +974,7 @@ def score_candidates_zeroshot(candidates, table_bbox, table=None):
 
         # "표 X.X ..." 패턴은 강력한 제목 신호
         elif is_table_title_like(txt):
-            pattern_title_boost = 0.3
+            pattern_title_boost = 0.5  # 0.3 → 0.5로 강화
             # 표 제목 패턴이면 설명 가능성 낮춤
             pattern_desc_boost = -0.2
 
@@ -881,27 +998,23 @@ def score_candidates_zeroshot(candidates, table_bbox, table=None):
             pattern_desc_boost = 0.25
             pattern_title_boost = -0.3
 
-        # 표 위쪽 위치 보너스 (제목은 보통 표 위에 있음)
+        # 위치 보너스 제거 (위/아래 공평하게 평가)
         position_boost = 0.0
-        if table_bbox:
-            is_above = bb[3] <= table_bbox[1]
-            if is_above:
-                position_boost = 0.15  # 위쪽 제목 보너스
-            else:
-                position_boost = -0.1  # 아래쪽 제목 페널티
 
         # 최종 점수 계산
-        # Zero-shot 50% + 임베딩 30% + 패턴 15% + 위치 5%
+        # 제목: Zero-shot 45% + 리랭커 25% + 패턴 30%
+        # 설명: Zero-shot 40% + 임베딩 25% + 리랭커 15% + 패턴 20%
         combined_title_score = (
-            title_score * 0.5 +
-            embedding_sim * 0.3 +
+            title_score * 0.45 +
+            rerank_sim * 0.25 +
             pattern_title_boost +
             position_boost
         )
 
         combined_desc_score = (
-            desc_score * 0.5 +
-            embedding_sim * 0.3 +
+            desc_score * 0.4 +
+            embedding_sim * 0.25 +
+            rerank_sim * 0.15 +
             pattern_desc_boost
         )
 
@@ -915,6 +1028,7 @@ def score_candidates_zeroshot(candidates, table_bbox, table=None):
             "title_score": combined_title_score,
             "desc_score": combined_desc_score,
             "embedding_sim": embedding_sim,  # 디버깅용
+            "rerank_sim": rerank_sim,  # 디버깅용
             "pattern_title": pattern_title_boost,  # 디버깅용
             "pattern_desc": pattern_desc_boost,  # 디버깅용
         })
@@ -951,13 +1065,13 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
     scored = score_candidates_zeroshot(candidates, table_bbox, table=table)
 
     # 디버깅: 후보 점수 출력
-    print("\n  [하이브리드 분류 결과 (ZeroShot + 임베딩 + 패턴)]")
+    print("\n  [하이브리드 분류 결과 (ZeroShot + 리랭커 + 임베딩 + 패턴)]")
     for x in scored:
         t = x["text"][:50] if len(x["text"]) > 50 else x["text"]
         print(f"    '{t}'")
         print(f"      제목: {x['title_score']:.3f} (패턴: {x.get('pattern_title', 0):+.2f}) | "
               f"설명: {x['desc_score']:.3f} (패턴: {x.get('pattern_desc', 0):+.2f}) | "
-              f"임베딩: {x.get('embedding_sim', 0):.3f}")
+              f"임베딩: {x.get('embedding_sim', 0):.3f} | 리랭커: {x.get('rerank_sim', 0):.3f}")
 
     # 제목 선택 (제목 점수가 가장 높은 것)
     scored.sort(key=lambda x: x['title_score'], reverse=True)
