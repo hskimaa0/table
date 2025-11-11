@@ -711,8 +711,14 @@ def merge_text_group(text_group):
     return merged_obj
 
 # ========== 후보 수집 ==========
-def collect_candidates_for_table(table, texts, all_tables=None):
-    """표 위쪽 + 아래쪽 텍스트 후보 수집 (규칙 기반 필터링)
+def collect_candidates_for_table(table, group_paragraphs, all_tables=None):
+    """표 위쪽 + 아래쪽 텍스트 후보 수집 (group_paragraphs 사용)
+
+    Args:
+        table: 표 객체
+        group_paragraphs: 그룹화된 단락 리스트
+            형식: [{"string": "텍스트", "rect": {"l": x1, "t": y1, "r": x2, "b": y2}, ...}, ...]
+        all_tables: 전체 표 리스트 (선택)
 
     거리/개수 제한 없음, 단 다른 표가 중간에 있으면 그 너머는 제외
     """
@@ -756,26 +762,60 @@ def collect_candidates_for_table(table, texts, all_tables=None):
     if other_tables_below:
         lower_limit = min(other_tables_below)  # 가장 가까운 표의 상단
 
-    # 그룹화된 텍스트
-    grouped_texts = group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE)
-
     candidates = []  # 모든 후보
 
-    for text in grouped_texts:
-        if not text:
+    print(f"  [후보 수집] group_paragraphs 개수: {len(group_paragraphs)}")
+    print(f"  [후보 수집] 표 bbox: {table_bbox}")
+
+    # group_paragraphs 처리
+    skipped_no_string = 0
+    skipped_no_rect = 0
+    skipped_empty_text = 0
+    skipped_invalid_rect = 0
+
+    for idx, para in enumerate(group_paragraphs):
+        if not para:
             continue
 
-        text_bbox = text.get('merged_bbox') or get_bbox_from_text(text)
-        if not text_bbox:
+        if 'string' not in para:
+            skipped_no_string += 1
+            if idx < 3:  # 첫 3개만 로그
+                print(f"  [파싱 실패 {idx}] 'string' 필드 없음: {list(para.keys())}")
             continue
 
-        px1, py1, px2, py2 = text_bbox
+        if 'rect' not in para:
+            skipped_no_rect += 1
+            if idx < 3:
+                print(f"  [파싱 실패 {idx}] 'rect' 필드 없음: {list(para.keys())}")
+            continue
+
+        text_content = para['string'].strip()
+        if not text_content:
+            skipped_empty_text += 1
+            continue
+
+        # rect에서 bbox 추출
+        rect = para['rect']
+        if isinstance(rect, dict):
+            # rect가 딕셔너리 형태 {l, t, r, b}
+            para_bbox = [rect.get('l', 0), rect.get('t', 0), rect.get('r', 0), rect.get('b', 0)]
+        elif isinstance(rect, list) and len(rect) >= 4:
+            # rect가 리스트 형태 [l, t, r, b]
+            para_bbox = rect[:4]
+        else:
+            skipped_invalid_rect += 1
+            if idx < 3:
+                print(f"  [파싱 실패 {idx}] 'rect' 형식 오류: type={type(rect)}, value={rect}")
+            continue
+
+        px1, py1, px2, py2 = para_bbox
 
         # 수평으로 겹치거나 근접한지 확인
         if not horizontally_near((tbx1, tbx2), (px1, px2), tol=X_TOLERANCE):
             continue
 
-        text_content = clean_text(text.get('merged_text') or extract_text_content(text))
+        # 텍스트 정리
+        text_content = clean_text(text_content)
 
         # 무의미한 텍스트 필터링
         if not text_content or is_trivial(text_content):
@@ -785,14 +825,14 @@ def collect_candidates_for_table(table, texts, all_tables=None):
         if py2 <= tby1 and py1 >= upper_limit:
             cand = {
                 'text': text_content,
-                'bbox': text_bbox
+                'bbox': para_bbox
             }
             candidates.append(cand)
         # 표 아래쪽에 있는지 확인 (다른 표 너머는 제외)
         elif py1 >= tby2 and py2 <= lower_limit:
             cand = {
                 'text': text_content,
-                'bbox': text_bbox
+                'bbox': para_bbox
             }
             candidates.append(cand)
 
@@ -801,7 +841,27 @@ def collect_candidates_for_table(table, texts, all_tables=None):
     for c in candidates:
         unique.setdefault(c['text'], c)
 
-    return list(unique.values())
+    result = list(unique.values())
+
+    # 스킵 통계 출력
+    if skipped_no_string > 0:
+        print(f"  [스킵 통계] 'string' 없음: {skipped_no_string}개")
+    if skipped_no_rect > 0:
+        print(f"  [스킵 통계] 'rect' 없음: {skipped_no_rect}개")
+    if skipped_empty_text > 0:
+        print(f"  [스킵 통계] 빈 텍스트: {skipped_empty_text}개")
+    if skipped_invalid_rect > 0:
+        print(f"  [스킵 통계] 'rect' 형식 오류: {skipped_invalid_rect}개")
+
+    print(f"  [후보 수집] 최종 후보 개수: {len(result)}")
+    if result:
+        print(f"  [후보 수집] 첫 3개 후보:")
+        for i, cand in enumerate(result[:3]):
+            print(f"    {i+1}. '{cand['text'][:50]}...' bbox={cand['bbox']}")
+    else:
+        print(f"  ⚠️  [후보 수집] 후보가 없습니다!")
+
+    return result
 
 
 # ========== Zero-shot 분류 ==========
@@ -843,11 +903,9 @@ def zeroshot_title_score_batch(candidates, table_bbox, batch_size=4):
             "단위 설명",
             "표 설명 아님",  # negative
         ]
+        # 템플릿 최소화: 가장 효과적인 1개만 (속도 4배 향상)
         templates_ko = [
-            "이 텍스트는 정확히 표의 {}입니다.",  # 더 구체적
-            "이 문장은 표에서 {} 역할을 합니다.",
-            "테이블 위/아래에 있는 이 텍스트는 {}입니다.",
-            "이것은 {}이다.",
+            "이 텍스트는 정확히 표의 {}입니다.",  # 가장 구체적
         ]
 
         # 영어 라벨 & 템플릿 (negative labels 추가)
@@ -861,11 +919,9 @@ def zeroshot_title_score_batch(candidates, table_bbox, batch_size=4):
             "unit explanation",
             "not table description",  # negative
         ]
+        # 템플릿 최소화: 가장 효과적인 1개만 (속도 4배 향상)
         templates_en = [
-            "This text is exactly a {} of the table.",  # 더 구체적
-            "This sentence serves as a {}.",
-            "This text above/below the table is a {}.",
-            "This is a {}.",
+            "This text is exactly a {} of the table.",  # 가장 구체적
         ]
 
         def score_once(tmpl: str, labels: list, batch_texts: list) -> tuple:
@@ -949,8 +1005,8 @@ def zeroshot_title_score_batch(candidates, table_bbox, batch_size=4):
 
             return title_sc, desc_sc
 
-        # ★ 배치 처리 (OOM 방지)
-        print(f"  [배치 처리] 총 후보 수: {len(texts)}, 배치 크기: {batch_size}")
+        # ★ 배치 처리 (OOM 방지) + 템플릿 최소화 (속도 4배 향상)
+        print(f"  [배치 처리] 총 후보 수: {len(texts)}, 배치 크기: {batch_size}, 템플릿: 한/영 각 1개 (총 2회 추론)")
 
         all_title_scores = []
         all_desc_scores = []
@@ -961,14 +1017,14 @@ def zeroshot_title_score_batch(candidates, table_bbox, batch_size=4):
             print(f"  [배치 {start//batch_size + 1}/{(len(texts)-1)//batch_size + 1}] 처리 중 ({len(batch_texts)}개 텍스트)")
 
             try:
-                # 한국어 + 영어 가설, 다중 템플릿 평균
+                # 한국어 + 영어 템플릿 (각 1개, 총 2회 추론)
                 batch_results = []
 
-                # 한국어 템플릿들
+                # 한국어 템플릿 (1개)
                 for tmpl in templates_ko:
                     batch_results.append(score_once(tmpl, labels_ko, batch_texts))
 
-                # 영어 템플릿들
+                # 영어 템플릿 (1개)
                 for tmpl in templates_en:
                     batch_results.append(score_once(tmpl, labels_en, batch_texts))
 
@@ -1029,20 +1085,20 @@ def extract_table_text(table):
     return ' '.join(all_texts)
 
 def summarize_table_context(table, max_length=256):
-    """표 컨텍스트 요약: 헤더/상단 행 위주, 숫자 과잉 비중 낮춤
+    """표 컨텍스트 요약: 헤더/상단 행 위주, 숫자 과잉 비중 낮춤 (강화)
 
     Returns:
         str: "[TABLE] 헤더/상단행 요약" 형태
     """
     if 'rows' not in table or not table['rows']:
         print("  [Debug] 표 컨텍스트: 빈 테이블")
-        return "[TABLE]"
+        return "[TABLE] 빈 표"
 
     headers = []
     rows = table['rows']
 
-    # 상단 1~2행만 추출 (헤더 위주)
-    for i, row in enumerate(rows[:2]):
+    # 상단 3행으로 확대 (더 많은 컨텍스트)
+    for i, row in enumerate(rows[:3]):
         if not isinstance(row, list):
             continue
         for cell in row:
@@ -1050,22 +1106,18 @@ def summarize_table_context(table, max_length=256):
                 for text_obj in cell['texts']:
                     if 'v' in text_obj:
                         text = text_obj['v'].strip()
-                        # 숫자만 있는 셀은 가중치 낮춤 (10% 확률로만 포함)
-                        if re.match(r'^[\d\s\.\-,]+$', text):
-                            import random
-                            if random.random() < 0.1:
-                                headers.append(text)
-                        else:
+                        # 숫자만 있는 셀은 완전 제외 (강화)
+                        if not re.match(r'^[\d\s\.\-,]+$', text):
                             headers.append(text)
 
     # 길이 제한
     ctx = " ".join(headers)[:max_length]
-    result = "[TABLE] " + ctx if ctx else "[TABLE]"
-    print(f"  [Debug] 표 컨텍스트 ({len(result)}자): '{result[:80]}...'")
+    result = "[TABLE] " + ctx if ctx else "[TABLE] 빈 요약"
+    print(f"  [Context Debug] 표 컨텍스트 ({len(result)}자): '{result[:80]}...'")
     return result
 
 def rerank_score(query, doc, table_text=None):
-    """리랭커로 query-doc 연관도 점수 계산
+    """리랭커로 query-doc 연관도 점수 계산 (강화: logits 0 시 임베딩 대체)
 
     Args:
         query: 쿼리 텍스트 (예: "[TABLE] 헤더 요약")
@@ -1076,7 +1128,7 @@ def rerank_score(query, doc, table_text=None):
         float: 연관도 점수 (0~1)
     """
     if not reranker_model or not reranker_tokenizer:
-        print("  [Debug] 리랭커 모델/토크나이저 None → fallback 0.5")
+        print("  ⚠️  리랭커 모델/토크나이저 None → fallback 0.5")
         return 0.5
 
     try:
@@ -1084,12 +1136,12 @@ def rerank_score(query, doc, table_text=None):
         query_enhanced = query + " [표 제목 또는 설명 관련성 점수]"
 
         # 쿼리가 너무 짧으면 표 텍스트로 보강
-        if len(query) < 20 and table_text:
+        if len(query) < 30 and table_text:
             query_enhanced += " " + table_text[:100]
-            print(f"  [Debug] 쿼리 짧아서 표 텍스트 추가 (총 {len(query_enhanced)}자)")
+            print(f"  [Rerank Debug] 쿼리 보강 (총 {len(query_enhanced)}자)")
 
-        print(f"  [Debug] 리랭커 쿼리: '{query_enhanced[:60]}...'")
-        print(f"  [Debug] 리랭커 문서: '{doc[:60]}...'")
+        print(f"  [Rerank Debug] 쿼리: '{query_enhanced[:70]}...'")
+        print(f"  [Rerank Debug] 문서: '{doc[:70]}...'")
 
         # GPU 캐시 클리어 (OOM 방지)
         if torch.cuda.is_available():
@@ -1101,29 +1153,46 @@ def rerank_score(query, doc, table_text=None):
             truncation=True,
             max_length=512,
             return_tensors="pt"
-        ).to(DEVICE_STR)
+        )
 
-        print(f"  [Debug] 입력 키: {list(inputs.keys())}")
-        if 'input_ids' in inputs:
-            print(f"  [Debug] input_ids shape: {inputs['input_ids'].shape}")
+        # Device 이동
+        if DEVICE_STR.startswith("cuda"):
+            inputs = inputs.to(DEVICE_STR)
+
+        print(f"  [Rerank Debug] input_ids shape: {inputs['input_ids'].shape}")
 
         # 추론
         with torch.no_grad():
-            logits = reranker_model(**inputs).logits.squeeze().float()
-            print(f"  [Debug] Logits: {logits.item():.6f}")
+            outputs = reranker_model(**inputs)
+            logits = outputs.logits.squeeze().float()
+            logits_value = logits.item() if logits.dim() == 0 else logits[0].item()
+            print(f"  [Rerank Debug] ★ Logits: {logits_value:.6f}")
 
-        # logits가 0에 가까우면 쿼리가 약함 → 중립 점수
-        if torch.abs(logits) < 1e-6:
-            print("  [Debug] Logits 거의 0 → 중립 fallback")
-            return 0.5
+        # logits가 0에 가까우면 쿼리가 약함 → 임베딩 유사도로 대체
+        if abs(logits_value) < 1e-6:
+            print("  ⚠️  Logits 중립 (0 근처) → 임베딩 유사도로 대체")
+            if embedding_model and table_text:
+                emb_sim = compute_embedding_similarity(table_text, doc, embedding_model)
+                print(f"  [Rerank Debug] 임베딩 대체 점수: {emb_sim:.3f}")
+                return emb_sim
+            else:
+                print("  ⚠️  임베딩 모델 없음 → fallback 0.5")
+                return 0.5
 
         # 시그모이드로 0~1 변환
-        score = torch.sigmoid(logits).item()
-        print(f"  [Debug] 리랭커 점수: {score:.3f}")
+        score = torch.sigmoid(torch.tensor(logits_value)).item()
+        print(f"  [Rerank Debug] ✅ 리랭커 점수: {score:.3f}")
         return float(score)
 
+    except RuntimeError as e:
+        # OOM 등 런타임 오류
+        if "out of memory" in str(e).lower():
+            print(f"  ⚠️  리랭커 OOM → fallback 0.5")
+        else:
+            print(f"  ❌ 리랭커 런타임 오류: {e}")
+        return 0.5
     except Exception as e:
-        print(f"  ❌ 리랭커 점수 계산 오류: {e}")
+        print(f"  ❌ 리랭커 예외: {e}")
         import traceback
         traceback.print_exc()
         return 0.5
@@ -1281,8 +1350,15 @@ def score_candidates_zeroshot(candidates, table_bbox, table=None):
     return scored
 
 # ========== 메인 로직 ==========
-def find_title_for_table(table, texts, all_tables=None, used_titles=None):
+def find_title_for_table(table, group_paragraphs, all_tables=None, used_titles=None):
     """Zero-shot 분류로 표 제목 1개 및 설명 여러 개 찾기
+
+    Args:
+        table: 표 객체
+        group_paragraphs: 그룹화된 단락 리스트 (기존 texts 대체)
+            형식: [{"string": "텍스트", "rect": {"l": x1, "t": y1, "r": x2, "b": y2}, ...}, ...]
+        all_tables: 전체 표 리스트 (선택)
+        used_titles: 사용된 제목 집합 (선택)
 
     Returns:
         tuple: (title, title_bbox, descriptions, desc_bboxes)
@@ -1298,7 +1374,7 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         used_titles = set()
 
     # Step 1: 후보 수집 (규칙 기반 필터링)
-    candidates = collect_candidates_for_table(table, texts, all_tables)
+    candidates = collect_candidates_for_table(table, group_paragraphs, all_tables)
 
     # 이미 사용된 제목 제외
     candidates = [c for c in candidates if c['text'] not in used_titles]
@@ -1375,15 +1451,30 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
 
 @app.route('/get_title', methods=['POST'])
 def get_title():
-    """받은 데이터(tables, texts)에 각 테이블마다 title, descriptions 프로퍼티를 추가해서 되돌려주는 API"""
+    """받은 데이터(tables, group_paragraphs)에 각 테이블마다 title, descriptions 프로퍼티를 추가해서 되돌려주는 API"""
     data = request.get_json()
 
     if isinstance(data, dict):
         tables = data.get('tables', [])
-        texts = data.get('texts', [])
+        group_paragraphs = data.get('group_paragraphs', [])
+
+        # 하위 호환성: group_paragraphs가 없으면 texts 사용 (deprecated)
+        if not group_paragraphs and 'texts' in data:
+            print("⚠️  'texts' 사용 (deprecated), 'group_paragraphs' 권장")
+            texts = data.get('texts', [])
+            # texts를 group_paragraphs 형식으로 변환 (간단 변환)
+            group_paragraphs = []
+            for t in texts:
+                bbox = get_bbox_from_text(t)
+                text_content = extract_text_content(t)
+                if bbox and text_content:
+                    group_paragraphs.append({
+                        'string': text_content,
+                        'rect': {'l': bbox[0], 't': bbox[1], 'r': bbox[2], 'b': bbox[3]}
+                    })
 
         print(f"받은 테이블 수: {len(tables)}")
-        print(f"받은 텍스트 수: {len(texts)}")
+        print(f"받은 단락 수: {len(group_paragraphs)}")
 
         result_tables = []
         used_titles = set()
@@ -1391,7 +1482,7 @@ def get_title():
         for idx, table in enumerate(tables):
             table_with_title = copy.deepcopy(table)
             title, title_bbox, descriptions, desc_bboxes = find_title_for_table(
-                table, texts, all_tables=tables, used_titles=used_titles
+                table, group_paragraphs, all_tables=tables, used_titles=used_titles
             )
             table_with_title['title'] = title
             table_with_title['title_bbox'] = title_bbox
