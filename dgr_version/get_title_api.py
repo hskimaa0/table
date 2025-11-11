@@ -2,6 +2,10 @@
 타이틀 추출 API
 Zero-shot 분류 방식: 표 제목 1개 + 설명 여러 개 추출
 """
+import os
+# CUDA 오류 디버깅을 위한 동기화 모드 활성화
+os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
+
 from flask import Flask, jsonify, request
 import copy
 import re
@@ -21,7 +25,7 @@ ZEROSHOT_MODEL = "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"  # Zero-shot 분류 (
 EMBEDDING_MODEL_NAME = "BAAI/bge-m3"  # 임베딩 (다국어 강력)
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 리랭커 (크로스인코더)
 ML_DEVICE = 0  # -1: CPU, 0: GPU
-MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
+MAX_TEXT_INPUT_LENGTH = 256  # ML 모델 입력 최대 길이 (512→256으로 OOM 방지)
 
 # Zero-shot 설정
 TITLE_SCORE_THRESHOLD = 0.7  # 제목 판정 최소 점수 (overconfidence 완화 후 상향)
@@ -802,13 +806,19 @@ def collect_candidates_for_table(table, texts, all_tables=None):
 
 # ========== Zero-shot 분류 ==========
 
-def zeroshot_title_score_batch(candidates, table_bbox):
-    """Zero-shot 분류: 각 후보가 '표 제목'/'설명'일 확률 반환 (overconfidence 완화)
+def zeroshot_title_score_batch(candidates, table_bbox, batch_size=4):
+    """Zero-shot 분류: 각 후보가 '표 제목'/'설명'일 확률 반환 (overconfidence 완화, OOM 방지)
+
+    Args:
+        candidates: 후보 텍스트 리스트
+        table_bbox: 표 bounding box
+        batch_size: 배치 크기 (기본 4, OOM 발생 시 자동으로 줄임)
 
     Returns:
         tuple: (title_scores, desc_scores) - 각각 numpy array of scores (0~1)
     """
     import numpy as np
+    import torch
     if not zeroshot_classifier or not candidates:
         return np.ones(len(candidates)) * 0.5, np.zeros(len(candidates))  # 중립 점수
 
@@ -858,21 +868,47 @@ def zeroshot_title_score_batch(candidates, table_bbox):
             "This is a {}.",
         ]
 
-        def score_once(tmpl: str, labels: list) -> tuple:
-            """특정 템플릿으로 분류 후 제목/설명 점수 반환"""
+        def score_once(tmpl: str, labels: list, batch_texts: list) -> tuple:
+            """특정 템플릿으로 분류 후 제목/설명 점수 반환 (배치 단위)"""
+            # GPU 캐시 클리어 (OOM 방지)
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+
             try:
                 res = zeroshot_classifier(
-                    texts, labels,
+                    batch_texts, labels,
                     hypothesis_template=tmpl,
                     multi_label=False,  # ★ 변경: 합=1 강제, 경쟁적 분류 (overconfidence 완화)
                     truncation=True
                 )
+            except RuntimeError as e:
+                # OOM 발생 시 CPU로 fallback
+                if "out of memory" in str(e).lower():
+                    print(f"  ⚠️  OOM 발생 (배치 크기: {len(batch_texts)}), CPU로 fallback")
+                    # 모델을 CPU로 이동
+                    original_device = zeroshot_classifier.device
+                    try:
+                        zeroshot_classifier.model = zeroshot_classifier.model.cpu()
+                        res = zeroshot_classifier(
+                            batch_texts, labels,
+                            hypothesis_template=tmpl,
+                            multi_label=False,
+                            truncation=True
+                        )
+                        # 모델을 다시 GPU로
+                        if DEVICE_STR.startswith("cuda"):
+                            zeroshot_classifier.model = zeroshot_classifier.model.to(DEVICE_STR)
+                    except Exception as cpu_e:
+                        print(f"  ❌ CPU fallback 실패: {cpu_e}")
+                        return np.ones(len(batch_texts)) * 0.5, np.zeros(len(batch_texts))
+                else:
+                    raise e
             except Exception as e:
                 print(f"  Zero-shot 템플릿 '{tmpl[:20]}...' 예외: {e}")
-                return np.ones(len(candidates)) * 0.5, np.zeros(len(candidates))
+                return np.ones(len(batch_texts)) * 0.5, np.zeros(len(batch_texts))
 
-            title_sc = np.zeros(len(candidates), dtype=float)
-            desc_sc = np.zeros(len(candidates), dtype=float)
+            title_sc = np.zeros(len(batch_texts), dtype=float)
+            desc_sc = np.zeros(len(batch_texts), dtype=float)
 
             for i, r in enumerate(res if isinstance(res, list) else [res]):
                 probs = {lab: float(p) for lab, p in zip(r["labels"], r["scores"])}
@@ -909,24 +945,51 @@ def zeroshot_title_score_batch(candidates, table_bbox):
                 # 디버그: 첫 3개만 출력
                 if i < 3:
                     lang = "KO" if labels == labels_ko else "EN"
-                    print(f"    [Zero-shot {lang}] '{texts[i][:30]}...' -> 제목:{title_sc[i]:.3f}, 설명:{desc_sc[i]:.3f}")
+                    print(f"    [Zero-shot {lang}] '{batch_texts[i][:30]}...' -> 제목:{title_sc[i]:.3f}, 설명:{desc_sc[i]:.3f}")
 
             return title_sc, desc_sc
 
-        # 한국어 + 영어 가설, 다중 템플릿 평균
-        results = []
+        # ★ 배치 처리 (OOM 방지)
+        print(f"  [배치 처리] 총 후보 수: {len(texts)}, 배치 크기: {batch_size}")
 
-        # 한국어 템플릿들
-        for tmpl in templates_ko:
-            results.append(score_once(tmpl, labels_ko))
+        all_title_scores = []
+        all_desc_scores = []
 
-        # 영어 템플릿들
-        for tmpl in templates_en:
-            results.append(score_once(tmpl, labels_en))
+        for start in range(0, len(texts), batch_size):
+            end = min(start + batch_size, len(texts))
+            batch_texts = texts[start:end]
+            print(f"  [배치 {start//batch_size + 1}/{(len(texts)-1)//batch_size + 1}] 처리 중 ({len(batch_texts)}개 텍스트)")
 
-        # 전체 평균
-        title_scores = np.mean([r[0] for r in results], axis=0)
-        desc_scores = np.mean([r[1] for r in results], axis=0)
+            try:
+                # 한국어 + 영어 가설, 다중 템플릿 평균
+                batch_results = []
+
+                # 한국어 템플릿들
+                for tmpl in templates_ko:
+                    batch_results.append(score_once(tmpl, labels_ko, batch_texts))
+
+                # 영어 템플릿들
+                for tmpl in templates_en:
+                    batch_results.append(score_once(tmpl, labels_en, batch_texts))
+
+                # 배치 평균
+                batch_title = np.mean([r[0] for r in batch_results], axis=0)
+                batch_desc = np.mean([r[1] for r in batch_results], axis=0)
+
+                all_title_scores.append(batch_title)
+                all_desc_scores.append(batch_desc)
+
+            except RuntimeError as e:
+                if "out of memory" in str(e).lower() and batch_size > 1:
+                    print(f"  ⚠️  배치 OOM 발생, 배치 크기 절반으로 재시도 ({batch_size} → {batch_size // 2})")
+                    # 재귀 호출로 배치 크기 줄여서 재시도
+                    return zeroshot_title_score_batch(candidates, table_bbox, batch_size=max(1, batch_size // 2))
+                else:
+                    raise e
+
+        # 모든 배치 결과 합치기
+        title_scores = np.concatenate(all_title_scores)
+        desc_scores = np.concatenate(all_desc_scores)
 
         # ★ Temperature scaling (overconfidence 완화, temp=1.5)
         temp = 1.5
