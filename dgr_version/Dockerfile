@@ -24,7 +24,8 @@ RUN pip3 install --upgrade pip && \
       safetensors==0.4.5 \
       hf_transfer==0.1.7 \
       flask>=3.0.0 \
-      numpy>=1.24.0
+      numpy>=1.24.0 \
+      kiwipiepy>=0.17.0
 
 # 애플리케이션 코드 복사 (코드 변경 시 이 레이어만 재빌드)
 COPY get_title_api.py .
