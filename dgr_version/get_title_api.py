@@ -11,32 +11,34 @@ app = Flask(__name__)
 X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
 # 모델 설정
-RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
+ZEROSHOT_MODEL = "MoritzLaurer/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7"
 EMBEDDING_MODEL = "BAAI/bge-m3"
 USE_GPU = True  # GPU 사용 여부
 
 # 모델 로드
 import torch
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from transformers import pipeline
 
-device = "cuda" if USE_GPU and torch.cuda.is_available() else "cpu"
-print(f"▶ Device: {device}")
+device = 0 if USE_GPU and torch.cuda.is_available() else -1
+print(f"▶ Device: {'cuda' if device == 0 else 'cpu'}")
 
-# Reranker 로드
+# Zero-shot 분류기 로드
 try:
-    reranker_tokenizer = AutoTokenizer.from_pretrained(RERANKER_MODEL)
-    reranker_model = AutoModelForSequenceClassification.from_pretrained(RERANKER_MODEL).to(device)
-    reranker_model.eval()
-    print(f"✅ Reranker 모델 로드 완료: {RERANKER_MODEL}")
+    zeroshot_classifier = pipeline(
+        "zero-shot-classification",
+        model=ZEROSHOT_MODEL,
+        device=device
+    )
+    print(f"✅ Zero-shot 모델 로드 완료: {ZEROSHOT_MODEL}")
 except Exception as e:
-    print(f"⚠️ Reranker 모델 로드 실패: {e}")
-    reranker_model = None
-    reranker_tokenizer = None
+    print(f"⚠️ Zero-shot 모델 로드 실패: {e}")
+    zeroshot_classifier = None
 
 # Embedding 모델 로드
 try:
     from sentence_transformers import SentenceTransformer
-    embedding_model = SentenceTransformer(EMBEDDING_MODEL, device=device)
+    device_str = "cuda" if device == 0 else "cpu"
+    embedding_model = SentenceTransformer(EMBEDDING_MODEL, device=device_str)
     print(f"✅ Embedding 모델 로드 완료: {EMBEDDING_MODEL}")
 except Exception as e:
     print(f"⚠️ Embedding 모델 로드 실패: {e}")
@@ -313,20 +315,26 @@ def compute_embedding_similarity(table_text, candidate_text):
         print(f"  ⚠️ Embedding 오류: {e}")
         return 0.5
 
-# ========== Reranker 판단 로직 ==========
+# ========== Zero-shot + Embedding 판단 로직 ==========
 def score_candidates_with_models(candidates, table_text):
-    """Reranker + Embedding으로 각 후보 점수 계산
+    """Zero-shot + Embedding으로 각 후보 점수 계산
 
     Args:
         candidates: [{"text": "...", "bbox": [...], "position": "above/below"}, ...]
         table_text: 표 내용 텍스트
 
     Returns:
-        list: [{"text": "...", "bbox": [...], "position": "...", "rerank_score": 0.X, "embedding_score": 0.X, "final_score": 0.X}, ...]
+        list: [{"text": "...", "bbox": [...], "position": "...", "zeroshot_score": 0.X, "embedding_score": 0.X, "final_score": 0.X}, ...]
     """
     if not candidates:
         print("  ⚠️ 후보 없음")
         return []
+
+    # 표 내용 요약 (처음 300자만 사용)
+    table_text_short = table_text[:300] if len(table_text) > 300 else table_text
+
+    # Zero-shot 라벨
+    labels = ["표 제목", "관련 없음"]
 
     results = []
 
@@ -335,37 +343,38 @@ def score_candidates_with_models(candidates, table_text):
         bbox = cand['bbox']
         position = cand['position']
 
-        # 1. Reranker 점수
-        rerank_score = 0.5
-        if reranker_model and reranker_tokenizer:
+        # 1. Zero-shot 점수
+        zeroshot_score = 0.5
+        if zeroshot_classifier:
             try:
-                # 쿼리-문서 형식: 후보 텍스트가 표 내용과 관련있는지 판단
-                inputs = reranker_tokenizer(
-                    txt, table_text,  # 쿼리를 후보 텍스트로, 문서를 표 내용으로
-                    truncation=True,
-                    max_length=512,
-                    return_tensors="pt"
-                ).to(device)
+                # 가설: "이 텍스트는 다음 표의 {label}이다: {표내용}"
+                hypothesis_template = f"이 텍스트는 다음 표의 {{}}이다: {table_text_short}"
 
-                with torch.no_grad():
-                    outputs = reranker_model(**inputs)
-                    logits = outputs.logits.squeeze().float()
-                    rerank_score = torch.sigmoid(logits).item()
+                result = zeroshot_classifier(
+                    txt,
+                    candidate_labels=labels,
+                    hypothesis_template=hypothesis_template,
+                    multi_label=False
+                )
+
+                # "표 제목" 라벨의 점수
+                title_idx = result['labels'].index("표 제목")
+                zeroshot_score = result['scores'][title_idx]
 
             except Exception as e:
-                print(f"  ⚠️ Reranker 오류: {e}")
+                print(f"  ⚠️ Zero-shot 오류: {e}")
 
-        # 2. Embedding 유사도
+        # 2. Embedding 유사도 (전체 표 내용 사용)
         embedding_score = compute_embedding_similarity(table_text, txt)
 
-        # 3. 최종 점수: Reranker 60% + Embedding 40%
-        final_score = rerank_score * 0.6 + embedding_score * 0.4
+        # 3. 최종 점수: Zero-shot 60% + Embedding 40%
+        final_score = zeroshot_score * 0.6 + embedding_score * 0.4
 
         results.append({
             'text': txt,
             'bbox': bbox,
             'position': position,
-            'rerank_score': rerank_score,
+            'zeroshot_score': zeroshot_score,
             'embedding_score': embedding_score,
             'final_score': final_score
         })
@@ -479,7 +488,7 @@ def compute_distance_score(text_bbox, table_bbox):
         return 0.0  # 표와 겹침
 
 def find_title_from_candidates(candidates, table_bbox, table):
-    """Reranker + Embedding으로 후보 중에서 제목 선택
+    """Zero-shot + Embedding으로 후보 중에서 제목 선택
 
     Returns:
         tuple: (title, title_bbox, descriptions, desc_bboxes)
@@ -491,7 +500,7 @@ def find_title_from_candidates(candidates, table_bbox, table):
     table_text = extract_table_text(table)
     print(f"  [표 내용] {len(table_text)}자: '{table_text}'")
 
-    # Reranker + Embedding으로 점수 계산
+    # Zero-shot + Embedding으로 점수 계산
     scored = score_candidates_with_models(candidates, table_text)
 
     if not scored:
@@ -503,7 +512,7 @@ def find_title_from_candidates(candidates, table_bbox, table):
         pos = "위" if item['position'] == 'above' else "아래"
         is_noun = is_noun_phrase(item['text'])
         noun_str = "명사○" if is_noun else "동사✗"
-        print(f"    {i+1}. [{pos}] Rerank:{item['rerank_score']:.3f} Embed:{item['embedding_score']:.3f} 최종:{item['final_score']:.3f} [{noun_str}] '{item['text']}'")
+        print(f"    {i+1}. [{pos}] Zero:{item['zeroshot_score']:.3f} Embed:{item['embedding_score']:.3f} 최종:{item['final_score']:.3f} [{noun_str}] '{item['text']}'")
 
     # 명사형 종결인 후보 중에서 최고 점수 선택
     best = None
