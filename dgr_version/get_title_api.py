@@ -24,8 +24,8 @@ ML_DEVICE = 0  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
 # Zero-shot 설정
-TITLE_SCORE_THRESHOLD = 0.6  # 제목 판정 최소 점수 (0.5→0.6 상향)
-DESC_SCORE_THRESHOLD = 0.28   # 설명 판정 최소 점수 (0.3→0.28 하향)
+TITLE_SCORE_THRESHOLD = 0.7  # 제목 판정 최소 점수 (overconfidence 완화 후 상향)
+DESC_SCORE_THRESHOLD = 0.4   # 설명 판정 최소 점수 (overconfidence 완화 후 상향)
 
 # ML 모델 로드
 zeroshot_classifier = None
@@ -340,6 +340,82 @@ def is_cross_reference(s: str) -> bool:
 
     # 명확한 설명 문장만 (동사 어미로 끝나는 긴 문장)
     if len(t) >= 35 and re.search(r"(바랍니다|바란다|협의대로|안내하|요청)", t):
+        return True
+
+    return False
+
+def is_source_like(s: str) -> bool:
+    """출처/자료 정보 판별 (한국 문서 특화)
+
+    예: 출처: 한국은행, 자료: 기획재정부, 제공: 통계청 등
+    """
+    t = s.strip()
+
+    # 출처/자료/근거/제공 키워드로 시작
+    if re.search(r"(출처|자료|근거|제공)\s*[:：]", t):
+        return True
+
+    # 공공기관 이름 포함
+    if re.search(r"(KDI|한국은행|통계청|기재부|금감원|국토부|행정안전부|보건복지부|환경부)", t):
+        return True
+
+    # "주: " 또는 "주)" 로 시작 (주석)
+    if re.match(r"^주\s*[:：)]", t):
+        return True
+
+    return False
+
+def is_note_like(s: str) -> bool:
+    """주석/참고 사항 판별
+
+    예: 주) ..., 1) ..., ※ ..., 참고: ...
+    """
+    t = s.strip()
+
+    # "주)" 또는 "주:"로 시작
+    if re.match(r"^주\s*[):：]", t):
+        return True
+
+    # 숫자 + 괄호로 시작 (1), 2), 3)...)
+    if re.match(r"^\d+\s*\)", t):
+        return True
+
+    # ※ 기호로 시작
+    if t.startswith("※"):
+        return True
+
+    # "참고:", "비고:", "주의:" 등
+    if re.match(r"^(참고|비고|주의|주석|각주)\s*[:：]", t):
+        return True
+
+    return False
+
+def is_page_header_like(s: str) -> bool:
+    """페이지 헤더/번호 패턴 판별
+
+    예: 58 │ ..., (2/4), 제1장 │ ...
+    페이지 번호, 장/절 번호 + │ 패턴은 표 제목이 아님
+    """
+    t = s.strip()
+
+    # 숫자 + │ 패턴 (예: 58 │ GIS 기반...)
+    if re.match(r'^\d+\s*│', t):
+        return True
+
+    # (N/M) 형식 (예: (2/4), (1/3))
+    if re.search(r'\(\d+/\d+\)$', t):
+        return True
+
+    # 로마숫자 + │ 패턴 (예: III │ ...)
+    if re.match(r'^[IVX]+\s*│', t):
+        return True
+
+    # "제N장", "제N절" + │ 패턴
+    if re.match(r'^제\s*\d+\s*(장|절|편|부)\s*│', t):
+        return True
+
+    # 단독 숫자 (1~3자리) + │
+    if re.fullmatch(r'\d{1,3}\s*│.*', t):
         return True
 
     return False
@@ -727,7 +803,7 @@ def collect_candidates_for_table(table, texts, all_tables=None):
 # ========== Zero-shot 분류 ==========
 
 def zeroshot_title_score_batch(candidates, table_bbox):
-    """Zero-shot 분류: 각 후보가 '표 제목'/'설명'일 확률 반환 (한/영 이중 가설)
+    """Zero-shot 분류: 각 후보가 '표 제목'/'설명'일 확률 반환 (overconfidence 완화)
 
     Returns:
         tuple: (title_scores, desc_scores) - 각각 numpy array of scores (0~1)
@@ -746,34 +822,50 @@ def zeroshot_title_score_batch(candidates, table_bbox):
                 pos_tag = "[표 위쪽] " if is_above else "[표 아래쪽] "
             texts.append(clamp_text_len(pos_tag + c['text']))
 
-        # 한국어 라벨 & 템플릿
+        # 한국어 라벨 & 템플릿 (negative labels 추가로 contrast 강화)
         labels_ko = [
             "표 제목",
+            "표 소제목",
+            "표 제목 아님",  # negative
             "표 설명",
-            "본문 텍스트",
-            "페이지 번호",
-            "단위 표기",
+            "표 주석",
+            "출처 정보",
+            "단위 설명",
+            "표 설명 아님",  # negative
         ]
-        template_ko = "이것은 {}이다."
+        templates_ko = [
+            "이 텍스트는 정확히 표의 {}입니다.",  # 더 구체적
+            "이 문장은 표에서 {} 역할을 합니다.",
+            "테이블 위/아래에 있는 이 텍스트는 {}입니다.",
+            "이것은 {}이다.",
+        ]
 
-        # 영어 라벨 & 템플릿 (NLI 안정성 향상)
+        # 영어 라벨 & 템플릿 (negative labels 추가)
         labels_en = [
             "table title",
+            "table subtitle",
+            "not table title",  # negative
             "table description",
-            "body text",
-            "page number",
-            "unit notation",
+            "table note",
+            "source information",
+            "unit explanation",
+            "not table description",  # negative
         ]
-        template_en = "This is a {}."
+        templates_en = [
+            "This text is exactly a {} of the table.",  # 더 구체적
+            "This sentence serves as a {}.",
+            "This text above/below the table is a {}.",
+            "This is a {}.",
+        ]
 
         def score_once(tmpl: str, labels: list) -> tuple:
-            """특정 템플릿으로 multi-label 분류 후 제목/설명 점수 반환"""
+            """특정 템플릿으로 분류 후 제목/설명 점수 반환"""
             try:
                 res = zeroshot_classifier(
                     texts, labels,
                     hypothesis_template=tmpl,
-                    multi_label=True,
-                    truncation=True  # 긴 텍스트 안전 처리
+                    multi_label=False,  # ★ 변경: 합=1 강제, 경쟁적 분류 (overconfidence 완화)
+                    truncation=True
                 )
             except Exception as e:
                 print(f"  Zero-shot 템플릿 '{tmpl[:20]}...' 예외: {e}")
@@ -782,16 +874,37 @@ def zeroshot_title_score_batch(candidates, table_bbox):
             title_sc = np.zeros(len(candidates), dtype=float)
             desc_sc = np.zeros(len(candidates), dtype=float)
 
-            for i, r in enumerate(res):
+            for i, r in enumerate(res if isinstance(res, list) else [res]):
                 probs = {lab: float(p) for lab, p in zip(r["labels"], r["scores"])}
 
                 # 제목/설명 확률 분리 (한국어/영어 라벨에 따라)
+                # positive max - negative * 0.5 (contrast 강화)
                 if labels == labels_ko:
-                    title_sc[i] = probs.get("표 제목", 0.0)
-                    desc_sc[i] = probs.get("표 설명", 0.0)
+                    title_pos = max(probs.get("표 제목", 0.0), probs.get("표 소제목", 0.0))
+                    title_neg = probs.get("표 제목 아님", 0.0)
+                    title_sc[i] = max(0.0, title_pos - title_neg * 0.5)  # negative 페널티
+
+                    desc_pos = max(
+                        probs.get("표 설명", 0.0),
+                        probs.get("표 주석", 0.0),
+                        probs.get("출처 정보", 0.0),
+                        probs.get("단위 설명", 0.0)
+                    )
+                    desc_neg = probs.get("표 설명 아님", 0.0)
+                    desc_sc[i] = max(0.0, desc_pos - desc_neg * 0.5)
                 else:  # 영어
-                    title_sc[i] = probs.get("table title", 0.0)
-                    desc_sc[i] = probs.get("table description", 0.0)
+                    title_pos = max(probs.get("table title", 0.0), probs.get("table subtitle", 0.0))
+                    title_neg = probs.get("not table title", 0.0)
+                    title_sc[i] = max(0.0, title_pos - title_neg * 0.5)
+
+                    desc_pos = max(
+                        probs.get("table description", 0.0),
+                        probs.get("table note", 0.0),
+                        probs.get("source information", 0.0),
+                        probs.get("unit explanation", 0.0)
+                    )
+                    desc_neg = probs.get("not table description", 0.0)
+                    desc_sc[i] = max(0.0, desc_pos - desc_neg * 0.5)
 
                 # 디버그: 첫 3개만 출력
                 if i < 3:
@@ -800,13 +913,33 @@ def zeroshot_title_score_batch(candidates, table_bbox):
 
             return title_sc, desc_sc
 
-        # 한국어 + 영어 가설 평균 (NLI 안정성 향상)
-        results = [
-            score_once(template_ko, labels_ko),
-            score_once(template_en, labels_en),
-        ]
+        # 한국어 + 영어 가설, 다중 템플릿 평균
+        results = []
+
+        # 한국어 템플릿들
+        for tmpl in templates_ko:
+            results.append(score_once(tmpl, labels_ko))
+
+        # 영어 템플릿들
+        for tmpl in templates_en:
+            results.append(score_once(tmpl, labels_en))
+
+        # 전체 평균
         title_scores = np.mean([r[0] for r in results], axis=0)
         desc_scores = np.mean([r[1] for r in results], axis=0)
+
+        # ★ Temperature scaling (overconfidence 완화, temp=1.5)
+        temp = 1.5
+        combined_scores = np.stack([title_scores, desc_scores], axis=1)
+        # softmax with temperature
+        exp_scores = np.exp(combined_scores / temp)
+        softened = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
+        title_scores, desc_scores = softened[:, 0], softened[:, 1]
+
+        # 최종 normalization (합=1)
+        total = title_scores + desc_scores + 1e-8  # zero division 방지
+        title_scores = title_scores / total
+        desc_scores = desc_scores / total
 
         return title_scores, desc_scores
 
@@ -879,9 +1012,12 @@ def rerank_score(query, doc):
         return 0.5  # 중립 점수
 
     try:
+        # 한국어 컨텍스트 추가 (프롬프트 강화)
+        query_enhanced = query + " [표 제목 또는 설명 관련성 점수]"
+
         # 토큰화
         inputs = reranker_tokenizer(
-            query, doc,
+            query_enhanced, doc,
             truncation=True,
             max_length=512,
             return_tensors="pt"
@@ -962,8 +1098,18 @@ def score_candidates_zeroshot(candidates, table_bbox, table=None):
         pattern_title_boost = 0.0
         pattern_desc_boost = 0.0
 
+        # 페이지 헤더 패턴은 제목 불가 (최우선)
+        if is_page_header_like(txt):
+            pattern_title_boost = -0.6  # 매우 강력한 페널티 (헤더 불가)
+            pattern_desc_boost = 0.0    # 설명도 아님
+
+        # 출처/주석 패턴은 설명 확정
+        elif is_source_like(txt) or is_note_like(txt):
+            pattern_desc_boost = 0.45  # 매우 강한 설명 신호
+            pattern_title_boost = -0.6  # 제목 불가
+
         # 날짜/시간 패턴은 제목 불가
-        if is_datetime_like(txt):
+        elif is_datetime_like(txt):
             pattern_title_boost = -0.6  # 매우 강력한 페널티
             pattern_desc_boost = 0.1
 
@@ -972,11 +1118,11 @@ def score_candidates_zeroshot(candidates, table_bbox, table=None):
             pattern_title_boost = -0.5  # 강력한 페널티
             pattern_desc_boost = 0.2    # 설명 가능성 증가
 
-        # "표 X.X ..." 패턴은 강력한 제목 신호
+        # "표 X.X ..." 패턴은 강력한 제목 신호 (더 강화)
         elif is_table_title_like(txt):
-            pattern_title_boost = 0.5  # 0.3 → 0.5로 강화
-            # 표 제목 패턴이면 설명 가능성 낮춤
-            pattern_desc_boost = -0.2
+            pattern_title_boost = 0.6  # 0.5 → 0.6로 강화
+            # 표 제목 패턴이면 설명 가능성 낮춤 (더 강화)
+            pattern_desc_boost = -0.3  # -0.2 → -0.3
 
         # 섹션 헤더 (1. 제목, ㅇ 제목 등)
         elif is_section_header_like(txt):
@@ -998,17 +1144,23 @@ def score_candidates_zeroshot(candidates, table_bbox, table=None):
             pattern_desc_boost = 0.25
             pattern_title_boost = -0.3
 
-        # 위치 보너스 제거 (위/아래 공평하게 평가)
+        # 위치 가중치 (한국 문서 특성: 제목은 거의 표 위쪽)
         position_boost = 0.0
+        if table_bbox:
+            is_above = bb[3] <= table_bbox[1]
+            if is_above:
+                position_boost = 0.35  # 표 위쪽 제목 보너스 (강화)
+            else:
+                position_boost = -0.45  # 표 아래쪽은 거의 제목 불가 (강화)
 
         # 최종 점수 계산
-        # 제목: Zero-shot 45% + 리랭커 25% + 패턴 30%
+        # 제목: Zero-shot 55% + 리랭커 20% + 패턴 + 위치 (위치 가중치 1.5배 적용)
         # 설명: Zero-shot 40% + 임베딩 25% + 리랭커 15% + 패턴 20%
         combined_title_score = (
-            title_score * 0.45 +
-            rerank_sim * 0.25 +
+            title_score * 0.55 +
+            rerank_sim * 0.20 +
             pattern_title_boost +
-            position_boost
+            position_boost * 1.5  # 위치를 더 강하게 반영
         )
 
         combined_desc_score = (
@@ -1073,8 +1225,16 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
               f"설명: {x['desc_score']:.3f} (패턴: {x.get('pattern_desc', 0):+.2f}) | "
               f"임베딩: {x.get('embedding_sim', 0):.3f} | 리랭커: {x.get('rerank_sim', 0):.3f}")
 
-    # 제목 선택 (제목 점수가 가장 높은 것)
-    scored.sort(key=lambda x: x['title_score'], reverse=True)
+    # 제목 선택 (제목 점수가 가장 높은 것, 동점 시 2차 기준 적용)
+    # 정렬 우선순위: 제목 점수 > 패턴 보너스 > 리랭커 > y 좌표 (위쪽 우선)
+    scored.sort(
+        key=lambda x: (
+            -x['title_score'],                      # 제목 점수 역순 (높을수록 우선)
+            -x.get('pattern_title', 0),             # 패턴 보너스 역순 (높을수록 우선)
+            -x.get('rerank_sim', 0),                # 리랭커 역순 (높을수록 우선)
+            x['bbox'][1] if x['bbox'] else float('inf')  # y 좌표 오름차순 (위쪽 우선)
+        )
+    )
     best = scored[0]
 
     # 임계값 체크
@@ -1103,8 +1263,16 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         desc_candidates.sort(key=lambda x: x['desc_score'], reverse=True)
 
         # 설명 점수가 임계값 이상인 모든 후보를 설명으로 선택
+        # 단, 표 패턴('표 X.X ...')이 있으면 임계값을 높여서 제목으로 오분류 방지
         for desc_cand in desc_candidates:
-            if desc_cand['desc_score'] >= DESC_SCORE_THRESHOLD:
+            # 동적 임계값 설정
+            effective_desc_threshold = DESC_SCORE_THRESHOLD
+
+            # 표 패턴이 있으면 설명으로 선택되려면 더 높은 점수 필요
+            if is_table_title_like(desc_cand['text']):
+                effective_desc_threshold += 0.2  # 0.28 → 0.48
+
+            if desc_cand['desc_score'] >= effective_desc_threshold:
                 descriptions.append(desc_cand['text'])
                 desc_bboxes.append(desc_cand['bbox'])
                 print(f"  ✅ 설명: '{desc_cand['text'][:60]}' (설명 점수: {desc_cand['desc_score']:.3f})")
