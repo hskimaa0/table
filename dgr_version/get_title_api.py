@@ -1035,6 +1035,7 @@ def summarize_table_context(table, max_length=256):
         str: "[TABLE] 헤더/상단행 요약" 형태
     """
     if 'rows' not in table or not table['rows']:
+        print("  [Debug] 표 컨텍스트: 빈 테이블")
         return "[TABLE]"
 
     headers = []
@@ -1059,24 +1060,40 @@ def summarize_table_context(table, max_length=256):
 
     # 길이 제한
     ctx = " ".join(headers)[:max_length]
-    return "[TABLE] " + ctx if ctx else "[TABLE]"
+    result = "[TABLE] " + ctx if ctx else "[TABLE]"
+    print(f"  [Debug] 표 컨텍스트 ({len(result)}자): '{result[:80]}...'")
+    return result
 
-def rerank_score(query, doc):
+def rerank_score(query, doc, table_text=None):
     """리랭커로 query-doc 연관도 점수 계산
 
     Args:
         query: 쿼리 텍스트 (예: "[TABLE] 헤더 요약")
         doc: 문서 텍스트 (예: 후보 제목/설명)
+        table_text: 표 전체 텍스트 (쿼리 강화용, 선택)
 
     Returns:
         float: 연관도 점수 (0~1)
     """
     if not reranker_model or not reranker_tokenizer:
-        return 0.5  # 중립 점수
+        print("  [Debug] 리랭커 모델/토크나이저 None → fallback 0.5")
+        return 0.5
 
     try:
-        # 한국어 컨텍스트 추가 (프롬프트 강화)
+        # 쿼리 강화: 한국어 컨텍스트 추가
         query_enhanced = query + " [표 제목 또는 설명 관련성 점수]"
+
+        # 쿼리가 너무 짧으면 표 텍스트로 보강
+        if len(query) < 20 and table_text:
+            query_enhanced += " " + table_text[:100]
+            print(f"  [Debug] 쿼리 짧아서 표 텍스트 추가 (총 {len(query_enhanced)}자)")
+
+        print(f"  [Debug] 리랭커 쿼리: '{query_enhanced[:60]}...'")
+        print(f"  [Debug] 리랭커 문서: '{doc[:60]}...'")
+
+        # GPU 캐시 클리어 (OOM 방지)
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
         # 토큰화
         inputs = reranker_tokenizer(
@@ -1086,16 +1103,29 @@ def rerank_score(query, doc):
             return_tensors="pt"
         ).to(DEVICE_STR)
 
+        print(f"  [Debug] 입력 키: {list(inputs.keys())}")
+        if 'input_ids' in inputs:
+            print(f"  [Debug] input_ids shape: {inputs['input_ids'].shape}")
+
         # 추론
         with torch.no_grad():
             logits = reranker_model(**inputs).logits.squeeze().float()
+            print(f"  [Debug] Logits: {logits.item():.6f}")
+
+        # logits가 0에 가까우면 쿼리가 약함 → 중립 점수
+        if torch.abs(logits) < 1e-6:
+            print("  [Debug] Logits 거의 0 → 중립 fallback")
+            return 0.5
 
         # 시그모이드로 0~1 변환
         score = torch.sigmoid(logits).item()
+        print(f"  [Debug] 리랭커 점수: {score:.3f}")
         return float(score)
 
     except Exception as e:
-        print(f"  리랭커 점수 계산 오류: {e}")
+        print(f"  ❌ 리랭커 점수 계산 오류: {e}")
+        import traceback
+        traceback.print_exc()
         return 0.5
 
 def compute_embedding_similarity(table_text, candidate_text, model):
@@ -1152,10 +1182,10 @@ def score_candidates_zeroshot(candidates, table_bbox, table=None):
         if embedding_model and table_text:
             embedding_sim = compute_embedding_similarity(table_text, txt, embedding_model)
 
-        # 리랭커 점수 계산
+        # 리랭커 점수 계산 (표 텍스트도 전달)
         rerank_sim = 0.5
         if reranker_model and table_ctx:
-            rerank_sim = rerank_score(table_ctx, txt)
+            rerank_sim = rerank_score(table_ctx, txt, table_text=table_text)
 
         # 패턴 기반 보너스/페널티
         pattern_title_boost = 0.0
