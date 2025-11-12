@@ -68,7 +68,7 @@ ZEROSHOT_TEMPLATES = [
 TIEBREAKER_THRESHOLD = 0.03  # 1위와 2위 점수 차이 임계값
 
 # 최종 검증 설정
-MIN_ZEROSHOT_NO_PATTERN = 0.5  # 제목 패턴 없을 때 최소 Zero-shot 점수
+MIN_ZEROSHOT_NO_PATTERN = 0.0  # 제목 패턴 없을 때 최소 Zero-shot 점수
 
 # 패턴 관련 상수
 SUBTITLE_MIN_LENGTH = 4  # 소제목 최소 길이
