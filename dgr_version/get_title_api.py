@@ -1,11 +1,12 @@
 """
 타이틀 추출 API
-하이브리드 방식: 리랭커 + 레이아웃 점수
+LLM 방식: Ollama gemma2:2b로 표+텍스트 분석
 """
 from flask import Flask, jsonify, request
 import copy
 import re
-import numpy as np
+import requests
+import json
 
 app = Flask(__name__)
 
@@ -15,22 +16,14 @@ Y_LINE_TOLERANCE = 100  # 같은 줄로 간주할 y 좌표 허용 오차 (px)
 UP_MULTIPLIER = 1.5  # 표 위쪽 탐색 범위 (표 높이의 배수)
 X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
-# ML 모델 관련
-RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 크로스-인코더 리랭커 (다국어 SOTA)
-EMBEDDER_MODEL = "BAAI/bge-m3"  # 임베딩 모델 (1차 필터링용)
-ML_DEVICE = 0  # -1: CPU, 0: GPU
-MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
+# LLM 설정
+OLLAMA_URL = "http://localhost:11434/api/generate"  # Ollama API 엔드포인트
+LLM_MODEL = "gemma2:2b"  # 사용할 모델
+LLM_TEMPERATURE = 0.1  # 낮을수록 결정론적
+LLM_MAX_TOKENS = 100  # 최대 생성 토큰 수
 
-# 모델 사용 설정
-USE_RERANKER = True   # 리랭커 사용 여부
-USE_EMBEDDER_FILTER = True  # 임베딩 기반 1차 필터링 사용 여부
-
-SCORE_THRESHOLD = 0.40   # 제목 판정 최소 점수 (Reranker 확률 40% 이상)
-EMBEDDING_SIMILARITY_THRESHOLD = 0.3  # 1차 필터링: 표 문맥과 유사도 최소값
-
-# 리랭커 설정
-RERANKER_TEMPERATURE = 0.6  # 온도 소프트맥스 tau 값 (< 1 → 대비 강화)
-RERANKER_BATCH_SIZE = 32    # 리랭커 배치 크기
+MAX_TEXT_INPUT_LENGTH = 512  # LLM 입력 최대 길이
+SCORE_THRESHOLD = 0.40   # 제목 판정 최소 점수 (더 이상 사용 안 함)
 
 
 # 패턴 관련 상수
@@ -49,61 +42,8 @@ API_HOST = '0.0.0.0'
 API_PORT = 5555
 API_DEBUG = True
 
-# ML 모델 변수
-reranker = None
-embedder = None
-
-# 디바이스 설정
-import torch
-
-def _resolve_device():
-    """ML_DEVICE 설정과 CUDA 가용성에 따라 디바이스 결정"""
-    use_gpu = (ML_DEVICE == 0 and torch.cuda.is_available())
-    return "cuda:0" if use_gpu else "cpu"
-
-DEVICE_STR = _resolve_device()
-print(f"▶ Inference device = {DEVICE_STR}")
-
-# GPU 성능 최적화 (A100/RTX40 계열)
-if DEVICE_STR.startswith("cuda"):
-    torch.set_float32_matmul_precision("high")
-    try:
-        torch.backends.cuda.matmul.allow_tf32 = True
-        torch.backends.cudnn.allow_tf32 = True
-    except Exception:
-        pass
-
-# 리랭커 모델 로드
-try:
-    from sentence_transformers import CrossEncoder
-    try:
-        reranker = CrossEncoder(
-            RERANKER_MODEL,
-            device=DEVICE_STR,
-            default_activation_function=None  # logits 모드 (softmax 미적용)
-        )
-    except TypeError:
-        # 일부 구버전은 인자 없이도 logits 반환 가능
-        reranker = CrossEncoder(RERANKER_MODEL, device=DEVICE_STR)
-    print(f"✅ 리랭커 로드 완료 ({RERANKER_MODEL}, device={DEVICE_STR})")
-except ImportError:
-    print("⚠️  sentence-transformers 라이브러리 없음 (CrossEncoder)")
-    reranker = None
-except Exception as e:
-    print(f"⚠️  리랭커 로드 실패: {e}")
-    reranker = None
-
-# 임베딩 모델 로드 (1차 필터링용)
-try:
-    from sentence_transformers import SentenceTransformer
-    embedder = SentenceTransformer(EMBEDDER_MODEL, device=DEVICE_STR)
-    print(f"✅ 임베더 로드 완료 ({EMBEDDER_MODEL}, device={DEVICE_STR})")
-except ImportError:
-    print("⚠️  sentence-transformers 라이브러리 없음 (SentenceTransformer)")
-    embedder = None
-except Exception as e:
-    print(f"⚠️  임베더 로드 실패: {e}")
-    embedder = None
+print(f"[OK] LLM API: {OLLAMA_URL}")
+print(f"[OK] 사용 모델: {LLM_MODEL}")
 
 # ========== 유틸리티 함수 ==========
 def clean_text(s: str) -> str:
@@ -448,107 +388,50 @@ def build_table_context(table, max_cells=10):
 
     return " / ".join(parts) if parts else "표 정보 없음"
 
-# ========== ML 스코어링 ==========
-def make_reranker_pair(cand_text: str, table_ctx: str):
-    """리랭커 입력 쌍 생성 (명시적 역할 프롬프트)"""
-    q = f"[표제목 후보] {clamp_text_len(cand_text)}"
-    p = f"[표 문맥] {clamp_text_len(table_ctx)}"
-    return (q, p)
-
-def reranker_logits_batch(pairs):
-    """배치 리랭커 로짓 반환
-    pairs: [(cand_text, table_ctx), ...]
-    반환: numpy array of logits (float)
-    """
-    import numpy as np
-    if not reranker or not pairs:
-        return np.zeros((len(pairs),), dtype=float)
+# ========== LLM 함수 ==========
+def call_ollama_llm(prompt: str) -> str:
+    """Ollama API를 호출하여 LLM 응답 받기"""
     try:
-        out = reranker.predict(pairs, convert_to_numpy=True, batch_size=RERANKER_BATCH_SIZE)
-        logits = np.asarray(out).reshape(-1)
+        payload = {
+            "model": LLM_MODEL,
+            "prompt": prompt,
+            "temperature": LLM_TEMPERATURE,
+            "stream": False,
+            "options": {
+                "num_predict": LLM_MAX_TOKENS
+            }
+        }
 
-        # 디버깅: 로짓 출력
-        for i, (pair, logit) in enumerate(zip(pairs, logits)):
-            cand_text = pair[0].replace("[표제목 후보] ", "")[:30]
-            print(f"      [RR-DEBUG] '{cand_text}' → logit={logit:.3f}")
+        print(f"    [API] 요청 전송 중 - 모델: {LLM_MODEL}, 온도: {LLM_TEMPERATURE}")
+        import time
+        start = time.time()
 
-        return logits
+        response = requests.post(OLLAMA_URL, json=payload, timeout=30)
+        response.raise_for_status()
+
+        elapsed = time.time() - start
+        print(f"    [API] 응답 수신 완료 ({elapsed:.2f}초)")
+
+        result = response.json()
+        llm_response = result.get("response", "").strip()
+
+        print(f"    [API] 응답 길이: {len(llm_response)}자")
+
+        return llm_response
+
+    except requests.exceptions.RequestException as e:
+        print(f"  [!] Ollama API 오류: {e}")
+        return ""
     except Exception as e:
-        print(f"  리랭커 오류: {e}")
-        return np.zeros((len(pairs),), dtype=float)
-
-def softmax_with_temp_from_logits(logits, tau=RERANKER_TEMPERATURE):
-    """로짓에 온도를 적용한 소프트맥스 (후보 집합 내 대비 ↑)"""
-    import numpy as np
-    x = np.asarray(logits, dtype=float) / max(tau, 1e-6)
-    x = x - x.max()  # overflow 방지
-    ex = np.exp(x)
-    return ex / (ex.sum() + 1e-12)
-
-
-def filter_candidates_by_embedding(candidates, table_ctx):
-    """임베딩 유사도 기반 1차 필터링: 표 문맥과 관련 있는 후보만 남김"""
-    import numpy as np
-
-    if not embedder or not candidates:
-        return candidates
-
-    try:
-        # 표 문맥 임베딩
-        ctx_embedding = embedder.encode(table_ctx, convert_to_numpy=True, normalize_embeddings=True)
-
-        # 후보 텍스트 임베딩
-        candidate_texts = [c['text'] for c in candidates]
-        candidate_embeddings = embedder.encode(candidate_texts, convert_to_numpy=True, normalize_embeddings=True)
-
-        # 코사인 유사도 계산 (정규화된 벡터라서 내적만 하면 됨)
-        similarities = np.dot(candidate_embeddings, ctx_embedding)
-
-        # threshold 이상인 후보만 남김
-        filtered = []
-        for i, c in enumerate(candidates):
-            if similarities[i] >= EMBEDDING_SIMILARITY_THRESHOLD:
-                filtered.append(c)
-                print(f"    [EMB] '{c['text'][:30]}' → sim={similarities[i]:.3f} ✓")
-            else:
-                print(f"    [EMB] '{c['text'][:30]}' → sim={similarities[i]:.3f} ✗ (제외)")
-
-        return filtered if filtered else candidates  # 모두 필터링되면 원본 반환
-
-    except Exception as e:
-        print(f"  임베딩 필터링 오류: {e}")
-        return candidates
-
-def build_table_context_rich(table, max_cells=10):
-    """표 문맥 구축 (헤더 레이블 명시) - 리랭커용"""
-    headers = []
-    if 'rows' in table and table['rows']:
-        for cell in table['rows'][0]:
-            cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
-            if cell_texts:
-                headers.append(clean_text(" ".join(cell_texts)))
-
-    first_row = []
-    if 'rows' in table and len(table['rows']) >= 2:
-        for cell in table['rows'][1]:
-            cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
-            if cell_texts:
-                first_row.append(clean_text(" ".join(cell_texts)))
-
-    parts = []
-    if headers:
-        parts.append(f"헤더: [{', '.join(headers[:max_cells])}]")
-    if first_row:
-        parts.append(f"첫행: [{', '.join(first_row[:max_cells])}]")
-
-    return " / ".join(parts) if parts else "표 정보 없음"
+        print(f"  [!] LLM 호출 오류: {e}")
+        return ""
 
 def build_table_context_full(table):
-    """표 전체 내용 구축 - 임베딩 필터링용"""
+    """표 전체 내용 구축 - LLM 프롬프트용"""
     all_texts = []
 
     if 'rows' in table and table['rows']:
-        for row in table['rows']:
+        for row_idx, row in enumerate(table['rows'][:10]):  # 최대 10행만 (토큰 제한)
             row_texts = []
             for cell in row:
                 cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
@@ -557,35 +440,74 @@ def build_table_context_full(table):
             if row_texts:
                 all_texts.append(" | ".join(row_texts))
 
-    return " / ".join(all_texts) if all_texts else "표 정보 없음"
+    return "\n".join(all_texts) if all_texts else "표 정보 없음"
 
-def score_candidates_with_logits(candidates, table_ctx, table_bbox):
-    """리랭커 기반 스코어링"""
-    import numpy as np
+def select_title_with_llm(candidates, table_content):
+    """LLM을 사용하여 후보 중 가장 적절한 제목 선택"""
+    if not candidates:
+        return None
 
-    # 리랭커: 후보 집합 내 상대 순위
-    pairs = [make_reranker_pair(c['text'], table_ctx) for c in candidates]
-    logits = reranker_logits_batch(pairs) if USE_RERANKER else np.zeros(len(candidates))
-    rer_prob = softmax_with_temp_from_logits(logits)
+    # 프롬프트 구성
+    candidates_text = "\n".join([f"{i+1}. {c['text']}" for i, c in enumerate(candidates)])
 
-    scored = []
-    for i, c in enumerate(candidates):
-        txt, bb = c['text'], c['bbox']
+    prompt = f"""다음은 표의 내용입니다:
+{table_content[:1000]}
 
-        # 최종 점수 = 리랭커 점수
-        final = float(rer_prob[i])
+위 표의 제목으로 가장 적절한 것을 아래 후보 중에서 골라주세요:
+{candidates_text}
 
-        scored.append({
-            "text": txt, "bbox": bb, "score": final,
-            "details": {
-                "reranker": float(rer_prob[i])
-            }
-        })
-    return scored
+규칙:
+- 표의 내용과 가장 관련 있는 것을 선택
+- 단위 표기(예: (단위:원))는 제목이 아님
+- 교차 참조 문장(예: 표 X에 의하면)은 제목이 아님
+- 긴 설명문은 제목이 아님
+- 표 번호가 포함된 것을 우선 선택(예: 표 3-2 연간 실적)
+- 제목이 없다고 판단되면 "없음"이라고만 답하세요
+
+답변은 반드시 숫자만 출력하세요 (예: 1 또는 2 또는 없음). 설명 없이 숫자만."""
+
+    print(f"\n  [DEBUG-LLM] 프롬프트 생성 완료")
+    print(f"    - 표 내용 길이: {len(table_content[:1000])}자")
+    print(f"    - 후보 개수: {len(candidates)}개")
+    print(f"    - 프롬프트 전체 길이: {len(prompt)}자")
+    print(f"\n  [DEBUG-LLM] 프롬프트 미리보기:")
+    print(f"    {prompt[:300]}...")
+
+    print(f"\n  [DEBUG-LLM] Ollama API 호출 중...")
+    response = call_ollama_llm(prompt)
+    print(f"  [DEBUG-LLM] 응답 수신: '{response}'")
+
+    # 응답 파싱
+    print(f"\n  [DEBUG-LLM] 응답 파싱 시작")
+    response = response.strip()
+
+    # "없음" 또는 "제목 없음" 등
+    if "없음" in response.lower() or "no" in response.lower():
+        print(f"    - '없음' 감지: LLM이 제목 없음으로 판단")
+        return None
+
+    # 숫자 추출
+    import re
+    numbers = re.findall(r'\d+', response)
+    print(f"    - 추출된 숫자: {numbers}")
+
+    if numbers:
+        idx = int(numbers[0]) - 1  # 1-based → 0-based
+        print(f"    - 인덱스 변환: {numbers[0]} → {idx}")
+
+        if 0 <= idx < len(candidates):
+            print(f"    - 유효한 인덱스, 후보 반환: '{candidates[idx]['text']}'")
+            return candidates[idx]
+        else:
+            print(f"    - 인덱스 범위 초과 ({idx} >= {len(candidates)})")
+
+    # 파싱 실패 시 첫 번째 후보 반환
+    print(f"  [!] LLM 응답 파싱 실패, 첫 번째 후보 반환")
+    return candidates[0] if candidates else None
 
 # ========== 메인 로직 ==========
 def find_title_for_table(table, texts, all_tables=None, used_titles=None):
-    """하이브리드 방식으로 표 제목 찾기"""
+    """LLM 방식으로 표 제목 찾기"""
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
         print("  테이블 bbox 없음")
@@ -597,43 +519,38 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         used_titles = set()
 
     # Step 1: 후보 수집 (규칙 기반 필터링)
+    print("\n[DEBUG] Step 1: 후보 수집 (규칙 기반)")
     candidates = collect_candidates_for_table(table, texts, all_tables)
+    print(f"  - 위치/거리 필터링 후: {len(candidates)}개")
+    for i, c in enumerate(candidates[:5]):  # 처음 5개만
+        print(f"    {i+1}. '{c['text'][:50]}'")
 
     # 이미 사용된 제목 제외
+    before_used = len(candidates)
     candidates = [c for c in candidates if c['text'] not in used_titles]
+    if before_used != len(candidates):
+        print(f"  - 이미 사용된 제목 제외: {before_used}→{len(candidates)}개")
 
-    print(f"  후보 수집: {len(candidates)}개")
+    print(f"  총 후보: {len(candidates)}개")
 
     if not candidates:
-        print("  ❌ 후보 없음")
+        print("  [X] 후보 없음")
         return "", None
 
-    # Step 2: 표 문맥 구축
-    table_ctx = build_table_context_rich(table)
-    print(f"  표 문맥: {table_ctx[:MAX_CONTEXT_DISPLAY_LENGTH]}")
-
-    # Step 2.5: 임베딩 기반 1차 필터링 (표 전체 내용과 관련 있는 후보만)
-    if USE_EMBEDDER_FILTER and embedder and len(candidates) > 3:
-        before_filter = len(candidates)
-        table_full_ctx = build_table_context_full(table)  # 전체 표 내용
-        candidates = filter_candidates_by_embedding(candidates, table_full_ctx)
-        print(f"  임베딩 필터링: {before_filter}→{len(candidates)}개")
-
-        if not candidates:
-            print("  ❌ 필터링 후 후보 없음")
-            return "", None
-
-    # Step 2.9: 유닛 후보 삭제
+    # Step 2: 유닛 후보 삭제
+    print("\n[DEBUG] Step 2: 유닛 필터링")
+    before_unit = len(candidates)
     if any(is_table_title_like(c['text']) for c in candidates):
+        unit_removed = [c for c in candidates if is_unit_like(c['text'])]
         candidates = [c for c in candidates if not is_unit_like(c['text'])]
-        print(f"  유닛 필터링 후: {len(candidates)}개")
+        print(f"  - 유닛 제거: {before_unit}→{len(candidates)}개")
+        for u in unit_removed[:3]:
+            print(f"    제거: '{u['text']}'")
+    else:
+        print(f"  - 제목 패턴 없음, 유닛 필터링 스킵")
 
-    # 제목 패턴 통계
-    titles = [c for c in candidates if is_table_title_like(c['text'])]
-    if len(titles) >= 1:
-        print(f"  제목패턴 후보: {len(titles)}개 (ML 기반 점수 적용)")
-
-    # 하드 필터링: 명확한 노이즈만 제거
+    # Step 3: 하드 필터링 - 명확한 노이즈만 제거
+    print("\n[DEBUG] Step 3: 노이즈 필터링")
     before = len(candidates)
     filtered_out = []
     kept = []
@@ -648,56 +565,66 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         else:
             kept.append(c)
     candidates = kept
-    if len(candidates) != before:
-        print(f"  노이즈 제거: {before}→{len(candidates)}개")
+    print(f"  - 노이즈 제거: {before}→{len(candidates)}개")
+    if filtered_out:
         for fo in filtered_out[:MAX_FILTER_DISPLAY]:
             print(f"    제거: {fo}")
 
     if not candidates:
-        print("  ❌ 필터링 후 후보 없음")
+        print("  [X] 필터링 후 후보 없음")
         return "", None
 
-    # Step 3: ML 기반 스코어링
-    print("\n  후보 점수:")
-    scored = score_candidates_with_logits(candidates, table_ctx, table_bbox)
-    for x in scored:
-        t = x["text"][:MAX_DISPLAY_TEXT_LENGTH] if len(x["text"]) > MAX_DISPLAY_TEXT_LENGTH else x["text"]
-        d = x["details"]
-        print(f"    '{t}'")
-        print(f"      reranker: {d['reranker']:.3f}, Final: {x['score']:.3f}")
+    # Step 4: 표 전체 내용 구축
+    print("\n[DEBUG] Step 4: 표 내용 구축")
+    table_content = build_table_context_full(table)
+    print(f"  - 표 내용 (처음 {MAX_CONTEXT_DISPLAY_LENGTH}자): {table_content[:MAX_CONTEXT_DISPLAY_LENGTH]}...")
+    print(f"  - 전체 길이: {len(table_content)}자")
 
-    # 최고 점수 선택 (동점이면 위쪽 우선)
-    # 1차: 점수 내림차순, 2차: y 좌표 오름차순 (위쪽이 작은 값)
-    scored.sort(key=lambda x: (-x['score'], x['bbox'][1]))
-    best = scored[0]
+    # Step 5: LLM으로 제목 선택
+    print("\n[DEBUG] Step 5: LLM으로 제목 선택")
+    print(f"  - 최종 후보 목록:")
+    for i, c in enumerate(candidates):
+        print(f"    {i+1}. '{c['text']}'")
 
-    # 최종 검증
-    if best['score'] < SCORE_THRESHOLD:
-        print(f"  ⚠️  최고 점수({best['score']:.3f})가 임계값({SCORE_THRESHOLD}) 미만")
+    selected = select_title_with_llm(candidates, table_content)
+
+    if selected is None:
+        print("  [X] LLM이 제목 없음으로 판단")
         return "", None
 
-    print(f"\n  ✅ 선택: '{best['text']}' (점수: {best['score']:.3f})")
-    return best['text'], best['bbox']
+    print(f"\n[DEBUG] 최종 선택: '{selected['text']}'")
+    return selected['text'], selected['bbox']
 
 @app.route('/get_title', methods=['POST'])
 def get_title():
     """받은 데이터(tables, texts)에 각 테이블마다 title 프로퍼티를 추가해서 되돌려주는 API"""
+    print("\n" + "="*80)
+    print("[API 요청 수신]")
+    print("="*80)
+
     data = request.get_json()
 
     if isinstance(data, dict):
         tables = data.get('tables', [])
         texts = data.get('texts', [])
 
-        print(f"받은 테이블 수: {len(tables)}")
-        print(f"받은 텍스트 수: {len(texts)}")
+        print(f"\n[요청 데이터]")
+        print(f"  - 테이블 수: {len(tables)}개")
+        print(f"  - 텍스트 수: {len(texts)}개")
 
         result_tables = []
         used_titles = set()
 
         for idx, table in enumerate(tables):
+            print(f"\n{'='*80}")
+            print(f"[테이블 {idx+1}/{len(tables)} 처리 시작]")
+            print(f"{'='*80}")
+
             table_with_title = copy.deepcopy(table)
             title, title_bbox = find_title_for_table(table, texts, all_tables=tables, used_titles=used_titles)
-            print(f"테이블 {idx} 타이틀: '{title}'")
+
+            print(f"\n[테이블 {idx+1} 결과] 타이틀: '{title}'")
+
             table_with_title['title'] = title
             table_with_title['title_bbox'] = title_bbox
 
@@ -706,7 +633,12 @@ def get_title():
 
             result_tables.append(table_with_title)
 
-        print(f"\n최종 반환: {len(result_tables)}개 테이블")
+        print(f"\n{'='*80}")
+        print(f"[API 처리 완료]")
+        print(f"  - 반환 테이블: {len(result_tables)}개")
+        print(f"  - 발견된 제목: {len(used_titles)}개")
+        print(f"{'='*80}\n")
+
         return jsonify(result_tables)
 
     elif isinstance(data, list):
