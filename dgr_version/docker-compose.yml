@@ -1,20 +1,25 @@
 version: '3.8'
 
 services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: always
+
   api:
     build: .
+    container_name: title_api
     ports:
       - "5555:5555"
-    restart: always
+    depends_on:
+      - ollama
     environment:
-      - HF_HUB_ENABLE_HF_TRANSFER=1
-      - TOKENIZERS_PARALLELISM=false
-    volumes:
-      - ~/.cache/huggingface:/root/.cache/huggingface
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+      - OLLAMA_URL=http://ollama:11434/api/generate
+    restart: always
+
+volumes:
+  ollama_data:

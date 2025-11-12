@@ -7,6 +7,7 @@ import copy
 import re
 import requests
 import json
+import os
 
 app = Flask(__name__)
 
@@ -16,11 +17,11 @@ Y_LINE_TOLERANCE = 100  # 같은 줄로 간주할 y 좌표 허용 오차 (px)
 UP_MULTIPLIER = 1.5  # 표 위쪽 탐색 범위 (표 높이의 배수)
 X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
-# LLM 설정
-OLLAMA_URL = "http://localhost:11434/api/generate"  # Ollama API 엔드포인트
-LLM_MODEL = "gpt-oss:20b"  # 사용할 모델
-LLM_TEMPERATURE = 0.1  # 낮을수록 결정론적
-LLM_MAX_TOKENS = 100  # 최대 생성 토큰 수
+# LLM 설정 (환경변수 지원)
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
+LLM_MODEL = os.getenv("LLM_MODEL", "gemma2:2b")
+LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.1"))
+LLM_MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "100"))
 
 MAX_TEXT_INPUT_LENGTH = 512  # LLM 입력 최대 길이
 SCORE_THRESHOLD = 0.40   # 제목 판정 최소 점수 (더 이상 사용 안 함)
