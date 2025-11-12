@@ -751,8 +751,7 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         t = x["text"][:MAX_DISPLAY_TEXT_LENGTH] if len(x["text"]) > MAX_DISPLAY_TEXT_LENGTH else x["text"]
         d = x["details"]
         print(f"    '{t}'")
-        print(f"      zs: {d['zeroshot']:.3f}, logit: {d['rer_logits']:.3f}, prob*: {d['rer_prob_norm']:.3f}, "
-              f"layout: {d['layout']:.3f}, bonus: {d['bonus']:+.2f}, Final: {x['score']:.3f}")
+        print(f"      zeroshot: {d['zeroshot']:.3f}, reranker: {d['rer_prob_norm']:.3f}, layout: {d['layout']:.3f}, Final: {x['score']:.3f}")
 
     # 최고 점수 선택
     scored.sort(key=lambda x: x['score'], reverse=True)
