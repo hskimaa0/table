@@ -19,7 +19,7 @@ X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
 # LLM 설정 (환경변수 지원)
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
-LLM_MODEL = os.getenv("LLM_MODEL", "gpt-oss:20b")
+LLM_MODEL = os.getenv("LLM_MODEL", "gemma2:2b")
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.1"))
 LLM_MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "100"))
 
