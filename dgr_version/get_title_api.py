@@ -351,14 +351,15 @@ def merge_text_group(text_group):
 
 # ========== 후보 수집 ==========
 def collect_candidates_for_table(table, texts, all_tables=None):
-    """표 위쪽에 있는 텍스트 후보 수집 (규칙 기반 필터링)"""
+    """표 위/아래쪽에 있는 텍스트 후보 수집 (규칙 기반 필터링)"""
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
         return []
 
     tbx1, tby1, tbx2, tby2 = table_bbox
     h = tby2 - tby1
-    y_min = max(0, tby1 - int(UP_MULTIPLIER * h))
+    y_min_up = max(0, tby1 - int(UP_MULTIPLIER * h))  # 위쪽 탐색 범위
+    y_max_down = tby2 + int(UP_MULTIPLIER * h)  # 아래쪽 탐색 범위
 
     # 그룹화된 텍스트
     grouped_texts = group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE)
@@ -374,8 +375,11 @@ def collect_candidates_for_table(table, texts, all_tables=None):
 
         px1, py1, px2, py2 = text_bbox
 
-        # 표 위쪽에 있는지 확인
-        if not (py2 <= tby1 and py1 >= y_min):
+        # 표 위쪽 또는 아래쪽에 있는지 확인
+        is_above = (py2 <= tby1 and py1 >= y_min_up)
+        is_below = (py1 >= tby2 and py2 <= y_max_down)
+
+        if not (is_above or is_below):
             continue
 
         # 수평으로 겹치거나 근접한지 확인
