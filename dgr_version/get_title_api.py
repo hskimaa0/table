@@ -18,7 +18,7 @@ X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
 # LLM 설정
 OLLAMA_URL = "http://localhost:11434/api/generate"  # Ollama API 엔드포인트
-LLM_MODEL = "gemma2:2b"  # 사용할 모델
+LLM_MODEL = "gpt-oss:20b"  # 사용할 모델
 LLM_TEMPERATURE = 0.1  # 낮을수록 결정론적
 LLM_MAX_TOKENS = 100  # 최대 생성 토큰 수
 
