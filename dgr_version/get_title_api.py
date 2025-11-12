@@ -18,18 +18,21 @@ X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 # ML 모델 관련
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 크로스-인코더 리랭커 (다국어 SOTA)
 EMBEDDER_MODEL = "BAAI/bge-m3"  # 임베딩 모델 (1차 필터링용)
+E5_MODEL = "intfloat/multilingual-e5-large"  # E5 임베딩 (관련성 판단용, query:/passage: 프롬프트 지원)
 ML_DEVICE = 0  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
 # 모델 사용 설정
 USE_RERANKER = True   # 리랭커 사용 여부
-USE_EMBEDDER_FILTER = True  # 임베딩 기반 1차 필터링 사용 여부
+USE_EMBEDDER_FILTER = False  # 임베딩 기반 1차 필터링 사용 여부 (리랭커로 충분)
+USE_E5_FILTER = True  # E5 기반 관련성 필터링 사용 여부
 
-SCORE_THRESHOLD = 0.40   # 제목 판정 최소 점수 (Reranker 확률 40% 이상)
-EMBEDDING_SIMILARITY_THRESHOLD = 0.3  # 1차 필터링: 표 문맥과 유사도 최소값
+SCORE_THRESHOLD = 0.30   # 제목 판정 최소 점수 (하이브리드 점수 30% 이상)
+EMBEDDING_SIMILARITY_THRESHOLD = 0.3  # BGE 임베딩: 표 문맥과 유사도 최소값
+E5_SIMILARITY_THRESHOLD = 0.50  # E5 임베딩: query-passage 유사도 최소값 (필터링용)
 
 # 리랭커 설정
-RERANKER_TEMPERATURE = 0.6  # 온도 소프트맥스 tau 값 (< 1 → 대비 강화)
+RERANKER_TEMPERATURE = 0.4  # 온도 소프트맥스 tau 값 (< 1 → 대비 강화)
 RERANKER_BATCH_SIZE = 32    # 리랭커 배치 크기
 
 
@@ -52,6 +55,7 @@ API_DEBUG = True
 # ML 모델 변수
 reranker = None
 embedder = None
+e5_model = None
 
 # 디바이스 설정
 import torch
@@ -104,6 +108,18 @@ except ImportError:
 except Exception as e:
     print(f"⚠️  임베더 로드 실패: {e}")
     embedder = None
+
+# E5 임베딩 모델 로드 (관련성 판단용)
+try:
+    from sentence_transformers import SentenceTransformer
+    e5_model = SentenceTransformer(E5_MODEL, device=DEVICE_STR)
+    print(f"✅ E5 모델 로드 완료 ({E5_MODEL}, device={DEVICE_STR})")
+except ImportError:
+    print("⚠️  sentence-transformers 라이브러리 없음 (E5)")
+    e5_model = None
+except Exception as e:
+    print(f"⚠️  E5 모델 로드 실패: {e}")
+    e5_model = None
 
 # ========== 유틸리티 함수 ==========
 def clean_text(s: str) -> str:
@@ -173,6 +189,19 @@ def is_subtitle_like(s: str) -> bool:
     if re.match(rf"^({CIRCLED_RX}|{PAREN_NUM_RX}|{BULLET_RX})\s*\S+", t):
         if SUBTITLE_MIN_LENGTH <= len(t) <= SUBTITLE_MAX_LENGTH:
             return True
+
+    # 'ㅇ 제목' 형식도 추가 - 단, 너무 짧거나 불완전한 문장은 제외
+    if re.match(r"^[ㅇo]\s+\S{2,}", t) and len(t) <= SUBTITLE_MAX_LENGTH:
+        # "ㅇ 요구사항", "ㅇ 제약" 같은 불완전한 제목 제외
+        incomplete_patterns = [
+            r"^[ㅇo]\s+(요구사항|제약|조건|사항)$",  # 너무 짧음
+            r"^[ㅇo]\s+제약\s*요구사항$",  # "ㅇ 제약 요구사항" (문맥 없음)
+        ]
+        for pattern in incomplete_patterns:
+            if re.search(pattern, t):
+                return False
+        return True
+
     return False
 
 def is_unit_like(s: str) -> bool:
@@ -189,12 +218,24 @@ def is_unit_like(s: str) -> bool:
 
 def is_table_title_like(s: str) -> bool:
     """표 제목 패턴 판별"""
-    # '표 B.8 월별 기온', '표 A.6 토지이용현황', '표 B .4' (공백 포함), '표 3-2 연간 실적' 등
-    if re.search(r"^표\s*[A-Za-z]?\s*[\.\-]?\s*\d+([\-\.]\d+)?", s.strip()):
+    t = s.strip()
+
+    # 1. '표 B.8 월별 기온', '표 A.6 토지이용현황', '표 B .4' (공백 포함), '표 3-2 연간 실적' 등
+    if re.search(r"^표\s*[A-Za-z]?\s*[\.\-]?\s*\d+([\-\.]\d+)?", t):
         return True
-    # 섹션/표 제목 형태(숫자.숫자 제목)
-    if re.search(r"^\d+(\.\d+){0,2}\s+[^\[\(]{2,}", s.strip()):
+
+    # 2. '□ 추진조직 구성', '■ 사업개요' 등 (박스 기호 + 제목)
+    if re.search(r"^[□■◆◇▪▫●○◉◎]\s*\S", t):
         return True
+
+    # 3. '<표 제목>', '【표 제목】' 등
+    if re.search(r"^[<《\[【\(]\s*표?\s*\d*\s*[\]】\)>》]", t):
+        return True
+
+    # 4. 섹션/표 제목 형태(숫자.숫자 제목) - 단, 너무 짧지 않아야 함
+    if re.search(r"^\d+(\.\d+){0,2}\s+\S{3,}", t) and len(t) <= 50:
+        return True
+
     return False
 
 def is_cross_reference(s: str) -> bool:
@@ -215,6 +256,10 @@ def is_cross_reference(s: str) -> bool:
 
     # 명확한 설명 문장만 (동사 어미로 끝나는 긴 문장)
     if len(t) >= CROSS_REF_MIN_LENGTH and re.search(r"(바랍니다|바란다|협의대로|안내하|요청)", t):
+        return True
+
+    # '※' 시작하는 주석/부가설명
+    if t.startswith("※") and len(t) >= 20:
         return True
 
     return False
@@ -450,10 +495,15 @@ def build_table_context(table, max_cells=10):
 
 # ========== ML 스코어링 ==========
 def make_reranker_pair(cand_text: str, table_ctx: str):
-    """리랭커 입력 쌍 생성 (명시적 역할 프롬프트)"""
-    q = f"[표제목 후보] {clamp_text_len(cand_text)}"
-    p = f"[표 문맥] {clamp_text_len(table_ctx)}"
-    return (q, p)
+    """리랭커 입력 쌍 생성 (제목-표 관계 명시)"""
+    query = clamp_text_len(cand_text, max_chars=100)
+    context = clamp_text_len(table_ctx, max_chars=600)
+
+    # 명확한 제목 판정 질문
+    query_formatted = f"표 제목: {query}"
+    context_formatted = f"이것은 올바른 표 제목인가?\n\n표 내용:\n{context}"
+
+    return (query_formatted, context_formatted)
 
 def reranker_logits_batch(pairs):
     """배치 리랭커 로짓 반환
@@ -519,29 +569,95 @@ def filter_candidates_by_embedding(candidates, table_ctx):
         print(f"  임베딩 필터링 오류: {e}")
         return candidates
 
-def build_table_context_rich(table, max_cells=10):
-    """표 문맥 구축 (헤더 레이블 명시) - 리랭커용"""
-    headers = []
+def filter_candidates_by_e5(candidates, table_ctx):
+    """E5 임베딩 기반 관련성 필터링 및 순위 결정
+
+    E5 모델의 query:/passage: 프롬프트를 활용하여
+    후보 제목과 표 내용 간의 의미적 유사도를 측정하고
+    가장 높은 점수의 후보를 반환
+    """
+    if not e5_model or not candidates:
+        return candidates
+
+    try:
+        import numpy as np
+
+        # 표 문맥 임베딩 (양방향)
+        # 방법 1: 표 → passage
+        passage_text = f"passage: {table_ctx[:400]}"
+        passage_emb = e5_model.encode(passage_text, convert_to_numpy=True, normalize_embeddings=True)
+
+        # 방법 2: 표 → query (역방향 비교를 위해)
+        table_as_query = f"query: {table_ctx[:400]}"
+        table_query_emb = e5_model.encode(table_as_query, convert_to_numpy=True, normalize_embeddings=True)
+
+        # 모든 후보의 유사도 계산 (양방향)
+        scored_candidates = []
+        for c in candidates:
+            cand_text = c['text'][:120]
+
+            # 방법 1: 후보(query) → 표(passage)
+            query_text = f"query: {cand_text}"
+            query_emb = e5_model.encode(query_text, convert_to_numpy=True, normalize_embeddings=True)
+            sim1 = float(np.dot(query_emb, passage_emb))
+
+            # 방법 2: 후보(passage) → 표(query) - 역방향
+            cand_as_passage = f"passage: {cand_text}"
+            cand_passage_emb = e5_model.encode(cand_as_passage, convert_to_numpy=True, normalize_embeddings=True)
+            sim2 = float(np.dot(table_query_emb, cand_passage_emb))
+
+            # 양방향 평균 (대칭적 유사도)
+            similarity = (sim1 + sim2) / 2.0
+
+            # 후보에 E5 점수 추가
+            c_with_score = c.copy()
+            c_with_score['e5_score'] = similarity
+            scored_candidates.append((c_with_score, similarity))
+
+        # 점수 순으로 정렬
+        scored_candidates.sort(key=lambda x: -x[1])
+
+        # 점수 출력
+        print("\n  [E5 단독 판단] 후보 점수:")
+        for c, sim in scored_candidates:
+            cand_text = c['text'][:50]
+            print(f"    '{cand_text}' → sim={sim:.3f}")
+
+        # 최고 점수 후보만 반환 (임계값 체크)
+        best_candidate, best_score = scored_candidates[0]
+
+        if best_score >= E5_SIMILARITY_THRESHOLD:
+            print(f"\n  ✅ E5 선택: '{best_candidate['text']}' (점수: {best_score:.3f})")
+            return [best_candidate]
+        else:
+            print(f"\n  ⚠️  최고 점수({best_score:.3f})가 임계값({E5_SIMILARITY_THRESHOLD}) 미만")
+            return candidates  # 임계값 미달 시 모두 반환
+
+    except Exception as e:
+        print(f"  E5 필터링 오류: {e}")
+        return candidates
+
+def build_table_context_rich(table, max_rows=6, max_cells_per_row=10):
+    """표 문맥 구축 (더 많은 행 포함) - 리랭커용"""
+    all_rows = []
+
     if 'rows' in table and table['rows']:
-        for cell in table['rows'][0]:
-            cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
-            if cell_texts:
-                headers.append(clean_text(" ".join(cell_texts)))
+        # 최대 max_rows개 행 추출
+        for row_idx, row in enumerate(table['rows'][:max_rows]):
+            row_texts = []
+            for cell in row[:max_cells_per_row]:
+                cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
+                if cell_texts:
+                    row_texts.append(clean_text(" ".join(cell_texts)))
 
-    first_row = []
-    if 'rows' in table and len(table['rows']) >= 2:
-        for cell in table['rows'][1]:
-            cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
-            if cell_texts:
-                first_row.append(clean_text(" ".join(cell_texts)))
+            if row_texts:
+                # 첫 행은 헤더로 표시
+                if row_idx == 0:
+                    all_rows.append("[헤더] " + " | ".join(row_texts))
+                else:
+                    all_rows.append(f"[행{row_idx}] " + " | ".join(row_texts))
 
-    parts = []
-    if headers:
-        parts.append(f"헤더: [{', '.join(headers[:max_cells])}]")
-    if first_row:
-        parts.append(f"첫행: [{', '.join(first_row[:max_cells])}]")
-
-    return " / ".join(parts) if parts else "표 정보 없음"
+    return "\n".join(all_rows) if all_rows else "표 정보 없음"
 
 def build_table_context_full(table):
     """표 전체 내용 구축 - 임베딩 필터링용"""
@@ -560,7 +676,7 @@ def build_table_context_full(table):
     return " / ".join(all_texts) if all_texts else "표 정보 없음"
 
 def score_candidates_with_logits(candidates, table_ctx, table_bbox):
-    """리랭커 기반 스코어링"""
+    """리랭커 + 휴리스틱 기반 스코어링"""
     import numpy as np
 
     # 리랭커: 후보 집합 내 상대 순위
@@ -572,13 +688,52 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
     for i, c in enumerate(candidates):
         txt, bb = c['text'], c['bbox']
 
-        # 최종 점수 = 리랭커 점수
-        final = float(rer_prob[i])
+        # 휴리스틱 점수 계산
+        heuristic_score = 0.0
+        pattern_bonus = 0.0
+
+        # 1. 표 제목 패턴 ("표 4.21 ...", "□ 제목" 형식)
+        if is_table_title_like(txt):
+            pattern_bonus = 0.7
+
+        # 2. 소제목 패턴 (① ② (1) ㅇ 등)
+        elif is_subtitle_like(txt):
+            pattern_bonus = 0.4
+
+        # 3. 일반적인 제목 형식이지만 점수는 낮게
+        elif len(txt) >= 5 and len(txt) <= 40:
+            pattern_bonus = 0.2
+
+        # 4. 위치 점수 (표 위쪽에 가까울수록 높음)
+        distance = abs(bb[3] - table_bbox[1])  # 텍스트 하단 ~ 표 상단 거리
+        position_bonus = 0.0
+        if distance < 50:  # 50px 이내
+            position_bonus = 0.25
+        elif distance < 150:  # 150px 이내
+            position_bonus = 0.18
+        elif distance < 300:  # 300px 이내
+            position_bonus = 0.1
+
+        # 5. 길이 점수 (너무 짧거나 길지 않은 것 선호)
+        txt_len = len(txt.strip())
+        length_bonus = 0.0
+        if 10 <= txt_len <= 50:
+            length_bonus = 0.15
+        elif 6 <= txt_len < 10:
+            length_bonus = 0.05
+        elif 50 < txt_len <= 70:
+            length_bonus = 0.08
+
+        heuristic_score = pattern_bonus + position_bonus + length_bonus
+
+        # 최종 점수 = 리랭커(80%) + 휴리스틱(20%)
+        final = float(rer_prob[i]) * 0.80 + heuristic_score * 0.20
 
         scored.append({
             "text": txt, "bbox": bb, "score": final,
             "details": {
-                "reranker": float(rer_prob[i])
+                "reranker": float(rer_prob[i]),
+                "heuristic": heuristic_score
             }
         })
     return scored
@@ -623,6 +778,39 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
             print("  ❌ 필터링 후 후보 없음")
             return "", None
 
+    # Step 2.7: E5 기반 관련성 필터링 (표와 관련있는 후보만 남김)
+    if USE_E5_FILTER and e5_model and len(candidates) >= 2:
+        before_filter = len(candidates)
+
+        # E5 필터링 (필터 모드로 변경)
+        try:
+            import numpy as np
+
+            passage_text = f"passage: {table_ctx[:400]}"
+            passage_emb = e5_model.encode(passage_text, convert_to_numpy=True, normalize_embeddings=True)
+
+            filtered = []
+            for c in candidates:
+                cand_text = c['text'][:120]
+                query_text = f"query: {cand_text}"
+                query_emb = e5_model.encode(query_text, convert_to_numpy=True, normalize_embeddings=True)
+                similarity = float(np.dot(query_emb, passage_emb))
+
+                if similarity >= E5_SIMILARITY_THRESHOLD:
+                    filtered.append(c)
+                    print(f"    [E5] '{cand_text[:30]}' → sim={similarity:.3f} ✓")
+                else:
+                    print(f"    [E5] '{cand_text[:30]}' → sim={similarity:.3f} ✗")
+
+            candidates = filtered if filtered else candidates
+            print(f"  E5 필터링: {before_filter}→{len(candidates)}개")
+        except Exception as e:
+            print(f"  E5 필터링 오류: {e}")
+
+        if not candidates:
+            print("  ❌ E5 필터링 후 후보 없음")
+            return "", None
+
     # Step 2.9: 유닛 후보 삭제
     if any(is_table_title_like(c['text']) for c in candidates):
         candidates = [c for c in candidates if not is_unit_like(c['text'])]
@@ -664,16 +852,21 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         t = x["text"][:MAX_DISPLAY_TEXT_LENGTH] if len(x["text"]) > MAX_DISPLAY_TEXT_LENGTH else x["text"]
         d = x["details"]
         print(f"    '{t}'")
-        print(f"      reranker: {d['reranker']:.3f}, Final: {x['score']:.3f}")
+        print(f"      reranker: {d['reranker']:.3f}, heuristic: {d.get('heuristic', 0):.3f}, Final: {x['score']:.3f}")
 
     # 최고 점수 선택 (동점이면 위쪽 우선)
     # 1차: 점수 내림차순, 2차: y 좌표 오름차순 (위쪽이 작은 값)
     scored.sort(key=lambda x: (-x['score'], x['bbox'][1]))
     best = scored[0]
 
-    # 최종 검증
-    if best['score'] < SCORE_THRESHOLD:
-        print(f"  ⚠️  최고 점수({best['score']:.3f})가 임계값({SCORE_THRESHOLD}) 미만")
+    # 최종 검증: 표 제목 패턴이면 임계값 낮춤
+    threshold = SCORE_THRESHOLD
+    if is_table_title_like(best['text']):
+        threshold = SCORE_THRESHOLD * 0.5  # 표 제목 패턴은 절반 임계값
+        print(f"  📋 표 제목 패턴 감지 → 임계값 완화 ({threshold:.2f})")
+
+    if best['score'] < threshold:
+        print(f"  ⚠️  최고 점수({best['score']:.3f})가 임계값({threshold:.2f}) 미만")
         return "", None
 
     print(f"\n  ✅ 선택: '{best['text']}' (점수: {best['score']:.3f})")
