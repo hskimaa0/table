@@ -40,20 +40,17 @@ RERANKER_BATCH_SIZE = 32    # 리랭커 배치 크기
 # Zero-shot 분류 설정
 ZEROSHOT_NEUTRAL_SCORE = 0.5  # 중립 점수 (모델 없을 때)
 ZEROSHOT_MIN_TITLE_SCORE = 0.80  # 표 제목 패턴 매칭 시 최소 보장 점수
-ZEROSHOT_OFFSET = 0.35  # Zero-shot 점수 오프셋
-ZEROSHOT_NEAR_TOP_DISTANCE = 120  # 표 상단 근접 거리 기준 (px)
-ZEROSHOT_SECTION_NEAR_WEIGHT = 0.10  # 섹션 헤더 근접 시 가중치
-ZEROSHOT_SECTION_FAR_WEIGHT = -0.25  # 섹션 헤더 일반 가중치
+ZEROSHOT_OFFSET = 0.65  # Zero-shot 점수 오프셋 (음수 보정)
 ZEROSHOT_BATCH_SIZE = 16  # Zero-shot 배치 크기
 
 # Zero-shot 라벨별 가중치
 ZEROSHOT_LABEL_WEIGHTS = {
-    "표의 제목/표제/캡션": 0.85,
-    "소제목(섹션 내 소단락 제목)": 0.25,
-    "섹션 헤더(장/절/항 제목)": -0.25,
-    "본문 설명문/서술문": -0.60,
-    "단위 표기/비고/주:": -0.65,
-    "그림/도 제목·캡션": -0.25,
+    "표의 제목/표제/캡션": 1.50,                  # 핵심: 표 제목일 확률 높게
+    "소제목(섹션 내 소단락 제목)": 0.40,            # 차선: 소제목도 후보 가능
+    "섹션 헤더(장/절/항 제목)": 0.50,              # 섹션 헤더도 표 제목 될 수 있음
+    "서술형 문장(~이다/~한다/~는/~을)": -1.20,     # 강한 부정: 서술형 문장은 제목 아님
+    "단위/출처/주석(단위:, 주:, 출처:)": -1.50,    # 매우 강한 부정: 절대 제목 아님
+    "그림 제목(Fig., 그림)": -0.80,              # 부정: 그림 제목은 표 제목 아님
 }
 
 # Zero-shot 템플릿 (속도 최적화: USE_SINGLE_TEMPLATE=True 시 첫 번째만 사용)
@@ -533,6 +530,12 @@ def reranker_logits_batch(pairs):
     try:
         out = reranker.predict(pairs, convert_to_numpy=True, batch_size=RERANKER_BATCH_SIZE)
         logits = np.asarray(out).reshape(-1)
+
+        # 디버깅: 로짓 출력
+        for i, (pair, logit) in enumerate(zip(pairs, logits)):
+            cand_text = pair[0].replace("[표제목 후보] ", "")[:30]
+            print(f"      [RR-DEBUG] '{cand_text}' → logit={logit:.3f}")
+
         return logits
     except Exception as e:
         print(f"  리랭커 오류: {e}")
@@ -560,23 +563,6 @@ def zeroshot_title_score_batch(candidates, table_bbox=None):
         texts = [clamp_text_len(c['text']) for c in candidates]
         labels = list(ZEROSHOT_LABEL_WEIGHTS.keys())
 
-        # 표 상단 근접 마스크 (미리 계산)
-        if table_bbox:
-            top = table_bbox[1]
-            near_top_mask = np.array([
-                max(0, top - (c.get("bbox", [0, 0, 0, 0])[3])) <= ZEROSHOT_NEAR_TOP_DISTANCE
-                for c in candidates
-            ], dtype=bool)
-        else:
-            near_top_mask = np.ones(len(candidates), dtype=bool)
-
-        # 섹션 헤더 가중치 미리 계산
-        section_weights_near = ZEROSHOT_LABEL_WEIGHTS.copy()
-        section_weights_near["섹션 헤더(장/절/항 제목)"] = ZEROSHOT_SECTION_NEAR_WEIGHT
-
-        section_weights_far = ZEROSHOT_LABEL_WEIGHTS.copy()
-        section_weights_far["섹션 헤더(장/절/항 제목)"] = ZEROSHOT_SECTION_FAR_WEIGHT
-
         def score_once(tmpl: str) -> np.ndarray:
             """특정 템플릿으로 multi-label 분류 후 가중합 계산"""
             try:
@@ -593,10 +579,13 @@ def zeroshot_title_score_batch(candidates, table_bbox=None):
             sc = np.zeros(len(candidates), dtype=float)
             for i, r in enumerate(res):
                 probs = {lab: float(p) for lab, p in zip(r["labels"], r["scores"])}
-                # 미리 계산된 가중치 사용
-                w = section_weights_near if near_top_mask[i] else section_weights_far
-                s = sum(w[k] * probs.get(k, 0.0) for k in w)
+                # 가중합 계산
+                s = sum(ZEROSHOT_LABEL_WEIGHTS[k] * probs.get(k, 0.0) for k in ZEROSHOT_LABEL_WEIGHTS)
                 sc[i] = np.clip(s + ZEROSHOT_OFFSET, 0.0, 1.0)
+
+                # 디버깅: 상위 3개 라벨 출력
+                top_labels = sorted(probs.items(), key=lambda x: x[1], reverse=True)[:3]
+                print(f"      [ZS-DEBUG] '{texts[i][:30]}' → {[(k, f'{v:.2f}') for k, v in top_labels]} → score={sc[i]:.3f}")
             return sc
 
         # 템플릿 앙상블 평균 (또는 단일 템플릿)
