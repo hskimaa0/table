@@ -1,6 +1,6 @@
 """
 타이틀 추출 API
-하이브리드 방식: Zero-shot NLI + 리랭커 + 레이아웃 점수 + 보너스
+하이브리드 방식: 리랭커 + 레이아웃 점수
 """
 from flask import Flask, jsonify, request
 import copy
@@ -14,58 +14,21 @@ app = Flask(__name__)
 Y_LINE_TOLERANCE = 100  # 같은 줄로 간주할 y 좌표 허용 오차 (px)
 UP_MULTIPLIER = 1.5  # 표 위쪽 탐색 범위 (표 높이의 배수)
 X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
-MAX_LAYOUT_DISTANCE = 3000  # 레이아웃 점수 계산 최대 거리 (px)
 
 # ML 모델 관련
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 크로스-인코더 리랭커 (다국어 SOTA)
-ZEROSHOT_MODEL = "joeddav/xlm-roberta-large-xnli"  # Zero-shot 분류 (다국어, 한국어 우수)
 ML_DEVICE = 0  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
 # 모델 사용 설정
-USE_RERANKER = True  # 리랭커 사용 여부
-USE_ZEROSHOT = True  # Zero-shot 분류 사용 여부
+USE_RERANKER = True   # 리랭커 사용 여부
 
-# 최종 점수 가중치
-WEIGHT_ZEROSHOT = 0.40   # Zero-shot 분류 점수 (제목 vs 비제목 판별)
-WEIGHT_RERANKER = 0.40   # 리랭커 점수 (상대 순위)
-WEIGHT_LAYOUT = 0.15     # 레이아웃 점수 (거리 기반)
-WEIGHT_BONUS = 0.05      # 보너스 점수 (패턴 기반 미세 조정)
 SCORE_THRESHOLD = 0.01   # 제목 판정 최소 점수
 
 # 리랭커 설정
 RERANKER_TEMPERATURE = 0.6  # 온도 소프트맥스 tau 값 (< 1 → 대비 강화)
 RERANKER_BATCH_SIZE = 32    # 리랭커 배치 크기
 
-# Zero-shot 분류 설정
-ZEROSHOT_NEUTRAL_SCORE = 0.5  # 중립 점수 (모델 없을 때)
-ZEROSHOT_MIN_TITLE_SCORE = 0.80  # 표 제목 패턴 매칭 시 최소 보장 점수
-ZEROSHOT_OFFSET = 0.65  # Zero-shot 점수 오프셋 (음수 보정)
-ZEROSHOT_BATCH_SIZE = 16  # Zero-shot 배치 크기
-
-# Zero-shot 라벨별 가중치
-ZEROSHOT_LABEL_WEIGHTS = {
-    "표 제목": 1.50,           # 핵심: 표 제목일 확률 높게
-    "제목": 0.60,             # 일반적인 제목
-    "소제목": 0.40,           # 소제목도 후보 가능
-    "긴 문장": -1.20,         # 강한 부정: 긴 설명 문장
-    "주석": -1.50,           # 매우 강한 부정: 주석/단위 표기
-    "그림": -0.80,           # 부정: 그림 관련
-}
-
-# Zero-shot 템플릿 (속도 최적화: USE_SINGLE_TEMPLATE=True 시 첫 번째만 사용)
-USE_SINGLE_TEMPLATE = True  # True: 3배 빠름, False: 정확도 약간 높음
-ZEROSHOT_TEMPLATES = [
-    "이 텍스트는 {}이다.",
-    "다음 문구의 용도는 {}이다.",
-    "이 문장은 {}에 해당한다.",
-]
-
-# 타이브레이커 설정
-TIEBREAKER_THRESHOLD = 0.03  # 1위와 2위 점수 차이 임계값
-
-# 최종 검증 설정
-MIN_ZEROSHOT_NO_PATTERN = 0.0  # 제목 패턴 없을 때 최소 Zero-shot 점수
 
 # 패턴 관련 상수
 SUBTITLE_MIN_LENGTH = 4  # 소제목 최소 길이
@@ -85,7 +48,6 @@ API_DEBUG = True
 
 # ML 모델 변수
 reranker = None
-zeroshot_classifier = None
 
 # 디바이스 설정
 import torch
@@ -127,40 +89,6 @@ except Exception as e:
     print(f"⚠️  리랭커 로드 실패: {e}")
     reranker = None
 
-# Zero-shot 분류기 로드 (FP16 지원)
-try:
-    from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
-    import sentencepiece  # noqa: F401
-
-    # SentencePiece 기반 slow tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(ZEROSHOT_MODEL, use_fast=False)
-
-    # FP16 로드 (GPU면 FP16, CPU면 FP32)
-    dtype = torch.float16 if DEVICE_STR.startswith("cuda") else torch.float32
-    model = AutoModelForSequenceClassification.from_pretrained(
-        ZEROSHOT_MODEL,
-        torch_dtype=dtype
-    )
-
-    device_id = 0 if DEVICE_STR.startswith("cuda") else -1
-    zeroshot_classifier = pipeline(
-        "zero-shot-classification",
-        model=model,
-        tokenizer=tokenizer,
-        device=device_id,
-        batch_size=ZEROSHOT_BATCH_SIZE
-    )
-    print(f"✅ Zero-shot 로드 완료 ({ZEROSHOT_MODEL}, device={DEVICE_STR}, dtype={dtype})")
-    print(f"✅ Zero-shot 분류 활성화 (가중치: {WEIGHT_ZEROSHOT:.0%})")
-except ImportError as e:
-    print(f"⚠️  라이브러리 없음: {e}")
-    print("   → pip install sentencepiece transformers 실행 필요")
-    zeroshot_classifier = None
-    USE_ZEROSHOT = False
-except Exception as e:
-    print(f"⚠️  Zero-shot 로드 실패: {e}")
-    zeroshot_classifier = None
-    USE_ZEROSHOT = False
 
 # ========== 유틸리티 함수 ==========
 def clean_text(s: str) -> str:
@@ -212,17 +140,6 @@ def horizontally_near(table_x: tuple, text_x: tuple, tol: int = X_TOLERANCE) -> 
     if iou_1d(table_x, text_x) > 0:
         return True
     return (text_x[1] >= table_x[0] - tol and text_x[0] <= table_x[1] + tol)
-
-def layout_score(table_bbox, text_bbox) -> float:
-    """레이아웃 점수: 표와의 세로 거리 기반 (가까울수록 1)"""
-    _, ty1, _, ty2 = table_bbox
-    x1, y1, x2, y2 = text_bbox
-
-    # 텍스트가 표 위에 있을 때의 거리
-    dist = max(0, ty1 - y2)
-
-    # 선형 스케일링
-    return max(0.0, 1.0 - min(dist, MAX_LAYOUT_DISTANCE) / MAX_LAYOUT_DISTANCE)
 
 # ========== 패턴 스코어/페널티 ==========
 UNIT_TOKENS = ["단위", "unit", "u.", "℃", "°c", "%", "mm", "kg", "km", "원", "개", "회"]
@@ -549,53 +466,6 @@ def softmax_with_temp_from_logits(logits, tau=RERANKER_TEMPERATURE):
     ex = np.exp(x)
     return ex / (ex.sum() + 1e-12)
 
-def zeroshot_title_score_batch(candidates, table_bbox=None):
-    """Zero-shot 분류: 각 후보가 '표 제목'일 확률 반환
-
-    Returns:
-        numpy array of scores (0~1), 높을수록 제목일 확률 높음
-    """
-    import numpy as np
-    if not zeroshot_classifier or not USE_ZEROSHOT or not candidates:
-        return np.ones(len(candidates)) * ZEROSHOT_NEUTRAL_SCORE
-
-    try:
-        texts = [clamp_text_len(c['text']) for c in candidates]
-        labels = list(ZEROSHOT_LABEL_WEIGHTS.keys())
-
-        def score_once(tmpl: str) -> np.ndarray:
-            """특정 템플릿으로 multi-label 분류 후 가중합 계산"""
-            try:
-                res = zeroshot_classifier(
-                    texts, labels,
-                    hypothesis_template=tmpl,
-                    multi_label=True,
-                    truncation=True
-                )
-            except Exception as e:
-                print(f"  Zero-shot 템플릿 '{tmpl[:20]}...' 예외: {e}")
-                return np.ones(len(candidates)) * ZEROSHOT_NEUTRAL_SCORE
-
-            sc = np.zeros(len(candidates), dtype=float)
-            for i, r in enumerate(res):
-                probs = {lab: float(p) for lab, p in zip(r["labels"], r["scores"])}
-                # 가중합 계산
-                s = sum(ZEROSHOT_LABEL_WEIGHTS[k] * probs.get(k, 0.0) for k in ZEROSHOT_LABEL_WEIGHTS)
-                sc[i] = np.clip(s + ZEROSHOT_OFFSET, 0.0, 1.0)
-
-                # 디버깅: 상위 3개 라벨 출력
-                top_labels = sorted(probs.items(), key=lambda x: x[1], reverse=True)[:3]
-                print(f"      [ZS-DEBUG] '{texts[i][:30]}' → {[(k, f'{v:.2f}') for k, v in top_labels]} → score={sc[i]:.3f}")
-            return sc
-
-        # 템플릿 앙상블 평균 (또는 단일 템플릿)
-        templates = [ZEROSHOT_TEMPLATES[0]] if USE_SINGLE_TEMPLATE else ZEROSHOT_TEMPLATES
-        scores = np.mean([score_once(t) for t in templates], axis=0)
-        return scores
-
-    except Exception as e:
-        print(f"  Zero-shot 오류: {e}")
-        return np.ones(len(candidates)) * ZEROSHOT_NEUTRAL_SCORE
 
 def build_table_context_rich(table, max_cells=10):
     """표 문맥 구축 (헤더 레이블 명시)"""
@@ -622,13 +492,10 @@ def build_table_context_rich(table, max_cells=10):
     return " / ".join(parts) if parts else "표 정보 없음"
 
 def score_candidates_with_logits(candidates, table_ctx, table_bbox):
-    """하이브리드 스코어링: Zero-shot + 리랭커 + 레이아웃 + 보너스"""
+    """리랭커 기반 스코어링"""
     import numpy as np
 
-    # 1) Zero-shot 분류: 각 후보가 '표 제목'일 절대 확률
-    zs_scores = zeroshot_title_score_batch(candidates, table_bbox) if USE_ZEROSHOT else np.ones(len(candidates)) * ZEROSHOT_NEUTRAL_SCORE
-
-    # 2) 리랭커: 후보 집합 내 상대 순위
+    # 리랭커: 후보 집합 내 상대 순위
     pairs = [make_reranker_pair(c['text'], table_ctx) for c in candidates]
     logits = reranker_logits_batch(pairs) if USE_RERANKER else np.zeros(len(candidates))
     rer_prob = softmax_with_temp_from_logits(logits)
@@ -637,35 +504,13 @@ def score_candidates_with_logits(candidates, table_ctx, table_bbox):
     for i, c in enumerate(candidates):
         txt, bb = c['text'], c['bbox']
 
-        # 레이아웃 점수
-        lay = layout_score(table_bbox, bb)
-
-        # Zero-shot 점수 + 하한 보정
-        zs = float(zs_scores[i])
-        if is_table_title_like(txt):
-            zs = max(zs, ZEROSHOT_MIN_TITLE_SCORE)
-
-        # 보너스: 제목 패턴 가점, 유닛/주석 감점
-        bonus = 0.0
-        if is_table_title_like(txt):
-            bonus += 1.0  # 만점
-        if is_unit_like(txt) or re.search(r"(주:|비고|참고)\b", txt):
-            bonus -= 1.0
-
-        # 최종 점수 계산
-        final = (WEIGHT_ZEROSHOT * zs
-                 + WEIGHT_RERANKER * float(rer_prob[i])
-                 + WEIGHT_LAYOUT * lay
-                 + WEIGHT_BONUS * bonus)
+        # 최종 점수 = 리랭커 점수
+        final = float(rer_prob[i])
 
         scored.append({
             "text": txt, "bbox": bb, "score": final,
             "details": {
-                "zeroshot": zs,
-                "rer_logits": float(logits[i]),
-                "rer_prob_norm": float(rer_prob[i]),
-                "layout": lay,
-                "bonus": bonus
+                "reranker": float(rer_prob[i])
             }
         })
     return scored
@@ -740,35 +585,13 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         t = x["text"][:MAX_DISPLAY_TEXT_LENGTH] if len(x["text"]) > MAX_DISPLAY_TEXT_LENGTH else x["text"]
         d = x["details"]
         print(f"    '{t}'")
-        print(f"      zeroshot: {d['zeroshot']:.3f}, reranker: {d['rer_prob_norm']:.3f}, layout: {d['layout']:.3f}, Final: {x['score']:.3f}")
+        print(f"      reranker: {d['reranker']:.3f}, Final: {x['score']:.3f}")
 
     # 최고 점수 선택
     scored.sort(key=lambda x: x['score'], reverse=True)
     best = scored[0]
 
-    # 타이브레이커: 패턴 우선 및 근접도
-    if len(scored) >= 2:
-        second = scored[1]
-        gap = best['score'] - second['score']
-        if gap <= TIEBREAKER_THRESHOLD:
-            def rank(c):
-                t = c['text']
-                if is_table_title_like(t): return 0
-                if is_subtitle_like(t):    return 1
-                return 2
-            def dy(bb): return max(0, table_bbox[1] - bb[3])
-            bR, sR = rank(best), rank(second)
-            if (sR < bR) or (sR == bR and dy(second['bbox']) < dy(best['bbox'])):
-                print("  타이브레이커 적용: 제목/소제목 및 근접도 우선")
-                best = second
-
     # 최종 검증
-    has_title_pattern = any(is_table_title_like(s['text']) for s in scored)
-    if not has_title_pattern:
-        if best['details']['zeroshot'] < MIN_ZEROSHOT_NO_PATTERN:
-            print(f"  ⚠️  제목 패턴 없음 (최고 zeroshot: {best['details']['zeroshot']:.3f})")
-            return "", None
-
     if best['score'] < SCORE_THRESHOLD:
         print(f"  ⚠️  최고 점수({best['score']:.3f})가 임계값({SCORE_THRESHOLD}) 미만")
         return "", None
