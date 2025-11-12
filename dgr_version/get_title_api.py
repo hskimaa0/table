@@ -17,13 +17,16 @@ X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
 # ML 모델 관련
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 크로스-인코더 리랭커 (다국어 SOTA)
+EMBEDDER_MODEL = "BAAI/bge-m3"  # 임베딩 모델 (1차 필터링용)
 ML_DEVICE = 0  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
 # 모델 사용 설정
 USE_RERANKER = True   # 리랭커 사용 여부
+USE_EMBEDDER_FILTER = True  # 임베딩 기반 1차 필터링 사용 여부
 
-SCORE_THRESHOLD = 0.01   # 제목 판정 최소 점수
+SCORE_THRESHOLD = 0.40   # 제목 판정 최소 점수 (Reranker 확률 40% 이상)
+EMBEDDING_SIMILARITY_THRESHOLD = 0.3  # 1차 필터링: 표 문맥과 유사도 최소값
 
 # 리랭커 설정
 RERANKER_TEMPERATURE = 0.6  # 온도 소프트맥스 tau 값 (< 1 → 대비 강화)
@@ -48,6 +51,7 @@ API_DEBUG = True
 
 # ML 모델 변수
 reranker = None
+embedder = None
 
 # 디바이스 설정
 import torch
@@ -89,6 +93,17 @@ except Exception as e:
     print(f"⚠️  리랭커 로드 실패: {e}")
     reranker = None
 
+# 임베딩 모델 로드 (1차 필터링용)
+try:
+    from sentence_transformers import SentenceTransformer
+    embedder = SentenceTransformer(EMBEDDER_MODEL, device=DEVICE_STR)
+    print(f"✅ 임베더 로드 완료 ({EMBEDDER_MODEL}, device={DEVICE_STR})")
+except ImportError:
+    print("⚠️  sentence-transformers 라이브러리 없음 (SentenceTransformer)")
+    embedder = None
+except Exception as e:
+    print(f"⚠️  임베더 로드 실패: {e}")
+    embedder = None
 
 # ========== 유틸리티 함수 ==========
 def clean_text(s: str) -> str:
@@ -471,8 +486,41 @@ def softmax_with_temp_from_logits(logits, tau=RERANKER_TEMPERATURE):
     return ex / (ex.sum() + 1e-12)
 
 
+def filter_candidates_by_embedding(candidates, table_ctx):
+    """임베딩 유사도 기반 1차 필터링: 표 문맥과 관련 있는 후보만 남김"""
+    import numpy as np
+
+    if not embedder or not candidates:
+        return candidates
+
+    try:
+        # 표 문맥 임베딩
+        ctx_embedding = embedder.encode(table_ctx, convert_to_numpy=True, normalize_embeddings=True)
+
+        # 후보 텍스트 임베딩
+        candidate_texts = [c['text'] for c in candidates]
+        candidate_embeddings = embedder.encode(candidate_texts, convert_to_numpy=True, normalize_embeddings=True)
+
+        # 코사인 유사도 계산 (정규화된 벡터라서 내적만 하면 됨)
+        similarities = np.dot(candidate_embeddings, ctx_embedding)
+
+        # threshold 이상인 후보만 남김
+        filtered = []
+        for i, c in enumerate(candidates):
+            if similarities[i] >= EMBEDDING_SIMILARITY_THRESHOLD:
+                filtered.append(c)
+                print(f"    [EMB] '{c['text'][:30]}' → sim={similarities[i]:.3f} ✓")
+            else:
+                print(f"    [EMB] '{c['text'][:30]}' → sim={similarities[i]:.3f} ✗ (제외)")
+
+        return filtered if filtered else candidates  # 모두 필터링되면 원본 반환
+
+    except Exception as e:
+        print(f"  임베딩 필터링 오류: {e}")
+        return candidates
+
 def build_table_context_rich(table, max_cells=10):
-    """표 문맥 구축 (헤더 레이블 명시)"""
+    """표 문맥 구축 (헤더 레이블 명시) - 리랭커용"""
     headers = []
     if 'rows' in table and table['rows']:
         for cell in table['rows'][0]:
@@ -494,6 +542,22 @@ def build_table_context_rich(table, max_cells=10):
         parts.append(f"첫행: [{', '.join(first_row[:max_cells])}]")
 
     return " / ".join(parts) if parts else "표 정보 없음"
+
+def build_table_context_full(table):
+    """표 전체 내용 구축 - 임베딩 필터링용"""
+    all_texts = []
+
+    if 'rows' in table and table['rows']:
+        for row in table['rows']:
+            row_texts = []
+            for cell in row:
+                cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
+                if cell_texts:
+                    row_texts.append(clean_text(" ".join(cell_texts)))
+            if row_texts:
+                all_texts.append(" | ".join(row_texts))
+
+    return " / ".join(all_texts) if all_texts else "표 정보 없음"
 
 def score_candidates_with_logits(candidates, table_ctx, table_bbox):
     """리랭커 기반 스코어링"""
@@ -548,6 +612,17 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
     table_ctx = build_table_context_rich(table)
     print(f"  표 문맥: {table_ctx[:MAX_CONTEXT_DISPLAY_LENGTH]}")
 
+    # Step 2.5: 임베딩 기반 1차 필터링 (표 전체 내용과 관련 있는 후보만)
+    if USE_EMBEDDER_FILTER and embedder and len(candidates) > 3:
+        before_filter = len(candidates)
+        table_full_ctx = build_table_context_full(table)  # 전체 표 내용
+        candidates = filter_candidates_by_embedding(candidates, table_full_ctx)
+        print(f"  임베딩 필터링: {before_filter}→{len(candidates)}개")
+
+        if not candidates:
+            print("  ❌ 필터링 후 후보 없음")
+            return "", None
+
     # Step 2.9: 유닛 후보 삭제
     if any(is_table_title_like(c['text']) for c in candidates):
         candidates = [c for c in candidates if not is_unit_like(c['text'])]
@@ -591,8 +666,9 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
         print(f"    '{t}'")
         print(f"      reranker: {d['reranker']:.3f}, Final: {x['score']:.3f}")
 
-    # 최고 점수 선택
-    scored.sort(key=lambda x: x['score'], reverse=True)
+    # 최고 점수 선택 (동점이면 위쪽 우선)
+    # 1차: 점수 내림차순, 2차: y 좌표 오름차순 (위쪽이 작은 값)
+    scored.sort(key=lambda x: (-x['score'], x['bbox'][1]))
     best = scored[0]
 
     # 최종 검증
