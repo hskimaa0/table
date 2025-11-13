@@ -16,6 +16,7 @@ UP_MULTIPLIER = 1.5  # 표 위쪽 탐색 범위 (표 높이의 배수)
 X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
 # ML 모델 관련
+KOBERT_MODEL_PATH = "kobert_table_classifier.pt"  # KoBERT 분류 모델 경로
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"  # 크로스-인코더 리랭커 (다국어 SOTA)
 EMBEDDER_MODEL = "BAAI/bge-m3"  # 임베딩 모델 (1차 필터링용)
 E5_MODEL = "intfloat/multilingual-e5-large"  # E5 임베딩 (관련성 판단용, query:/passage: 프롬프트 지원)
@@ -23,9 +24,10 @@ ML_DEVICE = 0  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
 # 모델 사용 설정
+USE_KOBERT = True  # KoBERT 분류기 사용 여부 (제목/설명/제목아님 필터링)
 USE_RERANKER = True   # 리랭커 사용 여부
-USE_EMBEDDER_FILTER = False  # 임베딩 기반 1차 필터링 사용 여부 (리랭커로 충분)
-USE_E5_FILTER = True  # E5 기반 관련성 필터링 사용 여부
+USE_EMBEDDER_FILTER = False  # 임베딩 기반 1차 필터링 사용 여부 (비활성화)
+USE_E5_FILTER = False  # E5 기반 관련성 필터링 사용 여부 (비활성화)
 
 SCORE_THRESHOLD = 0.30   # 제목 판정 최소 점수 (하이브리드 점수 30% 이상)
 EMBEDDING_SIMILARITY_THRESHOLD = 0.3  # BGE 임베딩: 표 문맥과 유사도 최소값
@@ -53,6 +55,7 @@ API_PORT = 5555
 API_DEBUG = True
 
 # ML 모델 변수
+kobert_classifier = None
 reranker = None
 embedder = None
 e5_model = None
@@ -120,6 +123,26 @@ except ImportError:
 except Exception as e:
     print(f"⚠️  E5 모델 로드 실패: {e}")
     e5_model = None
+
+# KoBERT 분류기 로드
+if USE_KOBERT:
+    try:
+        from kobert_classifier import TableTextClassifier
+        import os
+        if os.path.exists(KOBERT_MODEL_PATH):
+            kobert_classifier = TableTextClassifier(model_path=KOBERT_MODEL_PATH, device=DEVICE_STR)
+            print(f"✅ KoBERT 분류기 로드 완료 ({KOBERT_MODEL_PATH}, device={DEVICE_STR})")
+        else:
+            print(f"⚠️  KoBERT 모델 파일 없음: {KOBERT_MODEL_PATH}")
+            kobert_classifier = None
+    except ImportError as e:
+        print(f"⚠️  kobert_classifier 모듈 없음: {e}")
+        kobert_classifier = None
+    except Exception as e:
+        print(f"⚠️  KoBERT 분류기 로드 실패: {e}")
+        kobert_classifier = None
+else:
+    print("ℹ️  KoBERT 분류기 비활성화 (USE_KOBERT=False)")
 
 # ========== 유틸리티 함수 ==========
 def clean_text(s: str) -> str:
@@ -849,6 +872,28 @@ def find_title_for_table(table, texts, all_tables=None, used_titles=None):
     titles = [c for c in candidates if is_table_title_like(c['text'])]
     if len(titles) >= 1:
         print(f"  제목패턴 후보: {len(titles)}개 (ML 기반 점수 적용)")
+
+    # Step 2.8: KoBERT 기반 분류 필터링 (제목만 남김)
+    if USE_KOBERT and kobert_classifier:
+        before_filter = len(candidates)
+        kobert_filtered = []
+
+        print("\n  [KoBERT 분류]")
+        for c in candidates:
+            txt = c['text']
+            label = kobert_classifier.predict(txt)
+
+            if label == "제목":
+                kobert_filtered.append(c)
+                print(f"    ✓ '{txt[:40]}' → {label}")
+            else:
+                print(f"    ✗ '{txt[:40]}' → {label} (제외)")
+
+        if kobert_filtered:
+            candidates = kobert_filtered
+            print(f"  KoBERT 필터링: {before_filter}→{len(candidates)}개")
+        else:
+            print(f"  ⚠️  KoBERT로 모두 필터링됨, 원본 유지")
 
     # 하드 필터링: 명확한 노이즈만 제거
     before = len(candidates)
