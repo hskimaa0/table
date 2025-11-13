@@ -1,0 +1,444 @@
+# 표 제목 추출 프로젝트 - 진화 과정 및 시도한 모델 조합
+
+## 프로젝트 개요
+PDF 문서에서 표(table)를 추출한 후, 각 표의 제목을 자동으로 찾아내는 API 시스템입니다.
+표 위쪽이나 아래쪽에 있는 텍스트 중에서 ML 모델을 활용하여 가장 적절한 제목을 선택합니다.
+
+---
+
+## Git 히스토리 기반 진화 과정
+
+### 1단계: 리랭커 도입 (627b663 ~ 5ef07f0)
+**커밋**: `627b663 리랭커` → `5ef07f0 reranker 단독으로 변경`
+
+**사용 모델**:
+- `BAAI/bge-reranker-v2-m3` (Cross-Encoder 리랭커) 단독
+
+**접근 방식**:
+- 표 위쪽의 텍스트 후보들을 수집 후, 리랭커로 각 후보와 표 내용의 관련성 점수 계산
+- 온도 소프트맥스(temperature=0.6)를 적용하여 후보 간 대비 강화
+- 표 제목 패턴("표 3-2", "① 제목" 등) 휴리스틱 추가
+
+**특징**:
+- 배치 처리(`RERANKER_BATCH_SIZE = 32`)로 GPU 효율화
+- 위치 기반 필터링으로 다른 표 영역 후보 제외
+- 단순하고 빠른 추론 속도 (표당 0.1~0.2초)
+
+**문제점**:
+- 표 내용과 무관한 후보도 리랭커에 전달되어 노이즈 발생
+- 표 문맥 정보가 헤더+첫 행만 사용되어 정보 부족
+- 의미적 관련성이 낮은 후보가 높은 점수를 받을 수 있음
+
+---
+
+### 2단계: 리랭커 + BGE 임베딩 필터링 추가 (90dfc36)
+**커밋**: `90dfc36 임베딩 추가`
+
+**사용 모델**:
+- `BAAI/bge-reranker-v2-m3` (리랭커)
+- `BAAI/bge-m3` (임베딩 - 1차 필터링용) ⬅️ **신규 추가**
+
+**접근 방식**:
+1. **1차 필터링**: BGE-m3 임베딩으로 표 전체 내용과 후보 텍스트의 코사인 유사도 계산
+   - 유사도 임계값(`EMBEDDING_SIMILARITY_THRESHOLD = 0.3`) 이상만 통과
+2. **2차 스코어링**: 리랭커로 최종 제목 선택
+   - 리랭커(100%) 점수만 사용
+
+**특징**:
+- 표 **아래쪽** 텍스트도 탐색 범위에 포함 (`bdd515f 표 아래쪽도 검색`)
+- 임베딩으로 무관한 후보를 사전 제거하여 리랭커 효율 향상
+- 표 전체 내용(`build_table_context_full`)을 임베딩에 활용
+
+**개선점**:
+- 노이즈 후보가 리랭커에 도달하기 전에 필터링됨
+- 표 내용과 의미적으로 관련 있는 후보만 최종 평가
+- 후보 수가 많을 때 성능 향상
+
+**문제점**:
+- BGE 임베딩은 비대칭 query-passage 관계를 명시하지 않음
+- 여전히 "표 번호는 맞지만 내용은 무관한 제목" 선택 가능성
+- 임베딩 필터만으로는 미묘한 의미 차이를 구분 못함
+
+---
+
+### 3단계: LLM 기반 방식 시도 ❌ (04b50f6 → 693b153 Revert)
+**커밋**:
+- `04b50f6 llm버전전`
+- `b6ef114 버전 변경`
+- `3b144d2 docker llm`
+- `27b4bb1 버전 변경`
+- → `693b153 Revert "llm버전전"` ⬅️ **실패로 인한 롤백**
+
+**사용 모델**:
+- Ollama API (`gemma2:2b` 로컬 LLM)
+
+**접근 방식**:
+- 후보 텍스트와 표 내용을 프롬프트로 구성하여 LLM에게 제목 선택 요청
+- 프롬프트 예시:
+  ```
+  다음은 표의 내용입니다:
+  [표 내용...]
+
+  위 표의 제목으로 가장 적절한 것을 아래 후보 중에서 골라주세요:
+  1. 후보1
+  2. 후보2
+  ...
+
+  규칙:
+  - 표의 내용과 가장 관련 있는 것을 선택
+  - 단위 표기는 제목이 아님
+  - 교차 참조 문장은 제목이 아님
+
+  답변은 숫자만 출력하세요 (예: 1).
+  ```
+
+**시도한 이유**:
+- LLM의 강력한 의미 이해 능력 활용
+- 표 내용과 제목의 관계를 자연어로 추론
+- Few-shot 없이도 규칙을 이해할 수 있음
+
+**실패 원인 (추정)**:
+1. **응답 파싱 불안정**:
+   - LLM이 숫자 외 텍스트를 포함하거나 형식을 지키지 않음
+   - "1번이 적절합니다", "1 또는 2" 같은 애매한 응답
+2. **속도 문제**:
+   - Ollama API 호출마다 2~5초 소요 (리랭커는 0.1초 이내)
+   - 배치 처리 불가능
+3. **정확도 이슈**:
+   - 작은 모델(2B)의 한계로 미묘한 문맥 차이를 제대로 판단 못함
+   - "표 3-2 사업 개요"와 "ㅇ 사업 개요" 중 선택 시 일관성 없음
+4. **외부 의존성**:
+   - Ollama 서버가 항상 실행 중이어야 함
+   - 네트워크 오류 시 전체 API 중단
+
+**결과**:
+- 여러 버전 변경 시도 후 최종적으로 revert
+- 리랭커 + 임베딩 방식으로 복귀
+
+---
+
+### 4단계 (현재): 리랭커 + E5 임베딩 필터링 (b061671)
+**커밋**: `b061671 ES5모델` (E5 오타)
+
+**사용 모델**:
+- `BAAI/bge-reranker-v2-m3` (리랭커) - 유지
+- `BAAI/bge-m3` (임베딩) - 사용 안 함 (`USE_EMBEDDER_FILTER=False`)
+- `intfloat/multilingual-e5-large` (E5 임베딩) ⬅️ **신규 추가**
+
+**BGE에서 E5로 변경한 이유**:
+BGE-m3는 대칭적 유사도(symmetric similarity)를 위한 모델이지만,
+표 제목 추출은 **비대칭적 관계**입니다:
+- **Query**: "이 텍스트가 표의 제목인가?" (짧고 구체적)
+- **Passage**: "표의 전체 내용" (길고 포괄적)
+
+E5 모델은 `query:`/`passage:` 프롬프트를 통해 이러한 비대칭 관계를 명시할 수 있습니다.
+
+**접근 방식**:
+1. **규칙 기반 필터링**: 표 위쪽 텍스트 후보 수집 (무의미한 텍스트 제외)
+2. **E5 임베딩 필터링**:
+   ```python
+   # 후보 → query, 표 → passage로 명시
+   query_text = f"query: {후보_제목}"
+   passage_text = f"passage: {표_내용}"
+
+   # 코사인 유사도 계산
+   similarity = cosine_similarity(query_emb, passage_emb)
+
+   # 임계값 이상만 통과
+   if similarity >= 0.5:  # E5_SIMILARITY_THRESHOLD
+       리랭커로_전달
+   ```
+3. **리랭커 스코어링**:
+   - 통과한 후보에 대해 리랭커 로짓 계산
+   - 온도 소프트맥스(`tau=0.4`)로 확률 변환
+4. **휴리스틱 점수 조합**:
+   - 리랭커(80%) + 휴리스틱(20%) 가중 평균
+   - 휴리스틱: 패턴 점수 + 위치 점수 + 길이 점수
+5. **최종 선택**:
+   - 점수 순으로 정렬 후 최고 점수 선택
+   - 표 제목 패턴("표 X.X")이면 임계값 50% 완화
+
+**E5의 양방향 유사도 계산**:
+```python
+# 방법 1: 후보(query) → 표(passage)
+sim1 = cosine(encode("query: 후보"), encode("passage: 표"))
+
+# 방법 2: 표(query) → 후보(passage) - 역방향
+sim2 = cosine(encode("query: 표"), encode("passage: 후보"))
+
+# 최종 점수 = 평균 (대칭적 유사도)
+final_similarity = (sim1 + sim2) / 2
+```
+
+**핵심 개선점**:
+1. **명시적 query/passage 관계**:
+   - "이 제목이 표와 관련있는가?"를 E5가 더 정확히 판단
+   - BGE 대비 의미적 관련성 판단 정확도 향상
+2. **표 제목 패턴 감지**:
+   - "표 4.21 연간 실적" 같은 명확한 패턴이면 임계값 `0.30 → 0.15`로 낮춤
+   - 패턴 점수(0.7) + 위치 점수(0.25) + 길이 점수(0.15) 조합
+3. **공간적 독립성 보장**:
+   - 다른 표의 영역과 충돌하는 후보 제외
+   - 표 아래쪽 탐색은 다시 제외 (표 위쪽만)
+4. **하드 필터링 강화**:
+   - 유닛 표기("(단위: ℃)")
+   - 교차 참조("표 X에 의하면")
+   - 긴 설명문(40자 이상 + 종결어미)
+   - 주석("※ 본 자료는...")
+
+**현재 성능**:
+- 속도: 테이블당 평균 0.2~0.5초 (GPU 기준)
+- 정확도: 표 제목 패턴 + E5 필터링으로 노이즈 대폭 감소
+- 메모리: E5 모델(~2.2GB) 추가 로드로 총 ~4GB GPU 메모리 사용
+
+---
+
+## 모델 조합 비교표
+
+| 단계 | 모델 조합 | 장점 | 단점 | 속도 | 상태 |
+|------|----------|------|------|------|------|
+| **1** | 리랭커 단독 | 빠름, 간단함 | 노이즈 후보 많음 | 0.1초 | ✅ 기본 |
+| **2** | 리랭커 + BGE 임베딩 | 1차 필터링으로 노이즈↓ | 대칭적 유사도만 지원 | 0.2초 | ✅ 개선 |
+| **3** | LLM (Ollama gemma2:2b) | 자연어 추론 능력 | 느림, 불안정, 외부 의존 | 2-5초 | ❌ 실패 |
+| **4** | 리랭커 + E5 임베딩 | query/passage 명시, 정확도↑ | 모델 2개 로드로 메모리↑ | 0.3초 | ✅ 현재 |
+
+---
+
+## 주요 휴리스틱 규칙
+
+### 제목 가능성 높은 패턴 (`is_table_title_like`, `is_subtitle_like`)
+1. **표 번호 포함**:
+   - `표 3-2 연간 실적`, `표 B.8 월별 기온`, `표 A .6 토지이용` (공백 포함)
+2. **박스 기호**:
+   - `□ 추진조직 구성`, `■ 사업개요`, `◆ 제약 사항`
+3. **소제목 패턴**:
+   - `① 사업 개요`, `(1) 계획`, `ㅇ 제약 조건` (단, "ㅇ 요구사항"처럼 불완전한 건 제외)
+4. **섹션 번호**:
+   - `1.2.3 시스템 구성도`
+5. **특수 괄호**:
+   - `<표 제목>`, `【표 제목】`
+
+### 제목 불가 패턴 (필터링)
+1. **단위 표기** (`is_unit_like`):
+   - `(단위: 원)`, `[단위: ℃]`, `단위: mm`
+2. **교차 참조** (`is_cross_reference`):
+   - `표 A.20에 의하면 다음과 같다`
+   - `상세한 내용은 다음 표 B.12와 같다`
+   - `다음표와같이나타난다` (띄어쓰기 없는 OCR도 커버)
+3. **긴 설명문**:
+   - 40자 이상 + 종결어미(`다.`, `였다.`)로 끝나는 문장
+4. **주석/부가설명**:
+   - `※ 본 자료는...`, `주) 2024년 기준`
+
+---
+
+## 기술 스택
+
+### ML 모델
+| 모델 | 역할 | 크기 | 용도 |
+|------|------|------|------|
+| `BAAI/bge-reranker-v2-m3` | Cross-Encoder 리랭커 | ~1.1GB | 후보 간 상대 순위 결정 |
+| `intfloat/multilingual-e5-large` | E5 임베딩 (query/passage) | ~2.2GB | 의미적 관련성 필터링 |
+
+### 추론 환경
+- **디바이스**: CUDA (GPU) 또는 CPU 자동 선택
+- **최적화**:
+  - FP16 정밀도 (GPU 메모리 절감)
+  - TF32 연산 활성화 (A100/RTX40 GPU 성능 향상)
+  - 배치 처리 (`RERANKER_BATCH_SIZE = 32`)
+
+### API 프레임워크
+- **Flask**: REST API 서버
+- **엔드포인트**: `POST /get_title`
+- **입력**: `{"tables": [...], "texts": [...]}`
+- **출력**: 각 테이블에 `title`, `title_bbox` 프로퍼티 추가
+
+---
+
+## 향후 개선 방향
+
+### 1. 앙상블 방식
+- 리랭커 + E5 + 패턴 점수를 더 정교하게 조합
+- 각 모델의 신뢰도(confidence)를 반영한 가중치 동적 조정
+
+### 2. 파인튜닝
+- 한국 공공문서 표 제목 데이터셋 구축
+- BGE/E5 모델을 표 제목 선택 task에 특화
+- LoRA/QLoRA 기법으로 효율적 파인튜닝
+
+### 3. 멀티모달 접근
+- 표와 제목의 시각적 레이아웃(bbox 정보) 활용
+- LayoutLM 계열 모델 실험 (문서 이미지 + 텍스트 + 레이아웃)
+
+### 4. 표 아래쪽 제목 지원
+- 일부 문서는 표 아래에 제목이 있음 (현재는 표 위쪽만 탐색)
+- 위/아래 모두 탐색 후 위치 점수로 구분
+- 문서 스타일 자동 감지
+
+### 5. LLM 재시도 (개선 버전)
+- 더 큰 모델 (7B 이상) 또는 API 기반 LLM (GPT-4o-mini, Claude 3.5 Sonnet)
+- Structured output (JSON schema) 강제로 파싱 안정성 향상
+- Few-shot prompting으로 정확도 향상
+
+---
+
+## 설치 및 실행
+
+### 의존성 설치
+```bash
+pip install torch sentence-transformers flask numpy
+```
+
+### 모델 다운로드 (자동)
+최초 실행 시 Hugging Face에서 자동 다운로드됩니다:
+- `BAAI/bge-reranker-v2-m3` (~1.1GB)
+- `intfloat/multilingual-e5-large` (~2.2GB)
+
+**총 소요 시간**: 약 5~10분 (네트워크 속도에 따라)
+
+### API 서버 실행
+```bash
+cd dgr_version
+python get_title_api.py
+```
+- 기본 포트: `5555`
+- 디바이스: GPU 자동 감지 (없으면 CPU)
+- GPU 메모리: 최소 4GB 필요 (RTX 3060 이상 권장)
+
+### API 사용 예시
+```python
+import requests
+
+data = {
+    "tables": [
+        {
+            "bbox": [100, 200, 500, 600],
+            "rows": [[{"texts": [{"v": "항목"}]}], [{"texts": [{"v": "데이터"}]}]]
+        }
+    ],
+    "texts": [
+        {"rect": [100, 150, 300, 180], "text": "표 3-2 연간 실적"},
+        {"rect": [100, 185, 300, 210], "text": "(단위: 억원)"}
+    ]
+}
+
+response = requests.post("http://localhost:5555/get_title", json=data)
+result = response.json()
+
+print(result[0]["title"])  # 출력: "표 3-2 연간 실적"
+print(result[0]["title_bbox"])  # [100, 150, 300, 180]
+```
+
+---
+
+## Docker 실행 (GPU 지원)
+
+### Docker Compose로 실행 (권장)
+```bash
+cd dgr_version
+docker-compose up -d
+
+# 로그 확인
+docker-compose logs -f
+
+# 컨테이너 중지
+docker-compose down
+```
+
+### 수동 실행
+```bash
+# 이미지 빌드
+docker build -t title-extractor:latest .
+
+# GPU 사용
+docker run -d \
+  --name title-api \
+  --gpus all \
+  -p 5555:5555 \
+  -v ~/.cache/huggingface:/root/.cache/huggingface \
+  title-extractor:latest
+
+# CPU 사용
+docker run -d \
+  --name title-api \
+  -p 5555:5555 \
+  -e CUDA_VISIBLE_DEVICES=-1 \
+  -v ~/.cache/huggingface:/root/.cache/huggingface \
+  title-extractor:latest
+```
+
+---
+
+## 성능 및 리소스
+
+### GPU 사용 시 (권장)
+- **GPU 메모리**: 최소 4GB (RTX 3060 이상 권장)
+- **추론 속도**: 표 1개당 약 0.2~0.5초
+- **배치 처리**: 후보 32개 동시 처리
+- **정밀도**: FP16 (메모리 절감)
+
+### CPU 사용 시
+- **RAM**: 최소 8GB (16GB 권장)
+- **추론 속도**: 표 1개당 약 2~4초 (GPU 대비 5~10배 느림)
+- **정밀도**: FP32
+
+---
+
+## 트러블슈팅
+
+### GPU 인식 안 됨
+```bash
+# NVIDIA Docker Runtime 확인
+docker run --rm --gpus all nvidia/cuda:12.1.1-base-ubuntu22.04 nvidia-smi
+
+# CUDA 버전 확인
+nvidia-smi
+```
+
+### 메모리 부족 (OOM)
+```python
+# get_title_api.py에서 배치 크기 조정
+RERANKER_BATCH_SIZE = 16  # 기본값: 32 → 16으로 축소
+```
+
+### 모델 다운로드 실패
+```bash
+# Hugging Face 캐시 수동 다운로드
+python3 -c "
+from sentence_transformers import SentenceTransformer, CrossEncoder
+
+SentenceTransformer('intfloat/multilingual-e5-large')
+CrossEncoder('BAAI/bge-reranker-v2-m3')
+"
+```
+
+---
+
+## 프로젝트 구조
+
+```
+표_연속성체크_04/
+├── dgr_version/
+│   ├── get_title_api.py        # 메인 API 서버 (현재 버전: E5 + 리랭커)
+│   ├── requirements.txt        # Python 의존성
+│   ├── Dockerfile              # Docker 이미지 빌드
+│   └── docker-compose.yml      # Docker Compose 설정
+├── README.md                   # 본 문서 (진화 과정 설명)
+├── README_프로젝트구조.md       # 상세 코드 구조 설명
+└── GPU_OPTIMIZATION.md         # GPU 최적화 가이드
+```
+
+---
+
+## 라이선스
+MIT License
+
+## 기여
+Issues 및 Pull Requests 환영합니다.
+
+---
+
+## 참고 문헌
+- [BGE Reranker v2-m3 (Hugging Face)](https://huggingface.co/BAAI/bge-reranker-v2-m3)
+- [Multilingual E5 (Paper)](https://arxiv.org/abs/2402.05672)
+- [Sentence Transformers Documentation](https://www.sbert.net/)

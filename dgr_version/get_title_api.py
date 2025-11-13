@@ -411,7 +411,10 @@ def merge_text_group(text_group):
 
 # ========== 후보 수집 ==========
 def collect_candidates_for_table(table, texts, all_tables=None):
-    """표 위/아래쪽에 있는 텍스트 후보 수집 (규칙 기반 필터링)"""
+    """표 위/아래쪽에 있는 텍스트 후보 수집 (규칙 기반 필터링)
+
+    중요: 다른 테이블 영역과 겹치는 후보는 제외 (공간적 독립성 보장)
+    """
     table_bbox = get_bbox_from_table(table)
     if not table_bbox:
         return []
@@ -420,6 +423,21 @@ def collect_candidates_for_table(table, texts, all_tables=None):
     h = tby2 - tby1
     y_min_up = max(0, tby1 - int(UP_MULTIPLIER * h))  # 위쪽 탐색 범위
     y_max_down = tby2 + int(UP_MULTIPLIER * h)  # 아래쪽 탐색 범위
+
+    # 다른 테이블들의 탐색 범위 계산 (충돌 방지)
+    other_table_zones = []
+    if all_tables:
+        for other_table in all_tables:
+            other_bbox = get_bbox_from_table(other_table)
+            if not other_bbox or other_bbox == table_bbox:
+                continue
+
+            ox1, oy1, ox2, oy2 = other_bbox
+            oh = oy2 - oy1
+            # 다른 테이블의 탐색 영역
+            other_y_min = max(0, oy1 - int(UP_MULTIPLIER * oh))
+            other_y_max = oy2 + int(UP_MULTIPLIER * oh)
+            other_table_zones.append((other_y_min, other_y_max))
 
     # 그룹화된 텍스트
     grouped_texts = group_texts_by_line(texts, y_tolerance=Y_LINE_TOLERANCE)
@@ -445,6 +463,17 @@ def collect_candidates_for_table(table, texts, all_tables=None):
         # 수평으로 겹치거나 근접한지 확인
         if not horizontally_near((tbx1, tbx2), (px1, px2), tol=X_TOLERANCE):
             continue
+
+        # 다른 테이블의 탐색 영역과 충돌하는지 확인
+        text_y_center = (py1 + py2) / 2
+        is_conflicting = False
+        for other_y_min, other_y_max in other_table_zones:
+            if other_y_min <= text_y_center <= other_y_max:
+                is_conflicting = True
+                break
+
+        if is_conflicting:
+            continue  # 다른 테이블 영역에 있는 텍스트는 제외
 
         text_content = clean_text(text.get('merged_text') or extract_text_content(text))
 
