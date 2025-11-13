@@ -127,8 +127,16 @@ except Exception as e:
 # KoBERT 분류기 로드
 if USE_KOBERT:
     try:
-        from kobert_classifier import TableTextClassifier
+        import sys
         import os
+
+        # 현재 디렉토리를 Python 경로에 추가
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        if current_dir not in sys.path:
+            sys.path.insert(0, current_dir)
+
+        from kobert_classifier import TableTextClassifier
+
         if os.path.exists(KOBERT_MODEL_PATH):
             kobert_classifier = TableTextClassifier(model_path=KOBERT_MODEL_PATH, device=DEVICE_STR)
             print(f"✅ KoBERT 분류기 로드 완료 ({KOBERT_MODEL_PATH}, device={DEVICE_STR})")
