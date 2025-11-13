@@ -7,9 +7,16 @@ RUN apt-get update && apt-get install -y \
     gcc g++ git \
     && rm -rf /var/lib/apt/lists/*
 
+# pip 업그레이드 및 protobuf 먼저 설치
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir protobuf sentencepiece
+
 # requirements.txt 복사 및 설치
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+# 설치 확인
+RUN python -c "import transformers; import sentencepiece; print('Imports OK')"
 
 # 모든 Python 파일 복사
 COPY *.py ./
