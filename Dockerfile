@@ -17,8 +17,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 애플리케이션 파일 복사
 COPY dgr_version/ ./dgr_version/
 
+# Python 경로에 dgr_version 추가
+ENV PYTHONPATH=/app:/app/dgr_version:$PYTHONPATH
+
 # 작업 디렉토리를 dgr_version으로 변경
 WORKDIR /app/dgr_version
+
+# 복사된 파일 확인 (디버깅용)
+RUN ls -la /app/dgr_version/
 
 # 포트 노출
 EXPOSE 5555
