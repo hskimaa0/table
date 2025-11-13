@@ -9,8 +9,9 @@ services:
     volumes:
       # 학습된 모델 파일 마운트 (호스트 → 컨테이너)
       - ./dgr_version/kobert_table_classifier.pt:/app/dgr_version/kobert_table_classifier.pt:ro
-      # 설정 수정 시 자동 반영 (개발용)
+      # Python 파일 마운트 (개발용)
       - ./dgr_version/get_title_api.py:/app/dgr_version/get_title_api.py:ro
+      - ./dgr_version/kobert_classifier.py:/app/dgr_version/kobert_classifier.py:ro
     environment:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
