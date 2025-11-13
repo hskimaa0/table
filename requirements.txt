@@ -7,5 +7,7 @@ Pillow
 transformers
 torch
 sentence-transformers
+sentencepiece
 kiwipiepy
 flask
+tqdm
