@@ -2,6 +2,7 @@
 KoBERT 분류기 학습 스크립트
 """
 import json
+import os
 from kobert_classifier import train_kobert_classifier, TableTextClassifier
 
 
@@ -91,11 +92,18 @@ def main():
     print("KoBERT 표 텍스트 분류기 학습")
     print("=" * 60)
 
+    # 현재 스크립트가 있는 디렉토리 기준으로 경로 설정
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
     # 옵션 1: JSON 파일에서 로드
-    train_data = load_training_data_from_json('train_data_example.json')
+    json_path = os.path.join(script_dir, 'train_data_example.json')
+    train_data = load_training_data_from_json(json_path)
 
     # 옵션 2: 샘플 데이터 사용 (주석 처리)
     # train_data = create_sample_data()
+
+    # 데이터 일부만 사용 (테스트용, 주석 해제하여 사용)
+    # train_data = train_data[:1000]  # 처음 1000개만 사용
 
     print(f"\n📊 학습 데이터 통계:")
     labels_count = {0: 0, 1: 0, 2: 0}
@@ -108,13 +116,13 @@ def main():
     print(f"  총합: {len(train_data)}개")
 
     # 학습 파라미터
-    epochs = 5  # 에폭 수 (데이터 적으면 늘리기)
+    epochs = 2  # 추가 학습시 1-2 에폭으로 충분 (처음 학습은 5-10)
     batch_size = 8  # 배치 크기 (GPU 메모리에 따라 조절)
-    lr = 2e-5  # 학습률
-    save_path = 'kobert_table_classifier.pt'
+    lr = 1e-5  # 추가 학습시 낮은 학습률 권장 (처음 학습은 2e-5)
+    save_path = os.path.join(script_dir, 'kobert_table_classifier.pt')
 
     # 추가 학습을 위한 기존 모델 경로 (None이면 처음부터 학습)
-    pretrained_model = 'kobert_table_classifier.pt'  # 기존 모델 사용
+    pretrained_model = os.path.join(script_dir, 'kobert_table_classifier.pt')  # 기존 모델 사용
     # pretrained_model = None  # 처음부터 학습하려면 None으로 설정
 
     print(f"\n⚙️  학습 파라미터:")
