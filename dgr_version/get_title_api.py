@@ -17,11 +17,13 @@ X_TOLERANCE = 800  # 수평 근접 허용 거리 (px)
 
 # ML 모델 관련
 KOBERT_MODEL_PATH = "kobert_table_classifier.pt"  # KoBERT 분류 모델 경로
+EMBEDDING_MODEL = "intfloat/multilingual-e5-large"  # E5 임베딩 (표-제목 의미 유사도)
 ML_DEVICE = 0  # -1: CPU, 0: GPU
 MAX_TEXT_INPUT_LENGTH = 512  # ML 모델 입력 최대 길이
 
 # 모델 사용 설정
 USE_KOBERT = True  # KoBERT 분류기 사용 여부 (제목/설명/제목아님 필터링)
+USE_E5_MATCHING = True  # E5 의미 유사도 매칭 사용 여부
 
 
 # 패턴 관련 상수
@@ -42,6 +44,7 @@ API_DEBUG = True
 
 # ML 모델 변수
 kobert_classifier = None
+embedder = None
 
 # 디바이스 설정
 import torch
@@ -62,6 +65,22 @@ if DEVICE_STR.startswith("cuda"):
         torch.backends.cudnn.allow_tf32 = True
     except Exception:
         pass
+
+# E5 임베딩 모델 로드
+if USE_E5_MATCHING:
+    try:
+        from sentence_transformers import SentenceTransformer
+        embedder = SentenceTransformer(EMBEDDING_MODEL, device=DEVICE_STR)
+        print(f"✅ E5 임베딩 모델 로드 완료 ({EMBEDDING_MODEL}, device={DEVICE_STR})")
+    except ImportError:
+        print("⚠️  sentence-transformers 라이브러리 없음")
+        embedder = None
+    except Exception as e:
+        print(f"⚠️  E5 모델 로드 실패: {e}")
+        embedder = None
+else:
+    print("ℹ️  E5 의미 매칭 비활성화 (USE_E5_MATCHING=False)")
+    embedder = None
 
 # KoBERT 분류기 로드
 if USE_KOBERT:
@@ -412,25 +431,28 @@ def collect_candidates_for_table(table, texts, all_tables=None):
 
     return list(unique.values())
 
+# ========== 표 문맥 구축 ==========
+def build_table_context(table, max_rows=6, max_cells_per_row=10):
+    """표 문맥 구축 (E5 의미 매칭용)"""
+    all_rows = []
 
+    if 'rows' in table and table['rows']:
+        # 최대 max_rows개 행 추출
+        for row_idx, row in enumerate(table['rows'][:max_rows]):
+            row_texts = []
+            for cell in row[:max_cells_per_row]:
+                cell_texts = [t['v'] for t in cell.get('texts', []) if t.get('v')]
+                if cell_texts:
+                    row_texts.append(clean_text(" ".join(cell_texts)))
 
-# ========== 메인 로직 ==========
-# 이 함수는 더 이상 사용되지 않음 (get_title()에서 직접 처리)
+            if row_texts:
+                # 첫 행은 헤더로 표시
+                if row_idx == 0:
+                    all_rows.append("[헤더] " + " | ".join(row_texts))
+                else:
+                    all_rows.append(f"[행{row_idx}] " + " | ".join(row_texts))
 
-def calculate_distance_between_title_and_table(title_bbox, table_bbox):
-    """제목과 표 사이의 거리 계산"""
-    tx1, ty1, tx2, ty2 = title_bbox
-    tbx1, tby1, tbx2, tby2 = table_bbox
-
-    # 표 위쪽에 있는 경우: 표 상단과 제목 하단의 거리
-    if ty2 <= tby1:
-        return tby1 - ty2
-    # 표 아래쪽에 있는 경우: 제목 상단과 표 하단의 거리
-    elif ty1 >= tby2:
-        return ty1 - tby2
-    # 겹치는 경우
-    else:
-        return 0
+    return "\n".join(all_rows) if all_rows else "표 정보 없음"
 
 @app.route('/get_title', methods=['POST'])
 def get_title():
@@ -473,51 +495,75 @@ def get_title():
                         'text': text_content,
                         'bbox': text_bbox
                     })
-                    print(f"  ✓ '{text_content[:40]}' → 제목")
+                    print(f"  ✓ '{text_content[:40]}' → {label}")
+                else:
+                    print(f"  ✗ '{text_content[:40]}' → {label}")
 
         print(f"\n총 제목 후보: {len(all_title_candidates)}개")
 
-        # Step 2: 각 제목을 가장 가까운 테이블에 할당
-        title_assignments = {}  # {table_idx: {'text': ..., 'bbox': ..., 'distance': ...}}
-
-        for title_cand in all_title_candidates:
-            closest_table_idx = None
-            min_distance = float('inf')
-
-            for idx, table in enumerate(tables):
-                table_bbox = get_bbox_from_table(table)
-                if not table_bbox:
-                    continue
-
-                distance = calculate_distance_between_title_and_table(title_cand['bbox'], table_bbox)
-
-                if distance < min_distance:
-                    min_distance = distance
-                    closest_table_idx = idx
-
-            # 가장 가까운 테이블에 할당 (더 가까운 제목이 있으면 교체)
-            if closest_table_idx is not None:
-                if closest_table_idx not in title_assignments or min_distance < title_assignments[closest_table_idx]['distance']:
-                    title_assignments[closest_table_idx] = {
-                        'text': title_cand['text'],
-                        'bbox': title_cand['bbox'],
-                        'distance': min_distance
-                    }
-
-        # Step 3: 결과 생성
+        # Step 2: 각 테이블마다 E5로 가장 맥락에 맞는 제목 선택
         result_tables = []
+
         for idx, table in enumerate(tables):
             table_with_title = copy.deepcopy(table)
 
-            if idx in title_assignments:
-                assignment = title_assignments[idx]
-                table_with_title['title'] = assignment['text']
-                table_with_title['title_bbox'] = assignment['bbox']
-                print(f"테이블 {idx} → 제목: '{assignment['text']}' (거리: {assignment['distance']:.1f})")
-            else:
+            print(f"\n[테이블 {idx}]")
+
+            # 표 문맥 구축
+            table_ctx = build_table_context(table)
+            print(f"  표 문맥: {table_ctx[:80]}...")
+
+            if not all_title_candidates:
                 table_with_title['title'] = ""
                 table_with_title['title_bbox'] = None
-                print(f"테이블 {idx} → 제목 없음")
+                print(f"  → 제목 없음 (후보 없음)")
+                result_tables.append(table_with_title)
+                continue
+
+            # E5로 의미 유사도 계산
+            if USE_E5_MATCHING and embedder:
+                import numpy as np
+
+                try:
+                    # 표 내용을 passage로 인코딩
+                    passage_text = f"passage: {table_ctx[:500]}"
+                    passage_emb = embedder.encode(passage_text, convert_to_numpy=True, normalize_embeddings=True)
+
+                    # 각 제목 후보와 유사도 계산
+                    best_title = None
+                    best_similarity = -1
+
+                    print(f"  E5 유사도 계산:")
+                    for title_cand in all_title_candidates:
+                        query_text = f"query: {title_cand['text']}"
+                        query_emb = embedder.encode(query_text, convert_to_numpy=True, normalize_embeddings=True)
+                        similarity = float(np.dot(query_emb, passage_emb))
+
+                        print(f"    '{title_cand['text'][:40]}' → {similarity:.3f}")
+
+                        if similarity > best_similarity:
+                            best_similarity = similarity
+                            best_title = title_cand
+
+                    if best_title:
+                        table_with_title['title'] = best_title['text']
+                        table_with_title['title_bbox'] = best_title['bbox']
+                        print(f"  ✅ 선택: '{best_title['text']}' (유사도: {best_similarity:.3f})")
+                    else:
+                        table_with_title['title'] = ""
+                        table_with_title['title_bbox'] = None
+                        print(f"  → 제목 없음")
+
+                except Exception as e:
+                    print(f"  ⚠️  E5 오류: {e}, 제목 없음 처리")
+                    table_with_title['title'] = ""
+                    table_with_title['title_bbox'] = None
+            else:
+                # E5 비활성화 시 첫 번째 후보 선택
+                first_title = all_title_candidates[0]
+                table_with_title['title'] = first_title['text']
+                table_with_title['title_bbox'] = first_title['bbox']
+                print(f"  → 첫 번째 후보 선택: '{first_title['text']}'")
 
             result_tables.append(table_with_title)
 
