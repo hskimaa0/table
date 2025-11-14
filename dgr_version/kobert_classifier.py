@@ -166,7 +166,7 @@ class TableTextClassifier:
 
 
 # ========== 학습용 함수 ==========
-def train_kobert_classifier(train_data, val_data=None, epochs=3, batch_size=16, lr=2e-5, save_path='kobert_classifier.pt'):
+def train_kobert_classifier(train_data, val_data=None, epochs=3, batch_size=16, lr=2e-5, save_path='kobert_classifier.pt', pretrained_model_path=None):
     """
     KoBERT 분류기 학습
 
@@ -178,10 +178,12 @@ def train_kobert_classifier(train_data, val_data=None, epochs=3, batch_size=16, 
         batch_size: 배치 크기
         lr: 학습률
         save_path: 모델 저장 경로
+        pretrained_model_path: 기존 학습된 모델 경로 (추가 학습용, None이면 처음부터 학습)
     """
     from torch.utils.data import Dataset, DataLoader
     from torch.optim import AdamW
     from tqdm import tqdm
+    import os
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"🔧 학습 디바이스: {device}")
@@ -221,6 +223,17 @@ def train_kobert_classifier(train_data, val_data=None, epochs=3, batch_size=16, 
     # 토크나이저 & 모델
     tokenizer = AutoTokenizer.from_pretrained('skt/kobert-base-v1')
     model = KoBERTClassifier(num_classes=3)
+
+    # 기존 모델 로드 (있으면)
+    if pretrained_model_path and os.path.exists(pretrained_model_path):
+        print(f"📂 기존 모델 로드: {pretrained_model_path}")
+        model.load_state_dict(torch.load(pretrained_model_path, map_location=device))
+        print("✅ 기존 모델에서 이어서 학습합니다!")
+    else:
+        if pretrained_model_path:
+            print(f"⚠️  모델 파일이 없습니다: {pretrained_model_path}")
+        print("🆕 처음부터 학습을 시작합니다")
+
     model.to(device)
 
     # 데이터로더

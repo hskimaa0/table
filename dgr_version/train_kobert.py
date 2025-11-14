@@ -113,11 +113,19 @@ def main():
     lr = 2e-5  # 학습률
     save_path = 'kobert_table_classifier.pt'
 
+    # 추가 학습을 위한 기존 모델 경로 (None이면 처음부터 학습)
+    pretrained_model = 'kobert_table_classifier.pt'  # 기존 모델 사용
+    # pretrained_model = None  # 처음부터 학습하려면 None으로 설정
+
     print(f"\n⚙️  학습 파라미터:")
     print(f"  에폭: {epochs}")
     print(f"  배치 크기: {batch_size}")
     print(f"  학습률: {lr}")
     print(f"  저장 경로: {save_path}")
+    if pretrained_model:
+        print(f"  기존 모델: {pretrained_model} (추가 학습)")
+    else:
+        print(f"  기존 모델: 없음 (처음부터 학습)")
 
     # 학습 실행
     train_kobert_classifier(
@@ -126,7 +134,8 @@ def main():
         epochs=epochs,
         batch_size=batch_size,
         lr=lr,
-        save_path=save_path
+        save_path=save_path,
+        pretrained_model_path=pretrained_model  # 기존 모델 경로 전달
     )
 
     # 학습된 모델 테스트
